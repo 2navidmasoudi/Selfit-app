@@ -89,7 +89,7 @@ export const putCodeLogin = async (Method, phone, code, tokenapi) => {
 
 export const postMember = async (phone, tokenapi) => {
     try {
-        let resutlt = await fetch(`${Selfit}${Member}Post`, {
+        let response = await fetch(`${Selfit}${Member}Post`, {
             method: POST,
             headers,
             body: JSON.stringify({
@@ -97,11 +97,10 @@ export const postMember = async (phone, tokenapi) => {
                 tokenapi
             })
         });
-        let json = await result.json();
+        let json = await response.json();
         return json;
     } catch (e) {
         console.log(e);
-
     }
 };
 

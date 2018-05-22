@@ -1,23 +1,15 @@
 import React, {Component} from 'react';
-import {NetInfo, Text, View,} from 'react-native';
-import {form, main} from '../../assets/styles/index';
+import {Text, View,} from 'react-native';
+import {main} from '../../assets/styles/index';
 import {Button, Container} from 'native-base';
 import AppHeader from '../header';
 import {connect} from 'react-redux';
 import {putCheckToken} from '../../services';
-import {Actions} from 'react-native-router-flux';
 import MemberGrid from './grids/MemberGrid';
 import GymGrid from './grids/GymGrid';
 import BuffetGrid from './grids/BuffetGrid';
+
 // import PushNotification from 'react-native-push-notification';
-// import io from "socket.io-client";
-//
-// const socket = io('https://selfitapi.ir/api/Log/GetAll?token=66CE1D8A-C38E-4E47-8627-7ABE7418AC19&tokenapi=selfit.public&max=30&min=0&ssort=true');
-
-
-// NetInfo.getConnectionInfo().then((connectionInfo) => {
-//     console.log('Initial, type: ' + connectionInfo.type + ', effectiveType: ' + connectionInfo.effectiveType);
-// });
 // PushNotification.configure({
 //
 //     // (optional) Called when Token is generated (iOS and Android)
@@ -46,6 +38,7 @@ import BuffetGrid from './grids/BuffetGrid';
 //      */
 //     requestPermissions: true,
 // });
+
 class Main extends Component {
     state = {
         viewComponent: <MemberGrid/>,
