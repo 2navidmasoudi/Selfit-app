@@ -4,12 +4,23 @@ import {Actions} from 'react-native-router-flux';
 import {Container} from 'native-base';
 import {styles} from "./style";
 import * as Animatable from 'react-native-animatable';
+import Video from "react-native-video";
 
 export default class MyGym extends Component {
     render() {
         return (
             <Container>
-                <ImageBackground source={require('../../assets/Bashgah_man.jpg')} style={styles.bgImg}>
+                {/*<Video*/}
+                    {/*source={require('../../assets/bashgae_man.mp4')}*/}
+                    {/*rate={1.0}                   // 0 is paused, 1 is normal.*/}
+                    {/*volume={1.0}                 // 0 is muted, 1 is normal.*/}
+                    {/*muted={false}                // Mutes the audio entirely.*/}
+                    {/*paused={false}               // Pauses playback entirely.*/}
+                    {/*resizeMode="cover"           // Fill the whole screen at aspect ratio.*/}
+                    {/*repeat={true}                // Repeat forever.*/}
+                    {/*style={styles.backgroundVideo}*/}
+                {/*/>*/}
+                <View style={styles.bgImg}>
                     <TouchableWithoutFeedback onPress={() => Actions.mygymRoot()}>
                         <Animatable.View ref={this.handleViewRef}
                                          animation="fadeInDown"
@@ -39,7 +50,7 @@ export default class MyGym extends Component {
                             </View>
                         </Animatable.View>
                     </TouchableWithoutFeedback>
-                </ImageBackground>
+                </View>
             </Container>
         )
     }

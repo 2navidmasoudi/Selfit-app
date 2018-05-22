@@ -57,7 +57,7 @@ class BuffetBasket extends Component {
             let {tokenmember} = await this.props.user;
             let {tokenapi} = await this.props;
             let {active, max, min} = await  this.state;
-            let {Basket,PriceAll} = await getAllOrder(active, tokenmember, tokenapi, max, min);
+            let {Basket,PriceAll} = await getAllOrder(active,false, tokenmember, tokenapi, max, min);
             console.log(Basket, 'basket for Buffet!',PriceAll,'priceAll');
             this.props.reBasketBuffet(Basket, Basket.length,PriceAll);
         } catch (e) {
@@ -80,14 +80,6 @@ class BuffetBasket extends Component {
         }
     };
 
-    async _getPayment() {
-        let result = await getPayment(1, this.props.user.tokenmember, 'selfit.member');
-        console.log(result, 'payment get');
-    };
-
-    async _getRequestPayment() {
-        getRequestPayment(2, this.props.user.tokenmember);
-    };
 
     render() {
         const FooterComponent = (this.props.Count1 + this.props.Count2) === 0 ? null :

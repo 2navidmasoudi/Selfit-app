@@ -1,8 +1,8 @@
 import {headers, PUT, GET, POST, Selfit, OrderBuffet, DELETE} from './type';
 
-export const getAllOrder = async (active, token, tokenapi, max, min) => {
+export const getAllOrder = async (active, accept, token, tokenapi, max, min) => {
     try {
-        let response = await fetch(`${Selfit}${OrderBuffet}GetAll?active=${active}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}`, {
+        let response = await fetch(`${Selfit}${OrderBuffet}GetAll?active=${active}&accept=${accept}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}`, {
             method: GET,
             headers
         });
@@ -30,9 +30,9 @@ export const getOrderBuffetid = async (id, active, token, tokenapi, max, min, ss
     }
 };
 
-export const getBasketOrderBuffet = async (id, methodpayed, buffetid, token, tokenapi, max, min, ssort, fsort) => {
+export const getOrderBuffetAll = async (id, methodpayed,statepayed, buffetid, token, tokenapi, max, min, ssort, fsort) => {
     try {
-        let response = await fetch(`${Selfit}${OrderBuffet}GetOrderBuffet/${id}?methodpayed=${methodpayed}&buffetid=${buffetid}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
+        let response = await fetch(`${Selfit}${OrderBuffet}GetOrderBuffet/${id}?methodpayed=${methodpayed}&statepayed=${statepayed}&buffetid=${buffetid}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
             method: GET,
             headers
         });
@@ -40,6 +40,19 @@ export const getBasketOrderBuffet = async (id, methodpayed, buffetid, token, tok
         let json = await response.json();
         console.log(json, 'getBasketOrderBuffet');
         return json.OrderBuffetList.$values;
+    } catch (e) {
+        console.log(e);
+
+    }
+};
+export const checkOrderBuffet = async (buffetid, token, tokenapi) => {
+    try {
+        let response = await fetch(`${Selfit}${OrderBuffet}CheckOrder?buffetid=${buffetid}&token=${token}&tokenapi=${tokenapi}`, {
+            method: GET,
+            headers
+        });
+        let json = await response.json();
+        return json;
     } catch (e) {
         console.log(e);
 
@@ -179,9 +192,9 @@ export const deleteOrderBuffet = async (id, token, tokenapi) => {
     }
 };
 
-export const deleteBasket = async (id, token, tokenapi) => {
+export const deleteOrderAll = async ( token, tokenapi) => {
     try {
-        let response = await fetch(`${Selfit}${OrderBuffet}DeleteBasketAll/${id}?token=${token}&tokenapi=${tokenapi}`, {
+        let response = await fetch(`${Selfit}${OrderBuffet}DeleteOrderAll?token=${token}&tokenapi=${tokenapi}`, {
             method: DELETE,
             headers,
         });

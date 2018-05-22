@@ -12,7 +12,7 @@ import {
     Spinner,
     Footer,
     FooterTab,
-    Button, Badge
+    Button, Badge, Left
 } from 'native-base';
 import AppHeader from '../../header';
 import {connect} from 'react-redux';
@@ -50,7 +50,7 @@ class CategoryChildren extends Component {
             let {tokenapi, idcategory} = await this.props;
             let {max, min, fsort, ssort} = await this.state;
             let Product = await getAllAccessProduct(idcategory, tokenmember, tokenapi, max, min, ssort, fsort);
-            console.log(Product);
+            console.log(Product,'Product');
             // this.props.receiveProduct(Product,min);
             this.setState({Product});
         } catch (e) {
@@ -112,11 +112,9 @@ class CategoryChildren extends Component {
                 <Content>
                     <Card style={{flex:0}}>
                         <CardItem style={{flex: 1, alignItems: 'center'}} header bordered>
-                            <Icon active name="cart"/>
-                            <Text style={{textAlign: 'right'}}>{this.props.categoryTitle}</Text>
-                            {/* <Right>
-                            <Icon name="arrow-forward" />
-                        </Right> */}
+                            <Left style={{flex:1}}/>
+                            <Text style={{flex:5,textAlign: 'center'}}>{this.props.categoryTitle}</Text>
+                            <Icon active name="cart" style={{flex:1}}/>
                         </CardItem>
                         {this.props.productCategory.map((c) => (
                             <CardItem button key={c.idcategory} bordered

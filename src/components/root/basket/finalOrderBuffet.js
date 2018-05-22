@@ -45,6 +45,7 @@ class finalOrderBuffet extends Component {
 
     componentWillMount() {
         this.getInfo();
+        console.log(this.props,'props');
     }
 
 
@@ -86,17 +87,12 @@ class finalOrderBuffet extends Component {
                 <FooterTab>
                     <Button
                         style={{
-                            // paddingTop: 10,
                             backgroundColor: '#0F9D7A'
                         }}
                         onPress={this.sendOrderBuffet.bind(this)}>
-                        {/*<Badge><Text>{(this.props.Count1 + this.props.Count2).toLocaleString('fa')}</Text></Badge>*/}
-                        {/*<Icon name="basket" style={{color: 'white'}}/>*/}
                         <Text style={{
                             fontFamily: 'IRANSansMobile',
-                            // fontSize: 18,
                             color: 'white',
-                            // paddingTop: 12
                         }}>صدور فاکتور</Text>
                     </Button>
                 </FooterTab>

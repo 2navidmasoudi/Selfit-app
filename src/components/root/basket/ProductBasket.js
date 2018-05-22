@@ -26,9 +26,6 @@ class ProductBasket extends Component {
         let totalPrice = await getPayment(2, this.props.user.tokenmember, 'selfit.member');
         this.props.setProductPriceAll(totalPrice);
     };
-    async _getRequestPayment() {
-        getRequestPayment(2, this.props.user.tokenmember);
-    };
 
     async getInfo() {
         await this.props.tokenStore('selfit.store');
@@ -60,7 +57,7 @@ class ProductBasket extends Component {
                             // paddingTop: 10,
                             backgroundColor: '#0F9D7A'
                         }}
-                        onPress={() => Actions.addressRoot({LeadFrom: 'Store'})}>
+                        onPress={() => Actions.timeStore({LeadFrom: 'Store'})}>
                         {/*<Badge><Text>{(this.props.Count1 + this.props.Count2).toLocaleString('fa')}</Text></Badge>*/}
                         {/*<Icon name="basket" style={{color: 'white'}}/>*/}
                         <Text style={{
@@ -90,9 +87,6 @@ class ProductBasket extends Component {
                     {/*<Button block onPress={this._getPayment.bind(this)}>*/}
                         {/*<Text>get</Text>*/}
                     {/*</Button>*/}
-                    <Button block onPress={this._getRequestPayment.bind(this)}>
-                        <Text>get</Text>
-                    </Button>
                     <Text>کل: {this.props.totalPrice.toLocaleString('fa')}</Text>
                 </Content>
                 {FooterComponent}

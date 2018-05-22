@@ -16,7 +16,7 @@ class FoodCard extends Component {
             let {idbasketbuffet} = this.props.food;
             let deletedOrder = await deleteOrderBuffet(idbasketbuffet, tokenmember, tokenapi);
             console.log(deletedOrder,'deletedOrder?');
-            let {Basket,PriceAll} = await getAllOrder(true, tokenmember, tokenapi, 30, 0);
+            let {Basket,PriceAll} = await getAllOrder(true,false, tokenmember, tokenapi, 30, 0);
             this.props.reBasketBuffet(Basket,Basket.length,PriceAll);
         }catch (e) {
             console.log(e)

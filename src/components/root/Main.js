@@ -81,7 +81,7 @@ class Main extends Component {
     render() {
         const pannel =
             this.props.user.typememberid ===
-            1 ?
+            6 ?
                 <View>
                     <View style={main.pannelContainer}>
                         <View style={main.pannelWrapper}>

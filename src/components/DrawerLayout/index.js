@@ -3,7 +3,7 @@ import {ImageBackground, Text, TouchableWithoutFeedback, View} from 'react-nativ
 import {connect} from 'react-redux';
 import moment from 'moment-jalaali';
 import {Actions} from 'react-native-router-flux';
-import {Icon, Item,Badge,Left} from 'native-base';
+import {Icon, Item, Badge, Left, Content} from 'native-base';
 import {drawer} from '../../assets/styles/index';
 import {reBasketBuffet, reBasketMaterial, reBasketProduct, tokenBuffet, tokenStore} from "../../redux/actions";
 import {getBasketProduct} from "../../services/orderProduct";
@@ -29,6 +29,7 @@ class DrawerLayout extends Component {
     async getInfo() {
         await this.props.tokenStore('selfit.store');
         await this.props.tokenBuffet('selfit.buffet');
+        // await this._getAllOrder();
         await this._getBasketProduct();
         await this._getBasketBuffet();
         await this._getBasketMaterial();
@@ -47,13 +48,22 @@ class DrawerLayout extends Component {
             logError(e, '_getBasketProduct', 'DrawerLayout/index', 'getBasketProduct');
         }
     };
-
+    // async _getAllOrder() {
+    //     try {
+    //         let {tokenmember} = await this.props.user;
+    //         let {buffetToken} = await this.props;
+    //         let orders = await getAllOrder(true,false,tokenmember,buffetToken,30,0);
+    //         console.log(orders,'Orders');
+    //     } catch (e) {
+    //         console.log(e);
+    //     }
+    // }
     async _getBasketBuffet() {
         try {
             let {tokenmember} = await this.props.user;
             let {buffetToken} = await this.props;
             let {active, max, min} = await  this.state;
-            let {Basket,PriceAll} = await getAllOrder(active, tokenmember, buffetToken, max, min);
+            let {Basket,PriceAll} = await getAllOrder(active, false, tokenmember, buffetToken, max, min);
             console.log(Basket, 'basket for Buffet!',PriceAll,'priceAll');
             this.props.reBasketBuffet(Basket, Basket.length,PriceAll);
         } catch (e) {
@@ -111,61 +121,64 @@ class DrawerLayout extends Component {
                         </View>
                     </ImageBackground>
                 </TouchableWithoutFeedback>
-                <Item style={drawer.item} onPress={() => {
-                    Actions.profile()
-                }}>
-                    <Text style={drawer.itemTitle}>پروفایل</Text>
-                    <Icon name='person' style={drawer.itemIcon}/>
-                </Item>
-                {/*<Item style={drawer.item} onPress={() => {*/}
-                {/*Actions.support()*/}
-                {/*}}>*/}
-                {/*<Text style={drawer.itemTitle}>تنظیمات</Text>*/}
-                {/*<Icon name='settings' style={drawer.itemIcon}/>*/}
-                {/*</Item>*/}
-                <Item style={drawer.item} onPress={() => {
-                    Actions.buffetBasket()
-                }}>
-                    <Left style={{justifyContent:'center'}}>
-                    <Badge style={{backgroundColor:'#0F9D7A',height:30,width:30,justifyContent:'center',alignItems:'center'}}>
-                        <Text style={{color:'white'}}>{(this.props.buffetBasketCount+this.props.materialBasketCount).toLocaleString('fa')||'0'.toLocaleString('fa')}</Text>
-                    </Badge>
-                    </Left>
-                    <Text style={drawer.itemTitle}>سبد خرید غذا</Text>
-                    <Icon name='basket' style={drawer.itemIcon}/>
-                </Item>
-                <Item style={drawer.item} onPress={() => {
-                    Actions.productBasket()
-                }}>
-                    <Left style={{justifyContent:'center'}}>
-                        <Badge style={{backgroundColor:'#0F9D7A',height:30,width:30,justifyContent:'center',alignItems:'center'}}>
-                            {/*//todo: localeString for undefined basket*/}
-                            <Text style={{color:'white',textAlign:'center'}}>{this.props.productBasketCount.toLocaleString('fa')||'0'.toLocaleString('fa')}</Text>
-                        </Badge>
-                    </Left>
+                <Content>
+                    <Item style={drawer.item} onPress={() => {Actions.profile()}}>
+                        <Text style={drawer.itemTitle}>پروفایل</Text>
+                        <Icon name='person' style={drawer.itemIcon}/>
+                    </Item>
+                    <Item style={drawer.item} onPress={() => {
+                        Actions.buffetBasket()
+                    }}>
+                        <Left style={{justifyContent:'center'}}>
+                            <Badge style={{backgroundColor:'#0F9D7A',height:30,width:30,justifyContent:'center',alignItems:'center'}}>
+                                <Text style={{color:'white'}}>{(this.props.buffetBasketCount+this.props.materialBasketCount).toLocaleString('fa')||'0'.toLocaleString('fa')}</Text>
+                            </Badge>
+                        </Left>
+                        <Text style={drawer.itemTitle}>سبد خرید غذا</Text>
+                        <Icon name='basket' style={drawer.itemIcon}/>
+                    </Item>
+                    <Item style={drawer.item} onPress={() => {
+                        Actions.productBasket()
+                    }}>
+                        <Left style={{justifyContent:'center'}}>
+                            <Badge style={{backgroundColor:'#0F9D7A',height:30,width:30,justifyContent:'center',alignItems:'center'}}>
+                                {/*//todo: localeString for undefined basket*/}
+                                <Text style={{color:'white',textAlign:'center'}}>{this.props.productBasketCount.toLocaleString('fa')||'0'.toLocaleString('fa')}</Text>
+                            </Badge>
+                        </Left>
 
-                    <Text style={drawer.itemTitle}>سبد خرید فروشگاه</Text>
-                    <Icon name='basket' style={drawer.itemIcon}/>
-                </Item>
-                <Item style={drawer.item} onPress={() => {
-                Actions.support()
-                }}>
-
-                    <Text style={drawer.itemTitle}>پشتیبانی</Text>
-                    <Icon name='call' style={drawer.itemIcon}/>
-                </Item>
-                <Item style={drawer.item}>
-                    <Text style={drawer.itemTitle}>درباره ما</Text>
-                    <Icon name='bookmarks' style={drawer.itemIcon}/>
-                </Item>
-                <Item style={drawer.item}>
-                    <Text style={drawer.itemTitle}>راهنمای برنامه</Text>
-                    <Icon name='help' style={drawer.itemIcon}/>
-                </Item>
-                <Item style={drawer.item} onPress={() => this._putUserLogout()}>
-                    <Text style={drawer.itemTitle}>خروج از حساب</Text>
-                    <Icon name='backspace' style={drawer.itemIcon}/>
-                </Item>
+                        <Text style={drawer.itemTitle}>سبد خرید فروشگاه</Text>
+                        <Icon name='basket' style={drawer.itemIcon}/>
+                    </Item>
+                    <Item style={drawer.item} onPress={() => Actions.follow()}>
+                        <Text style={drawer.itemTitle}>پیگیری سفارش</Text>
+                        <Icon name='call' style={drawer.itemIcon}/>
+                    </Item>
+                    <Item style={drawer.item} onPress={() => Actions.support()}>
+                        <Text style={drawer.itemTitle}>پشتیبانی</Text>
+                        <Icon name='call' style={drawer.itemIcon}/>
+                    </Item>
+                    <Item style={drawer.item}>
+                        <Text style={drawer.itemTitle}>درباره ما</Text>
+                        <Icon name='bookmarks' style={drawer.itemIcon}/>
+                    </Item>
+                    <Item style={drawer.item} onPress={()=>Actions.complaints()}>
+                        <Text style={drawer.itemTitle}>شکایات و پیشنهادات</Text>
+                        <Icon name='bookmarks' style={drawer.itemIcon}/>
+                    </Item>
+                    <Item style={drawer.item}>
+                        <Text style={drawer.itemTitle}>راهنمای برنامه</Text>
+                        <Icon name='help' style={drawer.itemIcon}/>
+                    </Item>
+                    <Item style={drawer.item} onPress={()=>Actions.rules()}>
+                        <Text style={drawer.itemTitle}>قوانین و تعهدات</Text>
+                        <Icon name='help' style={drawer.itemIcon}/>
+                    </Item>
+                    <Item style={drawer.item} onPress={() => this._putUserLogout()}>
+                        <Text style={drawer.itemTitle}>خروج از حساب</Text>
+                        <Icon name='backspace' style={drawer.itemIcon}/>
+                    </Item>
+                </Content>
             </View>
         )
     }

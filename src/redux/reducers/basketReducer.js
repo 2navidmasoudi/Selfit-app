@@ -1,7 +1,15 @@
 import {
     GET_BUFFET_BASKET,
-    GET_MATERIAL_BASKET, GET_ORDER_BUFFET, GET_ORDER_MATERIAL,
-    GET_PRODUCT_BASKET, SET_DESC_PRODUCT, SET_ID_BASKET, SET_ORDER_ID_BUFFET, SET_PRODUCT_PRICEALL, SET_ROAD
+    GET_MATERIAL_BASKET,
+    GET_ORDER_BUFFET,
+    GET_ORDER_MATERIAL,
+    GET_PRODUCT_BASKET,
+    SET_DESC_PRODUCT,
+    SET_ID_BASKET,
+    SET_ORDER_ID_BUFFET,
+    SET_PRODUCT_IDACCESS,
+    SET_PRODUCT_PRICEALL,
+    SET_ROAD
 } from "../actions/type";
 
 const initialState = {
@@ -21,6 +29,7 @@ const initialState = {
     orderMaterial:[],
     orderBuffet:[],
     descProduct:null,
+    idtimefactor:null,
 };
 
 export default basket = (state = initialState, action = {}) => {
@@ -91,6 +100,11 @@ export default basket = (state = initialState, action = {}) => {
                 PriceAllProduct: action.PriceAllProduct,
             };
             break;
+        case SET_PRODUCT_IDACCESS:
+            return {
+                ...state,
+                idtimefactor: action.idtimefactor,
+            };
         default:
             return state;
     }

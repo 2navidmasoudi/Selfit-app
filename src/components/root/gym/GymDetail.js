@@ -20,18 +20,22 @@ import AppHeader from '../../header';
 import HTMLView from 'react-native-htmlview';
 import Swiper from 'react-native-swiper';
 import {connect} from 'react-redux';
-import {putVisit, getAllPicGym} from '../../../services/gym';
+import {putVisit, getAllPicGym, postRateGym} from '../../../services/gym';
 import {form, header} from '../../../assets/styles/index';
-
+import {Rating} from 'react-native-elements';
 moment.loadPersian({dialect: 'persian-modern'});
 import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
-    wrapper: {flex:1},
+    wrapper: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     slide1: {
         flex: 1,
-        width: 300,
-        height: 200,
+        justifyContent: 'center',
+        alignItems: 'center',
         // backgroundColor: '#9DD6EB',
     },
     text: {
@@ -42,51 +46,49 @@ const styles = StyleSheet.create({
 });
 
 class GymDetail extends Component {
-    constructor() {
-        super();
-        this.state = {
-            ImgSrc: null,
-            slideready: false,
-            position: 1,
-            interval: null,
-            dataSource: [],
-        }
-    }
+    state = {
+        ImgSrc: null,
+        slideready: false,
+        position: 1,
+        interval: null,
+        dataSource: [],
+    };
 
     componentWillMount() {
-        this._putVisit();
-        this._getAllPicGym();
-        Linking.getInitialURL().then((url) => {
-            if (url) {
-                console.log('Initial url is: ' + url);
-            }
-        }).catch(err => console.error('An error occurred', err));
-
+        this.getInfo();
     }
 
-    componentWillUnmount() {
-        // clearInterval(this.state.interval);
+    async getInfo() {
+        await  this._getAllPicGym();
+        await  this._putVisit();
+
     }
 
     async _putVisit() {
-        let {gymid, tokenapi} = await this.props;
-        let {tokenmember} = await this.props.user;
-        let json = await putVisit(gymid, tokenmember, tokenapi);
-        console.log('put visit? ', json);
+        try {
+            let {gymid, tokenapi} = await this.props;
+            let {tokenmember} = await this.props.user;
+            let json = await putVisit(gymid, tokenmember, tokenapi);
+            console.log('put visit? ', json);
+        } catch (e) {
+            console.log(e);
+        }
+
     }
 
     async _getAllPicGym() {
         try {
+            await this.setState({dataSource: []});
             let {gymid, tokenapi} = await this.props;
             let {tokenmember} = await this.props.user;
             let allPicGym = await getAllPicGym(gymid, tokenmember, tokenapi, 20, 0, true);
             let PicArray = await allPicGym.PicGymList.$values;
             console.log('pics', PicArray);
             for (i = 0; i < PicArray.length; i++) {
-                const m = moment(`${PicArray[i].datesave}`, 'YYYY/MM/DDTHH:mm:ss');
-                const ImgYear = m.jYear();
-                const ImgMonth = m.jMonth() + 1;
-                const ImgSrc = `${PicArray[i].httpserver}${PicArray[i].pathserver}${ImgYear}/${ImgMonth}/${PicArray[i].picgym}`;
+                const m = await moment(`${PicArray[i].datesave}`, 'YYYY/MM/DDTHH:mm:ss');
+                const ImgYear = await m.jYear();
+                const ImgMonth = await m.jMonth() + 1;
+                const ImgSrc = await `${PicArray[i].httpserver}${PicArray[i].pathserver}${ImgYear}/${ImgMonth}/${PicArray[i].picgym}`;
                 await this.setState(prevState => ({
                     dataSource: [...prevState.dataSource,
                         {
@@ -99,20 +101,21 @@ class GymDetail extends Component {
                 slideready: true
             });
             console.log(this.state.dataSource);
-            // this.setState({
-            //     interval: setInterval(() => {
-            //         this.setState({
-            //             position: this.state.position === this.state.dataSource.length ? 0 : this.state.position + 1
-            //         });
-            //     }, 3000)
-            // });
-
-
         } catch (err) {
             console.log(err);
         }
     }
-
+   async ratingCompleted(rate) {
+        try {
+            console.log("Rating is: " + rate);
+            let {tokenmember} = await this.props.user;
+            let {tokenapi,idgym} = await this.props;
+            let result = await postRateGym(idgym,rate,tokenmember,tokenapi);
+            console.log(result,'postRateGym');
+        } catch (e) {
+            console.log(e);
+        }
+    }
     render() {
         const {datesave, httpserver, pathserver, picgym, descgym, namegym, addressgym, RateNumber, visitgym, telgym} = this.props;
         const m = moment(`${datesave}`, 'YYYY/MM/DDTHH:mm:ss');
@@ -124,21 +127,21 @@ class GymDetail extends Component {
         // const htmlContent = `${descgym}`;
 
         const slide = this.state.slideready ?
-            <Swiper style={styles.wrapper} showsButtons={true} loop={true}>
-                {this.state.dataSource.map((pic,index)=>(
-                    <View style={styles.slide1}
-                    key={index}>
-                        <Image style={{height:200,width:300}} source={{uri:pic.url}}/>
-                    </View>
+            <Swiper style={styles.wrapper} height={200} showsButtons={true} loop={true} autoplay={true}
+                    autoplayTimeout={1.5}
+            >
+                {this.state.dataSource.map((pic, index) => (
+                    <TouchableWithoutFeedback key={index} style={styles.slide1}
+                                              onPress={() => Actions.showImage({images: this.state.dataSource})}>
+                        <Image style={{
+                            height: 200, width: null, resizeMode: 'cover',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }} source={{uri: pic.url}}/>
+                    </TouchableWithoutFeedback>
                 ))}
 
             </Swiper>
-            // <Slideshow
-            // dataSource={this.state.dataSource}
-            // position={this.state.position}
-            // onPositionChanged={position => this.setState({ position })}
-            // onPress={(image) => Actions.showImage({images:this.state.dataSource})}
-            // />
             :
             <TouchableWithoutFeedback onPress={() => Actions.showImage({uri: ImgSrc})}>
                 <Image style={{flex: 1, height: 220, width: null}} resizeMode='contain' source={{uri: ImgSrc}}/>
@@ -191,10 +194,20 @@ class GymDetail extends Component {
                                 <Text>تعداد بازدید: {visitgym}</Text>
                             </Left>
                             <Right style={{flex: 1}}>
-                                <Button transparent textStyle={{color: '#87838B'}}>
-                                    <Icon name="md-star"/>
-                                    <Text>امتیاز: 5/{RateNumber}</Text>
-                                </Button>
+                                <Rating
+                                    ratingCount={5}
+                                    fractions={2}
+                                    startingValue={RateNumber}
+                                    imageSize={30}
+                                    onFinishRating={this.ratingCompleted.bind(this)}
+                                    style={{ paddingVertical: 10 }}
+                                />
+                                {/*<AirbnbRating*/}
+                                    {/*count={11}*/}
+                                    {/*reviews={["Terrible", "Bad", "Meh", "OK", "Good", "Hmm...", "Very Good", "Wow", "Amazing", "Unbelievable", "Jesus"]}*/}
+                                    {/*defaultRating={11}*/}
+                                    {/*size={20}*/}
+                                {/*/>*/}
                             </Right>
 
                         </CardItem>

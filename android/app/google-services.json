@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "200205451563",
+    "firebase_url": "https://selfit-1520083373477.firebaseio.com",
+    "project_id": "selfit-1520083373477",
+    "storage_bucket": "selfit-1520083373477.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:200205451563:android:b3cb3bb4fa0ba6f9",
+        "android_client_info": {
+          "package_name": "com.selfit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "200205451563-s7i6pou0t6d1qe8e0t54b6gmbotjn081.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDl-emP9dzCfh7p2zziswmvfhVE_rMuNl4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -3,7 +3,7 @@ import {Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import {Button, Container, Content, Footer, FooterTab, Icon, Input, Item, Label} from 'native-base';
 import AppHeader from "../../header";
-import {setDescProduct, setRoad, tokenStore} from "../../../redux/actions";
+import {setDescProduct, setProductIDAccess, setRoad, tokenStore} from "../../../redux/actions";
 import {logError} from "../../../services/log";
 import {Actions} from "react-native-router-flux";
 import {SignStyle} from "../../../assets/styles/sign";
@@ -48,10 +48,7 @@ class TimeStore extends Component {
     }
     async _putTimeFactor(idtimefactor){
         try {
-            let {tokenmember} = await this.props.user;
-            let {tokenapi,productBasket} = await this.props;
-            let result = await putTimeFactor(productBasket[0].orderid,idtimefactor,tokenmember,tokenapi);
-            console.log(result);
+            this.props.setProductIDAccess(idtimefactor);
             this.setState({selected:true});
         } catch (e) {
             console.log(e);
@@ -123,6 +120,7 @@ const mapDispatchToProps = (dispatch) => {
         tokenStore: (tokenapi) => dispatch(tokenStore(tokenapi)),
         setRoad: (roadTo) => dispatch(setRoad(roadTo)),
         setDescProduct: (descProducet) => dispatch(setDescProduct(descProducet)),
+        setProductIDAccess: (idtimefactor) => dispatch(setProductIDAccess(idtimefactor)),
     }
 };
 

@@ -12,6 +12,16 @@ class FoodCard extends Component {
     state = {
         numberbuffet: 0,
     };
+    async _rebasketBuffet() {
+        try {
+            let {tokenapi} = await this.props;
+            let {tokenmember} = this.props.user;
+            let {Basket,  PriceAll} = await getAllOrder(true, false, tokenmember, tokenapi, 30, 0);
+            this.props.reBasketBuffet(Basket,Basket.length,PriceAll);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     async removeButtonHandle() {
         try {
@@ -21,22 +31,20 @@ class FoodCard extends Component {
             let {MenuFood,tokenapi} = await this.props;
             let {tokenmember} = this.props.user;
             let deletedOrder;
-            let FoodOrdered = await getAllOrder(true, tokenmember, tokenapi, 30, 0);
-            console.log(FoodOrdered);
-            for (i = 0; i < FoodOrdered.length; i++) {
-                if (MenuFood.menufoodid == FoodOrdered[i].menufoodid) {
-                    deletedOrder = await deleteOrderBuffet(FoodOrdered[i].idbasketbuffet, tokenmember, tokenapi);
-                    console.log('this is it!', FoodOrdered[i], 'deleted?', deletedOrder);
+            let {Basket,  PriceAll} = await getAllOrder(true, false, tokenmember, tokenapi, 30, 0);
+            console.log(Basket,'asdasdasd');
+            for (i = 0; i < Basket.length; i++) {
+                if (MenuFood.menufoodid == Basket[i].menufoodid) {
+                    deletedOrder = await deleteOrderBuffet(Basket[i].idbasketbuffet, tokenmember, tokenapi);
+                    console.log('this is it!', Basket[i], 'deleted?', deletedOrder);
                     break;
                 }
             }
-            let {Basket,PriceAll} = await getAllOrder(true, tokenmember, tokenapi, 30, 0);
-            this.props.reBasketBuffet(Basket,Basket.length,PriceAll);
+            this._rebasketBuffet();
         } catch (error) {
             console.log(error);
             logError(error, 'removeButtonHandle', 'buffet/FoodCard', 'deleteOrderBuffet');
             this.props.reBasketBuffet([],0,0);
-
         }
     }
 
@@ -51,8 +59,7 @@ class FoodCard extends Component {
             });
             let result = await postOrderBuffet(buffetid, MenuFood.menufoodid, numberbuffet + 1, tokenmember, tokenapi);
             console.log('postOrderBuffet for', numberbuffet, MenuFood.menufoodid, MenuFood.pricemenufood, result);
-            let {Basket,PriceAll} = await getAllOrder(true, tokenmember, tokenapi, 30, 0);
-            this.props.reBasketBuffet(Basket,Basket.length,PriceAll);
+            this._rebasketBuffet();
         } catch (error) {
             console.log(error);
             logError(error, 'addButtonHandle', 'buffet/FoodCard', 'postOrderBuffet');
@@ -125,14 +132,13 @@ const mapStateToProps = (state) => {
     return {
         user: state.user,
         tokenapi: state.buffet.tokenapi,
-        buffetid: state.buffet.buffetid
+        buffetid: state.buffet.buffetid,
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         reBasketBuffet: (basket, basketCount,PriceAll) => dispatch(reBasketBuffet(basket, basketCount, PriceAll)),
-
     }
 };
 
