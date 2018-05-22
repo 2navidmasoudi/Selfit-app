@@ -126,13 +126,13 @@ class App extends Component {
                         persistor={persistor}>
                         <RouterWithRedux hideNavBar>
                             <Scene key='rootMain' hideNavbar>
-                                <Scene key="splash"  component={Splash} hideNavBar/>
+                                <Scene key="splash" initial component={Splash} hideNavBar/>
                                 <Scene key="sign" component={Sign} hideNavBar/>
-                                <Scene key="root" initial  hideNavBar>
+                                <Scene key="root" hideNavBar>
                                     <Drawer key="drawer" drawerPosition="right" contentComponent={DrawerLayout}
                                             drawerWidth={window.width / 1.7}>
                                         <Scene key='componentMain' hideNavbar>
-                                            <Scene key="Home" initial hideNavBar={true} initial component={Main}/>
+                                            <Scene key="Home" hideNavBar={true} initial component={Main}/>
                                             <Scene key="Music" hideNavBar={true} component={Music}/>
                                             <Scene key="support" component={Support} hideNavBar/>
                                             <Scene key="gym" component={Gym} hideNavBar/>
