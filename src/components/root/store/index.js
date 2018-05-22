@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
     Container,
     Header,
@@ -11,14 +11,14 @@ import {
     Footer,
     FooterTab,
     Button,
-    Badge
+    Badge, Body, Left
 } from 'native-base';
 import AppHeader from '../../header';
-import { connect } from 'react-redux';
-import { putCheckToken } from '../../../services/index';
-import { tokenStore } from '../../../redux/actions';
-import { logError } from '../../../services/log';
-import { getAllCategoryProduct } from '../../../services/categoryProduct';
+import {connect} from 'react-redux';
+import {putCheckToken} from '../../../services/index';
+import {tokenStore} from '../../../redux/actions';
+import {logError} from '../../../services/log';
+import {getAllCategoryProduct} from '../../../services/categoryProduct';
 import listToTree from 'list-to-tree-lite';
 import {Actions} from 'react-native-router-flux';
 
@@ -56,78 +56,72 @@ import {Actions} from 'react-native-router-flux';
 
 //TODO: LIST FOR PRODUCT
 class Store extends Component {
-    constructor(){
+    constructor() {
         super();
-        this.state={
-            productCategory:[],
-            max:30,
-            min:0,
-            ssort:false,
-            fsort:0,
+        this.state = {
+            productCategory: [],
+            max: 30,
+            min: 0,
+            ssort: false,
+            fsort: 0,
         }
     }
-    componentWillMount(){
+
+    componentWillMount() {
         this.setInfo();
-        let {tokenmember,tokenapi} = this.props.user;
-        putCheckToken(tokenmember,tokenapi);
+        let {tokenmember, tokenapi} = this.props.user;
+        putCheckToken(tokenmember, tokenapi);
     }
-    async setInfo(){
+
+    async setInfo() {
         await this.props.tokenStore('selfit.store');
         await this._getCategoryProduct();
         await this._listToTree();
     }
+
     async _listToTree() {
         let {productCategory} = await this.state;
-        let Tree =  await listToTree(productCategory,{
-            idKey:'idcategory',
-            parentKey:'parentidcategory',
+        let Tree = await listToTree(productCategory, {
+            idKey: 'idcategory',
+            parentKey: 'parentidcategory',
             // childrenKey: childrenKey,
         });
-        console.log(productCategory,'productCategory');
-        this.setState({productCategory:Tree});
+        console.log(productCategory, 'productCategory');
+        this.setState({productCategory: Tree});
     }
+
     onItemPress(item) {
         // if (item.children.length) {
-        Actions.categoryChildren({productCategory:item.children,categoryTitle:item.namecategory,idcategory:item.idcategory});
+        Actions.categoryChildren({
+            productCategory: item.children,
+            categoryTitle: item.namecategory,
+            idcategory: item.idcategory
+        });
         console.log(item);
         // }
     }
 
-    async _getCategoryProduct(){
+    async _getCategoryProduct() {
         try {
             let {tokenapi} = await this.props;
             let {tokenmember} = await this.props.user;
-            let {max,min,ssort,fsort} = await this.state;
-            let productCategory = await getAllCategoryProduct(tokenmember,tokenapi,max,min,ssort,fsort);
+            let {max, min, ssort, fsort} = await this.state;
+            let productCategory = await getAllCategoryProduct(tokenmember, tokenapi, max, min, ssort, fsort);
             console.log(productCategory);
             this.setState({
                 productCategory
             })
         } catch (error) {
-            logError(error,'getAllCategoryProduct','root/store','_getCategoryProduct');
+            logError(error, 'getAllCategoryProduct', 'root/store', '_getCategoryProduct');
             console.log(error);
         }
 
     }
+
     render() {
         const FooterComponent = this.props.Count === 0 ? null :
             <Footer>
                 <FooterTab>
-                    {/*<Button*/}
-                    {/*style={{*/}
-                    {/*// paddingTop: 10,*/}
-                    {/*backgroundColor: '#0F9D7A'*/}
-                    {/*}}*/}
-                    {/*onPress={() => Actions.productBasket({LeadFrom: 'Buffet'})}>*/}
-                    {/*/!*<Badge><Text>{(this.props.Count1 + this.props.Count2).toLocaleString('fa')}</Text></Badge>*!/*/}
-                    {/*/!*<Icon name="basket" style={{color: 'white'}}/>*!/*/}
-                    {/*<Text style={{*/}
-                    {/*fontFamily: 'IRANSansMobile',*/}
-                    {/*// fontSize: 18,*/}
-                    {/*color: 'white',*/}
-                    {/*// paddingTop: 12*/}
-                    {/*}}>مشاهده سبد خرید</Text>*/}
-                    {/*</Button>*/}
                     <Button badge
                             full
                             style={{
@@ -146,38 +140,37 @@ class Store extends Component {
                     </Button>
                 </FooterTab>
             </Footer>;
-        return(
+        return (
             <Container>
-                <AppHeader rightTitle="فروشگاه" backButton={"flex"} />
+                <AppHeader rightTitle="فروشگاه" backButton={"flex"}/>
                 <Content>
-                <Card  style={{flex:0}}>
-                    <CardItem style={{flex:1,alignItems:'center'}} header bordered >
-                        <Icon active name="cart" />
-                        <Text style={{textAlign:'right'}}>دسته بندی فروشگاه</Text>
-                        {/* <Right>
-                            <Icon name="arrow-forward" />
-                        </Right> */}
-                    </CardItem>
-                    {this.state.productCategory.map((c)=>(
-                        <CardItem button key={c.idcategory} bordered
-                                  onPress={()=>this.onItemPress(c)}>
-                            {/* <Icon active name="logo-googleplus" /> */}
-                            <Text style={{flex:5,textAlign:'right'}}>{c.namecategory}</Text>
-                            <Right style={{flex:1,alignItems:'center'}}>
-                                <Icon name="arrow-forward" />
-                            </Right>
+                    <Card style={{flex: 0}}>
+                        <CardItem style={{flex: 1, alignItems: 'center',justifyContent:'center'}} header bordered>
+                            <Left style={{flex:1}}/>
+                            <Text style={{flex:5,textAlign: 'center'}}>دسته بندی فروشگاه</Text>
+                            <Icon active name="cart" style={{flex:1}}/>
                         </CardItem>
-                    ))}
-                </Card>
+                        {this.state.productCategory.map((c) => (
+                            <CardItem button key={c.idcategory} bordered
+                                      onPress={() => this.onItemPress(c)}>
+                                {/* <Icon active name="logo-googleplus" /> */}
+                                <Text style={{flex: 5, textAlign: 'right'}}>{c.namecategory}</Text>
+                                <Right style={{flex: 1, alignItems: 'center'}}>
+                                    <Icon name="arrow-forward"/>
+                                </Right>
+                            </CardItem>
+                        ))}
+                    </Card>
                 </Content>
                 {FooterComponent}
             </Container>
         )
     }
 }
+
 const mapDispatchToProps = (dispatch) => {
     return {
-        tokenStore:(tokenapi)=>dispatch(tokenStore(tokenapi)),
+        tokenStore: (tokenapi) => dispatch(tokenStore(tokenapi)),
     }
 };
 const mapStateToProps = (state) => {
@@ -187,4 +180,4 @@ const mapStateToProps = (state) => {
         Count: state.basket.productBasketCount,
     }
 };
-export default connect(mapStateToProps,mapDispatchToProps)(Store);
+export default connect(mapStateToProps, mapDispatchToProps)(Store);

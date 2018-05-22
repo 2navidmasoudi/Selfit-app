@@ -6,16 +6,12 @@ import {connect} from 'react-redux';
 import {putCheckToken} from '../../../services/index';
 import {
     getOrderBuffet,
-    getOrderMaterial,
-    setOrderIDBuffet,
-    setOrderIDMaterial,
     tokenBuffet
 } from '../../../redux/actions';
 import {getSingleBuffet, putActiveBuffet} from '../../../services/buffet';
 import {logError} from '../../../services/log';
-import {getBasketOrderBuffet, getOrderBuffetid} from "../../../services/orderBuffet";
+import {getOrderBuffetAll} from "../../../services/orderBuffet";
 import OrderCard from './orderCard';
-import {getAllOrderMaterial} from "../../../services/orderMaterial";
 
 class BuffetKeeper extends Component {
     state = {
@@ -28,14 +24,12 @@ class BuffetKeeper extends Component {
         this.setInfo();
         let {tokenmember, tokenapi} = this.props.user;
         putCheckToken(tokenmember, tokenapi);
-
     }
 
     async setInfo() {
         await this.props.tokenBuffet('selfit.buffet');
         await this.checkActiveBuffet();
-        await this._getBasketOrderBuffet();
-
+        await this._getOrderBuffet();
     }
 
     async _getSingleBuffet() {
@@ -50,18 +44,17 @@ class BuffetKeeper extends Component {
         }
     }
 
-    async _getBasketOrderBuffet() {
+    async _getOrderBuffet() {
         try {
             let {tokenmember} = await this.props.user;
             let {tokenapi, buffetid} = await this.props;
-            let order = await getBasketOrderBuffet(0,0,buffetid,tokenmember,tokenapi,30,0,true,0);
+            let order = await getOrderBuffetAll(0,0,0,buffetid,tokenmember,tokenapi,30,0,true,0);
             console.log(order);
             this.props.getOrderBuffet(order);
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
     }
-
 
     async checkActiveBuffet() {
         try {
@@ -143,7 +136,6 @@ class BuffetKeeper extends Component {
 const mapDispatchToProps = (dispatch) => {
     return {
         tokenBuffet: (tokenapi) => dispatch(tokenBuffet(tokenapi)),
-        getOrderMaterial: (orderMaterial) => dispatch(getOrderMaterial(orderMaterial)),
         getOrderBuffet: (orderBuffet) => dispatch(getOrderBuffet(orderBuffet)),
 
     }

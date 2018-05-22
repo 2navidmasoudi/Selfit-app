@@ -84,3 +84,22 @@ export const putGym = async (idgym, namegym, descgym, picgym, tuitiongym, number
         console.log(e);
     }
 };
+
+export const postRateGym = async (idgym, rate, token, tokenapi) => {
+    try {
+        let response = await fetch(`${Selfit}${Gym}PostRate`, {
+            method: POST,
+            headers,
+            body: JSON.stringify({
+                idgym,
+                rate,
+                token,
+                tokenapi,
+            })
+        });
+        let json = await response.json();
+        return json;
+    } catch (e) {
+        console.log(e);
+    }
+};

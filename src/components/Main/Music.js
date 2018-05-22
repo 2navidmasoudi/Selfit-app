@@ -4,11 +4,22 @@ import {Actions} from 'react-native-router-flux';
 import {Container} from 'native-base';
 import {styles} from "./style";
 import * as Animatable from 'react-native-animatable';
+import Video from "react-native-video";
 export default class Music extends Component {
     render() {
         return (
         <Container>
-            <ImageBackground source={require('../../assets/music.jpg')} style={styles.bgImg}>
+            {/*<Video*/}
+                {/*source={require('../../assets/music.mp4')}*/}
+                {/*rate={1.0}                   // 0 is paused, 1 is normal.*/}
+                {/*volume={1.0}                 // 0 is muted, 1 is normal.*/}
+                {/*muted={true}                // Mutes the audio entirely.*/}
+                {/*paused={false}               // Pauses playback entirely.*/}
+                {/*resizeMode="cover"           // Fill the whole screen at aspect ratio.*/}
+                {/*repeat={true}                // Repeat forever.*/}
+                {/*style={styles.backgroundVideo}*/}
+            {/*/>*/}
+            <ImageBackground style={styles.bgImg}>
                 <TouchableWithoutFeedback onPress={()=>Actions.Music()}>
                     <View style={styles.animationView}>
                         <View style={styles.bgView}>

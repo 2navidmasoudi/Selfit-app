@@ -50,9 +50,9 @@ import TimeStore from "./components/root/basket/timeStore";
 import finalOrderBuffet from "./components/root/basket/finalOrderBuffet";
 import finalOrderProduct from "./components/root/basket/finalOrderProduct";
 import OrderDetail from "./components/root/buffetKeepr/OrderDetail";
-
-// import io from 'socket.io-client';
-// import Sockets from 'react-native-sockets';
+import Complaints from "./components/root/Complaints";
+import Rules from "./components/root/Rules";
+import Follow from "./components/root/follow";
 
 Geocoder.setApiKey('AIzaSyBlgHjeMbqK3xEZfh6HK2o8RdjhhgTOh0s');
 let window = Dimensions.get('window');
@@ -67,33 +67,9 @@ EStyleSheet.build({
 
 //     code-push release-react Selfit-Android android
 //      adb shell input keyevent 82
-// debug {
-//     // Note: CodePush updates should not be tested in Debug mode as they are overriden by the RN packager. However, because CodePush checks for updates in all modes, we must supply a key.
-//     buildConfigField "String", "CODEPUSH_KEY", '""'
-// }
 
-//new CodePush("9PjteJbz4ITT6_TB0p8ZQiQiCdlw9a15624f-c322-4826-b2b4-273e2c1cd5eb", MainApplication.this, BuildConfig.DEBUG),
 
 const onBeforeLift = async () => {
-    // let port = 8081;
-    // Sockets.startServer(port);
-    // let clientAddr = 'http://localhost';
-    // Sockets.emit("message to client", clientAddr);
-    // const socket = io('https://selfitapi.ir/api', {
-    // path: '/Log/GetAll'
-    // });
-    // let config={
-    //     address: "hhtps://selfitapi.ir/", //ip address of server
-    //     port: 80, //port of socket server
-    //     reconnect:true, //OPTIONAL (default false): auto-reconnect on lost server
-    //     reconnectDelay:500, //OPTIONAL (default 500ms): how often to try to auto-reconnect
-    //     maxReconnectAttempts:10, //OPTIONAL (default infinity): how many time to attemp to auto-reconnect
-    //
-    // };
-    // Sockets.startClient(config);
-    //
-    // Sockets.write("message to server");
-
     function handleFirstConnectivityChange(connectionInfo) {
         console.log('Network change, type: ' + connectionInfo.type + ', effectiveType: ' + connectionInfo.effectiveTypes);
         console.log(connectionInfo);
@@ -107,43 +83,9 @@ const onBeforeLift = async () => {
         'connectionChange',
         handleFirstConnectivityChange
     );
-    //on started
-    // DeviceEventEmitter.addListener('socketServer_connected', () => {
-    //     console.log('socketServer_connected');
-    // });
-    // //on error
-    // DeviceEventEmitter.addListener('socketServer_error', (data) => {
-    //     console.log('socketServer_error',data.error);
-    // });
-    // //on client connected
-    // DeviceEventEmitter.addListener('socketServer_clientConnected', (client) => {
-    //     console.log('socketServer_clientConnected', client.id);
-    // });
-    // //on new message
-    // DeviceEventEmitter.addListener('socketServer_data', (payload) => {
-    //     console.log('socketServer_data message:', payload.data);
-    //     console.log('socketServer_data client id:', payload.client);
-    // });
-    // //on server closed
-    // DeviceEventEmitter.addListener('socketServer_closed', (data) => {
-    //     console.log('socketServer_closed',data.error);
-    // });
-    // //on client disconnected
-    // DeviceEventEmitter.addListener('socketServer_clientDisconnected', (data) => {
-    //     console.log('socketServer_clientDisconnected client id:', data.client);
-    // });
 };
 
 class App extends Component {
-    componentDidMount() {
-        // Linking.addEventListener('url', this._handleOpenURL);
-
-    }
-    //
-    componentWillUnmount() {
-        // Linking.removeEventListener('url', this._handleOpenURL);
-
-    }
 
     _handleOpenURL(event) {
         console.log(event.url);
@@ -183,33 +125,25 @@ class App extends Component {
                         onBeforeLift={onBeforeLift}
                         persistor={persistor}>
                         <RouterWithRedux hideNavBar>
-                            <Scene>
-                                <Scene key="splash"
-                                       
-                                       component={Splash}
-                                       hideNavBar/>
+                            <Scene key='rootMain' hideNavbar>
+                                <Scene key="splash" initial component={Splash} hideNavBar/>
                                 <Scene key="sign" component={Sign} hideNavBar/>
-                                <Scene key="root"
-                                        initial
-                                       hideNavBar>
+                                <Scene key="root"  hideNavBar>
                                     <Drawer key="drawer" drawerPosition="right" contentComponent={DrawerLayout}
-                                            drawerWidth={window.width / 2}>
-                                        <Scene>
-                                            <Scene key="Home" hideNavBar={true}
-                                                   component={Main}/>
+                                            drawerWidth={window.width / 1.7}>
+                                        <Scene key='componentMain' hideNavbar>
+                                            <Scene key="Home" hideNavBar={true} initial component={Main}/>
                                             <Scene key="Music" hideNavBar={true} component={Music}/>
                                             <Scene key="support" component={Support} hideNavBar/>
-                                            <Scene key="gym"
-                                                   
-                                                   component={Gym} hideNavBar/>
+                                            <Scene key="gym" component={Gym} hideNavBar/>
                                             <Scene key="fullMap" component={FullMap} hideNavBar/>
                                             <Scene key="gymDetail" component={GymDetail} hideNavBar/>
                                             <Scene key="buffet"  component={Buffet}
                                                    hideNavBar/>
                                             <Scene key="buffetMenu" component={BuffetMenu} hideNavBar/>
                                             <Scene key="buffetBasket" component={BuffetBasket} hideNavBar/>
-                                            <Scene key="productBasket"  component={ProductBasket} hideNavBar/>
-                                            <Scene key="timeStore"   component={TimeStore} hideNavBar/>
+                                            <Scene key="productBasket" component={ProductBasket} hideNavBar/>
+                                            <Scene key="timeStore" component={TimeStore} hideNavBar/>
                                             <Scene key="factorBuffet" component={finalOrderBuffet} hideNavBar/>
                                             <Scene key="factorProduct" component={finalOrderProduct} hideNavBar/>
                                             <Scene key="addressRoot" hideNavBar>
@@ -221,7 +155,6 @@ class App extends Component {
                                             <Scene key="buffetKeeperRoot"  hideNavBar>
                                                 <Scene key="buffetKeeper" component={BuffetKeeper} initial hideNavBar/>
                                                 <Scene key="orderDetail" component={OrderDetail}  hideNavBar/>
-
                                             </Scene>
                                             <Scene key="buffetMenuRoot" hideNavBar>
                                                 <Scene key="buffetMenu" component={FoodList} initial hideNavBar/>
@@ -254,15 +187,18 @@ class App extends Component {
                                             <Scene key="showImage" component={ShowImage} hideNavBar/>
                                             <Scene key="profile" hideNavBar={true} component={Profile}/>
                                             <Scene key="editProfile" component={EditProfile} hideNavBar/>
+                                            <Scene key="complaints" component={Complaints} hideNavBar/>
+                                            <Scene key="rules" component={Rules} hideNavBar/>
+                                            <Scene key="follow" component={Follow} hideNavBar/>
                                         </Scene>
                                     </Drawer>
                                 </Scene>
-                                <Lightbox key="signUp"  hideNavBar>
+                                <Lightbox key="signUp" hideNavBar>
                                     <Scene hideNavBar>
                                         <Scene key="login" component={Login}/>
-                                        <Scene key="register"  component={Register}/>
+                                        <Scene key="register" component={Register}/>
                                     </Scene>
-                                    <Scene key="authLightBox"  component={AuthLightBox}/>
+                                    <Scene key="authLightBox" component={AuthLightBox}/>
                                 </Lightbox>
                             </Scene>
                         </RouterWithRedux>
@@ -278,6 +214,3 @@ App = codePush({
     installMode: codePush.InstallMode.ON_NEXT_RESTART,
 })(App);
 export default App;
-
-
-//distributionUrl=https\://services.gradle.org/distributions/gradle-2.14.1-all.zip

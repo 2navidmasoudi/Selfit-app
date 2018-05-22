@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View , Dimensions} from 'react-native';
+import {View} from 'react-native';
 import {Icon} from 'native-base';
 import * as Animatable from 'react-native-animatable';
 import {styles} from './style';
@@ -10,12 +10,11 @@ import Buffet from '../../Main/Buffet';
 import Gym from '../../Main/Gym';
 import Coach from '../../Main/Coach';
 import {anim0, anim1} from "./anim";
-let ScreenHeight = Dimensions.get("window").height;
+
 export default class MemberGrid extends Component {
     state = {
         icon: 'restaurant',
-        color: '#37FF00',
-        width:'99%'
+        color: '#37FF00'
     };
 
     changeIcon(i) {
@@ -59,26 +58,10 @@ export default class MemberGrid extends Component {
     //             break;
     //     }
     // }
-    // componentWillMount() {
-    //     this.forceUpdate();
-    // }
-    // componentDidMount() {
-    //     this.forceUpdate();
-    // }
-    componentWillMount() {
-        setTimeout(() => {
-            this.setState({
-                width: '100%'
-            });
-        }, 500);
-    }
+
     render() {
         return (
-            // <View style={{flex:1}} >
-                <Swiper style={styles.wrapper} showsButtons={true} 
-                    width={this.state.width}
-                    // height={ScreenHeight}
-                    loop={false}
+            <Swiper style={styles.wrapper} showsButtons={true} loop={false} index={2}
                     onIndexChanged={(i) => this.changeIcon(i)}
                     dot={<View style={styles.nonActive}/>}
                     activeDot={<Animatable.View animation={anim0}
@@ -100,12 +83,12 @@ export default class MemberGrid extends Component {
                                                  iterationCount="infinite"
                                                  useNativeDriver
                                                  duration={2000}>‹</Animatable.Text>}>
-                {/* <View style={styles.slide1}>
+                <View style={styles.slide1}>
                     <Store/>
-                </View> */}
-                {/* <View style={styles.slide1}>
+                </View>
+                <View style={styles.slide1}>
                     <Music/>
-                </View> */}
+                </View>
                 <View style={styles.slide1}>
                     <Buffet/>
                 </View>
@@ -116,8 +99,6 @@ export default class MemberGrid extends Component {
                     <Coach/>
                 </View>
             </Swiper>
-            // </View>
-
         );
     }
 }

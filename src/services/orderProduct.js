@@ -44,16 +44,34 @@ export const postOrderProduct = async (numberproduct, productid, token, tokenapi
 
     }
 };
-//TODO
-export const putOrderBuffet = async (idbasketbuffet, menufoodid, numbermenufood, token, tokenapi) => {
+export const postFactorProduct = async (timefactor, descfactor, methodpayed, token, tokenapi) => {
     try {
-        let response = await fetch(`${Selfit}${OrderProduct}Put`, {
-            method: PUT,
+        let response = await fetch(`${Selfit}${OrderProduct}PostFactor`, {
+            method: POST,
             headers,
             body: JSON.stringify({
-                idbasketbuffet,
-                menufoodid,
-                numbermenufood,
+                timefactor,
+                descfactor,
+                methodpayed,
+                token,
+                tokenapi
+            })
+        });
+        let json = await response.json();
+        return json;
+    } catch (e) {
+        console.log(e);
+
+    }
+};
+export const postAddressProduct = async (factorid, Addressmemberid, token, tokenapi) => {
+    try {
+        let response = await fetch(`${Selfit}${OrderProduct}PostAddress`, {
+            method: POST,
+            headers,
+            body: JSON.stringify({
+                factorid,
+                Addressmemberid,
                 token,
                 tokenapi
             })
@@ -67,7 +85,7 @@ export const putOrderBuffet = async (idbasketbuffet, menufoodid, numbermenufood,
 };
 export const putTimeFactor = async (factorid, timefactor, token, tokenapi) => {
     try {
-        let response = await fetch(`${Selfit}${OrderProduct}Put`, {
+        let response = await fetch(`${Selfit}${OrderProduct}PutTimeFactor`, {
             method: PUT,
             headers,
             body: JSON.stringify({

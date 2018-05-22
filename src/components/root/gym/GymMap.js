@@ -163,10 +163,7 @@ class GymMap extends Component {
                             pinColor={gym.activegym === true ? 'blue' : 'red'}
                             title={gym.namegym}
                             description={gym.addressgym}
-                            onCalloutPress={() => this._gymDetail(gym)}>
-                            {/* <View><Text>{gym.namegym}</Text></View> */}
-
-                        </Marker>
+                            onCalloutPress={() => this._gymDetail(gym)}/>
                     ))}
                 </MapView>
                 <Fab style={{backgroundColor: '#0F9D7A'}}
@@ -175,7 +172,7 @@ class GymMap extends Component {
                     <Icon name="md-locate"/>
                 </Fab>
                 {this.state.MarkerReady === false ? <Spinner/> :
-                    <Button block style={{margin: 25, marginHorizontal: 100, borderWidth: 5}}
+                    <Button block style={{margin: 25, marginHorizontal: 100, borderRadius: 5, backgroundColor:'#0F9D7A',}}
                             onPress={() => this.getNewGym()}>
                         <Text style={{color: 'white'}}>گرفتن باشکاه ها در این مکان</Text>
                     </Button>}

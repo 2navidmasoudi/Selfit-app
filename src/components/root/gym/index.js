@@ -95,12 +95,12 @@ const mapDispatchToProps = (dispatch) => {
     return {
         locateUser: (latval, longval) => dispatch(locateUser(latval, longval)),
     }
-}
+};
 
 const mapStateToProps = (state) => {
     return {
         user: state.user,
     }
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Gym);

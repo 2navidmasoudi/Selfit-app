@@ -40,6 +40,7 @@ import {
 import FoodCard from "./FoodCard";
 import MaterialCard from "./MaterialCard";
 import {TabsStyle} from "../../../assets/styles/gym";
+import {checkOrderBuffet, deleteOrderAll} from "../../../services/orderBuffet";
 
 moment.loadPersian({dialect: 'persian-modern'});
 
@@ -67,7 +68,7 @@ class BuffetMenu extends Component {
         await this._getMenuFood();
         await this._getMaterial();
         await this._getDish();
-        await this._postBasketMaterial();
+        await this._checkOrderBuffet();
     };
 
     componentDidMount() {
@@ -127,16 +128,27 @@ class BuffetMenu extends Component {
         }
     }
 
+    async _checkOrderBuffet() {
+        try {
+            let {buffetid, tokenapi,idbasket} = await this.props;
+            let {tokenmember} = await this.props.user;
+            let result = await checkOrderBuffet(buffetid, tokenmember, tokenapi);
+            console.log(result,'checkOrder');
+            if (result == 1 || !idbasket) {
+                await this._postBasketMaterial();
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     async _postBasketMaterial() {
         try {
             let {tokenapi, buffetid} = await this.props;
             let {tokenmember} = await this.props.user;
             let {iddish} = await this.state;
-            let allBasket = await getAllBasketMaterial(true, tokenmember, tokenapi, 30, 0, false);
-            if (allBasket.length && allBasket[0].idbuffet == buffetid) {
-                this.props.setIDBasket(allBasket[0].idbasketmaterial);
-                return;
-            }
+            let deleteOrder = await deleteOrderAll(tokenmember,tokenapi);
+            console.log(deleteOrder,'deleteOrder?');
 
             let idbasket = await postBasketMaterial(iddish, buffetid, tokenmember, tokenapi);
             this.props.setIDBasket(idbasket);

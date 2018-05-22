@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
-import {Text, FlatList} from 'react-native';
+import {Text} from 'react-native';
 import {connect} from 'react-redux';
-import {Button, Container, Content, Footer, FooterTab, Badge, Icon, Spinner} from 'native-base';
-import {getAllOrder, postAddressOrderBuffet, postFactor} from "../../../services/orderBuffet";
-import { getAllMixMaterial} from "../../../services/orderMaterial";
+import {Button, Container, Content, Footer, FooterTab} from 'native-base';
 import AppHeader from "../../header";
-import {reBasketBuffet, reBasketMaterial, setRoad, tokenBuffet} from "../../../redux/actions";
+import { setRoad, tokenStore} from "../../../redux/actions";
 import {logError} from "../../../services/log";
-import {getPayment, getRequestPayment} from "../../../services/payment";
+import { getRequestPayment} from "../../../services/payment";
 import {Actions} from "react-native-router-flux";
+import {postAddressProduct, postFactorProduct, putTimeFactor} from "../../../services/orderProduct";
 // import PushNotification from 'react-native-push-notification';
 
 // PushNotification.configure({
@@ -43,34 +42,54 @@ class finalOrderProduct extends Component {
 
     componentWillMount() {
         this.getInfo();
+        console.log(this.props,'props');
+
     }
 
 
     async getInfo() {
-        await  this.props.tokenBuffet('selfit.buffet');
-        this.props.setRoad('buffet');
+        await  this.props.tokenStore('selfit.store');
+        this.props.setRoad('Store');
         // await  this.getTotalPrice();
 
     }
+
     async _getRequestPayment() {
         getRequestPayment(2, this.props.user.tokenmember);
     };
+
+    async _putTimeFactor(idfactor) {
+        try {
+            let {tokenmember} = await this.props.user;
+            let {tokenapi, idtimefactor} = await this.props;
+            let result = await putTimeFactor(idfactor, idtimefactor, tokenmember, tokenapi);
+            console.log(result, 'putTimeFactor');
+            this.setState({selected: true});
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    async _postAddressProduct(idfactor) {
+        try {
+            let {tokenmember} = await this.props.user;
+            let {tokenapi,address} = await this.props;
+            let result = await postAddressProduct(idfactor, address.idaddressmember, tokenmember, tokenapi);
+            console.log(result, 'postAddressProduct');
+            this.setState({selected: true});
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     async handleFooterPress() {
         try {
             let {tokenmember} = await this.props.user;
-            let {tokenapi} = await this.props;
-            // let idfactor = await postFactor('سس بزن', 1, tokenmember, tokenapi);
+            let {tokenapi, idtimefactor, descProduct} = await this.props;
+            let idfactor = await postFactorProduct(idtimefactor, descProduct, 1, tokenmember, tokenapi);
+            await this._putTimeFactor(idfactor);
+            await this._postAddressProduct(idfactor);
             this._getRequestPayment();
-            // console.log(idfactor);
-            // let result = await postAddressOrderBuffet(idfactor, tokenmember, tokenapi);
-            // if (result == 1) {
-            //     PushNotification.localNotification({
-            //         title: 'selfit',
-            //         message: "فاکتور شما ثبت شد. در صورت تائید بوفه دار پیام پرداخت به شما فرستاده می شود.", // (required)
-            //     });
-            //     Actions.reset('root');
-            // }
-            console.log(result);
+            Actions.reset('root');
         } catch (e) {
             console.log(e)
         }
@@ -82,24 +101,19 @@ class finalOrderProduct extends Component {
                 <FooterTab>
                     <Button
                         style={{
-                            // paddingTop: 10,
                             backgroundColor: '#0F9D7A'
                         }}
                         onPress={this.handleFooterPress.bind(this)}>
-                        {/*<Badge><Text>{(this.props.Count1 + this.props.Count2).toLocaleString('fa')}</Text></Badge>*/}
-                        {/*<Icon name="basket" style={{color: 'white'}}/>*/}
                         <Text style={{
                             fontFamily: 'IRANSansMobile',
-                            // fontSize: 18,
                             color: 'white',
-                            // paddingTop: 12
-                        }}>انتخاب زمان</Text>
+                        }}>پرداخت: {this.props.totalPrice.toLocaleString('fa')} تومان</Text>
                     </Button>
                 </FooterTab>
             </Footer>;
         return (
             <Container>
-                <AppHeader rightTitle="سبد غذا" backButton="flex"/>
+                <AppHeader rightTitle="صدور فاکتور فروشگاه" backButton="flex"/>
                 <Content padder>
                     <Text>صدور فاکتور</Text>
                 </Content>
@@ -111,8 +125,7 @@ class finalOrderProduct extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        tokenBuffet: (tokenapi) => dispatch(tokenBuffet(tokenapi)),
-
+        tokenStore: (tokenapi) => dispatch(tokenStore(tokenapi)),
         setRoad: (roadTo) => dispatch(setRoad(roadTo)),
     }
 };
@@ -120,8 +133,11 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
     return {
         user: state.user,
-        tokenapi: state.buffet.tokenapi,
+        tokenapi: state.store.tokenapi,
         Count: state.basket.productBasketCount,
+        totalPrice: state.basket.PriceAllProduct,
+        idtimefactor: state.basket.idtimefactor,
+        descProducet: state.basket.descProducet,
     }
 };
 

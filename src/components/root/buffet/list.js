@@ -1,70 +1,58 @@
-import React , { Component } from 'react';
-import { View, Text, FlatList } from 'react-native';
-import { Spinner , Header, Button, Item, Icon,Input ,Left, Body } from 'native-base';
-import { connect } from 'react-redux';
-
+import React, {Component} from 'react';
+import {View, Text, FlatList} from 'react-native';
+import {Spinner, Header, Button, Item, Icon, Input, Left, Body} from 'native-base';
+import {connect} from 'react-redux';
 import BuffetCard from './BuffetCard';
-import { receiveBuffet , incrementMin , decrementMin , refreshBuffet, tokenBuffet} from '../../../redux/actions';
-import { getSearchBuffet, getAllBuffet } from '../../../services/buffet';
+import {receiveBuffet, incrementMin, decrementMin, refreshBuffet, tokenBuffet} from '../../../redux/actions';
+import {getSearchBuffet, getAllBuffet} from '../../../services/buffet';
+import {SearchBar} from 'react-native-elements';
 
 class List extends Component {
-    constructor(){
+    constructor() {
         super();
         this.state = {
-            max:10,
+            max: 10,
             ssort: false,
-            fsort:0,
-            loading:0,
+            fsort: 0,
+            loading: 0,
             refreshing: false,
-            search:null,
-            searchMode:false,
+            search: null,
+            searchMode: false,
         }
     }
-    componentWillMount(){
+
+    componentWillMount() {
         this.props.tokenBuffet("selfit.buffet");
         this.getBuffetList();
     }
 
-    async searchText(text){
-        if(text) {
+    async searchText(text) {
+        if (text) {
             await this.setState({
-                search:text
+                search: text
             });
+            this.searchBuffet();
         } else {
             await this.setState({
-                searchMode:false,
-            })
+                searchMode: false,
+            });
             await this.props.refreshBuffet();
             await this.getBuffetList();
         }
     }
 
-
-
-    render(){
-        return(
+    render() {
+        return (
             <View>
-                <Header searchBar rounded style={{backgroundColor:'white'}}>
-                    <Left style={{flex:1}}>
-                    <Button light onPress={this.searchBuffet.bind(this)}>
-                        <Text>جستجو</Text>
-                    </Button>
-                    </Left>
-                    <Body style={{flex:5}}>
-                    <Item >
-                        <Icon name="ios-search" />
-                        <Input placeholder="نام، آدرس..." onChangeText={(text)=>this.searchText(text)} />
-                        <Icon name="ios-people" />
-                        
-                    </Item>
-                    </Body>
-                    
-                </Header>
+                <SearchBar
+                    showLoading
+                    onChangeText={this.searchText.bind(this)}
+                    placeholder='نام، آدرس...'/>
                 <FlatList
                     data={this.props.buffet}
-                    renderItem={(item)=>this.renderItem(item)}
-                    keyExtractor={(item)=>item.buffetid}
-                    ListEmptyComponent={()=><Spinner/>}
+                    renderItem={(item) => this.renderItem(item)}
+                    keyExtractor={(item) => item.buffetid}
+                    ListEmptyComponent={() => <Spinner/>}
                     onRefresh={this.handleRefresh.bind(this)}
                     refreshing={this.state.refreshing}
                     onEndReached={this.handleLoadMore.bind(this)}
@@ -79,36 +67,34 @@ class List extends Component {
         try {
             if (!this.state.search) this.refreshBuffet();
             await this.setState({
-                searchMode:true
+                searchMode: true
             });
-            let { search , max , ssort , fsort } = await this.state;
-            let { tokenmember } = await this.props.user;
-            let { min , tokenapi } = await this.props;
-            let json = await getSearchBuffet(search,tokenmember,tokenapi,max,min,ssort,fsort);
+            let {search, max, ssort, fsort} = await this.state;
+            let {tokenmember} = await this.props.user;
+            let {min, tokenapi} = await this.props;
+            let json = await getSearchBuffet(search, tokenmember, tokenapi, max, min, ssort, fsort);
             let BuffetList = await json.BuffetSearch.$values;
-            await this.props.receiveBuffet(BuffetList,min);
-            this.setState({loading:false,refreshing:false});
+            await this.props.receiveBuffet(BuffetList, min);
+            this.setState({loading: false, refreshing: false});
         } catch (error) {
             console.log(error);
-            this.props.decrementMin();
-            this.setState({loading:false});  
+            this.setState({loading: false});
         }
     }
 
-    async getBuffetList(){
+    async getBuffetList() {
         try {
-            let {max,ssort,fsort} = await this.state;
-            let { tokenmember , latval , longval } = await this.props.user;
-            let { min , tokenapi } = await this.props;
-            let json = await getAllBuffet(latval,longval,tokenmember,tokenapi,max,min,ssort,fsort);
+            let {max, ssort, fsort} = await this.state;
+            let {tokenmember, latval, longval} = await this.props.user;
+            let {min, tokenapi} = await this.props;
+            let json = await getAllBuffet(latval, longval, tokenmember, tokenapi, max, min, ssort, fsort);
             console.log(json);
             let BuffetList = await json.BuffetMapList.$values;
-            await this.props.receiveBuffet(BuffetList,min);
-            this.setState({loading:false,refreshing:false});
+            await this.props.receiveBuffet(BuffetList, min);
+            this.setState({loading: false, refreshing: false});
         } catch (error) {
             console.log(error);
-            this.props.decrementMin();
-            this.setState({loading:false});  
+            this.setState({loading: false});
         }
     }
 
@@ -116,9 +102,8 @@ class List extends Component {
         return <BuffetCard buffet={item}/>
     }
 
-    async handleLoadMore(){
-
-        if (this.props.buffet.length>=10 && !this.state.loading) {
+    async handleLoadMore() {
+        if (this.props.buffet.length >= 10 && !this.state.loading) {
             console.log('Request Load More');
             this.props.incrementMin();
             this.setState({loading: true});
@@ -130,39 +115,39 @@ class List extends Component {
         }
     }
 
-    handleRefresh(){
+    handleRefresh() {
         this.props.refreshBuffet();
-        this.setState({refreshing:true});
+        this.setState({refreshing: true});
         if (!this.state.searchMode) {
             this.getBuffetList();
         } else {
             this.searchBuffet();
         }
     }
-    renderFooter(){
-        if(!this.state.loading) return null;
-        else
-        return <Spinner/>
-    }
 
+    renderFooter() {
+        if (!this.state.loading) return null;
+        else
+            return <Spinner/>
+    }
 }
 
 const mapStateToProps = (state) => {
     return {
-    buffet : state.buffet.BuffetList,
-    min : state.buffet.min,
-    user: state.user,
-    tokenapi: state.buffet.tokenapi,
+        buffet: state.buffet.BuffetList,
+        min: state.buffet.min,
+        user: state.user,
+        tokenapi: state.buffet.tokenapi,
     }
-} 
-  
+};
+
 const mapDispatchToProps = (dispatch) => {
     return {
-        receiveBuffet:(buffet,min)=>dispatch(receiveBuffet(buffet,min)),
-        incrementMin:()=>dispatch(incrementMin()),
-        decrementMin:()=>dispatch(decrementMin()),
-        refreshBuffet:()=>dispatch(refreshBuffet()),
-        tokenBuffet:(tokenapi)=>dispatch(tokenBuffet(tokenapi)),
+        receiveBuffet: (buffet, min) => dispatch(receiveBuffet(buffet, min)),
+        incrementMin: () => dispatch(incrementMin()),
+        decrementMin: () => dispatch(decrementMin()),
+        refreshBuffet: () => dispatch(refreshBuffet()),
+        tokenBuffet: (tokenapi) => dispatch(tokenBuffet(tokenapi)),
     }
-}
-export default connect(mapStateToProps,mapDispatchToProps)(List);
+};
+export default connect(mapStateToProps, mapDispatchToProps)(List);

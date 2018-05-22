@@ -3,6 +3,13 @@ import {MainWidth} from "./Window";
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 export const styles = EStyleSheet.create({
+    backgroundVideo: {
+        position: 'absolute',
+        top: -50,
+        left: -50,
+        bottom: -50,
+        right: -50,
+    },
     bgImg: {
         flex: 1,
         width: MainWidth
@@ -34,7 +41,7 @@ export const styles = EStyleSheet.create({
         color: 'white',
         fontSize: 18,
         marginHorizontal: 10,
-        textAlign: (Platform.OS == 'ios') ? 'justify' : 'right',
+        textAlign: (Platform.OS == 'ios') ? 'justify' : 'center',
     },
     animationClick: {
         flex: 1,

@@ -6,6 +6,7 @@ import CoachCard from './CoachCard';
 import {receiveGym, incrementMin, decrementMin, refreshGym, tokenGym} from '../../../redux/actions/index';
 import {getAllCoach, getSearchCoach} from "../../../services/coach";
 import {logError} from "../../../services/log";
+import {SearchBar } from 'react-native-elements';
 
 class List2 extends Component {
     state = {
@@ -29,10 +30,11 @@ class List2 extends Component {
             await this.setState({
                 search: text
             });
+            this._getSearchCoach();
         } else {
             await this.setState({
                 searchMode: false,
-            })
+            });
             await this.props.refreshCoach();
             await this._getAllCoach();
         }
@@ -42,22 +44,26 @@ class List2 extends Component {
     render() {
         return (
             <View>
-                <Header searchBar rounded style={{backgroundColor: 'white'}}  androidStatusBarColor='#313131' iosBarStyle="light-content">
-                    <Left style={{flex: 2,paddingRight:5}}>
-                        <Button block info onPress={this._getSearchCoach.bind(this)}>
-                            <Text>جستجو</Text>
-                        </Button>
-                    </Left>
-                    <Body style={{flex: 4}}>
-                    <Item>
-                        <Icon name="ios-search"/>
-                        <Input placeholder="نام، مشخصات و..." onChangeText={(text) => this.searchText(text)}/>
-                        <Icon name="ios-people"/>
+                {/*<Header searchBar rounded style={{backgroundColor: 'white'}}  androidStatusBarColor='#313131' iosBarStyle="light-content">*/}
+                    {/*<Left style={{flex: 2,paddingRight:5}}>*/}
+                        {/*<Button block info onPress={this._getSearchCoach.bind(this)}>*/}
+                            {/*<Text>جستجو</Text>*/}
+                        {/*</Button>*/}
+                    {/*</Left>*/}
+                    {/*<Body style={{flex: 4}}>*/}
+                    {/*<Item>*/}
+                        {/*<Icon name="ios-search"/>*/}
+                        {/*<Input placeholder="نام، مشخصات و..." onChangeText={(text) => this.searchText(text)}/>*/}
+                        {/*<Icon name="ios-people"/>*/}
 
-                    </Item>
-                    </Body>
+                    {/*</Item>*/}
+                    {/*</Body>*/}
 
-                </Header>
+                {/*</Header>*/}
+                <SearchBar
+                    showLoading
+                    onChangeText={this.searchText.bind(this)}
+                    placeholder='نام، مشخصات و...'/>
                 <FlatList
                     data={this.props.coach}
                     renderItem={(item) => this.renderItem(item)}

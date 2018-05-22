@@ -1,0 +1,6 @@
+<resources>
+    <string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey">9PjteJbz4ITT6_TB0p8ZQiQiCdlw9a15624f-c322-4826-b2b4-273e2c1cd5eb</string>
+    <string name="app_name">Selfit</string>
+    <string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true">ALWAYS_SEND</string>
+    <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true">ALWAYS_SEND</string>
+</resources>

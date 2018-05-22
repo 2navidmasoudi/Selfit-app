@@ -72,7 +72,6 @@ class OrderDetail extends Component {
         } catch (e) {
             console.log(e);
         }
-
     }
 
     async _getMixMaterial(id) {

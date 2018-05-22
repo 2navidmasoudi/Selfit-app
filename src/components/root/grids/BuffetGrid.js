@@ -122,7 +122,7 @@ class BuffetGrid extends React.Component {
                     activeDot={<Animatable.View animation={anim0}
                                                 easing="ease-out"
                                                 iterationCount="infinite"
-                                                // useNativeDriver
+                                                useNativeDriver
                                                 direction="alternate"
                                                 style={styles.activeDot}>
                         <Icon name={this.state.icon} style={{color: this.state.color}}/>
@@ -130,13 +130,13 @@ class BuffetGrid extends React.Component {
                     nextButton={<Animatable.Text style={styles.btn}
                                                  animation={anim1}
                                                  iterationCount="infinite"
-                                                //  useNativeDriver
+                                                 useNativeDriver
                                                  duration={2000}
                                                  direction="reverse">›</Animatable.Text>}
                     prevButton={<Animatable.Text style={styles.btn}
                                                  animation={anim1}
                                                  iterationCount="infinite"
-                                                //  useNativeDriver
+                                                 useNativeDriver
                                                  duration={2000}>‹</Animatable.Text>}>
                 <View style={styles.slide1}>
                     <Music/>

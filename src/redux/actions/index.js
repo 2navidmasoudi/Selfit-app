@@ -22,7 +22,7 @@ import {
     REFRESH_ORDER,
     REFRESH_PRODUCT,
     SELECT_BUFFET, SET_DESC_PRODUCT, SET_ID_BASKET, SET_ORDER_ID_BUFFET, SET_ORDER_ID_MATERIAL,
-    SET_PHONE, SET_PRODUCT_PRICEALL, SET_ROAD,
+    SET_PHONE, SET_PRODUCT_IDACCESS, SET_PRODUCT_PRICEALL, SET_ROAD,
     SET_TOKEN_API,
     SET_TOKEN_MEMBER,
     SET_USER,
@@ -187,4 +187,8 @@ export const setDescProduct = (descProduct) => ({
 export const setProductPriceAll = (PriceAllProduct) => ({
     type: SET_PRODUCT_PRICEALL,
     PriceAllProduct,
+});
+export const setProductIDAccess = (idtimefactor) => ({
+    type: SET_PRODUCT_IDACCESS,
+    idtimefactor,
 });

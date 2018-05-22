@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import {getAllGym, getSearchGym} from '../../../services/gym';
 import GymCard from './GymCard';
 import {decrementMin, incrementMin, receiveGym, refreshGym, tokenGym} from '../../../redux/actions/index';
+import {SearchBar} from 'react-native-elements';
 
 class List extends Component {
     state = {
@@ -26,11 +27,26 @@ class List extends Component {
         await this.getGymList();
     }
 
+    // async searchText(text) {
+    //     //     if (text) {
+    //     //         await this.setState({
+    //     //             search: text
+    //     //         });
+    //     //         await this.searchGym();
+    //     //     } else {
+    //     //         await this.setState({
+    //     //             searchMode: false,
+    //     //         });
+    //     //         await this.props.refreshGym();
+    //     //         await this.getGymList();
+    //     //     }
+    //     // }
     async searchText(text) {
         if (text) {
             await this.setState({
                 search: text
             });
+            await this.searchGym();
         } else {
             await this.setState({
                 searchMode: false,
@@ -48,20 +64,10 @@ class List extends Component {
                 justifyContent: 'flex-end',
                 // alignItems: 'center',
             }}>
-                <Header searchBar rounded style={{backgroundColor: 'white'}} androidStatusBarColor='#313131' iosBarStyle="light-content">
-                    <Left style={{flex: 1}}>
-                        <Button light onPress={this.searchGym.bind(this)}>
-                            <Text>جستجو</Text>
-                        </Button>
-                    </Left>
-                    <Body style={{flex: 5}}>
-                    <Item>
-                        <Icon name="ios-search"/>
-                        <Input placeholder="نام، آدرس..." onChangeText={(text) => this.searchText(text)}/>
-                        <Icon name="ios-people"/>
-                    </Item>
-                    </Body>
-                </Header>
+                <SearchBar
+                    showLoading
+                    onChangeText={this.searchText.bind(this)}
+                    placeholder='نام، آدرس...'/>
                 <FlatList
                     data={this.props.gym}
                     renderItem={(item) => this.renderItem(item)}

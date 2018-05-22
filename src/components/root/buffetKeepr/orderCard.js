@@ -23,21 +23,12 @@ import {connect} from 'react-redux';
 class OrderCard extends Component {
     render() {
         const {order} = this.props;
-        // const m = moment(`${order.datesave}`,'YYYY/MM/DDTHH:mm:ss');
-        // const jM = m.format('jYYYY/jMM');
-        // const ImgYear = m.jYear();
-        // const ImgMonth = m.jMonth()+1;
-        // const ImgSrc = `${order.httpserver}${order.pathserver}${ImgYear}/${ImgMonth}/${order.picmenufood}`;
         return (
             <TouchableWithoutFeedback onPress={() => this.onPressHandle(order)}>
-
-
                 <Card style={{flex: 0}}>
                     <CardItem>
                         <Left style={{flex: 1}}>
-                            {/*<Thumbnail square large source={{uri: ImgSrc}}/>*/}
                         </Left>
-
                         <Right style={{flex: 1}}>
                             <Text style={{
                                 marginRight: 10,
@@ -53,10 +44,11 @@ class OrderCard extends Component {
                         <Text>برای مشاهده سفارش کلیک کنید!</Text>
                     </CardItem>
                 </Card>
-                 </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback>
         );
     }
-    onPressHandle(order){
+
+    onPressHandle(order) {
         console.log(order);
         Actions.orderDetail({order});
     }
