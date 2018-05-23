@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Drawer, Lightbox, Router, Scene} from 'react-native-router-flux';
-import {Dimensions, NetInfo , DeviceEventEmitter } from 'react-native';
+import {Dimensions, NetInfo} from 'react-native';
 import {Root} from 'native-base';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {connect, Provider} from 'react-redux';
@@ -94,7 +94,7 @@ class App extends Component {
     codePushStatusDidChange(status) {
         switch (status) {
             case codePush.SyncStatus.CHECKING_FOR_UPDATE:
-                console.log("Checking for updates.");
+                console.log('Checking for updates.');
                 break;
             case codePush.SyncStatus.DOWNLOADING_PACKAGE:
                 console.log("Downloading package.");
@@ -129,8 +129,11 @@ class App extends Component {
                                 <Scene key="splash" initial component={Splash} hideNavBar/>
                                 <Scene key="sign" component={Sign} hideNavBar/>
                                 <Scene key="root" hideNavBar>
-                                    <Drawer key="drawer" drawerPosition="right" contentComponent={DrawerLayout}
-                                            drawerWidth={window.width / 1.7}>
+                                    <Drawer key="drawer"
+                                            drawerPosition="right"
+                                            contentComponent={DrawerLayout}
+                                            drawerWidth={window.width / 1.7}
+                                    >
                                         <Scene key='componentMain' hideNavbar>
                                             <Scene key="Home" hideNavBar={true} initial component={Main}/>
                                             <Scene key="Music" hideNavBar={true} component={Music}/>
@@ -138,8 +141,7 @@ class App extends Component {
                                             <Scene key="gym" component={Gym} hideNavBar/>
                                             <Scene key="fullMap" component={FullMap} hideNavBar/>
                                             <Scene key="gymDetail" component={GymDetail} hideNavBar/>
-                                            <Scene key="buffet"  component={Buffet}
-                                                   hideNavBar/>
+                                            <Scene key="buffet"  component={Buffet} hideNavBar/>
                                             <Scene key="buffetMenu" component={BuffetMenu} hideNavBar/>
                                             <Scene key="buffetBasket" component={BuffetBasket} hideNavBar/>
                                             <Scene key="productBasket" component={ProductBasket} hideNavBar/>
