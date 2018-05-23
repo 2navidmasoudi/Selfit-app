@@ -12,13 +12,14 @@ export const styles = EStyleSheet.create({
     },
     bgImg: {
         flex: 1,
-        width: MainWidth
+        // width: MainWidth/2
     },
     animationView: {
         flex: 1,
-        marginTop: 40,
-        marginBottom:60,
-        marginHorizontal:50,
+        // marginTop: 40,
+        // marginBottom:60,
+        // marginHorizontal:50,
+        margin:5
     },
     bgView: {
         flex: 1,
@@ -31,16 +32,16 @@ export const styles = EStyleSheet.create({
         flex: 2,
         fontFamily: '$IS',
         color: 'white',
-        fontSize: 36,
+        fontSize: 16,
         textAlign: 'center',
-        marginBottom: 20
+        marginBottom: 2
     },
     animationDetail: {
-        flex: 7,
+        flex: 5,
         fontFamily: '$IS',
         color: 'white',
-        fontSize: 18,
-        marginHorizontal: 10,
+        fontSize: 12,
+        marginHorizontal: 5,
         textAlign: (Platform.OS == 'ios') ? 'justify' : 'center',
     },
     animationClick: {

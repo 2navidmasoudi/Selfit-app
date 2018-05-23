@@ -128,7 +128,7 @@ class App extends Component {
                             <Scene key='rootMain' hideNavbar>
                                 <Scene key="splash" initial component={Splash} hideNavBar/>
                                 <Scene key="sign" component={Sign} hideNavBar/>
-                                <Scene key="root"  hideNavBar>
+                                <Scene key="root" hideNavBar>
                                     <Drawer key="drawer" drawerPosition="right" contentComponent={DrawerLayout}
                                             drawerWidth={window.width / 1.7}>
                                         <Scene key='componentMain' hideNavbar>
