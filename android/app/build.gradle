@@ -149,6 +149,9 @@ android {
 }
 
 dependencies {
+    compile(project(':react-native-firebase')) {
+        transitive = false
+    }
     implementation project(':react-native-video')
     implementation project(':react-native-linear-gradient')
     implementation project(':react-native-image-picker')

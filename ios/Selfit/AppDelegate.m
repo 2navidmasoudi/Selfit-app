@@ -6,17 +6,18 @@
  */
 
 #import "AppDelegate.h"
+#import <Firebase.h>
 #import <CodePush/CodePush.h>
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 
-@import Firebase;
 @import GoogleMaps;
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [FIRApp configure];
     [GMSServices provideAPIKey:@"AIzaSyBlgHjeMbqK3xEZfh6HK2o8RdjhhgTOh0s"]; // add this line using the api key obtained from Google Console
   NSURL *jsCodeLocation;
 
@@ -38,7 +39,6 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-  [FIRApp configure];
 
   return YES;
 }

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Drawer, Lightbox, Router, Scene} from 'react-native-router-flux';
 import {Dimensions, NetInfo} from 'react-native';
+import firebase from 'react-native-firebase';
 import {Root} from 'native-base';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {connect, Provider} from 'react-redux';
@@ -68,7 +69,6 @@ EStyleSheet.build({
 //     code-push release-react Selfit-Android android
 //      adb shell input keyevent 82
 
-
 const onBeforeLift = async () => {
     function handleFirstConnectivityChange(connectionInfo) {
         console.log('Network change, type: ' + connectionInfo.type + ', effectiveType: ' + connectionInfo.effectiveTypes);
@@ -86,7 +86,6 @@ const onBeforeLift = async () => {
 };
 
 class App extends Component {
-
     _handleOpenURL(event) {
         console.log(event.url);
     }
@@ -117,6 +116,8 @@ class App extends Component {
 
     render() {
         const RouterWithRedux = connect()(Router);
+        console.log('firebase');
+        console.log(firebase);
         return (
             <Root>
                 <Provider store={store}>

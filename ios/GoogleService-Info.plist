@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>1081449263893-p9mlo2270a5g61ddeq9jsts4qh8e136r.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1081449263893-p9mlo2270a5g61ddeq9jsts4qh8e136r</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBbjM1WfSjzfEOIa2gTB6YRIUv8KnLnGE4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1081449263893</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>comcom.selfit.universal</string>
+	<key>PROJECT_ID</key>
+	<string>selfit-app</string>
+	<key>STORAGE_BUCKET</key>
+	<string>selfit-app.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true></true>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false></false>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1081449263893:ios:793aac9c93d7f61b</string>
+	<key>DATABASE_URL</key>
+	<string>https://selfit-app.firebaseio.com</string>
+</dict>
+</plist>

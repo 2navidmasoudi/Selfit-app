@@ -3,6 +3,11 @@
 # platform :ios, '9.0'
 
 target 'Selfit' do
+  pod 'Firebase/Core'
+  pod 'Firebase/Crash'
+  pod 'Fabric', '~> 1.7.5'
+  pod 'Crashlytics', '~> 3.10.1'
+
   rn_path = '../node_modules/react-native'
   rn_maps_path = '../node_modules/react-native-maps'
 
@@ -24,7 +29,6 @@ target 'Selfit' do
     'RCTWebSocket',
   ]
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
-  pod 'Firebase/Core'
   # React Native third party dependencies podspecs
   pod 'DoubleConversion', :podspec => "#{rn_path}/third-party-podspecs/DoubleConversion.podspec"
   # pod 'glog', :podspec => "#{rn_path}/third-party-podspecs/glog.podspec"
