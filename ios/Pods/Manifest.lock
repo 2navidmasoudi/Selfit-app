@@ -22,12 +22,18 @@ PODS:
     - JWT (~> 3.0.0-beta.7)
     - React
     - SSZipArchive (~> 2.1)
+  - Crashlytics (3.10.1):
+    - Fabric (~> 1.7.5)
   - DoubleConversion (1.1.5)
+  - Fabric (1.7.6)
   - Firebase/Core (5.0.1):
     - Firebase/CoreOnly
     - FirebaseAnalytics (= 5.0.0)
   - Firebase/CoreOnly (5.0.1):
     - FirebaseCore (= 5.0.1)
+  - Firebase/Crash (5.0.1):
+    - Firebase/Core
+    - FirebaseCrash (= 3.0.0)
   - FirebaseAnalytics (5.0.0):
     - FirebaseCore (~> 5.0)
     - FirebaseInstanceID (~> 3.0)
@@ -35,6 +41,12 @@ PODS:
     - nanopb (~> 0.3)
   - FirebaseCore (5.0.1):
     - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
+  - FirebaseCrash (3.0.0):
+    - FirebaseAnalytics (~> 5.0)
+    - FirebaseInstanceID (~> 3.0)
+    - GoogleToolboxForMac/Logger (~> 2.1)
+    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
+    - Protobuf (~> 3.5)
   - FirebaseInstanceID (3.0.0):
     - FirebaseCore (~> 5.0)
   - Folly (2016.09.26.00):
@@ -64,6 +76,8 @@ PODS:
   - GoogleMaps/Maps (2.5.0):
     - GoogleMaps/Base
   - GoogleToolboxForMac/Defines (2.1.4)
+  - GoogleToolboxForMac/Logger (2.1.4):
+    - GoogleToolboxForMac/Defines (= 2.1.4)
   - "GoogleToolboxForMac/NSData+zlib (2.1.4)":
     - GoogleToolboxForMac/Defines (= 2.1.4)
   - JWT (3.0.0-beta.8):
@@ -73,6 +87,7 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
+  - Protobuf (3.5.0)
   - React (0.52.2):
     - React/Core (= 0.52.2)
   - react-native-fetch-blob (0.10.6):
@@ -133,8 +148,11 @@ PODS:
 DEPENDENCIES:
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
   - CodePush (from `../node_modules/react-native-code-push`)
+  - Crashlytics (~> 3.10.1)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
+  - Fabric (~> 1.7.5)
   - Firebase/Core
+  - Firebase/Crash
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - GLog (from `../node_modules/react-native/third-party-podspecs/GLog.podspec`)
   - Google-Maps-iOS-Utils
@@ -161,15 +179,19 @@ SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - Base64
     - boost
+    - Crashlytics
+    - Fabric
     - Firebase
     - FirebaseAnalytics
     - FirebaseCore
+    - FirebaseCrash
     - FirebaseInstanceID
     - Google-Maps-iOS-Utils
     - GoogleMaps
     - GoogleToolboxForMac
     - JWT
     - nanopb
+    - Protobuf
     - SSZipArchive
 
 EXTERNAL SOURCES:
@@ -199,10 +221,13 @@ SPEC CHECKSUMS:
   boost: 30a15ffb6d9aa4646dd3caffc960753f4cb4ca4e
   BVLinearGradient: 4b3f3bdf1ac1a52a5ef5e65c9585d793a7c3f825
   CodePush: f6b348759cdc42c734d9c3a46ceb2997c270b12e
+  Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
   DoubleConversion: ebb6747c5b66026ad4f97b789c3ceac6f18e57a6
+  Fabric: f8d42c893bb187326a7968b62abe55c36a987a46
   Firebase: d6861c2059d8c32d1e6dd8932e22ada346d90a3a
   FirebaseAnalytics: 19812b49fa5f283dd6b23edf8a14b5d477029ab8
   FirebaseCore: cafc814b2d84fc8733f09e653041cc2165332ad7
+  FirebaseCrash: 8900571fd763fd5bdda04522ec53da979456e3ce
   FirebaseInstanceID: 83e0040351565df711a5db3d8ebe5ea21aca998a
   Folly: b7255b29f1d693c375d642d0f04f0592181156d9
   GLog: 3e4e4ae9746ce6bf6e9420c7fc1e08ad59c8ba1a
@@ -211,6 +236,7 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: 91c824d21e85b31c2aae9bb011c5027c9b4e738f
   JWT: 6e7ec473b6febcb7498affc84f0e75d393914411
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
+  Protobuf: 8a9838fba8dae3389230e1b7f8c104aa32389c03
   React: 43e97926f429d846050880666de1809e22dd5cc5
   react-native-fetch-blob: 63394b1d7b0781547b3e4463b3195790177b1222
   react-native-google-maps: 963fc78a5ac32dad3a726e4fa08b5307faa5cab2
@@ -218,6 +244,6 @@ SPEC CHECKSUMS:
   SSZipArchive: d4009d2ce5520a421f231fd97028cc0e2667eed8
   yoga: 55da126afc384965b96bff46652464373b330add
 
-PODFILE CHECKSUM: 53af67bbc9be27fbce02e0ba7afdd75bde6f2cca
+PODFILE CHECKSUM: 928cd3d592752baaa51979b1164222883890aeb8
 
 COCOAPODS: 1.5.0

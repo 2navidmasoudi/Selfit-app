@@ -5,6 +5,7 @@ import {Dimensions, NetInfo, Linking} from 'react-native';
 import {Root} from 'native-base';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {connect, Provider} from 'react-redux';
+import { setEnabled } from './utils/analytics';
 import Splash from './components/Splash';
 import Login from './components/Login';
 import Register from './components/Register';
@@ -94,6 +95,12 @@ class App extends Component {
     }).catch(err => console.error('An error occurred', err));
 
     Linking.addEventListener('url', this.handleOpenURL);
+    if (__DEV__) {
+      console.disableYellowBox = true;
+      setEnabled(false);
+    } else {
+      setEnabled(true);
+    }
   }
   componentWillUnmount() {
     Linking.removeEventListener('url', this.handleOpenURL);
