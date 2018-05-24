@@ -86,6 +86,7 @@ const onBeforeLift = async () => {
   );
 };
 
+@codePush
 export default class App extends Component {
   componentDidMount() {
     Linking.getInitialURL().then((url) => {
