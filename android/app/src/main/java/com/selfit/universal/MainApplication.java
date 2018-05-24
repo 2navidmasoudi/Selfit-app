@@ -7,6 +7,8 @@ import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
 import io.invertase.firebase.fabric.crashlytics.RNFirebaseCrashlyticsPackage;
 import io.invertase.firebase.crash.RNFirebaseCrashPackage;
 import io.invertase.firebase.perf.RNFirebasePerformancePackage;
+import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
+import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 import com.brentvatne.react.ReactVideoPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
@@ -44,6 +46,8 @@ public class MainApplication extends Application implements ReactApplication {
           new RNFirebaseCrashlyticsPackage(),
           new RNFirebaseCrashPackage(),
           new RNFirebasePerformancePackage(),
+          new RNFirebaseMessagingPackage(),
+          new RNFirebaseNotificationsPackage(),
           new ReactVideoPackage(),
           new MapsPackage(),
           new LinearGradientPackage(),

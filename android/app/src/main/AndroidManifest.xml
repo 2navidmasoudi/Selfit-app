@@ -2,8 +2,9 @@
           package="com.selfit.universal"
           android:versionCode="1"
           android:versionName="1.0">
-
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -15,8 +16,6 @@
             android:name="com.selfit.permission.C2D_MESSAGE"
             android:protectionLevel="signature"/>
     <uses-permission android:name="com.selfit.permission.C2D_MESSAGE"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-sdk
             android:minSdkVersion="16"
             android:targetSdkVersion="27"/>
@@ -33,7 +32,8 @@
                 android:label="@string/app_name"
                 android:screenOrientation="portrait"
                 android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-                android:windowSoftInputMode="adjustResize">
+                android:windowSoftInputMode="adjustResize"
+                android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -59,8 +59,17 @@
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
                 android:value="AIzaSyBlgHjeMbqK3xEZfh6HK2o8RdjhhgTOh0s"/>
-
-
+        <service android:name="io.invertase.firebase.messaging.RNFirebaseMessagingService">
+          <intent-filter>
+            <action android:name="com.google.firebase.MESSAGING_EVENT" />
+          </intent-filter>
+        </service>
+        <service android:name="io.invertase.firebase.messaging.RNFirebaseInstanceIdService">
+          <intent-filter>
+            <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+          </intent-filter>
+        </service>
+        <service android:name="io.invertase.firebase.messaging.RNFirebaseBackgroundMessagingService" />
     </application>
 
 </manifest>

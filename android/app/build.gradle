@@ -152,8 +152,8 @@ android {
 
 dependencies {
     implementation (project(':react-native-firebase')){
-                                                              transitive = false
-                                                          }
+        transitive = false
+    }
     // Firebase dependencies
     implementation "com.google.android.gms:play-services-base:15.0.1"
     implementation "com.google.firebase:firebase-core:15.0.2"
@@ -163,6 +163,8 @@ dependencies {
     }
     implementation "com.google.firebase:firebase-crash:15.0.2"
     implementation "com.google.firebase:firebase-perf:15.1.0"
+    implementation "com.google.firebase:firebase-messaging:15.0.2"
+    implementation 'me.leolin:ShortcutBadger:1.1.21@aar'
     implementation project(':react-native-video')
     implementation project(':react-native-linear-gradient')
     implementation project(':react-native-image-picker')
