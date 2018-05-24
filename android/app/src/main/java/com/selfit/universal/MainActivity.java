@@ -1,4 +1,4 @@
-package com.selfit;
+package com.selfit.universal;
 
 import com.facebook.react.ReactActivity;
 

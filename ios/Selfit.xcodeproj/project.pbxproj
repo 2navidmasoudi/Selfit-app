@@ -5,7 +5,6 @@
 	};
 	objectVersion = 50;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		007E91BD20ACC171007B47C9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 007E91BC20ACC171007B47C9 /* GoogleService-Info.plist */; };
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
@@ -45,6 +44,7 @@
 		FA9FD30F988F40FCAB1A85B2 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A3D70A804F62448E9F673074 /* Zocial.ttf */; };
 		FC34F5B91C364C00B7FBFB03 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BEC949EB2312468185E3A83F /* SimpleLineIcons.ttf */; };
 		FC72CBE3F4A04FEA962FD605 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 451F21E5E0BC48F7B1621B7A /* Ionicons.ttf */; };
+		DC38D6999BC2435F89860208 /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DFA02FD4576147A79801BD09 /* libRNFirebase.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -380,6 +380,8 @@
 		F410FDD60C3B459A8E6EDED9 /* IRANSansMobile_Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = IRANSansMobile_Light.ttf; path = ../src/assets/fonts/IRANSansMobile_Light.ttf; sourceTree = "<group>"; };
 		F6CDF29CFF4048C0BEAA62BD /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNImagePicker.xcodeproj; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; };
 		FACB1C9E0C874B08A9C820E2 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/native-base/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
+		5304E377902940E1BFD58854 /* RNFirebase.xcodeproj */ = {isa = PBXFileReference; name = "RNFirebase.xcodeproj"; path = "../node_modules/react-native-firebase/ios/RNFirebase.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		DFA02FD4576147A79801BD09 /* libRNFirebase.a */ = {isa = PBXFileReference; name = "libRNFirebase.a"; path = "libRNFirebase.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -404,6 +406,7 @@
 				189041586A834759A740A3FF /* libRNImagePicker.a in Frameworks */,
 				657CA5AF67774F60973DEA11 /* libRCTVideo.a in Frameworks */,
 				7DFAD9E9A8AE7A76527949F0 /* libPods-Selfit.a in Frameworks */,
+				DC38D6999BC2435F89860208 /* libRNFirebase.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -607,6 +610,7 @@
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				F6CDF29CFF4048C0BEAA62BD /* RNImagePicker.xcodeproj */,
 				CCB49646EC8E41B894297517 /* RCTVideo.xcodeproj */,
+				5304E377902940E1BFD58854 /* RNFirebase.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1194,6 +1198,7 @@
 					"$(SRCROOT)..\node_modules\neact-native-mapslibios/**",
 					"$(SRCROOT)..\node_modules\neact-native-videoios",
 					"$(SRCROOT)..\node_modules\neact-native-firebaseiosRNFirebase/**",
+					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
 				);
 				INFOPLIST_FILE = Selfit/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1208,6 +1213,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.selfit.universal;
 				PRODUCT_NAME = Selfit;
 				VERSIONING_SYSTEM = "apple-generic";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Selfit\"",
+				);
 			};
 			name = Debug;
 		};
@@ -1227,6 +1236,7 @@
 					"$(SRCROOT)..\node_modules\neact-native-mapslibios/**",
 					"$(SRCROOT)..\node_modules\neact-native-videoios",
 					"$(SRCROOT)..\node_modules\neact-native-firebaseiosRNFirebase/**",
+					"$(SRCROOT)\..\node_modules\react-native-firebase\ios\RNFirebase/**",
 				);
 				INFOPLIST_FILE = Selfit/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1241,6 +1251,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.selfit.universal;
 				PRODUCT_NAME = Selfit;
 				VERSIONING_SYSTEM = "apple-generic";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Selfit\"",
+				);
 			};
 			name = Release;
 		};
