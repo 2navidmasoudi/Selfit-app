@@ -34,6 +34,9 @@ PODS:
   - Firebase/Crash (5.0.1):
     - Firebase/Core
     - FirebaseCrash (= 3.0.0)
+  - Firebase/Messaging (5.0.1):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (= 3.0.0)
   - FirebaseAnalytics (5.0.0):
     - FirebaseCore (~> 5.0)
     - FirebaseInstanceID (~> 3.0)
@@ -49,6 +52,11 @@ PODS:
     - Protobuf (~> 3.5)
   - FirebaseInstanceID (3.0.0):
     - FirebaseCore (~> 5.0)
+  - FirebaseMessaging (3.0.0):
+    - FirebaseCore (~> 5.0)
+    - FirebaseInstanceID (~> 3.0)
+    - GoogleToolboxForMac/Logger (~> 2.1)
+    - Protobuf (~> 3.1)
   - Folly (2016.09.26.00):
     - boost
     - DoubleConversion
@@ -153,6 +161,7 @@ DEPENDENCIES:
   - Fabric (~> 1.7.5)
   - Firebase/Core
   - Firebase/Crash
+  - Firebase/Messaging
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - GLog (from `../node_modules/react-native/third-party-podspecs/GLog.podspec`)
   - Google-Maps-iOS-Utils
@@ -186,6 +195,7 @@ SPEC REPOS:
     - FirebaseCore
     - FirebaseCrash
     - FirebaseInstanceID
+    - FirebaseMessaging
     - Google-Maps-iOS-Utils
     - GoogleMaps
     - GoogleToolboxForMac
@@ -229,6 +239,7 @@ SPEC CHECKSUMS:
   FirebaseCore: cafc814b2d84fc8733f09e653041cc2165332ad7
   FirebaseCrash: 8900571fd763fd5bdda04522ec53da979456e3ce
   FirebaseInstanceID: 83e0040351565df711a5db3d8ebe5ea21aca998a
+  FirebaseMessaging: f2360a966ecfb0d14facf0fbdf306efc2df0ddbe
   Folly: b7255b29f1d693c375d642d0f04f0592181156d9
   GLog: 3e4e4ae9746ce6bf6e9420c7fc1e08ad59c8ba1a
   Google-Maps-iOS-Utils: c32891ff472eaaa1fca032beedafa1a013af7875
@@ -244,6 +255,6 @@ SPEC CHECKSUMS:
   SSZipArchive: d4009d2ce5520a421f231fd97028cc0e2667eed8
   yoga: 55da126afc384965b96bff46652464373b330add
 
-PODFILE CHECKSUM: 928cd3d592752baaa51979b1164222883890aeb8
+PODFILE CHECKSUM: 387cc4e6900678a70ee5bafe79a2c789a628f01b
 
 COCOAPODS: 1.5.0

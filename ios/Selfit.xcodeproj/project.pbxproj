@@ -28,8 +28,8 @@
 		2A0A4FE3D91A4B389B2B86C6 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0117E91CCD0E4445B7BA8679 /* MaterialIcons.ttf */; };
 		2EA23A06DB944B7599E4B050 /* IRANSansMobile_Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 236ECE07F30B49AC9FF95F79 /* IRANSansMobile_Bold.ttf */; };
 		385E4362DA3F4BC390E4CC57 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 785CB4C1346D4B1BBEAEFC9B /* FontAwesome.ttf */; };
+		3C0545A820B6EAC00027556B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3C0545A720B6EAC00027556B /* GoogleService-Info.plist */; };
 		3C96E0112241425DB2E86132 /* IRANSansMobile_UltraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 40E696B183D447F385AEE135 /* IRANSansMobile_UltraLight.ttf */; };
-		3CFE1AAA20B6BEE6008719CD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3CFE1AA920B6BEE6008719CD /* GoogleService-Info.plist */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		657CA5AF67774F60973DEA11 /* libRCTVideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 59174DFCA07B4DB99E081DA3 /* libRCTVideo.a */; };
 		7CC9398130FF4D0E88B167AB /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA13FCBE5E534CDAB425A719 /* rubicon-icon-font.ttf */; };
@@ -362,7 +362,8 @@
 		236ECE07F30B49AC9FF95F79 /* IRANSansMobile_Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = IRANSansMobile_Bold.ttf; path = ../src/assets/fonts/IRANSansMobile_Bold.ttf; sourceTree = "<group>"; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BA0B5CFF3453EA0D3E171B5 /* libPods-Selfit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Selfit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3CFE1AA920B6BEE6008719CD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3C0545A620B6E6250027556B /* Selfit.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Selfit.entitlements; path = Selfit/Selfit.entitlements; sourceTree = "<group>"; };
+		3C0545A720B6EAC00027556B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		40E696B183D447F385AEE135 /* IRANSansMobile_UltraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = IRANSansMobile_UltraLight.ttf; path = ../src/assets/fonts/IRANSansMobile_UltraLight.ttf; sourceTree = "<group>"; };
 		451F21E5E0BC48F7B1621B7A /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/native-base/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		56B631E2699B4A0085742890 /* Roboto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto.ttf; path = "../node_modules/native-base/Fonts/Roboto.ttf"; sourceTree = "<group>"; };
@@ -530,12 +531,13 @@
 		13B07FAE1A68108700A75B9A /* Selfit */ = {
 			isa = PBXGroup;
 			children = (
+				3C0545A720B6EAC00027556B /* GoogleService-Info.plist */,
+				3C0545A620B6E6250027556B /* Selfit.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				3CFE1AA920B6BEE6008719CD /* GoogleService-Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
@@ -731,6 +733,18 @@
 			attributes = {
 				LastUpgradeCheck = 610;
 				ORGANIZATIONNAME = "Selfit co.";
+				TargetAttributes = {
+					13B07F861A680F5B00A75B9A = {
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
+					};
+				};
 			};
 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Selfit" */;
 			compatibilityVersion = "Xcode 9.3";
@@ -1124,7 +1138,7 @@
 				F60EA0A2321E4261ABFF736C /* Roboto_medium.ttf in Resources */,
 				0C381D964EFC4B18AA78C5E3 /* Roboto.ttf in Resources */,
 				7CC9398130FF4D0E88B167AB /* rubicon-icon-font.ttf in Resources */,
-				3CFE1AAA20B6BEE6008719CD /* GoogleService-Info.plist in Resources */,
+				3C0545A820B6EAC00027556B /* GoogleService-Info.plist in Resources */,
 				FC34F5B91C364C00B7FBFB03 /* SimpleLineIcons.ttf in Resources */,
 				FA9FD30F988F40FCAB1A85B2 /* Zocial.ttf in Resources */,
 			);
@@ -1228,6 +1242,7 @@
 			baseConfigurationReference = 10927F46F9C944CF82B57300 /* Pods-Selfit.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Selfit/Selfit.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 25652XH35Y;
@@ -1267,6 +1282,7 @@
 			baseConfigurationReference = 944723B69DA4ADAA8D24359D /* Pods-Selfit.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Selfit/Selfit.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 25652XH35Y;
 				HEADER_SEARCH_PATHS = (

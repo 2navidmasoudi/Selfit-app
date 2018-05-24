@@ -7,7 +7,7 @@ target 'Selfit' do
   pod 'Firebase/Crash'
   pod 'Fabric', '~> 1.7.5'
   pod 'Crashlytics', '~> 3.10.1'
-
+  pod 'Firebase/Messaging'
   rn_path = '../node_modules/react-native'
   rn_maps_path = '../node_modules/react-native-maps'
 

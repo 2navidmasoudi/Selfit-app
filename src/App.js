@@ -101,6 +101,47 @@ class App extends Component {
     } else {
       setEnabled(true);
     }
+    firebase.messaging().hasPermission()
+      .then(enabled => {
+        console.log('hasPermission');
+        console.log(enabled);
+        if (enabled) {
+          firebase.messaging().getToken()
+            .then(fcmToken => {
+              if (fcmToken) {
+                console.log('getToken');
+                console.log(fcmToken);
+              } else {
+                //@TODO: user doesn't have a device token yet
+              }
+            });
+          // user has permissions
+          this.notificationListener = firebase.notifications().onNotification((notification) => {
+            console.log('notification');
+            console.log(notification);
+          });
+        } else {
+          firebase.messaging().requestPermission()
+            .then(() => {
+              firebase.messaging().getToken()
+                .then(fcmToken => {
+                  if (fcmToken) {
+                    console.log('requestPermission getToken');
+                    console.log(fcmToken);
+                  } else {
+                    //@TODO: user doesn't have a device token yet
+                  }
+                });
+              this.notificationListener = firebase.notifications().onNotification((notification) => {
+                console.log('notification');
+                console.log(notification);
+              });
+            })
+            .catch(error => {
+              //@TODO: User has rejected permissions
+            });
+        }
+      });
   }
   componentWillUnmount() {
     Linking.removeEventListener('url', this.handleOpenURL);
