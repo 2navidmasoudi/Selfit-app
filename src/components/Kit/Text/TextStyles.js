@@ -15,7 +15,7 @@ export default StyleSheet.create({
     fontSize: 0
   },
   regular: {
-    fontFamily: isIOS ? 'IRANSansMobile' : 'IRANSans'
+    fontFamily: isIOS ? 'IRANSansMobile' : 'IRANSansMobile'
   },
   light: {
     fontFamily: isIOS ? 'IRANSansMobile-Light' : 'IRANSansLight'

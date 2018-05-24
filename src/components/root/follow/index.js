@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Content, Tab, Tabs } from 'native-base';
-import AppHeader from '../../header';
 import { connect } from 'react-redux';
+import AppHeader from '../../header';
 import { putCheckToken } from '../../../services/index';
 import { TabsStyle } from '../../../assets/styles/gym';
 import List1 from './List1';

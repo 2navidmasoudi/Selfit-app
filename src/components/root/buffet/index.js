@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { Container, Tab, Tabs } from 'native-base';
+import { Container, Fab, Tab, Tabs } from 'native-base';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 import AppHeader from '../../header';
 import MapComponent from './map';
 import List from './list';
 import { TabsStyle } from '../../../assets/styles/gym';
 import { locateUser } from '../../../redux/actions/index';
 import { putCheckToken } from '../../../services/index';
+import {Text} from '../../Kit';
 
 @connect(state => ({
   user: state.user,
@@ -59,6 +61,22 @@ export default class Buffet extends Component {
             <List />
           </Tab>
         </Tabs>
+        <Fab
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: 50,
+            width: 120,
+            left: 10,
+            borderRadius: 10,
+            backgroundColor: '#0F9D7A'
+          }}
+          position="bottomLeft"
+          onPress={() => Actions.follow()}
+        >
+          <Text style={{ fontSize: 18 }}>پیگیری سفارش</Text>
+        </Fab>
       </Container>
     );
   }

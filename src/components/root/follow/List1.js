@@ -7,8 +7,7 @@ import { connect } from 'react-redux';
 @connect(state => ({
   tokenapi: state.buffet.tokenapi,
 }))
-export default
-class List1 extends Component {
+export default class List1 extends Component {
   state = {
     max: 70,
     ssort: true,
@@ -16,6 +15,7 @@ class List1 extends Component {
   };
   renderItem({ item }) {
     // return <CoachCard coach={item}/>
+    console.log(item);
   }
   render() {
     return (
