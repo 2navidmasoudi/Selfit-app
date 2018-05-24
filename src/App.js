@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Drawer, Lightbox, Router, Scene} from 'react-native-router-flux';
-import {Dimensions, NetInfo} from 'react-native';
 import firebase from 'react-native-firebase';
+import {Dimensions, NetInfo, Linking} from 'react-native';
 import {Root} from 'native-base';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {connect, Provider} from 'react-redux';
@@ -86,9 +86,23 @@ const onBeforeLift = async () => {
 };
 
 class App extends Component {
-    _handleOpenURL(event) {
-        console.log(event.url);
-    }
+  componentDidMount() {
+    Linking.getInitialURL().then((url) => {
+      if (url) {
+        console.log('Initial url is: ' + url);
+      }
+    }).catch(err => console.error('An error occurred', err));
+
+    Linking.addEventListener('url', this.handleOpenURL);
+  }
+  componentWillUnmount() {
+    Linking.removeEventListener('url', this.handleOpenURL);
+  }
+
+  handleOpenURL(event) {
+      console.log('Incoming url');
+      console.log(event.url);
+  }
 
     codePushStatusDidChange(status) {
         switch (status) {
