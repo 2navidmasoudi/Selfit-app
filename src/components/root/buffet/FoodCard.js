@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { Image, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import { Button, Card, CardItem, Icon, Left, Right, Text } from 'native-base';
+import { Button, Card, CardItem, Icon, Left, Right } from 'native-base';
 import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { reBasketBuffet } from '../../../redux/actions';
 import { logError } from '../../../services/log';
 import { deleteOrderBuffet, getAllOrder, postOrderBuffet } from '../../../services/orderBuffet';
+import { Text } from '../../Kit';
+import { persianNumber } from '../../../utils/persian';
 
 @connect(state => ({
   user: state.user,
@@ -39,7 +41,7 @@ export default class FoodCard extends Component {
       let deletedOrder;
       const { Basket, PriceAll } = await getAllOrder(true, false, tokenmember, tokenapi, 30, 0);
       console.log(Basket, 'asdasdasd');
-      for (i = 0; i < Basket.length; i++) {
+      for (let i = 0; i < Basket.length; i++) {
         if (MenuFood.menufoodid == Basket[i].menufoodid) {
           deletedOrder = await deleteOrderBuffet(Basket[i].idbasketbuffet, tokenmember, tokenapi);
           console.log('this is it!', Basket[i], 'deleted?', deletedOrder);
@@ -83,23 +85,23 @@ export default class FoodCard extends Component {
         onPress={() => this.addButtonHandle()}
         style={{ display: MenuFood.active ? 'flex' : 'none' }}
       >
-        <Card style={{ flex: 0 }}>
+        <Card>
           <CardItem>
             <Left style={{ flex: 1 }}>
               <TouchableWithoutFeedback onPress={() => Actions.showImage({ uri: ImgSrc })}>
                 <Image
                   source={{ uri: ImgSrc }}
-                  style={{ flex: 1, height: 100, width: null, resizeMode: 'cover' }}
+                  style={{ flex: 1, borderRadius: 10, height: 100, width: null, resizeMode: 'cover' }}
                   onPress={() => Actions.showImage({ uri: ImgSrc })}
                 />
               </TouchableWithoutFeedback>
             </Left>
             <Right style={{ flex: 2 }}>
-              <Text style={{ textAlign: 'right' }}>
+              <Text>
                 {MenuFood.namemenufood}
               </Text>
-              <Text note style={{ textAlign: 'right', fontFamily: 'IRANSansMobile' }}>
-                {MenuFood.pricemenufood.toLocaleString('fa')} تومان
+              <Text type="light">
+                {persianNumber(MenuFood.pricemenufood.toLocaleString())} تومان
               </Text>
               <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
                 <Button
@@ -117,7 +119,7 @@ export default class FoodCard extends Component {
                   display: this.state.numberbuffet <= 0 ? 'none' : 'flex'
                 }}
                 >
-                  {this.state.numberbuffet.toLocaleString('fa')}
+                  {persianNumber(this.state.numberbuffet)}
                 </Text>
                 <Button
                   disabled={!MenuFood.active}

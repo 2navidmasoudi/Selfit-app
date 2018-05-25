@@ -1,27 +1,21 @@
 import React from 'react';
-import { TouchableWithoutFeedback, View, Text } from 'react-native';
+import { TouchableWithoutFeedback, View } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import { Container } from 'native-base';
 import { styles } from './style';
+import { Text } from '../Kit';
 
-const BuffetKeeper = () => (
-  <Container>
-    <View style={styles.bgImg}>
-      <TouchableWithoutFeedback onPress={() => Actions.buffetKeeperRoot()}>
-        <View style={styles.animationView}>
-          <View style={styles.bgView}>
-            <Text style={styles.animationTitle}>
+export default () => (
+  <TouchableWithoutFeedback onPress={() => Actions.buffetKeeperRoot()}>
+    <View style={styles.animationView}>
+      <Text type="bold" style={styles.animationTitle}>
                   دریافت سفارش
-            </Text>
-            <Text style={styles.animationDetail}>
+      </Text>
+      <Text style={styles.animationDetail}>
                   سفارش های ارسال شده به خود را تایید
                   و برای مشتری آماده کنید! هنوز در بوفه مورد نظر ثبت نشده اید؟
                   با پشتیبانی تماس بگیرید.
-            </Text>
-          </View>
-        </View>
-      </TouchableWithoutFeedback>
+      </Text>
     </View>
-  </Container>
+  </TouchableWithoutFeedback>
+
 );
-export default BuffetKeeper;

@@ -1,16 +1,17 @@
-import React from 'react';
-import { Button, Container, Content, Input, Item, Label, Text, View, Form } from 'native-base';
+import React, { Component } from 'react';
+import { Button, Container, Content, Input, Item, Label, View, Form } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { form } from '../../../assets/styles/index';
 import AppHeader from '../../header';
 import { postAddress } from '../../../services';
 import { styles } from './style';
+import { Text } from '../../Kit';
 
 const convertNumbers2English = str => str.replace(/([٠١٢٣٤٥٦٧٨٩])|([۰۱۲۳۴۵۶۷۸۹])/g, (m, $1, $2) => m.charCodeAt(0) - ($1 ? 1632 : 1776));
 
 @connect(state => ({ user: state.user }))
-export default class AddAddress extends React.Component {
+export default class AddAddress extends Component {
     state = {
       addressLocation: null,
       map: null,

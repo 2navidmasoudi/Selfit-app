@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native';
 import { connect } from 'react-redux';
 import { Button, Container, Content, Footer, FooterTab } from 'native-base';
 import { Actions } from 'react-native-router-flux';
@@ -7,6 +6,7 @@ import AppHeader from '../../header';
 import { setRoad, tokenStore } from '../../../redux/actions';
 import { getRequestPayment } from '../../../services/payment';
 import { postAddressProduct, postFactorProduct, putTimeFactor } from '../../../services/orderProduct';
+import { Text } from '../../Kit';
 
 // todo: add list for final order
 
@@ -82,16 +82,11 @@ export default class finalOrderProduct extends Component {
         (<Footer>
           <FooterTab>
             <Button
-              style={{
-                            backgroundColor: '#0F9D7A'
-                        }}
+              style={{ backgroundColor: '#0F9D7A' }}
               onPress={this.handleFooterPress.bind(this)}
             >
-              <Text style={{
-                            fontFamily: 'IRANSansMobile',
-                            color: 'white',
-                        }}
-              >پرداخت: {this.props.totalPrice.toLocaleString('fa')} تومان
+              <Text style={{ color: 'white' }}>
+                پرداخت: {this.props.totalPrice.toLocaleString('fa')} تومان
               </Text>
             </Button>
           </FooterTab>

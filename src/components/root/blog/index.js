@@ -136,7 +136,6 @@ export default class Blog extends Component {
           data={this.props.BlogList}
           renderItem={item => this.renderItem(item)}
           keyExtractor={item => item.blogid}
-          ListEmptyComponent={() => <Spinner />}
           onRefresh={this.handleRefresh.bind(this)}
           refreshing={this.state.refreshing}
           onEndReached={this.handleLoadMore.bind(this)}

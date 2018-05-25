@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Body, Container, Content, Header, Left, Spinner, Switch, Text } from 'native-base';
+import { Body, Container, Content, Header, Left, Right, Spinner, Switch } from 'native-base';
 import { Alert, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import AppHeader from '../../header';
@@ -9,6 +9,7 @@ import { getSingleBuffet, putActiveBuffet } from '../../../services/buffet';
 import { logError } from '../../../services/log';
 import { getOrderBuffetAll } from '../../../services/orderBuffet';
 import OrderCard from './orderCard';
+import { Text } from '../../Kit';
 
 @connect(state => ({
   user: state.user,
@@ -95,7 +96,7 @@ export default class BuffetKeeper extends Component {
     return <OrderCard order={item} />;
   }
   render() {
-    const YesOrNo = this.state.Active ? 'بله (سفارش می پذیرم)' : 'خیر (بوفه تعطیل است)';
+    const YesOrNo = this.state.Active ? ' بله (سفارش می پذیرم)' : ' خیر (بوفه تعطیل است)';
     const color = this.state.Active ? 'blue' : 'red';
     return (
       <Container>
@@ -113,22 +114,20 @@ export default class BuffetKeeper extends Component {
               onValueChange={this._putActiveBuffet.bind(this)}
             />
           </Left>
-          <Body style={{ flex: 3, justifyContent: 'center' }}>
-            <Text style={{ textAlign: 'right', color: 'white' }}>
+          <Right style={{ flex: 3, justifyContent: 'center' }}>
+            <Text style={{ color: 'white' }}>
                 فعالیت بوفه:
-              <Text
-                style={{ color }}
-              >{YesOrNo}
+              <Text style={{ color }}>
+                {YesOrNo}
               </Text>
             </Text>
-          </Body>
+          </Right>
         </Header>
         <Content padder>
           <FlatList
             data={this.props.orderList}
             renderItem={item => this.renderItem(item)}
             keyExtractor={item => item.idfactorbuffet}
-            scrollEnabled={false}
             ListEmptyComponent={() => <Spinner />}
             // onRefresh={this.handleRefresh.bind(this)}
           />

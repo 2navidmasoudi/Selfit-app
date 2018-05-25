@@ -7,7 +7,13 @@ export const TabsStyle = EstyleSheet.create({
   notActiveTabs: {
     backgroundColor: '$headerColor',
   },
+  underLine: {
+    backgroundColor: '#FFF',
+  },
   text: {
-    color: 'white',
+    color: '#FFF',
+  },
+  activeText: {
+    color: '#FFF',
   }
 });

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { Button, Card, CardItem, Icon, Left, Right, Text } from 'native-base';
+import { Button, Card, CardItem, Icon, Left, Right } from 'native-base';
 import { connect } from 'react-redux';
 import { reBasketBuffet } from '../../../redux/actions';
 import { deleteOrderBuffet, getAllOrder } from '../../../services/orderBuffet';
+import { Text } from '../../Kit';
+import { persianNumber } from '../../../utils/persian';
 
 @connect(state => ({
   user: state.user,
@@ -29,26 +31,20 @@ export default class FoodCard extends Component {
   render() {
     const { food } = this.props;
     return (
-      <Card >
-        <CardItem header style={{ flex: 1, justifyContent: 'center' }}>
-          <Text style={{ textAlign: 'center' }}>{food.namemenufood}</Text>
-        </CardItem>
-        <CardItem style={{ flex: 1 }}>
+      <Card>
+        <Text style={{ flex: 1, textAlign: 'center', marginTop: 5 }}>{food.namemenufood}</Text>
+        <CardItem>
           <Left style={{ flex: 1 }}>
-            <Button onPress={this.handleRemove.bind(this)}>
+            <Button bordered danger onPress={this.handleRemove.bind(this)}>
               <Icon name="close" />
             </Button>
           </Left>
-          <Text
-            style={{ textAlign: 'center' }}
-          >
-            تعداد: {food.numbermenufood.toLocaleString('fa')}
+          <Text style={{ flex: 1, textAlign: 'center' }}>
+            تعداد: {persianNumber(food.numbermenufood)}
           </Text>
           <Right style={{ flex: 1 }}>
-            <Text
-              style={{ textAlign: 'right' }}
-            >
-              قیمت: {food.pricemenufood.toLocaleString('fa')}
+            <Text>
+              قیمت کل: {persianNumber(food.pricemenufood.toLocaleString())}
             </Text>
           </Right>
         </CardItem>

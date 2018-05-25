@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, ImageBackground, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { View, ImageBackground, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import BaseLightBox from './BaseLightBox';
 import { SignStyle } from '../../assets/styles/sign';
 import { setTokenmember } from '../../redux/actions';
 import { putCodeLogin } from '../../services';
+import { Text } from '../Kit';
 
 @connect(state => ({ user: state.user }), { setTokenmember })
 export default class AuthLightBox extends Component {

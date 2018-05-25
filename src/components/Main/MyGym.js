@@ -1,28 +1,22 @@
 import React from 'react';
-import { Text, TouchableWithoutFeedback, View } from 'react-native';
+import { TouchableWithoutFeedback, View } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import { Container } from 'native-base';
 import { styles } from './style';
+import { Text } from '../Kit';
 
-const MyGym = () => (
-  <Container>
-    <View style={styles.bgImg}>
-      <TouchableWithoutFeedback onPress={() => Actions.mygymRoot()}>
-        <View style={styles.animationView}>
-          <View style={styles.bgView}>
-            <Text style={styles.animationTitle}>
+export default () => (
+  <TouchableWithoutFeedback onPress={() => Actions.mygymRoot()}>
+    <View style={styles.animationView}>
+      <Text style={styles.animationTitle}>
               باشگاه من
-            </Text>
-            <Text style={styles.animationDetail}>
+      </Text>
+      <Text style={styles.animationDetail}>
               عکس و اطلاعات و توضیحات باشکاه خود را ویرایش کنید
               تا بیشتر مورد توجه قرار بگیرید!
               در باشگاه خود ثبت نشده اید؟
               با پشتیبانی تماس بگیرید.
-            </Text>
-          </View>
-        </View>
-      </TouchableWithoutFeedback>
+      </Text>
     </View>
-  </Container>
+  </TouchableWithoutFeedback>
 );
-export default MyGym;
+

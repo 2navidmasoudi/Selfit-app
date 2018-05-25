@@ -16,7 +16,7 @@ export const styles = EStyleSheet.create({
   titleAddress: { textAlign: 'right', marginBottom: 10, fontFamily: '$IS' },
   itemAddress: { margin: 10, marginTop: 20 },
   labelAddress: { textAlign: 'right', paddingTop: 5 },
-  btnAddressText: { fontFamily: '$IS' },
+  btnAddressText: { fontFamily: '$IS', color: '#FFF' },
   btnAddress: { flexDirection: 'column', justifyContent: 'flex-end' },
   container: {
     position: 'absolute',

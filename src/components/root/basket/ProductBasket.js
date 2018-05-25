@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { FlatList, Text } from 'react-native';
+import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
-import { Button, Container, Content, Footer, FooterTab } from 'native-base';
+import { Button, Card, CardItem, Container, Content, Footer, FooterTab } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { getBasketProduct } from '../../../services/orderProduct';
 import AppHeader from '../../header';
@@ -9,6 +9,8 @@ import { reBasketProduct, setProductPriceAll, setRoad, tokenStore } from '../../
 import { logError } from '../../../services/log';
 import ProductCard from './ProductCard';
 import { getPayment } from '../../../services/payment';
+import { Text } from '../../Kit';
+import { persianNumber } from '../../../utils/persian';
 
 @connect(state => ({
   user: state.user,
@@ -64,21 +66,11 @@ export default class ProductBasket extends Component {
       (<Footer>
         <FooterTab>
           <Button
-            style={{
-              // paddingTop: 10,
-              backgroundColor: '#0F9D7A'
-            }}
+            style={{ backgroundColor: '#0F9D7A' }}
             onPress={() => Actions.timeStore({ LeadFrom: 'Store' })}
           >
-            {/* <Badge><Text>{(this.props.Count1 + this.props.Count2).toLocaleString('fa')}</Text></Badge> */}
-            {/* <Icon name="basket" style={{color: 'white'}}/> */}
-            <Text style={{
-              fontFamily: 'IRANSansMobile',
-              // fontSize: 18,
-              color: 'white',
-              // paddingTop: 12
-            }}
-            >انتخاب زمان
+            <Text style={{ color: 'white' }}>
+              انتخاب زمان
             </Text>
           </Button>
         </FooterTab>
@@ -87,17 +79,25 @@ export default class ProductBasket extends Component {
       <Container>
         <AppHeader rightTitle="سبد محصول" backButton="flex" />
         <Content padder>
-          <Text style={{ textAlign: 'center' }}>سبد خرید</Text>
-          <FlatList
-            data={this.props.productBasket}
-            renderItem={item => this.renderProduct(item)}
-            keyExtractor={item => item.idproduct}
-            scrollEnabled={false}
-          />
-          {/* <Button block onPress={this._getPayment.bind(this)}> */}
-          {/* <Text>get</Text> */}
-          {/* </Button> */}
-          <Text>کل: {this.props.totalPrice}</Text>
+          <Card>
+            <Card style={{ flex: 0 }}>
+              <CardItem>
+                <Text type="bold" style={{ flex: 1, textAlign: 'center' }}>سبد خرید فروشگاه</Text>
+              </CardItem>
+            </Card>
+            <FlatList
+              data={this.props.productBasket}
+              renderItem={item => this.renderProduct(item)}
+              ListEmptyComponent={<Text style={{ marginRight: 20 }}>هیچ سفارشی دریافت نشد...</Text>}
+              keyExtractor={item => item.idproduct}
+              scrollEnabled={false}
+            />
+            <CardItem footer bordered>
+              <Text style={{ flex: 1 }}>
+              جمع کل: {persianNumber(this.props.totalPrice.toLocaleString() || '0')} تومان
+              </Text>
+            </CardItem>
+          </Card>
         </Content>
         {FooterComponent}
       </Container>

@@ -74,7 +74,7 @@ export default class MapComponent extends Component {
   }
   async setInfo() {
     await this.props.tokenBuffet('selfit.buffet');
-    // this.getCurrentPosition();
+    this.getCurrentPosition();
     this.getBuffet();
   }
   async getBuffet() {
@@ -90,25 +90,24 @@ export default class MapComponent extends Component {
       console.log(error);
     }
   }
-  // getCurrentPosition() {
-  //     try {
-  //         navigator.geolocation.getCurrentPosition(
-  //             (position) => {
-  //                 const region = {
-  //                     latitude: position.coords.latitude,
-  //                     longitude: position.coords.longitude,
-  //                     latitudeDelta: LATITUDE_DELTA,
-  //                     longitudeDelta: LONGITUDE_DELTA,
-  //                 };
-  //                 this.setRegion(region);
-  //             },
-  //             (error) => alert(error.message),
-  //             {enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 , distanceFilter: 1000});
-  //     } catch(error) {
-  //         console.log(error);
-  //     }
-
-  // }
+  getCurrentPosition() {
+    try {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const region = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            latitudeDelta: LATITUDE_DELTA,
+            longitudeDelta: LONGITUDE_DELTA,
+          };
+          this.setRegion(region);
+        },
+        error => alert(error.message)
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
   _buffetMenu(buffet) {
     Actions.buffetMenu(buffet);
     console.log(buffet);
@@ -118,17 +117,12 @@ export default class MapComponent extends Component {
       <View style={styles.container}>
         <MapView
           style={styles.map}
-          ref={(map) => {
-            this.state.map = map;
-          }}
+          ref={(map) => { this.state.map = map; }}
           initialRegion={initialRegion}
           showsUserLocation
           loadingEnabled
-          // region={this.state.region}
-          // onRegionChange={this.onRegionChange.bind(this)}
           onRegionChangeComplete={this.onRegionChangeComplete.bind(this)}
           customMapStyle={mapStyle}
-          // onMapReady={()=>this.getCurrentPosition()}
         >
           {this.props.buffet.map((buffet, index) => (
             <Marker
@@ -149,7 +143,7 @@ export default class MapComponent extends Component {
         <Fab
           style={{ backgroundColor: '#0F9D7A' }}
           position="bottomRight"
-          // onPress={this.getCurrentPosition.bind(this)}
+          onPress={this.getCurrentPosition.bind(this)}
         >
           <Icon name="md-locate" />
         </Fab>

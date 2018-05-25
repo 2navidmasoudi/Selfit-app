@@ -13,7 +13,7 @@ export const drawer = EStyleSheet.create({
     justifyContent: 'flex-end'
   },
   info: { justifyContent: 'flex-end', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' },
-  infoText: { color: 'white', fontFamily: '$IS' },
+  infoText: { color: 'white' },
   item: {
     justifyContent: 'flex-end',
     padding: 10
@@ -53,12 +53,11 @@ export const form = EStyleSheet.create({
     fontSize: 14
   },
   submitButton: {
-    borderRadius: 5,
+    // borderRadius: 5,
     backgroundColor: '$statusBarColor',
   },
   submitText: {
     fontSize: 16,
-    fontFamily: '$IS'
   },
   error: {
     fontFamily: '$IS',
@@ -81,13 +80,10 @@ export const header = EStyleSheet.create({
     paddingRight: 4
   },
   bodySubtitle: {
-
-    fontSize: 14,
-    fontFamily: '$IS',
     color: '#FFF',
   },
   iconStyle: {
-    color: '#EEEEEE'
+    color: '#FFF'
   },
   bodyTitle: {
     color: 'white',
