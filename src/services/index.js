@@ -1,8 +1,8 @@
-import { DELETE, GET, headers, Member, POST, PUT, Selfit } from './type';
+import {AddressMember, DELETE, GET, headers, Member, POST, PUT, SecurityMember, Selfit} from './type';
 
 export const putCheckToken = async (token, tokenapi) => {
   try {
-    const response = await fetch(`${Selfit}${Member}PutCheckToken`, {
+    const response = await fetch(`${Selfit}${SecurityMember}PutCheckToken`, {
       method: PUT,
       headers,
       body: JSON.stringify({
@@ -20,7 +20,7 @@ export const putCheckToken = async (token, tokenapi) => {
 
 export const putMemberLogin = async (phone, tokenapi) => {
   try {
-    const response = await fetch(`${Selfit}${Member}PutMemberLogin`, {
+    const response = await fetch(`${Selfit}${SecurityMember}PutMemberLogin`, {
       method: PUT,
       headers,
       body: JSON.stringify({
@@ -50,7 +50,7 @@ export const getSingleToken = async (token, tokenapi) => {
 
 export const putUserLogout = async (token, tokenapi) => {
   try {
-    const response = await fetch(`${Selfit}${Member}PutLogout`, {
+    const response = await fetch(`${Selfit}${SecurityMember}PutLogout`, {
       method: PUT,
       headers,
       body: JSON.stringify({
@@ -68,7 +68,7 @@ export const putUserLogout = async (token, tokenapi) => {
 
 export const putCodeLogin = async (Method, phone, code, tokenapi) => {
   try {
-    const response = await fetch(`${Selfit}${Member}${Method}`, {
+    const response = await fetch(`${Selfit}${SecurityMember}${Method}`, {
       method: PUT,
       headers,
       body: JSON.stringify({
@@ -127,7 +127,7 @@ export const putMember = async (namefamilymember, mailmember, birthdaymember, se
 
 export const getAddress = async (id, token, tokenapi, max, min, ssort, fsort) => {
   try {
-    const response = await fetch(`${Selfit}${Member}GetAddressAll/${id}?token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
+    const response = await fetch(`${Selfit}${AddressMember}GetAll/${id}?token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
       method: GET,
       headers
     });
@@ -138,13 +138,14 @@ export const getAddress = async (id, token, tokenapi, max, min, ssort, fsort) =>
   }
 };
 
-export const postAddress = async (titleaddress, plaque, floor, latval, longval, districtid, token, tokenapi) => {
+export const postAddress = async (titleaddress, desc, plaque, floor, latval, longval, districtid, token, tokenapi) => {
   try {
-    const response = await fetch(`${Selfit}${Member}PostAddress`, {
+    const response = await fetch(`${Selfit}${AddressMember}Post`, {
       method: POST,
       headers,
       body: JSON.stringify({
         titleaddress,
+        desc,
         plaque,
         floor,
         latval,
@@ -163,7 +164,7 @@ export const postAddress = async (titleaddress, plaque, floor, latval, longval, 
 
 export const activeAddress = async (idaddress, token, tokenapi) => {
   try {
-    const response = await fetch(`${Selfit}${Member}PutActiveAddress`, {
+    const response = await fetch(`${Selfit}${AddressMember}PutActive`, {
       method: PUT,
       headers,
       body: JSON.stringify({
@@ -181,7 +182,7 @@ export const activeAddress = async (idaddress, token, tokenapi) => {
 
 export const deleteAddress = async (id, token, tokenapi) => {
   try {
-    const response = await fetch(`${Selfit}${Member}DeleteAddress/${id}?token=${token}&tokenapi=${tokenapi}`, {
+    const response = await fetch(`${Selfit}${AddressMember}Delete/${id}?token=${token}&tokenapi=${tokenapi}`, {
       method: DELETE,
       headers
     });

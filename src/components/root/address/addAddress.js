@@ -13,11 +13,12 @@ const convertNumbers2English = str => str.replace(/([٠١٢٣٤٥٦٧٨٩])|([۰
 @connect(state => ({ user: state.user }))
 export default class AddAddress extends Component {
     state = {
-      addressLocation: null,
+      desc: null,
       map: null,
       plaque: null,
       floor: null,
       titleaddress: null,
+
     };
     componentWillMount() {
       console.log(this.props);
@@ -25,9 +26,9 @@ export default class AddAddress extends Component {
     }
     async _addAddress() {
       const { tokenapi, tokenmember } = await this.props.user;
-      const { plaque, floor, titleaddress } = await this.state;
+      const { plaque, floor, titleaddress, desc } = await this.state;
       const { latitude, longitude } = await this.props.region;
-      const result = await postAddress(titleaddress, plaque, floor, latitude, longitude, 1, tokenmember, tokenapi);
+      const result = await postAddress(titleaddress, desc, plaque, floor, latitude, longitude, 1, tokenmember, tokenapi);
       console.log('result address: ', result);
       if (result === 1) {
         Actions.popTo('address', { refresh: { refresh: Math.random() } });
@@ -47,7 +48,7 @@ export default class AddAddress extends Component {
       this.setState({ titleaddress: text });
     }
     changeAddressLocation(text) {
-      this.setState({ addressLocation: text });
+      this.setState({ desc: text });
     }
     render() {
       return (

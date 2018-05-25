@@ -201,19 +201,19 @@ export default class BuffetMenu extends Component {
             badge
             full
             style={{
-                    paddingTop: 10,
+                    paddingTop: 15,
                     backgroundColor: '#0F9D7A'
                   }}
             onPress={() => Actions.buffetBasket()}
           >
-            <Badge><Text>{persianNumber(this.props.Count1 + this.props.Count2)}</Text></Badge>
+            <Badge style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ color: 'white' }}>
+                {persianNumber(this.props.Count1 + this.props.Count2)}
+              </Text>
+            </Badge>
             <Icon name="basket" style={{ color: 'white' }} />
-            <Text style={{
-              fontSize: 18,
-              color: 'white',
-              paddingTop: 12
-            }}
-            >سبد سفارش
+            <Text style={{ fontSize: 18, color: 'white' }}>
+              سبد سفارش
             </Text>
           </Button>
         </FooterTab>
