@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { FlatList, Text } from 'react-native';
+import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
-import { Button, Container, Content, Footer, FooterTab, Separator } from 'native-base';
+import { Button, Card, CardItem, Container, Content, Footer, FooterTab } from 'native-base';
 import { Actions } from 'react-native-router-flux';
+import PropTypes from 'prop-types';
 import { getAllOrder } from '../../../services/orderBuffet';
 import { getAllMixMaterial } from '../../../services/orderMaterial';
 import AppHeader from '../../header';
@@ -10,6 +11,8 @@ import { reBasketBuffet, reBasketMaterial, setRoad, tokenBuffet } from '../../..
 import { logError } from '../../../services/log';
 import FoodCard from './FoodCard';
 import MaterialCard from './MaterialCard';
+import { Text } from '../../Kit';
+import { persianNumber } from '../../../utils/persian';
 
 @connect(state => ({
   user: state.user,
@@ -90,11 +93,7 @@ export default class BuffetBasket extends Component {
             style={{ backgroundColor: '#0F9D7A' }}
             onPress={() => Actions.addressRoot({ LeadFrom: 'Buffet' })}
           >
-            <Text style={{
-              fontFamily: 'IRANSansMobile',
-              color: 'white',
-            }}
-            >
+            <Text style={{ color: 'white' }}>
               انتخاب آدرس
             </Text>
           </Button>
@@ -104,29 +103,53 @@ export default class BuffetBasket extends Component {
       <Container>
         <AppHeader rightTitle="سبد غذا" backButton="flex" />
         <Content padder>
-          <Text style={{ textAlign: 'center' }}>سبد خرید</Text>
-          <Separator>
-            <Text style={{ textAlign: 'center' }}>غذای آماده</Text>
-          </Separator>
-          <FlatList
-            data={this.props.buffetBasket}
-            renderItem={item => this.returnBuffetItem(item)}
-            keyExtractor={item => item.idbasketbuffet}
-            scrollEnabled={false}
-          />
-          <Separator>
-            <Text style={{ textAlign: 'center' }}>متریال</Text>
-          </Separator>
-          <FlatList
-            data={this.props.materialBasket}
-            renderItem={item => this.renderMaterialItem(item)}
-            keyExtractor={item => item.idmixmaterial}
-            scrollEnabled={false}
-          />
-          <Text>کل: {this.props.PriceAll}</Text>
+          <Card>
+            <Card style={{ flex: 0 }}>
+              <CardItem>
+                <Text type="bold" style={{ flex: 1, textAlign: 'center' }}>سبد خرید غذای آماده</Text>
+              </CardItem>
+            </Card>
+            <FlatList
+              data={this.props.buffetBasket}
+              renderItem={item => this.returnBuffetItem(item)}
+              ListEmptyComponent={<Text style={{ marginRight: 20 }}>هیچ سفارشی دریافت نشد...</Text>}
+              keyExtractor={item => item.idbasketbuffet}
+              scrollEnabled={false}
+            />
+            <Card style={{ flex: 0 }}>
+              <CardItem>
+                <Text type="bold" style={{ flex: 1, textAlign: 'center' }}>سبد خرید مواد اولیه</Text>
+              </CardItem>
+            </Card>
+            <FlatList
+              data={this.props.materialBasket}
+              renderItem={item => this.renderMaterialItem(item)}
+              ListEmptyComponent={<Text style={{ marginRight: 20 }}>هیچ سفارشی دریافت نشد...</Text>}
+              keyExtractor={item => item.idmixmaterial}
+              scrollEnabled={false}
+            />
+            <CardItem footer bordered>
+              <Text type="bold" style={{ flex: 1 }}>
+                جمع کل: {persianNumber(this.props.PriceAll.toLocaleString())} تومان
+              </Text>
+            </CardItem>
+          </Card>
         </Content>
         {FooterComponent}
       </Container>
     );
   }
 }
+// TODO : DO THIS FOR ALL PROJECT
+BuffetBasket.propTypes = {
+  user: PropTypes.node.isRequired,
+  buffetBasket: PropTypes.node.isRequired,
+  materialBasket: PropTypes.node.isRequired,
+  Count1: PropTypes.number.isRequired,
+  Count2: PropTypes.number.isRequired,
+  PriceAll: PropTypes.string.isRequired,
+  tokenBuffet: PropTypes.func.isRequired,
+  reBasketBuffet: PropTypes.func.isRequired,
+  reBasketMaterial: PropTypes.func.isRequired,
+  setRoad: PropTypes.func.isRequired,
+};

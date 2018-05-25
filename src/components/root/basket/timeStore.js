@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { Button, Container, Content, Footer, FooterTab, Icon, Input, Item, Label } from 'native-base';
 import { Actions } from 'react-native-router-flux';
@@ -7,6 +7,8 @@ import AppHeader from '../../header';
 import { setDescProduct, setProductIDAccess, setRoad, tokenStore } from '../../../redux/actions';
 import { SignStyle } from '../../../assets/styles/sign';
 import { getTimeAccessStore } from '../../../services/orderProduct';
+import { Text } from '../../Kit';
+import { persianNumber } from '../../../utils/persian';
 
 @connect(state => ({
   user: state.user,
@@ -71,14 +73,10 @@ export default class TimeStore extends Component {
       (<Footer>
         <FooterTab>
           <Button
-            style={{backgroundColor: '#0F9D7A'}}
+            style={{ backgroundColor: '#0F9D7A' }}
             onPress={this.handleFooterButton.bind(this)}
           >
-            <Text style={{
-              fontFamily: 'IRANSansMobile',
-              color: 'white',
-            }}
-            >
+            <Text style={{ color: 'white' }}>
               انتخاب آدرس
             </Text>
           </Button>
@@ -108,7 +106,7 @@ export default class TimeStore extends Component {
                   onPress={() => this._putTimeFactor(c.idtimefactor)}
                 >
                   <Text>
-                    {c.fromdatehour} الی {c.todatehour.toLocaleString('fa')}
+                    {persianNumber(c.fromdatehour)} الی {persianNumber(c.todatehour)}
                   </Text>
                 </Button>
               ))}

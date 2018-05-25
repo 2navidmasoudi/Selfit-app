@@ -6,7 +6,6 @@ import {
   Card,
   CardItem,
   Thumbnail,
-  Text,
   Button,
   Left,
   Body,
@@ -16,6 +15,7 @@ import HTMLView from 'react-native-htmlview';
 import { Actions } from 'react-native-router-flux';
 import AppHeader from '../../header';
 import { form } from '../../../assets/styles/index';
+import { Text } from '../../Kit';
 
 export default ({ blog }) => {
   const m = moment(`${blog.datesave}`, 'YYYY/MM/DDTHH:mm:ss');
@@ -27,13 +27,11 @@ export default ({ blog }) => {
     <Container>
       <AppHeader rightTitle="بیشتر بدانید" backButton="flex" />
       <Content>
-        <Card style={{ flex: 0 }}>
+        <Card>
           <CardItem>
             <Left style={{ flex: 1 }}>
               <Body>
-                <Text
-                  style={{ marginRight: 10, textAlign: 'right', fontFamily: 'IRANSansMobile' }}
-                >
+                <Text style={{ marginRight: 10 }}>
                   {blog.titleblog}
                 </Text>
               </Body>
@@ -51,7 +49,7 @@ export default ({ blog }) => {
             <ScrollView style={{ flex: 1 }}>
               <HTMLView
                 value={htmlContent}
-                stylesheet={{ flex: 1, textAlign: 'right' }}
+                stylesheet={{ flex: 1, fontFamily: 'IRANSansMobile' }}
               />
             </ScrollView>
           </CardItem>
@@ -62,11 +60,11 @@ export default ({ blog }) => {
           block
           style={[form.submitButton, { margin: 10, marginBottom: 20 }]}
           onPress={() => Share.share({
-          message: `http://selfit.ir/#/Home/SingleBlog/${blog.blogid}`,
-          title: `${blog.titleblog}`
-        })}
+            message: ` بیشتر بدانید سلفیت | selfit : ${blog.titleblog} لینک: https://selfit.ir/#/Home/SingleBlog/${blog.blogid}`,
+            title: `${blog.titleblog}`
+          })}
         >
-          <Text style={form.submitText}>اشتراک با دوستان</Text>
+          <Text style={{ color: '#FFF' }}>اشتراک با دوستان</Text>
         </Button>
       </View>
     </Container>

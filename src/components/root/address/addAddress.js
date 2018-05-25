@@ -1,22 +1,24 @@
-import React from 'react';
-import { Button, Container, Content, Input, Item, Label, Text, View, Form } from 'native-base';
+import React, { Component } from 'react';
+import { Button, Container, Content, Input, Item, Label, View, Form } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { form } from '../../../assets/styles/index';
 import AppHeader from '../../header';
 import { postAddress } from '../../../services';
 import { styles } from './style';
+import { Text } from '../../Kit';
 
 const convertNumbers2English = str => str.replace(/([٠١٢٣٤٥٦٧٨٩])|([۰۱۲۳۴۵۶۷۸۹])/g, (m, $1, $2) => m.charCodeAt(0) - ($1 ? 1632 : 1776));
 
 @connect(state => ({ user: state.user }))
-export default class AddAddress extends React.Component {
+export default class AddAddress extends Component {
     state = {
-      addressLocation: null,
+      desc: null,
       map: null,
       plaque: null,
       floor: null,
       titleaddress: null,
+
     };
     componentWillMount() {
       console.log(this.props);
@@ -24,9 +26,9 @@ export default class AddAddress extends React.Component {
     }
     async _addAddress() {
       const { tokenapi, tokenmember } = await this.props.user;
-      const { plaque, floor, titleaddress } = await this.state;
+      const { plaque, floor, titleaddress, desc } = await this.state;
       const { latitude, longitude } = await this.props.region;
-      const result = await postAddress(titleaddress, plaque, floor, latitude, longitude, 1, tokenmember, tokenapi);
+      const result = await postAddress(titleaddress, desc, plaque, floor, latitude, longitude, 1, tokenmember, tokenapi);
       console.log('result address: ', result);
       if (result === 1) {
         Actions.popTo('address', { refresh: { refresh: Math.random() } });
@@ -46,7 +48,7 @@ export default class AddAddress extends React.Component {
       this.setState({ titleaddress: text });
     }
     changeAddressLocation(text) {
-      this.setState({ addressLocation: text });
+      this.setState({ desc: text });
     }
     render() {
       return (

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { TouchableHighlight } from 'react-native';
-import { Card, CardItem, Text, Icon, Left, Body, Right } from 'native-base';
+import { TouchableOpacity } from 'react-native';
+import { Card, CardItem, Icon, Left, Body, Right } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { activeAddress } from '../../../services';
+import { Text } from '../../Kit';
 
 @connect(state => ({
   user: state.user,
@@ -27,7 +28,7 @@ export default class AddressCard extends Component {
   render() {
     const { address } = this.props;
     return (
-      <TouchableHighlight onPress={() => this.onPressHandle(address)}>
+      <TouchableOpacity onPress={() => this.onPressHandle(address)}>
         <Card style={{ flex: 0 }}>
           <CardItem>
             <Left style={{ flex: 1 }} >
@@ -36,11 +37,11 @@ export default class AddressCard extends Component {
             <Body style={{ flex: 1 }} />
             <Right style={{ flex: 1 }}>
               {/* <Thumbnail square large source={{uri: ImgSrc }} /> */}
-              <Text style={{ marginRight: 10, textAlign: 'right', fontFamily: 'IRANSansMobile' }}>{address.titleaddressmember ? Base64.decode(address.titleaddressmember) : 'نام وارد نشده.'}</Text>
+              <Text style={{ marginRight: 10 }}>{address.titleaddressmember ? Base64.decode(address.titleaddressmember) : 'نام وارد نشده.'}</Text>
             </Right>
           </CardItem>
         </Card>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   }
 }

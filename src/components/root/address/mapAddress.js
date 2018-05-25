@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Container, Fab, Icon, Text, View } from 'native-base';
+import { Button, Container, Fab, Icon, View } from 'native-base';
 import { Image } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import MapView from 'react-native-maps';
@@ -9,6 +9,7 @@ import { mapStyle } from '../../../assets/styles/map';
 import markerImage from '../../../assets/markerImage.png';
 import { form } from '../../../assets/styles';
 import { styles } from './style';
+import { Text } from '../../Kit';
 
 const initialRegion = {
   latitude: 35.7247434,
@@ -73,35 +74,33 @@ export default class MapAddress extends Component {
               style={styles.map}
               ref={(map) => { this.state.map = map; }}
               initialRegion={initialRegion}
-              showsUserLocation
-              loadingEnabled
+              showsUserLocation={true}
+              loadingEnabled={true}
               onRegionChangeComplete={this.onRegionChangeComplete.bind(this)}
               customMapStyle={mapStyle}
               onMapReady={this.getCurrentPosition.bind(this)}
             />
+            <View pointerEvents="none" style={styles.viewImage}>
+              <Image
+                pointerEvents="none"
+                style={styles.markerImage}
+                source={markerImage}
+              />
+            </View>
+            <Button
+              full
+              style={form.submitButton}
+              onPress={() => Actions.addAddress({ region: this.state.region })}
+            >
+              <Text style={{ color: '#FFF' }}>ثبت در نقشه</Text>
+            </Button>
             <Fab
-              style={{ backgroundColor: '#0F9D7A' }}
+              style={{ backgroundColor: '#0F9D7A', bottom: 20, }}
               position="bottomRight"
               onPress={this.getCurrentPosition.bind(this)}
             >
               <Icon name="md-locate" />
             </Fab>
-          </View>
-          <View pointerEvents="none" style={styles.viewImage}>
-            <Image
-              pointerEvents="none"
-              style={styles.markerImage}
-              source={markerImage}
-            />
-          </View>
-          <View style={styles.btnMap}>
-            <Button
-              block
-              style={form.submitButton}
-              onPress={() => Actions.addAddress({ region: this.state.region })}
-            >
-              <Text>ثبت در تقشه</Text>
-            </Button>
           </View>
         </Container>
       );

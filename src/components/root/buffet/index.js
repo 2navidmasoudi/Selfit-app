@@ -8,7 +8,7 @@ import List from './list';
 import { TabsStyle } from '../../../assets/styles/gym';
 import { locateUser } from '../../../redux/actions/index';
 import { putCheckToken } from '../../../services/index';
-import {Text} from '../../Kit';
+import { Text } from '../../Kit';
 
 @connect(state => ({
   user: state.user,
@@ -43,9 +43,14 @@ export default class Buffet extends Component {
     return (
       <Container>
         <AppHeader rightTitle="بوفه آنلاین" backButton="flex" />
-        <Tabs locked tabBarPosition="top">
+        <Tabs
+          locked
+          tabBarPosition="top"
+          tabBarUnderlineStyle={TabsStyle.underLine}
+        >
           <Tab
             heading="نقشه"
+            activeTextStyle={TabsStyle.activeText}
             textStyle={TabsStyle.text}
             activeTabStyle={TabsStyle.activeTab}
             tabStyle={TabsStyle.notActiveTabs}
@@ -54,6 +59,7 @@ export default class Buffet extends Component {
           </Tab>
           <Tab
             heading="لیست"
+            activeTextStyle={TabsStyle.activeText}
             textStyle={TabsStyle.text}
             activeTabStyle={TabsStyle.activeTab}
             tabStyle={TabsStyle.notActiveTabs}

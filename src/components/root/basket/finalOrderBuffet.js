@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native';
 import { connect } from 'react-redux';
 import { Button, Container, Content, Footer, FooterTab, Icon, Input, Item, Label } from 'native-base';
 import { Actions } from 'react-native-router-flux';
@@ -7,7 +6,8 @@ import { postAddressOrderBuffet, postFactor } from '../../../services/orderBuffe
 import AppHeader from '../../header';
 import { reBasketBuffet, reBasketMaterial, setRoad, tokenBuffet } from '../../../redux/actions';
 import { SignStyle } from '../../../assets/styles/sign';
-
+import { Text } from '../../Kit';
+// TODO: ADD LIST FOR FINAL ORDER
 @connect(state => ({
   user: state.user,
   tokenapi: state.buffet.tokenapi,
@@ -70,7 +70,6 @@ export default class finalOrderBuffet extends Component {
             onPress={this.sendOrderBuffet.bind(this)}
           >
             <Text style={{
-              fontFamily: 'IRANSansMobile',
               color: 'white',
             }}
             >

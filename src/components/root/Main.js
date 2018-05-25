@@ -43,7 +43,7 @@ export default class Main extends Component {
   render() {
     const pannel =
       this.props.user.typememberid ===
-      6 ?
+      1 ?
         (<View>
           <View style={main.pannelContainer}>
             <View style={main.pannelWrapper}>
@@ -78,7 +78,7 @@ export default class Main extends Component {
         : null;
     return (
       <Container>
-        <AppHeader />
+        <AppHeader rightTitle="صفحه اصلی" />
         {this.state.viewComponent}
         {pannel}
       </Container>

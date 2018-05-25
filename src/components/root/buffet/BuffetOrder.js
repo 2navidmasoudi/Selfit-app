@@ -6,7 +6,7 @@ import { form } from '../../../assets/styles/index';
 import AppHeader from '../../header';
 import { logError } from '../../../services/log';
 import { getAllOrder } from '../../../services/orderBuffet';
-
+// TODO: Delete This Class and Replace with FinalOrder
 @connect(state => ({
   user: state.user,
   buffetid: state.buffet.buffetid,

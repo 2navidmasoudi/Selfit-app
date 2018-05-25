@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ImageBackground, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { ImageBackground, TouchableWithoutFeedback, View } from 'react-native';
 import { connect } from 'react-redux';
 import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
@@ -11,6 +11,8 @@ import { logError } from '../../services/log';
 import { getAllOrder } from '../../services/orderBuffet';
 import { getAllMixMaterial } from '../../services/orderMaterial';
 import { putUserLogout } from '../../services';
+import { Text } from '../Kit';
+import { persianNumber } from '../../utils/persian';
 
 @connect(state => ({
   user: state.user,
@@ -117,11 +119,11 @@ export default class DrawerLayout extends Component {
     const phoneNumber = Base64.decode(phone);
     return (
       <View style={drawer.container}>
-        <TouchableWithoutFeedback onPress={() => Actions.showImage({ uri: ImgSrc })}>
+        <TouchableWithoutFeedback onPress={() => Actions.profile()}>
           <ImageBackground source={{ uri: ImgSrc }} style={drawer.imageHeader}>
             <View style={drawer.info}>
               <Text style={drawer.infoText}>{Name}</Text>
-              <Text style={drawer.infoText}>{phoneNumber}</Text>
+              <Text style={drawer.infoText}>{persianNumber(phoneNumber)}</Text>
             </View>
           </ImageBackground>
         </TouchableWithoutFeedback>
@@ -132,7 +134,7 @@ export default class DrawerLayout extends Component {
             Actions.profile();
           }}
           >
-            <Text style={drawer.itemTitle}>پروفایل</Text>
+            <Text>پروفایل</Text>
             <Icon name="person" style={drawer.itemIcon} />
           </Item>
           <Item
@@ -150,12 +152,12 @@ export default class DrawerLayout extends Component {
                 alignItems: 'center'
               }}
               >
-                <Text style={{ color: 'white' }}>
-                  {(this.props.buffetBasketCount + this.props.materialBasketCount).toLocaleString('fa') || '0'.toLocaleString('fa')}
+                <Text style={{ color: 'white', textAlign: 'center' }}>
+                  {persianNumber(this.props.buffetBasketCount + this.props.materialBasketCount) || persianNumber('0')}
                 </Text>
               </Badge>
             </Left>
-            <Text style={drawer.itemTitle}>سبد خرید غذا</Text>
+            <Text>سبد خرید غذا</Text>
             <Icon name="basket" style={drawer.itemIcon} />
           </Item>
           <Item
@@ -173,42 +175,40 @@ export default class DrawerLayout extends Component {
                 alignItems: 'center'
               }}
               >
-                {/* //todo: localeString for undefined basket */}
                 <Text style={{ color: 'white', textAlign: 'center' }}>
-                  {this.props.productBasketCount.toLocaleString('fa') || '0'.toLocaleString('fa')}
+                  {persianNumber(this.props.productBasketCount) || persianNumber('0')}
                 </Text>
               </Badge>
             </Left>
-
-            <Text style={drawer.itemTitle}>سبد خرید فروشگاه</Text>
+            <Text>سبد خرید فروشگاه</Text>
             <Icon name="basket" style={drawer.itemIcon} />
           </Item>
           <Item style={drawer.item} onPress={() => Actions.follow()}>
-            <Text style={drawer.itemTitle}>پیگیری سفارش</Text>
+            <Text>پیگیری سفارش</Text>
             <Icon name="call" style={drawer.itemIcon} />
           </Item>
           <Item style={drawer.item} onPress={() => Actions.support()}>
-            <Text style={drawer.itemTitle}>پشتیبانی</Text>
+            <Text>پشتیبانی</Text>
             <Icon name="call" style={drawer.itemIcon} />
           </Item>
           <Item style={drawer.item}>
-            <Text style={drawer.itemTitle}>درباره ما</Text>
+            <Text>درباره ما</Text>
             <Icon name="bookmarks" style={drawer.itemIcon} />
           </Item>
           <Item style={drawer.item} onPress={() => Actions.complaints()}>
-            <Text style={drawer.itemTitle}>شکایات و پیشنهادات</Text>
+            <Text>شکایات و پیشنهادات</Text>
             <Icon name="bookmarks" style={drawer.itemIcon} />
           </Item>
           <Item style={drawer.item}>
-            <Text style={drawer.itemTitle}>راهنمای برنامه</Text>
+            <Text>راهنمای برنامه</Text>
             <Icon name="help" style={drawer.itemIcon} />
           </Item>
           <Item style={drawer.item} onPress={() => Actions.rules()}>
-            <Text style={drawer.itemTitle}>قوانین و تعهدات</Text>
+            <Text>قوانین و تعهدات</Text>
             <Icon name="help" style={drawer.itemIcon} />
           </Item>
           <Item style={drawer.item} onPress={() => this._putUserLogout()}>
-            <Text style={drawer.itemTitle}>خروج از حساب</Text>
+            <Text>خروج از حساب</Text>
             <Icon name="backspace" style={drawer.itemIcon} />
           </Item>
         </Content>

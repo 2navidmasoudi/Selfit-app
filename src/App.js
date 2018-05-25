@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Drawer, Lightbox, Router, Scene } from 'react-native-router-flux';
-import {Dimensions, NetInfo, Linking} from 'react-native';
+import { Dimensions, NetInfo, Linking } from 'react-native';
 import firebase from 'react-native-firebase';
 import { Root } from 'native-base';
 import { PersistGate } from 'redux-persist/es/integration/react';
@@ -86,11 +86,12 @@ const onBeforeLift = async () => {
   );
 };
 
+@codePush
 export default class App extends Component {
   componentDidMount() {
     Linking.getInitialURL().then((url) => {
       if (url) {
-        console.log('Initial url is: ' + url);
+        console.log(`Initial url is: ${url}`);
       }
     }).catch(err => console.error('An error occurred', err));
 
@@ -102,17 +103,17 @@ export default class App extends Component {
       setEnabled(true);
     }
     firebase.messaging().hasPermission()
-      .then(enabled => {
+      .then((enabled) => {
         console.log('hasPermission');
         console.log(enabled);
         if (enabled) {
           firebase.messaging().getToken()
-            .then(fcmToken => {
+            .then((fcmToken) => {
               if (fcmToken) {
                 console.log('getToken');
                 console.log(fcmToken);
               } else {
-                //@TODO: user doesn't have a device token yet
+                // @TODO: user doesn't have a device token yet
               }
             });
           // user has permissions
@@ -124,12 +125,12 @@ export default class App extends Component {
           firebase.messaging().requestPermission()
             .then(() => {
               firebase.messaging().getToken()
-                .then(fcmToken => {
+                .then((fcmToken) => {
                   if (fcmToken) {
                     console.log('requestPermission getToken');
                     console.log(fcmToken);
                   } else {
-                    //@TODO: user doesn't have a device token yet
+                    // @TODO: user doesn't have a device token yet
                   }
                 });
               this.notificationListener = firebase.notifications().onNotification((notification) => {
@@ -137,8 +138,8 @@ export default class App extends Component {
                 console.log(notification);
               });
             })
-            .catch(error => {
-              //@TODO: User has rejected permissions
+            .catch((error) => {
+              // @TODO: User has rejected permissions
             });
         }
       });

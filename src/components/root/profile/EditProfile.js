@@ -28,7 +28,7 @@ export default class EditProfile extends React.Component {
     picmember: null,
     UploadButtonDisable: false,
     birthdaymember: null,
-  }
+  };
   componentWillMount() {
     const { namefamilymember, mailmember, picmember, birthdaymember } = this.props.user;
     this.setState({

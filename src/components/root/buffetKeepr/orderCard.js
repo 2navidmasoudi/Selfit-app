@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
-import { Card, CardItem, Left, Right, Text } from 'native-base';
+import { Card, CardItem, Left, Right } from 'native-base';
 import { Actions } from 'react-native-router-flux';
+import { Text } from '../../Kit';
+import { persianNumber } from '../../../utils/persian';
 
 export default class OrderCard extends Component {
   onPressHandle(order) {
@@ -12,29 +14,27 @@ export default class OrderCard extends Component {
     const { order } = this.props;
     return (
       <TouchableWithoutFeedback onPress={() => this.onPressHandle(order)}>
-        <Card style={{ flex: 0 }}>
+        <Card>
           <CardItem>
             <Left style={{ flex: 1 }} />
             <Right style={{ flex: 1 }}>
-              <Text style={{
-                marginRight: 10,
-                textAlign: 'right',
-                fontFamily: 'IRANSansMobile'
-              }}
-              >
+              <Text style={{ marginRight: 10, }}>
                 {order.namefamilymember}
               </Text>
               <Text
-                style={{ marginRight: 10, textAlign: 'right', fontFamily: 'IRANSansMobile' }}
+                style={{ marginRight: 10 }}
                 numberOfLines={1}
-                note
+                type="light"
               >
-                {order.finalpricefactorbuffet.toLocaleString('fa')} تومان
+                {persianNumber(order.finalpricefactorbuffet.toLocaleString())} تومان
               </Text>
             </Right>
           </CardItem>
           <CardItem>
-            <Text>برای مشاهده سفارش کلیک کنید!</Text>
+            <Text style={{ flex: 1, color: order.idstatepayed === 2 ? 'red' : 'green' }}>{order.namestatepayed}</Text>
+          </CardItem>
+          <CardItem>
+            <Text style={{ flex: 1 }}>برای مشاهده سفارش کلیک کنید!</Text>
           </CardItem>
         </Card>
       </TouchableWithoutFeedback>

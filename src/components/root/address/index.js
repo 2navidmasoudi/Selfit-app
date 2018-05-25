@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Container, View, Text,
-  Content, Button
+  Container, View, Content, Button
 } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
@@ -10,6 +9,7 @@ import AppHeader from '../../header';
 import { getAddress } from '../../../services';
 import AddressCard from './addressCard';
 import { logError } from '../../../services/log';
+import { Text } from '../../Kit';
 
 @connect(state => ({
   user: state.user,
@@ -64,7 +64,7 @@ export default class Address extends Component {
             style={[form.submitButton, { margin: 10 }]}
             onPress={() => Actions.mapAddress()}
           >
-            <Text style={form.submitText}>اضافه کردن آدرس</Text>
+            <Text style={{ color: '#FFF' }}>اضافه کردن آدرس</Text>
           </Button>
           <Button
             block
@@ -72,7 +72,7 @@ export default class Address extends Component {
             style={[form.submitButton, { margin: 10, marginBottom: 20 }]}
             onPress={() => Actions.editAddress({ address: this.state.address })}
           >
-            <Text style={form.submitText}>ویرایش آدرس</Text>
+            <Text style={{ color: '#FFF' }}>ویرایش آدرس</Text>
           </Button>
         </View>
       </Container>

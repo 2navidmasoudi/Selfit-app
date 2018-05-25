@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { View, TouchableWithoutFeedback } from 'react-native';
-import { Card, CardItem, Thumbnail, Text, Button, Icon, Left, Right } from 'native-base';
+import { Card, CardItem, Thumbnail, Button, Icon, Left, Right } from 'native-base';
 import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
+import { Text } from '../../Kit';
 
+// TODO : RATE FOR BUFFET
 export default class BuffetCard extends Component {
   onPressHandle(buffet) {
     Actions.buffetMenu(buffet);
@@ -25,20 +27,16 @@ export default class BuffetCard extends Component {
               <Thumbnail square large source={{ uri: ImgSrc }} />
             </Left>
             <Right style={{ flex: 1 }}>
-              <Text style={{
-                marginRight: 10,
-                textAlign: 'right',
-                fontFamily: 'IRANSansMobile'
-              }}
-              >
+              <Text style={{ marginRight: 10 }}>
                 بوفه {buffet.namebuffet}
               </Text>
               <Text
-                style={{ marginRight: 10, textAlign: 'right', fontFamily: 'IRANSansMobile' }}
+                style={{ marginRight: 10 }}
                 numberOfLines={1}
                 ellipsizeMode="tail"
                 note
-              >{buffet.addressgym}
+              >
+                {buffet.addressgym}
               </Text>
               <View style={{ justifyContent: 'flex-end' }}>
                 <Button transparent textStyle={{ color: '#87838B' }}>

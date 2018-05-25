@@ -15,7 +15,6 @@ import {
   Spinner,
   Tab,
   Tabs,
-  Text
 } from 'native-base';
 import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
@@ -30,6 +29,8 @@ import FoodCard from './FoodCard';
 import MaterialCard from './MaterialCard';
 import { TabsStyle } from '../../../assets/styles/gym';
 import { checkOrderBuffet, deleteOrderAll } from '../../../services/orderBuffet';
+import { Text } from '../../Kit';
+import { persianNumber } from '../../../utils/persian';
 
 moment.loadPersian({ dialect: 'persian-modern' });
 const styles = StyleSheet.create({
@@ -163,7 +164,7 @@ export default class BuffetMenu extends Component {
       const { tokenmember } = await this.props.user;
       const result = await checkOrderBuffet(buffetid, tokenmember, tokenapi);
       console.log(result, 'checkOrder');
-      if (result == 1 || !idbasket) {
+      if (result === 1 || !idbasket) {
         await this._postBasketMaterial();
       }
     } catch (e) {
@@ -200,20 +201,19 @@ export default class BuffetMenu extends Component {
             badge
             full
             style={{
-                    paddingTop: 10,
+                    paddingTop: 15,
                     backgroundColor: '#0F9D7A'
                   }}
             onPress={() => Actions.buffetBasket()}
           >
-            <Badge><Text>{(this.props.Count1 + this.props.Count2).toLocaleString('fa')}</Text></Badge>
+            <Badge style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ color: 'white' }}>
+                {persianNumber(this.props.Count1 + this.props.Count2)}
+              </Text>
+            </Badge>
             <Icon name="basket" style={{ color: 'white' }} />
-            <Text style={{
-              fontFamily: 'IRANSansMobile',
-              fontSize: 18,
-              color: 'white',
-              paddingTop: 12
-            }}
-            >سبد سفارش
+            <Text style={{ fontSize: 18, color: 'white' }}>
+              سبد سفارش
             </Text>
           </Button>
         </FooterTab>
@@ -239,16 +239,16 @@ export default class BuffetMenu extends Component {
               <View style={styles.bar}>
                 <Text style={{
                   textAlign: 'center',
-                  fontFamily: 'IRANSansMobile',
                   color: 'white',
                   margin: 10
                 }}
-                >بوفه {namebuffet}
+                >
+                  بوفه {namebuffet}
                 </Text>
               </View>
             </ImageBackground>
           </TouchableWithoutFeedback>
-          <Tabs initialPage={1} locked ref={component => this._tabs = component}>
+          <Tabs initialPage={1} locked ref={c => this._tabs = c}>
             <Tab
               heading="نظرات و اطلاعات"
               textStyle={TabsStyle.text}
@@ -284,7 +284,7 @@ export default class BuffetMenu extends Component {
               activeTabStyle={TabsStyle.activeTab}
               tabStyle={TabsStyle.notActiveTabs}
             >
-              <Tabs initialPage={1} ref={component => this._tabs2 = component}>
+              <Tabs initialPage={1} ref={c => this._tabs2 = c}>
 
                 <Tab
                   heading="منو انتخابی"

@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { Button, Card, CardItem, Icon, Left, Right, Text } from 'native-base';
+import { Button, Card, CardItem, Icon, Left, Right } from 'native-base';
 import { connect } from 'react-redux';
 import {
   deleteMixMaterial,
   getAllMixMaterial,
 } from '../../../services/orderMaterial';
 import { reBasketMaterial } from '../../../redux/actions';
+import { Text } from '../../Kit';
+import { persianNumber } from '../../../utils/persian';
 
 @connect(state => ({
   user: state.user,
@@ -45,26 +47,21 @@ export default class MaterialCard extends Component {
   }
   render() {
     const { food } = this.props;
-    // const ImgSrc = `http://selfit.ir/Resource/Material/${Material.picmaterial}`;
     return (
       <Card>
-        <CardItem header style={{ flex: 1, justifyContent: 'center' }}>
-          <Text style={{ textAlign: 'center' }}>{food.namematerial}</Text>
-        </CardItem>
-        <CardItem style={{ flex: 1 }}>
+        <Text style={{ flex: 1, textAlign: 'center', marginTop: 5 }}>{food.namematerial}</Text>
+        <CardItem>
           <Left style={{ flex: 1 }}>
-            <Button onPress={this.handleRemove.bind(this)}>
+            <Button bordered danger onPress={this.handleRemove.bind(this)}>
               <Icon name="close" />
             </Button>
           </Left>
-          <Text
-            style={{ textAlign: 'center' }}
-          >تعداد: {food.numbermaterial.toLocaleString('fa')}
+          <Text style={{ flex: 1, textAlign: 'center' }}>
+            تعداد: {persianNumber(food.numbermaterial)}
           </Text>
           <Right style={{ flex: 1 }}>
-            <Text
-              style={{ textAlign: 'right' }}
-            >قیمت: {food.pricematerial.toLocaleString('fa')}
+            <Text>
+              قیمت کل: {persianNumber(food.pricematerial.toLocaleString())}
             </Text>
           </Right>
         </CardItem>

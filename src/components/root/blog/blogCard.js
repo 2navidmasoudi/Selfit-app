@@ -4,12 +4,12 @@ import {
   Card,
   CardItem,
   Thumbnail,
-  Text,
   Left,
   Right,
 } from 'native-base';
 import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
+import { Text } from '../../Kit';
 
 export default class BlogCard extends Component {
   pressBlogHandler(blog) {
@@ -27,7 +27,7 @@ export default class BlogCard extends Component {
     const ImgSrc = `${blog.httpserver}${blog.pathserver}${ImgYear}/${ImgMonth}/${blog.picblog}`;
     return (
       <TouchableWithoutFeedback onPress={() => this.pressBlogHandler(blog)}>
-        <Card style={{ flex: 0 }}>
+        <Card>
           <CardItem>
             <Left style={{ flex: 1 }}>
               <TouchableWithoutFeedback onPress={() => Actions.showImage({ uri: ImgSrc })}>
@@ -35,13 +35,7 @@ export default class BlogCard extends Component {
               </TouchableWithoutFeedback>
             </Left>
             <Right style={{ flex: 3 }}>
-              <Text style={{
-                flex: 1,
-                marginRight: 10,
-                textAlign: 'right',
-                fontFamily: 'IRANSansMobile'
-              }}
-              >
+              <Text style={{ flex: 1, marginRight: 10 }}>
                 {blog.titleblog}
               </Text>
             </Right>

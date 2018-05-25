@@ -1,7 +1,5 @@
 import { Platform, StyleSheet } from 'react-native';
 
-const isIOS = Platform.OS === 'ios';
-
 export default StyleSheet.create({
   defaultStyles: {
     ...Platform.select({
@@ -15,18 +13,18 @@ export default StyleSheet.create({
     fontSize: 0
   },
   regular: {
-    fontFamily: isIOS ? 'IRANSansMobile' : 'IRANSansMobile'
+    fontFamily: 'IRANSansMobile'
   },
   light: {
-    fontFamily: isIOS ? 'IRANSansMobile-Light' : 'IRANSansLight'
+    fontFamily: 'IRANSansMobile_Light'
   },
   bold: {
-    fontFamily: isIOS ? 'IRANSansMobile-Bold' : 'IRANSansBold'
+    fontFamily: 'IRANSansMobile_Bold'
   },
   medium: {
-    fontFamily: isIOS ? 'IRANSansMobile-Medium' : 'IRANSansMedium'
+    fontFamily: 'IRANSansMobile_Medium'
   },
   ultraLight: {
-    fontFamily: isIOS ? 'IRANSansMobile-UltraLight' : 'IRANSansLight'
+    fontFamily: 'IRANSansMobile_UltraLight'
   }
 });

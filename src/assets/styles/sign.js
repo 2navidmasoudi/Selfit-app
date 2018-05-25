@@ -55,10 +55,8 @@ export const SignStyle = EStyleSheet.create({
     fontFamily: '$IS',
     fontSize: 18,
     textAlign: 'right',
-
     marginBottom: 10,
     color: '#5256c9',
-    // fontWeight:'bold'
   },
   labelRedText: {
     fontFamily: '$IS',
@@ -67,7 +65,6 @@ export const SignStyle = EStyleSheet.create({
     paddingTop: 5,
     marginBottom: 5,
     color: '#e53935',
-    // fontWeight:'bold'
   },
   inputText: {
     fontFamily: '$IS',
@@ -88,8 +85,6 @@ export const SignStyle = EStyleSheet.create({
     borderRadius: 5,
   },
   signButtonImg: {
-    // marginTop:10,
-    // resizeMode:'stretch',
     width: 150,
     height: 75,
     justifyContent: 'center',
@@ -99,8 +94,6 @@ export const SignStyle = EStyleSheet.create({
     // flex:1,
     width: 150,
     height: 75,
-    // tintColor:'#1B5E20'
-    // margin: 10,
   },
   LoginButtonText: {
     fontFamily: '$IS',
@@ -108,12 +101,8 @@ export const SignStyle = EStyleSheet.create({
     fontSize: 18,
     padding: 0,
     color: 'white',
-    // marginBottom:15,
-    // marginRight:10,
-    // check for IOS
     overflow: 'hidden'
   },
-
   authButtonText: {
     fontFamily: '$IS',
     textAlign: 'center',
@@ -155,23 +144,17 @@ export const SignStyle = EStyleSheet.create({
     fontSize: 14,
     marginRight: 5,
     marginLeft: 5
-
-
   },
   selectViewStyle: { flex: 1, flexDirection: 'row', margin: 10 },
   formSelectStyle: { flex: 3, flexDirection: 'column' },
   listSelectStyle: { justifyContent: 'flex-end' },
   submitButtonText: {
-
     fontFamily: '$IS',
     fontSize: 18,
     color: 'white',
     paddingTop: 20
   },
-
-
 });
-
 export const LightBoxStyle = EStyleSheet.create({
   container: {
     backgroundColor: 'rgba(52,52,52,0.5)',
@@ -180,7 +163,6 @@ export const LightBoxStyle = EStyleSheet.create({
     right: 0,
     left: 0,
     bottom: 0,
-    // justifyContent:'center',
     alignItems: 'center',
     paddingTop: 70,
   },

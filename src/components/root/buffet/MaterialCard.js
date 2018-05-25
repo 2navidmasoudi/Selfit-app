@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { Image, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import { Button, Card, CardItem, Icon, Left, Right, Text } from 'native-base';
+import { Button, Card, CardItem, Icon, Left, Right } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { logError } from '../../../services/log';
 import { deleteMixMaterial, getAllMixMaterial, postMixMaterial } from '../../../services/orderMaterial';
 import { reBasketMaterial } from '../../../redux/actions';
+import { Text } from '../../Kit';
+import { persianNumber } from '../../../utils/persian';
 
 @connect(state => ({
   user: state.user,
@@ -83,7 +85,7 @@ export default class MaterialCard extends Component {
         onPress={() => this.addButtonHandle()}
         style={{ display: Material.active_material_buffet ? 'flex' : 'none' }}
       >
-        <Card style={{ flex: 0 }}>
+        <Card>
           <CardItem>
             <Left style={{ flex: 1 }}>
               <TouchableWithoutFeedback onPress={() => Actions.showImage({ uri: ImgSrc })}>
@@ -95,11 +97,11 @@ export default class MaterialCard extends Component {
               </TouchableWithoutFeedback>
             </Left>
             <Right style={{ flex: 2 }}>
-              <Text style={{ textAlign: 'right' }}>
+              <Text>
                 {Material.namematerial}
               </Text>
-              <Text note style={{ textAlign: 'right', textAlign: 'right', fontFamily: 'IRANSansMobile' }}>
-                {(Material.pricematerial).toLocaleString('fa')} تومان
+              <Text type="light">
+                {persianNumber(Material.pricematerial.toLocaleString())} تومان
               </Text>
               <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
                 <Button
@@ -115,12 +117,10 @@ export default class MaterialCard extends Component {
                 </Button>
                 <Text style={{
                   paddingHorizontal: 10,
-                  textAlign: 'right',
-                  fontFamily: 'IRANSansMobile',
                   display: this.state.numberbuffet <= 0 ? 'none' : 'flex'
                 }}
                 >
-                  {this.state.numberbuffet.toLocaleString('fa')}
+                  {persianNumber(this.state.numberbuffet)}
                 </Text>
                 <Button
                   disabled={!Material.active_material_buffet}
