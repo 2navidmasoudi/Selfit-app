@@ -3,4 +3,6 @@
     <string name="app_name">Selfit</string>
     <string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true">ALWAYS_SEND</string>
     <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true">ALWAYS_SEND</string>
+    <color name="main">#313131</color>
+
 </resources>
