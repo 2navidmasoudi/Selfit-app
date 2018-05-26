@@ -55,15 +55,16 @@ import OrderDetail from './components/root/buffetKeepr/OrderDetail';
 import Complaints from './components/root/Complaints';
 import Rules from './components/root/Rules';
 import Follow from './components/root/follow';
+import {darkColor, mainColor} from "./assets/variables/colors";
 
 Geocoder.setApiKey('AIzaSyBlgHjeMbqK3xEZfh6HK2o8RdjhhgTOh0s');
 const window = Dimensions.get('window');
 const { persistor, store } = configureStore();
 
 EStyleSheet.build({
-  $statusBarColor: '#0f9d7a',
-  $headerColor: '#313131',
-  $signBoxColor: '#0F9D7A',
+  $statusBarColor: mainColor,
+  $headerColor: darkColor,
+  $signBoxColor: mainColor,
   $IS: 'IRANSansMobile'
 });
 
