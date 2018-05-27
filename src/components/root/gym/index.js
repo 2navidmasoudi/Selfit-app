@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Fab, Tab, Tabs, Text } from 'native-base';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 import AppHeader from '../../header';
 import List from './list';
 import { TabsStyle } from '../../../assets/styles/gym';
@@ -53,7 +54,7 @@ export default class Gym extends Component {
     }
   }
   toggleComponent() {
-    if (this.state.tabTitle == 'لیست') {
+    if (this.state.tabTitle === 'لیست') {
       this.setState({
         viewComponent: <GymMap />,
         tabTitle: 'نقشه',
@@ -84,7 +85,24 @@ export default class Gym extends Component {
           position="bottomLeft"
           onPress={this.toggleComponent.bind(this)}
         >
-          <Text style={{ fontSize: 18 }}>{this.state.tabTitle == 'لیست' ? 'نقشه' : 'لیست'}</Text>
+          <Text style={{ fontSize: 18 }}>{this.state.tabTitle === 'لیست' ? 'نقشه' : 'لیست'}</Text>
+        </Fab>
+        <Fab
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: 50,
+            width: 120,
+            left: 5,
+            bottom: 60,
+            borderRadius: 10,
+            backgroundColor: '#0F9D7A'
+          }}
+          position="bottomLeft"
+          onPress={() => Actions.fullMap()}
+        >
+          <Text style={{ fontSize: 18 }}>کل باشگاه ها</Text>
         </Fab>
       </Container>
     );

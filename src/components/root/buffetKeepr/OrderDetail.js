@@ -46,7 +46,7 @@ export default class OrderDetail extends Component {
   async getInfo() {
     await this.props.tokenBuffet('selfit.buffet');
     this._getBasketOrderAllBuffet();
-    this._getBasketOrderMaterial();
+    setTimeout(() => this._getBasketOrderMaterial(),100);
     // this._getMixMaterial(0);
     console.log(this.props);
   }

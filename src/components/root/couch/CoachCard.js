@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
-import { TouchableWithoutFeedback, View } from 'react-native';
-import { Button, Card, CardItem, Icon, Left, Right, Text, Thumbnail } from 'native-base';
+import { TouchableWithoutFeedback } from 'react-native';
+import { Card, CardItem, Left, Right, Thumbnail } from 'native-base';
 import moment from 'moment-jalaali';
+import { Rating } from 'react-native-elements';
+import HTMLView from 'react-native-htmlview';
+import { Actions } from 'react-native-router-flux';
+import { Text } from '../../Kit';
 
 export default class CoachCard extends Component {
   onPressHandle(coach) {
     // TODO: create a detail page for couch
-    // Actions.gymDetail(coach);
-    // console.log(coach);
+    Actions.coachDetail({ coach });
+    console.log(coach);
   }
+
   render() {
     const { coach } = this.props;
     const m = moment(`${coach.datesave}`, 'YYYY/MM/DDTHH:mm:ss');
@@ -16,6 +21,7 @@ export default class CoachCard extends Component {
     const ImgYear = m.jYear();
     const ImgMonth = m.jMonth() + 1;
     const ImgSrc = `${coach.httpserver}${coach.pathserver}${ImgYear}/${ImgMonth}/${coach.piccoach}`;
+    const htmlContent = `...${coach.desccoach}`;
     return (
       <TouchableWithoutFeedback onPress={() => this.onPressHandle(coach)}>
         <Card style={{ flex: 0 }}>
@@ -23,20 +29,15 @@ export default class CoachCard extends Component {
             <Left style={{ flex: 1 }}>
               <Thumbnail square large source={{ uri: ImgSrc }} />
             </Left>
-            <Right style={{ flex: 1 }}>
-              <Text style={{ marginRight: 10, textAlign: 'right', fontFamily: 'IRANSansMobile' }}>{coach.namecoach}</Text>
-              <Text
-                style={{ marginRight: 10, textAlign: 'right', fontFamily: 'IRANSansMobile' }}
-                numberOfLines={1}
-                ellipsizeMode="tail"
-                note
+            <Right style={{ flex: 2 }}>
+              <Text style={{ marginRight: 10, marginBottom: 15 }}>{coach.namecoach}</Text>
+              <Rating
+                readonly
+                fractions={1}
+                startingValue={coach.RateNumber || 5}
+                imageSize={10}
+                style={{ marginRight: 10 }}
               />
-              <View style={{ justifyContent: 'flex-end' }}>
-                <Button transparent textStyle={{ color: '#87838B' }}>
-                  <Icon name="md-star" />
-                  <Text>امتیاز: 5/{coach.RateNumber}</Text>
-                </Button>
-              </View>
             </Right>
           </CardItem>
         </Card>

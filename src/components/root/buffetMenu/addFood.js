@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, Text, TouchableNativeFeedback, View } from 'react-native';
+import { FlatList, TouchableWithoutFeedback, View } from 'react-native';
 import { Button, Container, Grid, Header, Icon, Input, Item, Left, Picker, Row, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import FoodCard from './FoodCard';
@@ -9,6 +9,7 @@ import { getAllMenuFood, getFoodCategory, getSearchMenuFood } from '../../../ser
 import { logError } from '../../../services/log';
 import { putCheckToken } from '../../../services';
 import Loader from '../../loader';
+import { Text } from '../../Kit';
 
 @connect(state => ({
   user: state.user,
@@ -47,6 +48,7 @@ export default class AddFood extends Component {
       await this.setState({
         search: text
       });
+      this._getSearchMenuFood();
     } else {
       await this.setState({
         searchMode: false, search: ''
@@ -144,24 +146,19 @@ export default class AddFood extends Component {
   render() {
     const ShowWhichButton = this.state.SelectedBarName === 'search' ?
       (<Header searchBar rounded style={{ backgroundColor: 'white' }}>
-        <Left style={{ flex: 1 }}>
-          <Button block light disabled={this.state.search === ''} onPress={this._getSearchMenuFood.bind(this)}>
-            <Text>جستجو</Text>
-          </Button>
-        </Left>
         <Item style={{ flex: 4 }}>
           <Icon name="search" />
           <Input placeholder="نام غذا..." onChangeText={text => this.searchText(text)} />
           <Icon name="people" />
         </Item>
-        <TouchableNativeFeedback
+        <TouchableWithoutFeedback
           style={{ flex: 1, justifyContent: 'center', alignItems: 'center', height: 20, width: 30 }}
           onPress={() => this.cancleSearch()}
         >
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Icon name="close" />
           </View>
-        </TouchableNativeFeedback>
+        </TouchableWithoutFeedback>
        </Header>)
       :
       (<Header rounded style={{ backgroundColor: 'white' }}>
@@ -174,7 +171,7 @@ export default class AddFood extends Component {
             selectedValue={this.state.FoodCategory}
             onValueChange={this.FoodCategoryChanged.bind(this)}
           >
-            <Picker.Item label="همه غذاها" value={0} key={-1} />
+            <Picker.Item label="همه غذاها" value={0} key={100} />
             {this.state.CategoryList.map(category => (
               <Picker.Item
                 label={category.namecategoryfood}
@@ -187,47 +184,43 @@ export default class AddFood extends Component {
             دسته بندی بر اساس:
           </Text>
         </View>
-        <TouchableNativeFeedback
+        <TouchableWithoutFeedback
           style={{ flex: 1, justifyContent: 'center', alignItems: 'center', height: 20, width: 30 }}
           onPress={() => this.cancleCategory()}
         >
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Icon name="close" />
           </View>
-        </TouchableNativeFeedback>
+        </TouchableWithoutFeedback>
        </Header>);
     const searchOrCategory = this.state.SelectedBar ? ShowWhichButton :
-      (<Header rounded style={{ backgroundColor: 'white' }}>
-        <Grid>
-          <Row>
-            <Button
-              iconLeft
-              bordered
-              success
-              style={{ flex: 1, marginHorizontal: 6 }}
-              onPress={this.categoryButton.bind(this)}
-            >
-              <Icon name="clipboard" />
-              <Text style={{ flex: 1, textAlign: 'center' }}>دسته بندی</Text>
-            </Button>
-            <Button
-              iconLeft
-              bordered
-              success
-              style={{ flex: 1, marginHorizontal: 6 }}
-              onPress={this.searchButton.bind(this)}
-            >
-              <Icon name="search" />
-              <Text style={{ flex: 1, textAlign: 'center' }}>جستجو</Text>
-            </Button>
-          </Row>
-        </Grid>
-       </Header>);
+      (<Header rounded style={{ backgroundColor: 'white' }} androidStatusBarColor="#313131" iosBarStyle="light-content">
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          <Button
+            iconLeft
+            bordered
+            success
+            style={{ flex: 1, marginHorizontal: 6 }}
+            onPress={this.categoryButton.bind(this)}
+          >
+            <Icon name="clipboard" />
+            <Text style={{ flex: 1, textAlign: 'center' }}>دسته بندی</Text>
+          </Button>
+          <Button
+            iconLeft
+            bordered
+            success
+            style={{ flex: 1, marginHorizontal: 6 }}
+            onPress={this.searchButton.bind(this)}
+          >
+            <Icon name="search" />
+            <Text style={{ flex: 1, textAlign: 'center' }}>جستجو</Text>
+          </Button>
+
+        </View>
+      </Header>);
     return (
       <Container>
-        <Loader
-          loading={this.state.loading}
-        />
         <AppHeader rightTitle="منو آماده" backButton="flex" />
         {searchOrCategory}
         <FlatList

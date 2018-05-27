@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Container } from 'native-base';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { styles } from './style';
 import Store from '../../Main/Store';
 import Music from '../../Main/Music';
@@ -9,7 +10,7 @@ import BuffetMenu from '../../Main/BuffetMenu';
 import BuffetKeeper from '../../Main/BuffetKeeper';
 import Coach from '../../Main/Coach';
 import { selectBuffet, tokenBuffet } from '../../../redux/actions';
-import { getSingleIDMember } from '../../../services/buffet';
+import { getSingleIDMemberBuffet } from '../../../services/buffet';
 import { logError } from '../../../services/log';
 
 @connect(state => ({
@@ -27,16 +28,15 @@ export default class BuffetGrid extends Component {
   }
   async setInfo() {
     await this.props.tokenBuffet('selfit.buffet');
-    const buffetInfo = await this._getSingleIDMember();
+    const buffetInfo = await this.getSingleIDMember();
     await this.props.selectBuffet(buffetInfo.idbuffet);
     console.log('buffet for this user:', buffetInfo.namebuffet, 'buffetid from props:', this.props.buffetid);
   }
-  async _getSingleIDMember() {
+  async getSingleIDMember() {
     try {
       const { tokenapi } = await this.props;
       const { tokenmember } = await this.props.user;
-      const BuffetKeeperInfo = await getSingleIDMember(tokenmember, tokenapi);
-      return BuffetKeeperInfo;
+      return await getSingleIDMemberBuffet(tokenmember, tokenapi);
     } catch (error) {
       console.log(error);
       logError(error, '_getSingleIDMember', 'BuffetMenu/index', 'getSingleIDMember');
@@ -72,3 +72,10 @@ export default class BuffetGrid extends Component {
     );
   }
 }
+
+BuffetGrid.propTypes = {
+  user: PropTypes.node.isRequired,
+  buffetid: PropTypes.node.isRequired,
+  tokenBuffet: PropTypes.func.isRequired,
+  selectBuffet: PropTypes.func.isRequired,
+};

@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
-import { Card, CardItem, Left, Right, Switch, Text, Thumbnail } from 'native-base';
+import { Card, CardItem, Left, Right, Switch, Thumbnail } from 'native-base';
 import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { logError } from '../../../services/log';
 import { putActiveMenuFood } from '../../../services/buffet';
+import { persianNumber } from '../../../utils/persian';
+import { Text } from '../../Kit';
+import {errorColor, mainColor} from '../../../assets/variables/colors';
 
 @connect(state => ({
   user: state.user,
@@ -14,19 +17,16 @@ import { putActiveMenuFood } from '../../../services/buffet';
   buffetid: state.buffet.buffetid,
 }))
 export default class ActiveFood extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      Active: this.props.food.active,
-    };
-  }
+  state = {
+    Active: null,
+  };
   onPressHandle(food) {
     console.log(food);
   }
   async handleSwitch(value) {
     const result = await this._activeMenuFood(value);
     console.log('handleSwitch:', result);
-    if (result == 1) { this.setState({ Active: value }); }
+    if (result === 1) { this.setState({ Active: value }); }
   }
   async _activeMenuFood(active) {
     try {
@@ -47,32 +47,38 @@ export default class ActiveFood extends Component {
     const ImgYear = m.jYear();
     const ImgMonth = m.jMonth() + 1;
     const ImgSrc = `${food.httpserver}${food.pathserver}${ImgYear}/${ImgMonth}/${food.picmenufood}`;
-    const YesOrNo = this.state.Active ? 'فعال در منو' : 'غیر فعال در منو';
+    const Active = this.state.Active === null ? food.active : this.state.Active;
+    const YesOrNo = Active ? 'فعال در منو' : 'غیر فعال در منو';
+    const color = Active ? '#000' : errorColor;
     return (
       <TouchableWithoutFeedback onPress={() => this.onPressHandle(food)}>
         <Card style={{ flex: 0 }}>
           <CardItem>
             <Left style={{ flex: 1 }}>
               <TouchableWithoutFeedback onPress={() => Actions.showImage({ uri: ImgSrc })}>
-                <Thumbnail square small source={{ uri: ImgSrc }} onPress={() => Actions.showImage({ uri: ImgSrc })} />
+                <Thumbnail
+                  square
+                  small
+                  source={{ uri: ImgSrc }}
+                  onPress={() => Actions.showImage({ uri: ImgSrc })}
+                />
               </TouchableWithoutFeedback>
               <Switch
-                value={this.state.Active}
+                value={Active}
                 onValueChange={value => this.handleSwitch(value)}
+                onTintColor={mainColor}
               />
-              <Text>{YesOrNo}</Text>
+              <Text style={{ color }}>{YesOrNo}</Text>
             </Left>
             <Right style={{ flex: 1 }}>
               <Text
-                style={{ marginRight: 10, textAlign: 'right', fontFamily: 'IRANSansMobile' }}
+                style={{ marginRight: 10 }}
               >{food.namemenufood}
               </Text>
               <Text
-                style={{ marginRight: 10, textAlign: 'right', fontFamily: 'IRANSansMobile' }}
-                numberOfLines={1}
-                ellipsizeMode="tail"
-                note
-              >{food.pricemenufood.toLocaleString('fa')} تومان
+                type="light"
+                style={{ marginRight: 10 }}
+              >{persianNumber(food.pricemenufood.toLocaleString())} تومان
               </Text>
             </Right>
           </CardItem>

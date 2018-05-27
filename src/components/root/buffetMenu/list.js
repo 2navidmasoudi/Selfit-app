@@ -4,10 +4,8 @@ import { Container, Spinner, Tab, Tabs } from 'native-base';
 import { connect } from 'react-redux';
 import AppHeader from '../../header';
 import { receiveMaterial, receiveMenuFood, tokenBuffet } from '../../../redux/actions/index';
-import { getFoodCategory } from '../../../services/MenuFood';
 import { logError } from '../../../services/log';
 import { putCheckToken } from '../../../services';
-import Loader from '../../loader';
 import { getAllBuffetMaterial } from '../../../services/orderMaterial';
 import ActiveFood from './activeFood';
 import ActiveMaterial from './activeMaterial';
@@ -21,14 +19,14 @@ import { TabsStyle } from '../../../assets/styles/gym';
   tokenapi: state.buffet.tokenapi,
   buffetid: state.buffet.buffetid,
 }), {
-  receiveMenuFood: MenuFood => dispatch(receiveMenuFood(MenuFood)),
-  receiveMaterial: Material => dispatch(receiveMaterial(Material)),
-  tokenBuffet: tokenapi => dispatch(tokenBuffet(tokenapi)),
+  receiveMenuFood,
+  receiveMaterial,
+  tokenBuffet,
 })
 export default class MenuList extends Component {
   state = {
-    max: 10,
-    ssort: true,
+    max: 100,
+    ssort: false,
     fsort: 0,
     loading: false,
     refreshing: false,
@@ -37,28 +35,25 @@ export default class MenuList extends Component {
     SelectedBar: false,
     SelectedBarName: 'search',
     FoodCategory: 0,
-    CategoryList: [],
   };
   componentWillMount() {
-    this._getAllMenuFood(0);
-    this._getAllMaterial();
     const { tokenmember, tokenapi } = this.props.user;
     putCheckToken(tokenmember, tokenapi);
     this.setInfo();
   }
 
   async setInfo() {
-    await this._getFoodCategory();
+    await this._getAllMenuFood(0);
+    this._getAllMaterial();
     setTimeout(this._tabs.goToPage.bind(this._tabs, 1), 500);
   }
-
   async _getAllMenuFood(catid = 0) {
     try {
       this.setState({ loading: true });
       const { max, ssort, fsort } = await this.state;
       const { tokenmember } = await this.props.user;
       const { tokenapi, buffetid } = await this.props;
-      const MenuFoodList = await getMenuFood(buffetid, catid, tokenmember, tokenapi, 30, 0, ssort, fsort);
+      const MenuFoodList = await getMenuFood(buffetid, catid, tokenmember, tokenapi, max, 0, true, fsort);
       console.log(MenuFoodList, 'catid:', catid);
       await this.props.receiveMenuFood(MenuFoodList);
       this.setState({ loading: false, refreshing: false });
@@ -67,14 +62,13 @@ export default class MenuList extends Component {
       logError(error, 'GetAllMenuFood', 'BuffetKeeper/FoodList', '_getAllMenuFood');
     }
   }
-
   async _getAllMaterial() {
     try {
       this.setState({ loading: true });
       const { max, ssort, fsort } = await this.state;
       const { tokenmember } = await this.props.user;
       const { tokenapi, buffetid } = await this.props;
-      const MaterialList = await getAllBuffetMaterial(buffetid, false, tokenmember, tokenapi, 20, 0, false, 0);
+      const MaterialList = await getAllBuffetMaterial(buffetid, false, tokenmember, tokenapi, max, 0, ssort, fsort);
       console.log(MaterialList);
       await this.props.receiveMaterial(MaterialList);
       this.setState({ loading: false, refreshing: false });
@@ -82,21 +76,6 @@ export default class MenuList extends Component {
       console.log(error);
       logError(error, 'GetAllMaterial', 'BuffetKeeper/FoodList', '_getAllMaterial');
       this.setState({ loading: false });
-    }
-  }
-
-
-
-  async _getFoodCategory() {
-    try {
-      const { tokenmember } = await this.props.user;
-      const { tokenapi } = await this.props;
-      const CategoryList = await getFoodCategory(tokenmember, tokenapi);
-      console.log('Category:', CategoryList);
-      this.setState({ CategoryList });
-    } catch (error) {
-      console.log(error);
-      logError(error, 'getCategory', 'BuffetKeeper/FoodList', '_getFoodCategory');
     }
   }
   handleRefresh() {
@@ -120,14 +99,16 @@ export default class MenuList extends Component {
   render() {
     return (
       <Container>
-        <Loader
-          loading={this.state.loading}
-        />
         <AppHeader rightTitle="منو آماده" backButton="flex" />
-        <Tabs initialPage={1} ref={component => this._tabs = component}>
+        <Tabs
+          initialPage={1}
+          ref={component => this._tabs = component}
+          tabBarUnderlineStyle={TabsStyle.underLine}
+        >
 
           <Tab
             heading="منو انتخابی"
+            activeTextStyle={TabsStyle.activeText}
             textStyle={TabsStyle.text}
             activeTabStyle={TabsStyle.activeTab}
             tabStyle={TabsStyle.notActiveTabs}
@@ -145,11 +126,11 @@ export default class MenuList extends Component {
           </Tab>
           <Tab
             heading="منو آماده"
+            activeTextStyle={TabsStyle.activeText}
             textStyle={TabsStyle.text}
             activeTabStyle={TabsStyle.activeTab}
             tabStyle={TabsStyle.notActiveTabs}
           >
-            {/* {searchOrCategory} */}
             <FlatList
               data={this.props.MenuFood}
               renderItem={item => this.renderItem(item)}

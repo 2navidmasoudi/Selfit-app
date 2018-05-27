@@ -127,9 +127,9 @@ export default class List2 extends Component {
           ListEmptyComponent={() => <Spinner />}
           onRefresh={this.handleRefresh.bind(this)}
           refreshing={this.state.refreshing}
-          // onEndReached={this.handleLoadMore.bind(this)}
+          onEndReached={this.handleLoadMore.bind(this)}
           onEndReachedThreshold={0.5}
-          // ListFooterComponent={this.renderFooter.bind(this)}
+          ListFooterComponent={this.renderFooter.bind(this)}
         />
       </View>
     );

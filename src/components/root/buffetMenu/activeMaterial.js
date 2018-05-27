@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
-import { Card, CardItem, Left, Right, Switch, Text, Thumbnail } from 'native-base';
+import { Card, CardItem, Left, Right, Switch, Thumbnail } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { logError } from '../../../services/log';
 import { putActiveBuffetMaterial } from '../../../services/orderMaterial';
+import { persianNumber } from '../../../utils/persian';
+import { errorColor } from '../../../assets/variables/colors';
+import { Text } from '../../Kit';
 
 @connect(state => ({
   user: state.user,
@@ -13,19 +16,16 @@ import { putActiveBuffetMaterial } from '../../../services/orderMaterial';
   buffetid: state.buffet.buffetid,
 }))
 export default class ActiveMaterial extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      Active: this.props.food.active_material_buffet,
-    };
-  }
+  state = {
+    Active: null
+  };
   onPressHandle(food) {
     console.log(food);
   }
   async handleSwitch(value) {
     const result = await this._activeBuffetMaterial(value);
     console.log('handleSwitch:', result);
-    if (result == 1) { this.setState({ Active: value }); }
+    if (result === 1) { this.setState({ Active: value }); }
   }
   async _activeBuffetMaterial(active) {
     try {
@@ -34,7 +34,7 @@ export default class ActiveMaterial extends Component {
       const result = await putActiveBuffetMaterial(buffetid, idmaterial_buffet, active, tokenmember, tokenapi);
       console.log('putActiveBuffetMaterial:', result);
 
-      if (result == 1) return 1;
+      if (result === 1) return 1;
     } catch (error) {
       console.log(error);
       logError(error, 'putActiveBuffetMaterial', 'BuffetMenu/activeMaterial', '_activeBuffetMaterial');
@@ -44,32 +44,39 @@ export default class ActiveMaterial extends Component {
   render() {
     const { food } = this.props;
     const ImgSrc = `http://selfit.ir/Resource/Material/${food.picmaterial}`;
-    const YesOrNo = this.state.Active ? 'فعال در منو' : 'غیر فعال در منو';
+    const Active = this.state.Active === null ? food.active_material_buffet : this.state.Active;
+    const YesOrNo = Active ? 'فعال در منو' : 'غیر فعال در منو';
+    const color = Active ? '#000' : errorColor;
     return (
       <TouchableWithoutFeedback onPress={() => this.onPressHandle(food)}>
         <Card style={{ flex: 0 }}>
           <CardItem>
             <Left style={{ flex: 1 }}>
               <TouchableWithoutFeedback onPress={() => Actions.showImage({ uri: ImgSrc })}>
-                <Thumbnail square small source={{ uri: ImgSrc }} onPress={() => Actions.showImage({ uri: ImgSrc })} />
+                <Thumbnail
+                  square
+                  small
+                  source={{ uri: ImgSrc }}
+                  onPress={() => Actions.showImage({ uri: ImgSrc })}
+                />
               </TouchableWithoutFeedback>
               <Switch
-                value={this.state.Active}
+                value={Active}
                 onValueChange={value => this.handleSwitch(value)}
               />
-              <Text>{YesOrNo}</Text>
+              <Text style={{ color }}>{YesOrNo}</Text>
             </Left>
             <Right style={{ flex: 1 }}>
               <Text
-                style={{ marginRight: 10, textAlign: 'right', fontFamily: 'IRANSansMobile' }}
+                style={{ marginRight: 10 }}
               >{food.namematerial}
               </Text>
               <Text
-                style={{ marginRight: 10, textAlign: 'right', fontFamily: 'IRANSansMobile' }}
+                style={{ marginRight: 10 }}
                 numberOfLines={1}
                 ellipsizeMode="tail"
                 note
-              >{food.pricematerial.toLocaleString('fa')} تومان
+              >{persianNumber(food.pricematerial.toLocaleString())} تومان
               </Text>
             </Right>
           </CardItem>
