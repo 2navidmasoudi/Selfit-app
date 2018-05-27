@@ -28,11 +28,24 @@ export default class AddAddress extends Component {
       const { tokenapi, tokenmember } = await this.props.user;
       const { plaque, floor, titleaddress, desc } = await this.state;
       const { latitude, longitude } = await this.props.region;
-      const result = await postAddress(titleaddress, desc, plaque, floor, latitude, longitude, 1, tokenmember, tokenapi);
-      console.log('result address: ', result);
-      if (result === 1) {
-        Actions.popTo('address', { refresh: { refresh: Math.random() } });
-        Actions.refresh({ refresh: { refresh: Math.random() } });
+      if (plaque && floor && titleaddress && desc) {
+        const result = await postAddress(
+          titleaddress,
+          desc,
+          plaque,
+          floor,
+          latitude,
+          longitude,
+          1,
+          tokenmember,
+          tokenapi
+        );
+        console.log('result address: ', result);
+        if (result === 1) {
+          Actions.popTo('address', { refresh: { refresh: Math.random() } });
+          Actions.refresh({ refresh: { refresh: Math.random() } });
+        }
+
         // alert('آدرس با موفقیت ثبت شد!');
       } else {
         alert('خطا در ثبت آدرس جدید!');
@@ -59,20 +72,20 @@ export default class AddAddress extends Component {
                         اضافه کردن آدرس جدید:
             </Text>
             <Form>
-              <Item floatingLabel style={styles.itemAddress}>
+              <Item floatingLabel style={styles.itemAddress} error={!this.state.desc}>
                 <Label style={styles.labelAddress}>آدرس کامل:</Label>
                 <Input mul onChangeText={text => this.changeAddressLocation(text)} />
               </Item>
-              <Item floatingLabel>
+              <Item floatingLabel error={!this.state.titleaddress}>
                 <Label style={styles.labelAddress}>نام آدرس (مثلا خانه، محل کار ...)</Label>
                 <Input onChangeText={text => this.changeTitle(text)} />
               </Item>
-              <View style={{ flexDirection: 'row' }}>
-                <Item style={{ flex: 1 }}>
+              <View style={{ flexDirection: 'row' }} >
+                <Item style={{ flex: 1 }} error={!this.state.floor}>
                   <Label style={styles.labelAddress}>واحد</Label>
                   <Input onChangeText={text => this.changeFloor(text)} />
                 </Item >
-                <Item style={{ flex: 1, marginLeft: 20 }}>
+                <Item style={{ flex: 1, marginLeft: 20 }} error={!this.state.plaque}>
                   <Label style={styles.labelAddress}>پلاک</Label>
                   <Input onChangeText={text => this.changePlaque(text)} />
                 </Item>

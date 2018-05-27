@@ -29,12 +29,13 @@ export const getAllBasketMaterial = async (active, token, tokenapi, max, min, ss
   }
 };
 
-export const getBasketOrderMaterial = async (id, buffetid, token, tokenapi, max, min, ssort) => {
+export const getBasketOrderMaterial = async (id, buffetid, accept, token, tokenapi, max, min, ssort) => {
   try {
-    const response = await fetch(`${Selfit}${OrderMaterial}GetBasketOrderAll/${id}?buffetid=${buffetid}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}`, {
+    const response = await fetch(`${Selfit}${OrderMaterial}GetBasketOrderAll/${id}?buffetid=${buffetid}&accpet=${accept}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}`, {
       method: GET,
       headers
     });
+    if (response.status === 204) return [];
     const json = await response.json();
     return json.Buffet_BasketMaterialOrderList.$values;
   } catch (e) {

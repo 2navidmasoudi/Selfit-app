@@ -17,24 +17,24 @@ import AppHeader from '../../header';
 import { form } from '../../../assets/styles/index';
 import { Text } from '../../Kit';
 
-export default ({ blog }) => {
-  const m = moment(`${blog.datesave}`, 'YYYY/MM/DDTHH:mm:ss');
+export default ({ coach }) => {
+  const m = moment(`${coach.datesave}`, 'YYYY/MM/DDTHH:mm:ss');
+  const jM = m.format('jYYYY/jMM');
   const ImgYear = m.jYear();
   const ImgMonth = m.jMonth() + 1;
-  const ImgSrc = `${blog.httpserver}${blog.pathserver}${ImgYear}/${ImgMonth}/${blog.picblog}`;
-  // const htmlContent = `<div>${blog.descblog}</div>`;
-  const htmlContent = blog.descblog;
+  const ImgSrc = `${coach.httpserver}${coach.pathserver}${ImgYear}/${ImgMonth}/${coach.piccoach}`;
+  const htmlContent = coach.desccoach;
   return (
     <Container>
-      <AppHeader rightTitle="بیشتر بدانید" backButton="flex" />
+      <AppHeader rightTitle="مربیان" backButton="flex" />
       <Content padder>
         <Card>
           <CardItem>
             <Left style={{ flex: 1 }}>
               <Body>
-                <Text style={{ marginRight: 10 }}>
-                  {blog.titleblog}
-                </Text>
+              <Text style={{ marginRight: 10 }}>
+                {coach.namecoach}
+              </Text>
               </Body>
               <TouchableWithoutFeedback onPress={() => Actions.showImage({ uri: ImgSrc })}>
                 <Thumbnail source={{ uri: ImgSrc }} />
@@ -60,12 +60,8 @@ export default ({ blog }) => {
         <Button
           block
           style={[form.submitButton, { margin: 10, marginBottom: 20 }]}
-          onPress={() => Share.share({
-            message: ` بیشتر بدانید سلفیت | selfit : ${blog.titleblog} لینک: https://selfit.ir/#/Home/SingleBlog/${blog.blogid}`,
-            title: `${blog.titleblog}`
-          })}
         >
-          <Text style={{ color: '#FFF' }}>اشتراک با دوستان</Text>
+          <Text style={{ color: '#FFF' }}>تماس با مربی</Text>
         </Button>
       </View>
     </Container>

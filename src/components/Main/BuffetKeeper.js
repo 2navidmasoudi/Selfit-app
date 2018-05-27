@@ -17,5 +17,4 @@ export default () => (
       </Text>
     </View>
   </TouchableWithoutFeedback>
-
 );

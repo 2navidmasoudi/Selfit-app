@@ -20,9 +20,14 @@ export default class Couch extends Component {
       <Container>
         <AppHeader rightTitle="مربیان" backButton="flex" />
         <Content>
-          <Tabs locked tabBarPosition="top">
+          <Tabs
+            locked
+            tabBarPosition="top"
+            tabBarUnderlineStyle={TabsStyle.underLine}
+          >
             <Tab
               heading="بر اساس نظرات"
+              activeTextStyle={TabsStyle.activeText}
               textStyle={TabsStyle.text}
               activeTabStyle={TabsStyle.activeTab}
               tabStyle={TabsStyle.notActiveTabs}
@@ -31,6 +36,7 @@ export default class Couch extends Component {
             </Tab>
             <Tab
               heading="بر اساس رتبه"
+              activeTextStyle={TabsStyle.activeText}
               textStyle={TabsStyle.text}
               activeTabStyle={TabsStyle.activeTab}
               tabStyle={TabsStyle.notActiveTabs}

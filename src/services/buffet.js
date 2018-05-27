@@ -107,7 +107,7 @@ export const getSingleBuffet = async (id, token, tokenapi) => {
   const json = await response.json();
   return json;
 };
-export const getSingleIDMember = async (token, tokenapi) => {
+export const getSingleIDMemberBuffet = async (token, tokenapi) => {
   const response = await fetch(`${Selfit}${Buffet}GetSingleIDMember?token=${token}&tokenapi=${tokenapi}`, {
     method: GET,
     headers

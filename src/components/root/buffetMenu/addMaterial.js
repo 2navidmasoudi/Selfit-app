@@ -19,7 +19,7 @@ import { getAllMaterial } from '../../../services/orderMaterial';
 })
 export default class AddMaterial extends Component {
   state = {
-    max: 10,
+    max: 100,
     ssort: true,
     fsort: 0,
     loading: false,
@@ -32,7 +32,6 @@ export default class AddMaterial extends Component {
   }
   async setInfo() {
     await this.props.tokenBuffet('selfit.buffet');
-    // await this._getFoodCategory();
     await this._getAllMaterial();
   }
   async _getAllMaterial() {
@@ -41,31 +40,19 @@ export default class AddMaterial extends Component {
       const { max, ssort, fsort } = await this.state;
       const { tokenmember } = await this.props.user;
       const { tokenapi } = await this.props;
-      const MaterialList = await getAllMaterial(tokenmember, tokenapi, 30, 0, ssort, fsort);
+      const MaterialList = await getAllMaterial(tokenmember, tokenapi, max, 0, ssort, fsort);
       console.log(MaterialList);
       await this.props.receiveMaterial(MaterialList);
       this.setState({ loading: false, refreshing: false });
     } catch (error) {
       console.log(error);
       logError(error, 'GetAllMaterial', 'BuffetKeeper/FoodList', '_getAllMaterial');
+      this.setState({ loading: false, refreshing: false });
     }
   }
   renderMaterial({ item }) {
     return <MaterialCard food={item} />;
   }
-  // handleRefresh(){
-  //     this.setState({refreshing:true});
-  //     if (!this.state.searchMode) {
-  //         this._getAllMaterial();
-  //     } else {
-  //         this._getSearchMenuFood();
-  //     }
-  // }
-  // renderFooter(){
-  //     if(!this.state.loading) return null;
-  //     else
-  //     return <Spinner/>
-  // }
   render() {
     return (
       <Container>

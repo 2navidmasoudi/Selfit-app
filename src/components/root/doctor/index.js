@@ -9,8 +9,7 @@ import { getAllDoctor } from '../../../services/doctor';
 @connect(state => ({
   user: state.user,
 }))
-export default
-class Doctor extends Component {
+export default class Doctor extends Component {
   componentWillMount() {
     const { tokenmember, tokenapi } = this.props.user;
     putCheckToken(tokenmember, tokenapi);

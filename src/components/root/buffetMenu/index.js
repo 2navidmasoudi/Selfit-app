@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
-import { Button, Container } from 'native-base';
+import { TouchableOpacity, View } from 'react-native';
+import { Container } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import AppHeader from '../../header';
 import { selectBuffet, tokenBuffet } from '../../../redux/actions/index';
 import { logError } from '../../../services/log';
 import { putCheckToken } from '../../../services';
-import { form } from '../../../assets/styles/index';
 import { getSingleIDMember } from '../../../services/buffet';
+import { Text } from '../../Kit';
+import { darkColor, mainColor } from '../../../assets/variables/colors';
 
 @connect(state => ({
   user: state.user,
@@ -46,31 +47,55 @@ export default class FoodList extends Component {
     return (
       <Container>
         <AppHeader rightTitle="منو بوفه" backButton="flex" />
-        <View style={{ flex: 1, padding: 10 }}>
-          <View style={{ flex: 3 }} />
-          <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-            <Button
-              full
-              style={[form.submitButton, { marginTop: 10 }]}
-              onPress={() => Actions.addFood()}
+        <View style={{ flex: 1 }}>
+          <TouchableOpacity
+            style={{ flex: 1 }}
+            onPress={() => Actions.addFood()}
+          >
+            <View style={{
+              flex: 1,
+              backgroundColor: mainColor,
+              borderRadius: 10,
+              borderWidth: 4,
+              borderColor: darkColor,
+              margin: 10
+              }}
             >
-              <Text style={{ color: 'white', fontSize: 16, fontFamily: 'IRANSansMobile' }}>اضافه به منو آماده</Text>
-            </Button>
-            <Button
-              full
-              style={[form.submitButton, { marginTop: 10 }]}
-              onPress={() => Actions.addMaterial()}
+              <Text style={{ color: 'white', textAlign: 'center' }}>ویرایش منو غذاهای آماده</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ flex: 1 }}
+            onPress={() => Actions.addMaterial()}
+          >
+            <View style={{
+              flex: 1,
+              backgroundColor: mainColor,
+              borderRadius: 10,
+              borderWidth: 4,
+              borderColor: darkColor,
+              margin: 10
+            }}
             >
-              <Text style={{ color: 'white', fontSize: 16, fontFamily: 'IRANSansMobile' }}>اضافه به منو انتخابی</Text>
-            </Button>
-            <Button
-              full
-              style={[form.submitButton, { marginTop: 10 }]}
-              onPress={() => Actions.menuList()}
+              <Text style={{ color: 'white', textAlign: 'center' }}>ویرایش منو غداهای انتخابی</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ flex: 1 }}
+            onPress={() => Actions.menuList()}
+          >
+            <View style={{
+              flex: 1,
+              backgroundColor: mainColor,
+              borderRadius: 10,
+              borderWidth: 4,
+              borderColor: darkColor,
+              margin: 10
+            }}
             >
-              <Text style={{ color: 'white', fontSize: 16, fontFamily: 'IRANSansMobile' }}>لیست غذا های بوفه</Text>
-            </Button>
-          </View>
+              <Text style={{ color: 'white', textAlign: 'center' }}>وضعیت غذا های منو</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </Container>
     );

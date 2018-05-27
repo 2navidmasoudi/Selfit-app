@@ -17,7 +17,7 @@ import Gym from './components/root/gym';
 import Buffet from './components/root/buffet';
 import BuffetKeeper from './components/root/buffetKeepr';
 import Couch from './components/root/couch';
-import Doctor from './components/root/doctor';
+import CouchDetail from './components/root/couch/CoachDetail';
 import Blog from './components/root/blog';
 import Store from './components/root/store';
 import CategoryChildren from './components/root/store/categoryChildren';
@@ -55,15 +55,16 @@ import OrderDetail from './components/root/buffetKeepr/OrderDetail';
 import Complaints from './components/root/Complaints';
 import Rules from './components/root/Rules';
 import Follow from './components/root/follow';
+import { darkColor, mainColor } from './assets/variables/colors';
 
 Geocoder.setApiKey('AIzaSyBlgHjeMbqK3xEZfh6HK2o8RdjhhgTOh0s');
 const window = Dimensions.get('window');
 const { persistor, store } = configureStore();
 
 EStyleSheet.build({
-  $statusBarColor: '#0f9d7a',
-  $headerColor: '#313131',
-  $signBoxColor: '#0F9D7A',
+  $statusBarColor: mainColor,
+  $headerColor: darkColor,
+  $signBoxColor: mainColor,
   $IS: 'IRANSansMobile'
 });
 
@@ -192,9 +193,9 @@ export default class App extends Component {
           >
             <RouterWithRedux hideNavBar>
               <Scene key="rootMain" hideNavbar>
-                <Scene key="splash" initial component={Splash} hideNavBar />
+                <Scene key="splash"  component={Splash} hideNavBar />
                 <Scene key="sign" component={Sign} hideNavBar />
-                <Scene key="root" hideNavBar>
+                <Scene key="root" initial hideNavBar>
                   <Drawer
                     key="drawer"
                     drawerPosition="right"
@@ -233,9 +234,7 @@ export default class App extends Component {
                       </Scene>
                       <Scene key="couchRoot" hideNavBar>
                         <Scene key="couch" component={Couch} initial hideNavBar />
-                      </Scene>
-                      <Scene key="doctorRoot" hideNavBar>
-                        <Scene key="doctor" component={Doctor} initial hideNavBar />
+                        <Scene key="coachDetail" component={CouchDetail} hideNavBar />
                       </Scene>
                       <Scene key="storeRoot" hideNavBar>
                         <Scene key="store" component={Store} initial hideNavBar />

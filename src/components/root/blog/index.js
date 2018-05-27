@@ -27,7 +27,7 @@ import BlogCard from './blogCard';
 export default class Blog extends Component {
   state = {
     max: 10,
-    ssort: true,
+    ssort: false,
     fsort: 0,
     loading: false,
     refreshing: false,
@@ -53,7 +53,7 @@ export default class Blog extends Component {
       await this.setState({
         searchMode: false, search: ''
       });
-      await this.props.refreshBlog();
+      await this.props.refreshBlog;
       this._getAllBlog();
     }
   }
@@ -70,7 +70,6 @@ export default class Blog extends Component {
     } catch (error) {
       console.log(error);
       logError(error, 'getAllBlog', 'root/blog', '_getAllBlog');
-      this.props.decrementMin();
       this.setState({ loading: false });
     }
   }
@@ -90,7 +89,6 @@ export default class Blog extends Component {
     } catch (error) {
       console.log(error);
       logError(error, 'getSearchBlog', 'root/blog', '_getSearchBlog');
-      this.props.decrementMin();
       this.setState({ loading: false });
     }
   }

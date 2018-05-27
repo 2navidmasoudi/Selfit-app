@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Spinner } from 'native-base';
+import { Fab, Icon, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import MapView, { Marker } from 'react-native-maps';
 import { Actions } from 'react-native-router-flux';
 import { mapStyle } from '../../../assets/styles/map';
 import { getAllGyms } from '../../../services/gym';
 import { receiveGym, tokenGym } from '../../../redux/actions/index';
+import { mainColor } from '../../../assets/variables/colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -61,19 +62,21 @@ export default class FullMap extends Component {
     LoadNew: false,
     min: 0,
   };
+
   componentWillMount() {
     this.props.tokenGym('selfit.gym');
     // this.getCurrentPosition();
     this.getGym();
   }
+
   async onRegionChangeComplete(region) {
     await this.setState({ region });
     console.log('onRegionChangeComplete', region, 'new region:', this.state.region);
   }
+
   async getGym() {
     try {
-      const { tokenmember, latval, longval } = await this.props.user;
-      const { latitude, longitude } = await this.state.region;
+      const { tokenmember } = await this.props.user;
       const { tokenapi } = await this.props;
       let json;
       await this.setState({ min: 0 });
@@ -85,9 +88,11 @@ export default class FullMap extends Component {
       console.log(error);
     }
   }
+
   setRegion(region) {
     this.state.map.animateToRegion(region, 1000);
   }
+
   getCurrentPosition() {
     try {
       navigator.geolocation.getCurrentPosition(
@@ -107,10 +112,12 @@ export default class FullMap extends Component {
       console.log(error);
     }
   }
+
   _gymDetail(gym) {
     Actions.gymDetail(gym);
     console.log(gym);
   }
+
   render() {
     return (
       <View style={styles.container}>
@@ -138,10 +145,16 @@ export default class FullMap extends Component {
               title={gym.namegym}
               description={gym.addressgym}
               onCalloutPress={() => this._gymDetail(gym)}
-            >
-            </Marker>
+            />
           ))}
         </MapView>
+        <Fab
+          style={{ backgroundColor: mainColor }}
+          position="topLeft"
+          onPress={() => Actions.pop()}
+        >
+          <Icon name="arrow-round-back" />
+        </Fab>
         {this.state.MarkerReady === false ? <Spinner /> : null}
       </View>
     );

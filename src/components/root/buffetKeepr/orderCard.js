@@ -4,10 +4,10 @@ import { Card, CardItem, Left, Right } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
+import { errorColor, mainColor } from '../../../assets/variables/colors';
 
 export default class OrderCard extends Component {
   onPressHandle(order) {
-    console.log(order);
     Actions.orderDetail({ order });
   }
   render() {
@@ -31,10 +31,17 @@ export default class OrderCard extends Component {
             </Right>
           </CardItem>
           <CardItem>
-            <Text style={{ flex: 1, color: order.idstatepayed === 2 ? 'red' : 'green' }}>{order.namestatepayed}</Text>
+            <Text
+              style={{
+                flex: 1,
+                color: order.idstatepayed === 2 ? errorColor : mainColor
+              }}
+            >
+              {order.namestatepayed}
+            </Text>
           </CardItem>
           <CardItem>
-            <Text style={{ flex: 1 }}>برای مشاهده سفارش کلیک کنید!</Text>
+            <Text style={{ flex: 1, textAlign: 'center' }}>برای مشاهده سفارش کلیک کنید!</Text>
           </CardItem>
         </Card>
       </TouchableWithoutFeedback>

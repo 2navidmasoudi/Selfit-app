@@ -55,20 +55,34 @@ export const checkOrderBuffet = async (buffetid, token, tokenapi) => {
     console.log(e);
   }
 };
-export const getBasketOrderAllBuffet = async (id, buffetid, active, token, tokenapi, max, min, fsort = true) => {
+export const getBasketOrderAllBuffet = async (id, buffetid, active, accept, token, tokenapi, max, min, fsort = true) => {
   try {
-    const response = await fetch(`${Selfit}${OrderBuffet}GetBasketOrderAll/${id}?buffetid=${buffetid}&active=${active}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&fsort=${fsort}`, {
+    const response = await fetch(`${Selfit}${OrderBuffet}GetBasketOrderAll/${id}?buffetid=${buffetid}&active=${active}&accept=${accept}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&fsort=${fsort}`, {
       method: GET,
       headers
     });
-    // if (response.status == 204) return [];
+    if (response.status === 204) return null;
     const json = await response.json();
     return json.Buffet_BasketBuffetOrderList.$values;
   } catch (e) {
     console.log(e);
   }
 };
-
+export const getFactorBuffet = async (methodpayed, statepayed, token, tokenapi, max, min, ssort, fsort) => {
+  try {
+    const response = await fetch(`${Selfit}${OrderBuffet}GetFactorBuffet?methodpayed=${methodpayed}&statepayed=${statepayed}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
+      method: GET,
+      headers
+    });
+    console.log('response for get factor buffet:');
+    console.log(response);
+    if (response.status === 204) return null;
+    const json = await response.json();
+    return json.FactorBuffetList.$values;
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 export const postOrderBuffet = async (buffetid, menufoodid, numbermenufood, token, tokenapi) => {
   try {
