@@ -87,7 +87,6 @@ const onBeforeLift = async () => {
   );
 };
 
-@codePush
 export default class App extends Component {
   componentDidMount() {
     Linking.getInitialURL().then((url) => {
@@ -193,9 +192,9 @@ export default class App extends Component {
           >
             <RouterWithRedux hideNavBar>
               <Scene key="rootMain" hideNavbar>
-                <Scene key="splash"  component={Splash} hideNavBar />
+                <Scene key="splash" initial component={Splash} hideNavBar />
                 <Scene key="sign" component={Sign} hideNavBar />
-                <Scene key="root" initial hideNavBar>
+                <Scene key="root" hideNavBar>
                   <Drawer
                     key="drawer"
                     drawerPosition="right"
