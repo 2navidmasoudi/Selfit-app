@@ -15,14 +15,20 @@ export default class Splash extends Component {
   };
   componentDidMount() {
     if (this.props.rehydrated === true) {
-      this.checkUserLogin()
-        .then((status) => {
-          if (status) {
-            this.setState({ tokenChecked: true });
-          } else {
-            this.setState({ tokenChecked: false });
-          }
-        });
+      this.checkToken();
+    }
+  }
+  async checkToken() {
+    try {
+      const { tokenmember, tokenapi } = await this.props.user;
+      const json = await putCheckToken(tokenmember, tokenapi);
+      if (json === 1) {
+        this.setState({ tokenChecked: true });
+      } else {
+        this.setState({ tokenChecked: false });
+      }
+    } catch (e) {
+      console.log(e);
     }
   }
   leadToScreen() {
@@ -30,25 +36,6 @@ export default class Splash extends Component {
       Actions.reset('root');
     } else {
       Actions.reset('sign');
-    }
-  }
-  async checkUserLogin() {
-    try {
-      const { tokenmember } = await this.props.user;
-      return tokenmember === (null || undefined)
-        ? false
-        : await this.checkUserLoginFromApi();
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  async checkUserLoginFromApi() {
-    try {
-      const { tokenmember, tokenapi } = await this.props.user;
-      const json = await putCheckToken(tokenmember, tokenapi);
-      return json === 1;
-    } catch (error) {
-      console.log(error);
     }
   }
   render() {

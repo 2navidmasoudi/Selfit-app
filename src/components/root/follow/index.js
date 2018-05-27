@@ -17,16 +17,24 @@ export default class Follow extends Component {
   componentWillMount() {
     const { tokenmember, tokenapi } = this.props.user;
     putCheckToken(tokenmember, tokenapi);
-    this.props.tokenBuffet('selfit.buffet');
+    this.getInfo();
+  }
+  async getInfo() {
+    await this.props.tokenBuffet('selfit.buffet');
   }
   render() {
     return (
       <Container>
         <AppHeader rightTitle="پیگیری سفارش" backButton="flex" />
         <Content>
-          <Tabs locked tabBarPosition="top">
+          <Tabs
+            locked
+            tabBarPosition="top"
+            tabBarUnderlineStyle={TabsStyle.underLine}
+          >
             <Tab
               heading="پراخت نشده"
+              activeTextStyle={TabsStyle.activeText}
               textStyle={TabsStyle.text}
               activeTabStyle={TabsStyle.activeTab}
               tabStyle={TabsStyle.notActiveTabs}
@@ -35,6 +43,7 @@ export default class Follow extends Component {
             </Tab>
             <Tab
               heading="پرداخت شده"
+              activeTextStyle={TabsStyle.activeText}
               textStyle={TabsStyle.text}
               activeTabStyle={TabsStyle.activeTab}
               tabStyle={TabsStyle.notActiveTabs}

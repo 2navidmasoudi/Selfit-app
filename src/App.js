@@ -55,7 +55,7 @@ import OrderDetail from './components/root/buffetKeepr/OrderDetail';
 import Complaints from './components/root/Complaints';
 import Rules from './components/root/Rules';
 import Follow from './components/root/follow';
-import {darkColor, mainColor} from "./assets/variables/colors";
+import { darkColor, mainColor } from './assets/variables/colors';
 
 Geocoder.setApiKey('AIzaSyBlgHjeMbqK3xEZfh6HK2o8RdjhhgTOh0s');
 const window = Dimensions.get('window');
