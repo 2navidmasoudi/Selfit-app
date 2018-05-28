@@ -78,7 +78,7 @@ export default class Main extends Component {
         : null;
     return (
       <Container>
-        <AppHeader rightTitle="صفحه اصلی" />
+        <AppHeader rightTitle="صفحه اصلی" hasBlog />
         {this.state.viewComponent}
         {pannel}
       </Container>

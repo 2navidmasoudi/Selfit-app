@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Fab, Tab, Tabs, Text } from 'native-base';
+import { Button, Container, Fab, Icon, Tab, Tabs, Text } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import AppHeader from '../../header';
@@ -8,6 +8,8 @@ import { TabsStyle } from '../../../assets/styles/gym';
 import { locateUser } from '../../../redux/actions/index';
 import { putCheckToken } from '../../../services/index';
 import GymMap from './GymMap';
+import { View } from 'react-native';
+import { mainColor } from '../../../assets/variables/colors';
 
 const LATITUDE_DELTA = 0.05;
 const LONGITUDE_DELTA = 0.05;
@@ -27,6 +29,8 @@ export default class Gym extends Component {
       // latitudeDelta: 0.5,
       // longitudeDelta: 0.5,
     },
+    active: 'true'
+
   };
   componentWillMount() {
     const { tokenmember, tokenapi } = this.props.user;
@@ -80,30 +84,33 @@ export default class Gym extends Component {
             {this.state.viewComponent}
           </Tab>
         </Tabs>
-        <Fab
-          style={{ backgroundColor: '#0F9D7A' }}
-          position="bottomLeft"
-          onPress={this.toggleComponent.bind(this)}
-        >
-          <Text style={{ fontSize: 18 }}>{this.state.tabTitle === 'لیست' ? 'نقشه' : 'لیست'}</Text>
-        </Fab>
-        <Fab
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: 50,
-            width: 120,
-            left: 5,
-            bottom: 60,
-            borderRadius: 10,
-            backgroundColor: '#0F9D7A'
+
+        <View style={{ flex: 0 }}>
+          <Fab
+            style={{ backgroundColor: '#0F9D7A' }}
+            position="bottomLeft"
+            onPress={this.toggleComponent.bind(this)}
+          >
+            <Text style={{ fontSize: 18 }}>{this.state.tabTitle === 'لیست' ? 'نقشه' : 'لیست'}</Text>
+          </Fab>
+          <Fab
+            style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: 50,
+          width: 120,
+          left: 5,
+          bottom: 60,
+          borderRadius: 10,
+          backgroundColor: '#0F9D7A'
           }}
-          position="bottomLeft"
-          onPress={() => Actions.fullMap()}
-        >
-          <Text style={{ fontSize: 18 }}>کل باشگاه ها</Text>
-        </Fab>
+            position="bottomLeft"
+            onPress={() => Actions.fullMap()}
+          >
+            <Text style={{ fontSize: 18 }}>کل باشگاه ها</Text>
+          </Fab>
+        </View>
       </Container>
     );
   }

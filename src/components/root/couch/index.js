@@ -18,7 +18,7 @@ export default class Couch extends Component {
   render() {
     return (
       <Container>
-        <AppHeader rightTitle="مربیان" backButton="flex" />
+        <AppHeader rightTitle="مربیان" />
         <Content>
           <Tabs
             locked

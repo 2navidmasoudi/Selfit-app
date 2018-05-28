@@ -32,9 +32,10 @@ export default class List1 extends Component {
     searchMode: false,
   };
   componentWillMount() {
-    this.props.tokenCoach('selfit.public');
+    this.getInfo();
   }
-  componentDidMount() {
+  async getInfo() {
+    await this.props.tokenCoach('selfit.public');
     this._getAllCoach();
   }
   async searchText(text) {
