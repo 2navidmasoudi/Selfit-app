@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
-import { Card, CardItem, Left, Right, Text, Thumbnail } from 'native-base';
+import { Card, CardItem, Left, Right, Thumbnail } from 'native-base';
 import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
 import { Rating } from 'react-native-elements';
+import { Text } from '../../Kit';
 
 export default class GymCard extends Component {
   onPressHandle(gym) {
     Actions.gymDetail(gym);
-    // console.log(gym);
   }
   render() {
     const { gym } = this.props;
     const m = moment(`${gym.datesave}`, 'YYYY/MM/DDTHH:mm:ss');
-    const jM = m.format('jYYYY/jMM');
     const ImgYear = m.jYear();
     const ImgMonth = m.jMonth() + 1;
     const ImgSrc = `${gym.httpserver}${gym.pathserver}${ImgYear}/${ImgMonth}/${gym.picgym}`;
@@ -25,19 +24,16 @@ export default class GymCard extends Component {
               <Thumbnail square large source={{ uri: ImgSrc }} />
             </Left>
             <Right style={{ flex: 2 }}>
-              <Text style={{
-                marginRight: 10,
-                textAlign: 'right',
-                fontFamily: 'IRANSansMobile'
-              }}
-              >باشگاه {gym.namegym}
+              <Text style={{marginRight: 10 }}>
+                باشگاه {gym.namegym}
               </Text>
               <Text
-                style={{ marginRight: 10, textAlign: 'right', fontFamily: 'IRANSansMobile' }}
+                style={{ marginRight: 10 }}
                 numberOfLines={1}
                 ellipsizeMode="tail"
-                note
-              >{gym.addressgym}
+                type="light"
+              >
+                {gym.addressgym}
               </Text>
               <Rating
                 readonly

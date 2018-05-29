@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Container, Content, Form, Icon, Input, Item, Text, View } from 'native-base';
+import { Button, Container, Content, Form, Icon, Input, Item, View } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { Image } from 'react-native';
 import { connect } from 'react-redux';
@@ -11,6 +11,8 @@ import { setUser } from '../../../redux/actions/index';
 import { picker } from './imagePicker';
 import { uploader } from '../../../services/UploadImage';
 import { Member } from '../../../services/type';
+import {Text} from "../../Kit";
+import {mainColor, white} from "../../../assets/variables/colors";
 
 @connect(state => ({
   user: state.user,
@@ -146,7 +148,7 @@ export default class EditProfile extends React.Component {
       <Image source={this.state.avatarSource} style={EditProfileStyle.imageStyle} />;
     return (
       <Container>
-        <AppHeader rightTitle="پروفایل" backButton="flex" />
+        <AppHeader rightTitle="پروفایل" />
         <Content padder>
           <View style={EditProfileStyle.uploadView}>
             <Text style={EditProfileStyle.textStyle}>عکس خود را انتخاب سپس آپلود کنید!</Text>
@@ -155,12 +157,12 @@ export default class EditProfile extends React.Component {
                 style={EditProfileStyle.uploadButton}
                 onPress={this.showImagePicker.bind(this)}
               >
-                <Text style={EditProfileStyle.btnText}>انتخاب تصویر</Text>
+                <Text style={{color:white}}>انتخاب تصویر</Text>
               </Button>
               <Button
                 success
                 disabled={this.state.UploadButtonDisable}
-                style={EditProfileStyle.uploadButton}
+                style={{backgroundColor:mainColor}}
                 onPress={this.uploadImage.bind(this)}
               >
                 <Text style={EditProfileStyle.btnText}>آپلود تصویر</Text>

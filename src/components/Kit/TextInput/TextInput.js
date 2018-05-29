@@ -52,7 +52,8 @@ export default class InputText extends Component {
       numberOfLines,
       returnKeyType,
       onSubmitEditing,
-      input: { onChange, value },
+      onChangeText,
+      value,
       meta,
       rtl
     } = this.props;
@@ -91,7 +92,7 @@ export default class InputText extends Component {
             <TextInput
               style={inputStyles}
               keyboardType={keyboardType}
-              onChangeText={onChange}
+              onChangeText={onChangeText}
               value={value}
               placeholder={placeholder}
               autoCorrect={autoCorrect}

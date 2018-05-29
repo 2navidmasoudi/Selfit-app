@@ -4,19 +4,26 @@ import { Spinner } from 'native-base';
 import { SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux';
 import CoachCard from './CoachCard';
-import { decrementMin, incrementMin, receiveGym, refreshGym, tokenGym } from '../../../redux/actions/index';
+import {
+  decrementMin,
+  incrementMin,
+  receiveBuffet,
+  receiveGym,
+  refreshGym,
+  tokenGym
+} from '../../../redux/actions/index';
 import { getAllCoach, getSearchCoach } from '../../../services/coach';
 import { logError } from '../../../services/log';
 
 const mapDispatchToProps = dispatch => ({
-  receiveCoach: (gym, min) => dispatch(receiveGym(gym, min)),
+  receiveCoach: (gym, min) => dispatch(receiveBuffet(gym, min)),
   incrementMin: () => dispatch(incrementMin()),
   decrementMin: () => dispatch(decrementMin()),
   refreshCoach: () => dispatch(refreshGym()),
   tokenCoach: tokenapi => dispatch(tokenGym(tokenapi)),
 });
 @connect(state => ({
-  coach: state.gym.GymList,
+  coach: state.buffet.BuffetList,
   min: state.gym.min,
   user: state.user,
   tokenapi: state.gym.tokenapi,
@@ -115,7 +122,11 @@ export default class List2 extends Component {
   }
   render() {
     return (
-      <View>
+      <View style={{
+        flex: 1,
+        justifyContent: 'flex-end',
+      }}
+      >
         <SearchBar
           showLoading
           onChangeText={this.searchText.bind(this)}

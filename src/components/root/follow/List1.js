@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
-import { FlatList, View } from 'react-native';
-import { Card, CardItem, Left, Right, Separator, Spinner } from 'native-base';
+import { FlatList } from 'react-native';
+import { Content, Separator } from 'native-base';
 import { connect } from 'react-redux';
-import moment from 'moment-jalaali';
 import { tokenBuffet } from '../../../redux/actions';
 import { getFactorBuffet } from '../../../services/orderBuffet';
 import { Text } from '../../Kit';
-import { persianNumber } from '../../../utils/persian';
-import { errorColor, mainColor } from '../../../assets/variables/colors';
-import FactorCard from './FactorCard';
+import FactorCard from './FactorCardBuffet';
 
 // PARDAKHT NASHODE!!!!
 @connect(state => ({
@@ -26,13 +23,16 @@ export default class List1 extends Component {
     unpayedFactors: null,
     refreshing: true,
   };
+
   componentWillMount() {
     this.getInfo();
   }
+
   async getInfo() {
     await this.props.tokenBuffet('selfit.buffet');
     await this.getUnpayedFactors();
   }
+
   async getUnpayedFactors() {
     try {
       const { tokenmember } = await this.props.user;
@@ -50,12 +50,14 @@ export default class List1 extends Component {
       this.setState({ refreshing: false });
     }
   }
+
   renderItem = ({ item }) => (
     <FactorCard item={item} />
   );
+
   render() {
     return (
-      <View>
+      <Content padder>
         <Separator>
           <Text type="bold" style={{ flex: 1, textAlign: 'center', padding: 5 }}>تایید شده توسط بوفه دار</Text>
         </Separator>
@@ -81,7 +83,7 @@ export default class List1 extends Component {
           scrollEnabled={false}
           onEndReachedThreshold={0.5}
         />
-      </View>
+      </Content>
     );
   }
 }

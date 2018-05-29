@@ -115,7 +115,11 @@ export default class List1 extends Component {
   }
   render() {
     return (
-      <View>
+      <View style={{
+        flex: 1,
+        justifyContent: 'flex-end',
+      }}
+      >
         <SearchBar
           showLoading
           onChangeText={this.searchText.bind(this)}

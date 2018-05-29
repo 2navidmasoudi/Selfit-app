@@ -55,6 +55,7 @@ import OrderDetail from './components/root/buffetKeepr/OrderDetail';
 import Complaints from './components/root/Complaints';
 import Rules from './components/root/Rules';
 import Follow from './components/root/follow';
+import FactorProductDetail from './components/root/follow/FactorProductDetail';
 import { darkColor, mainColor } from './assets/variables/colors';
 
 Geocoder.setApiKey('AIzaSyBlgHjeMbqK3xEZfh6HK2o8RdjhhgTOh0s');
@@ -192,9 +193,9 @@ export default class App extends Component {
           >
             <RouterWithRedux hideNavBar>
               <Scene key="rootMain" hideNavbar>
-                <Scene key="splash" initial component={Splash} hideNavBar />
+                <Scene key="splash"  component={Splash} hideNavBar />
                 <Scene key="sign" component={Sign} hideNavBar />
-                <Scene key="root" hideNavBar>
+                <Scene key="root" initial hideNavBar>
                   <Drawer
                     key="drawer"
                     drawerPosition="right"
@@ -257,6 +258,7 @@ export default class App extends Component {
                       <Scene key="complaints" component={Complaints} hideNavBar />
                       <Scene key="rules" component={Rules} hideNavBar />
                       <Scene key="follow" component={Follow} hideNavBar />
+                      <Scene key="followProduct" component={FactorProductDetail} hideNavBar />
                     </Scene>
                   </Drawer>
                 </Scene>

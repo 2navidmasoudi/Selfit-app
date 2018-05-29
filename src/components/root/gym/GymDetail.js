@@ -166,6 +166,7 @@ export default class GymDetail extends Component {
         itemWidth={itemWidth}
         inactiveSlideScale={0.95}
         inactiveSlideOpacity={1}
+        enableMomentum={false}
         layout="stack"
         layoutCardOffset={18}
         loop

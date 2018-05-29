@@ -148,12 +148,13 @@ export default class DrawerLayout extends Component {
                 backgroundColor: '#0F9D7A',
                 height: 30,
                 width: 30,
+                display: !(this.props.buffetBasketCount + this.props.materialBasketCount) ? 'none' : 'flex',
                 justifyContent: 'center',
                 alignItems: 'center'
               }}
               >
                 <Text style={{ color: 'white', textAlign: 'center' }}>
-                  {persianNumber(this.props.buffetBasketCount + this.props.materialBasketCount) || persianNumber('0')}
+                  {persianNumber(this.props.buffetBasketCount + this.props.materialBasketCount)}
                 </Text>
               </Badge>
             </Left>
@@ -171,12 +172,14 @@ export default class DrawerLayout extends Component {
                 backgroundColor: '#0F9D7A',
                 height: 30,
                 width: 30,
+                display: !(this.props.productBasketCount) ? 'none' : 'flex',
+
                 justifyContent: 'center',
                 alignItems: 'center'
               }}
               >
                 <Text style={{ color: 'white', textAlign: 'center' }}>
-                  {persianNumber(this.props.productBasketCount) || persianNumber('0')}
+                  {persianNumber(this.props.productBasketCount)}
                 </Text>
               </Badge>
             </Left>

@@ -13,6 +13,32 @@ export const getBasketProduct = async (active, token, tokenapi, max, min, ssort,
     console.log(e);
   }
 };
+export const getFactorProduct = async (active, token, tokenapi, max, min, ssort, fsort) => {
+  try {
+    const response = await fetch(`${Selfit}${OrderProduct}GetFactor?active=${active}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
+      method: GET,
+      headers
+    });
+    if (response.status == 204) return [];
+    const json = await response.json();
+    return json.OrderList.$values;
+  } catch (e) {
+    console.log(e);
+  }
+};
+export const getFactorDetailProduct = async (id, token, tokenapi, max, min, ssort, fsort) => {
+  try {
+    const response = await fetch(`${Selfit}${OrderProduct}GetFactorDetail/${id}?token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
+      method: GET,
+      headers
+    });
+    if (response.status == 204) return [];
+    const json = await response.json();
+    return json.BasketOrderList.$values;
+  } catch (e) {
+    console.log(e);
+  }
+};
 export const getTimeAccessStore = async (token, tokenapi, max, min, ssort) => {
   try {
     const response = await fetch(`${Selfit}${OrderProduct}GetTimeAccessStore?token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}`, {

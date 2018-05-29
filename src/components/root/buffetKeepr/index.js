@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Body, Container, Content, Header, Left, Right, Spinner, Switch } from 'native-base';
+import { Container, Content, Header, Left, Right, Spinner, Switch } from 'native-base';
 import { Alert, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import AppHeader from '../../header';

@@ -26,7 +26,6 @@ export default class Follow extends Component {
     return (
       <Container>
         <AppHeader rightTitle="پیگیری سفارش" backButton="flex" />
-        <Content>
           <Tabs
             locked
             tabBarPosition="top"
@@ -51,7 +50,6 @@ export default class Follow extends Component {
               <List2 />
             </Tab>
           </Tabs>
-        </Content>
       </Container>
     );
   }
