@@ -7,6 +7,7 @@ import HTMLView from 'react-native-htmlview';
 import Carousel from 'react-native-snap-carousel';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
+import { showLocation, Popup } from 'react-native-map-link';
 import AppHeader from '../../header';
 import { getAllPicGym, postRateGym, putVisit } from '../../../services/gym';
 import { form } from '../../../assets/styles/index';
@@ -15,7 +16,7 @@ import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
 
 moment.loadPersian({ dialect: 'persian-modern' });
-
+const isIOS = Platform.OS === 'ios';
 const horizontalMargin = 30;
 const slideWidth = 280;
 
@@ -64,6 +65,7 @@ export default class GymDetail extends Component {
     position: 1,
     interval: null,
     dataSource: [],
+    isVisible: false,
   };
   componentWillMount() {
     this.getInfo();
@@ -123,16 +125,19 @@ export default class GymDetail extends Component {
     }
   }
   handleMapClick() {
-    const { latgym, longgym } = this.props;
-    // let url = `https://waze.com/ul?ll=${latgym},${longgym}`;
-    const url = Platform.OS === 'ios' ? `http://maps.apple.com/?ll=${latgym},${longgym}` : `geo:${latgym},${longgym}`;
-    Linking.canOpenURL(url).then((supported) => {
-      if (!supported) {
-        console.log(`Can't handle url: ${url}`);
-      } else {
-        return Linking.openURL(url);
-      }
-    }).catch(err => console.error('An error occurred', err));
+    if (isIOS) {
+      this.setState({isVisible: true});
+    } else {
+      const { latgym, longgym } = this.props;
+      const url = `geo:${latgym},${longgym}`;
+      Linking.canOpenURL(url).then((supported) => {
+        if (!supported) {
+          console.log(`Can't handle url: ${url}`);
+        } else {
+          return Linking.openURL(url);
+        }
+      }).catch(err => console.error('An error occurred', err));
+    }
   }
   _renderItem({ item, index }) {
     return (
@@ -143,7 +148,7 @@ export default class GymDetail extends Component {
   }
   render() {
     const {
-      datesave, httpserver, pathserver, picgym,
+      datesave, httpserver, pathserver, picgym, latgym, longgym,
       descgym, namegym, addressgym,
       RateNumber, visitgym, telgym
     } = this.props;
@@ -162,7 +167,7 @@ export default class GymDetail extends Component {
         inactiveSlideScale={0.95}
         inactiveSlideOpacity={1}
         layout="stack"
-        layoutCardOffset="18"
+        layoutCardOffset={18}
         loop
       />)
       :
@@ -181,6 +186,22 @@ export default class GymDetail extends Component {
     return (
       <Container>
         <AppHeader rightTitle="باشگاه یاب" />
+        {isIOS && <Popup
+          isVisible={this.state.isVisible}
+          onCancelPressed={() => this.setState({ isVisible: false })}
+          onAppPressed={() => this.setState({ isVisible: false })}
+          onBackButtonPressed={() => this.setState({ isVisible: false })}
+          modalProps={{ // you can put all react-native-modal props inside.
+            animationIn: 'slideInUp'
+          }}
+          options={{
+            latitude: latgym,
+            longitude: longgym,
+            dialogTitle: 'نمایش باشگاه در نقشه', // optional (default: 'Open in Maps')
+            dialogMessage: 'کدام اپلیکیشن؟', // optional (default: 'What app would you like to use?')
+            cancelText: 'انصراف', // optional (default: 'Cancel')
+          }}
+        />}
         <Content>
           <Card style={{ flex: 0 }}>
             <CardItem>
@@ -244,7 +265,7 @@ export default class GymDetail extends Component {
             style={[form.submitButton, { margin: 10, marginBottom: 20 }]}
             onPress={this.handleMapClick.bind(this)}
           >
-            <Text style={{color: '#FFF'}}>نمایش در نقشه</Text>
+            <Text style={{ color: '#FFF' }}>نمایش در نقشه</Text>
           </Button>
         </View>
       </Container>
