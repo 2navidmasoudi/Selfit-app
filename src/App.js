@@ -56,6 +56,7 @@ import Complaints from './components/root/Complaints';
 import Rules from './components/root/Rules';
 import Follow from './components/root/follow';
 import FactorProductDetail from './components/root/follow/FactorProductDetail';
+import PaymentWeb from './components/root/payment';
 import { darkColor, mainColor } from './assets/variables/colors';
 
 Geocoder.setApiKey('AIzaSyBlgHjeMbqK3xEZfh6HK2o8RdjhhgTOh0s');
@@ -193,9 +194,9 @@ export default class App extends Component {
           >
             <RouterWithRedux hideNavBar>
               <Scene key="rootMain" hideNavbar>
-                <Scene key="splash"  component={Splash} hideNavBar />
+                <Scene key="splash" initial component={Splash} hideNavBar />
                 <Scene key="sign" component={Sign} hideNavBar />
-                <Scene key="root" initial hideNavBar>
+                <Scene key="root" hideNavBar>
                   <Drawer
                     key="drawer"
                     drawerPosition="right"
@@ -259,6 +260,7 @@ export default class App extends Component {
                       <Scene key="rules" component={Rules} hideNavBar />
                       <Scene key="follow" component={Follow} hideNavBar />
                       <Scene key="followProduct" component={FactorProductDetail} hideNavBar />
+                      <Scene key="paymentWebView" component={PaymentWeb} hideNavBar />
                     </Scene>
                   </Drawer>
                 </Scene>
