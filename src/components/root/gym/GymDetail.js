@@ -1,17 +1,28 @@
 import React, { Component } from 'react';
-import { Image, Linking, Platform, ScrollView, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
-import { Body, Button, Card, CardItem, Container, Content, Left, Right, Text, Thumbnail } from 'native-base';
+import { Image, Linking, Platform, ScrollView, StyleSheet, TouchableWithoutFeedback, View, Dimensions } from 'react-native';
+import { Body, Button, Card, CardItem, Container, Content, Left, Right, Thumbnail } from 'native-base';
 import moment from 'moment-jalaali';
 import { Rating } from 'react-native-elements';
 import HTMLView from 'react-native-htmlview';
-import Swiper from 'react-native-swiper';
+import Carousel from 'react-native-snap-carousel';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
+import { showLocation, Popup } from 'react-native-map-link';
 import AppHeader from '../../header';
 import { getAllPicGym, postRateGym, putVisit } from '../../../services/gym';
 import { form } from '../../../assets/styles/index';
+import { mainColor } from '../../../assets/variables/colors';
+import { Text } from '../../Kit';
+import { persianNumber } from '../../../utils/persian';
 
 moment.loadPersian({ dialect: 'persian-modern' });
+const isIOS = Platform.OS === 'ios';
+const horizontalMargin = 30;
+const slideWidth = 280;
+
+const sliderWidth = Dimensions.get('window').width;
+const itemWidth = slideWidth + horizontalMargin * 2;
+const itemHeight = 200;
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -29,6 +40,17 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 30,
     fontWeight: 'bold',
+  },
+  slide: {
+    width: itemWidth,
+    height: itemHeight,
+    paddingHorizontal: horizontalMargin
+    // other styles for the item container
+  },
+  slideInnerContainer: {
+    width: slideWidth,
+    flex: 1
+    // other styles for the inner container
   }
 });
 
@@ -43,6 +65,7 @@ export default class GymDetail extends Component {
     position: 1,
     interval: null,
     dataSource: [],
+    isVisible: false,
   };
   componentWillMount() {
     this.getInfo();
@@ -102,20 +125,30 @@ export default class GymDetail extends Component {
     }
   }
   handleMapClick() {
-    const { latgym, longgym } = this.props;
-    // let url = `https://waze.com/ul?ll=${latgym},${longgym}`;
-    const url = Platform.OS === 'ios' ? `http://maps.apple.com/?ll=${latgym},${longgym}` : `geo:${latgym},${longgym}`;
-    Linking.canOpenURL(url).then((supported) => {
-      if (!supported) {
-        console.log(`Can't handle url: ${url}`);
-      } else {
-        return Linking.openURL(url);
-      }
-    }).catch(err => console.error('An error occurred', err));
+    if (isIOS) {
+      this.setState({isVisible: true});
+    } else {
+      const { latgym, longgym } = this.props;
+      const url = `geo:${latgym},${longgym}`;
+      Linking.canOpenURL(url).then((supported) => {
+        if (!supported) {
+          console.log(`Can't handle url: ${url}`);
+        } else {
+          return Linking.openURL(url);
+        }
+      }).catch(err => console.error('An error occurred', err));
+    }
+  }
+  _renderItem({ item, index }) {
+    return (
+      <View key={index} style={styles.slide}>
+        <Image style={{ flex: 1, width: null }} resizeMode="cover" source={{ uri: item.url }} />
+      </View>
+    );
   }
   render() {
     const {
-      datesave, httpserver, pathserver, picgym,
+      datesave, httpserver, pathserver, picgym, latgym, longgym,
       descgym, namegym, addressgym,
       RateNumber, visitgym, telgym
     } = this.props;
@@ -126,40 +159,49 @@ export default class GymDetail extends Component {
     const ImgSrc = `${httpserver}${pathserver}${ImgYear}/${ImgMonth}/${picgym}`;
     const htmlContent = `<div>${descgym}</div>`;
     const slide = this.state.slideready ?
-      (<Swiper
-        style={styles.wrapper}
-        height={200}
-        showsButtons
+      (<Carousel
+        data={this.state.dataSource}
+        renderItem={this._renderItem.bind(this)}
+        sliderWidth={sliderWidth}
+        itemWidth={itemWidth}
+        inactiveSlideScale={0.95}
+        inactiveSlideOpacity={1}
+        layout="stack"
+        layoutCardOffset={18}
         loop
-        autoplay
-        autoplayTimeout={1.5}
-      >
-        {this.state.dataSource.map((pic, index) => (
-          <TouchableWithoutFeedback
-            key={index}
-            style={styles.slide1}
-            onPress={() => Actions.showImage({ images: this.state.dataSource })}
-          >
-            <Image
-              style={{
-              height: 200,
-              width: null,
-              resizeMode: 'cover',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-              source={{ uri: pic.url }}
-            />
-          </TouchableWithoutFeedback>
-        ))}
-       </Swiper>)
+      />)
       :
-      (<TouchableWithoutFeedback onPress={() => Actions.showImage({ uri: ImgSrc })}>
-        <Image style={{ flex: 1, height: 220, width: null }} resizeMode="contain" source={{ uri: ImgSrc }} />
-       </TouchableWithoutFeedback>);
+      (<Image style={{ flex: 1, height: itemHeight, width: null }} resizeMode="contain" source={{ uri: ImgSrc }} />);
+    const gallery =
+      (<CardItem style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <Button
+          style={{ backgroundColor: mainColor }}
+          onPress={() => Actions.showImage({ images: this.state.dataSource })}
+        >
+          <Text style={{ color: '#FFF', paddingHorizontal: 5 }}>
+            مشاهده گالری تصویر
+          </Text>
+        </Button>
+       </CardItem>);
     return (
       <Container>
-        <AppHeader rightTitle="باشگاه یاب" backButton="flex" />
+        <AppHeader rightTitle="باشگاه یاب" />
+        {isIOS && <Popup
+          isVisible={this.state.isVisible}
+          onCancelPressed={() => this.setState({ isVisible: false })}
+          onAppPressed={() => this.setState({ isVisible: false })}
+          onBackButtonPressed={() => this.setState({ isVisible: false })}
+          modalProps={{ // you can put all react-native-modal props inside.
+            animationIn: 'slideInUp'
+          }}
+          options={{
+            latitude: latgym,
+            longitude: longgym,
+            dialogTitle: 'نمایش باشگاه در نقشه', // optional (default: 'Open in Maps')
+            dialogMessage: 'کدام اپلیکیشن؟', // optional (default: 'What app would you like to use?')
+            cancelText: 'انصراف', // optional (default: 'Cancel')
+          }}
+        />}
         <Content>
           <Card style={{ flex: 0 }}>
             <CardItem>
@@ -167,16 +209,14 @@ export default class GymDetail extends Component {
                 <Body>
                   <Text style={{
                   marginRight: 10,
-                  textAlign: 'right',
-                  fontFamily: 'IRANSansMobile'
                 }}
                   >
                     باشگاه {namegym}
                   </Text>
                   <Text
-                    style={{ marginRight: 10, textAlign: 'right', fontFamily: 'IRANSansMobile' }}
-                    note
-                  >{jM}
+                    style={{ marginRight: 10 }}
+                    type="light"
+                  >{persianNumber(jM)}
                   </Text>
                 </Body>
                 <TouchableWithoutFeedback onPress={() => Actions.showImage({ uri: ImgSrc })}>
@@ -184,28 +224,27 @@ export default class GymDetail extends Component {
                 </TouchableWithoutFeedback>
               </Left>
             </CardItem>
-            <CardItem>
+            <CardItem cardBody>
               {slide}
             </CardItem>
+            {this.state.slideready && gallery}
             <CardItem>
               <ScrollView style={{ flex: 1 }}>
-                <Text
-                  style={{ textAlign: 'right', fontFamily: 'IRANSansMobile' }}
-                >آدرس: {addressgym}
+                <Text>
+                  آدرس: {addressgym}
                 </Text>
                 <HTMLView
                   value={htmlContent}
-                  stylesheet={{ flex: 1, textAlign: 'right' }}
                 />
                 <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-                  <Text>{telgym}</Text>
-                  <Text style={{ fontFamily: 'IRANSansMobile', }}>تلفن: </Text>
+                  <Text>{persianNumber(telgym)}</Text>
+                  <Text>تلفن: </Text>
                 </View>
               </ScrollView>
             </CardItem>
             <CardItem>
               <Left style={{ flex: 1 }}>
-                <Text>تعداد بازدید: {visitgym}</Text>
+                <Text>تعداد بازدید: {persianNumber(visitgym)}</Text>
               </Left>
               <Right style={{ flex: 1 }}>
                 <Rating
@@ -226,7 +265,7 @@ export default class GymDetail extends Component {
             style={[form.submitButton, { margin: 10, marginBottom: 20 }]}
             onPress={this.handleMapClick.bind(this)}
           >
-            <Text style={form.submitText}>نمایش در نقشه</Text>
+            <Text style={{ color: '#FFF' }}>نمایش در نقشه</Text>
           </Button>
         </View>
       </Container>

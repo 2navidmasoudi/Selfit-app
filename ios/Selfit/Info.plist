@@ -82,6 +82,17 @@
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
 	</array>
+	<key>LSApplicationQueriesSchemes</key>
+      <array>
+          <string>comgooglemaps</string>
+          <string>citymapper</string>
+          <string>uber</string>
+          <string>lyft</string>
+          <string>transit</string>
+          <string>waze</string>
+          <string>yandexnavi</string>
+          <string>moovit</string>
+      </array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

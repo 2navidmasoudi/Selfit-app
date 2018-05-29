@@ -192,9 +192,9 @@ export default class App extends Component {
           >
             <RouterWithRedux hideNavBar>
               <Scene key="rootMain" hideNavbar>
-                <Scene key="splash" initial component={Splash} hideNavBar />
+                <Scene key="splash"  component={Splash} hideNavBar />
                 <Scene key="sign" component={Sign} hideNavBar />
-                <Scene key="root" hideNavBar>
+                <Scene key="root" initial hideNavBar>
                   <Drawer
                     key="drawer"
                     drawerPosition="right"
