@@ -5,9 +5,9 @@ import moment from 'moment-jalaali';
 import { Rating } from 'react-native-elements';
 import HTMLView from 'react-native-htmlview';
 import Carousel from 'react-native-snap-carousel';
+import { openMap } from 'react-native-open-map';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { showLocation, Popup } from 'react-native-map-link';
 import AppHeader from '../../header';
 import { getAllPicGym, postRateGym, putVisit } from '../../../services/gym';
 import { form } from '../../../assets/styles/index';
@@ -126,15 +126,21 @@ export default class GymDetail extends Component {
   }
   handleMapClick() {
     const { latgym, longgym } = this.props;
-    const scheme = isIOS ? 'maps:' : 'geo:';
-    const url = `${scheme}${latgym},${longgym}`;
-    Linking.canOpenURL(url).then((supported) => {
-      if (!supported) {
-        console.log(`Can't handle url: ${url}`);
-      } else {
-        return Linking.openURL(url);
-      }
-    }).catch(err => console.error('An error occurred', err));
+    // const scheme = isIOS ? 'maps:' : 'geo:';
+    // const url = `${scheme}${latgym},${longgym}`;
+    // Linking.canOpenURL(url).then((supported) => {
+    //   if (!supported) {
+    //     console.log(`Can't handle url: ${url}`);
+    //   } else {
+    //     return Linking.openURL(url);
+    //   }
+    // }).catch(err => console.error('An error occurred', err));
+    openMap({
+      latitude: latgym,
+      longitude: longgym,
+      title: 'انتخاب مسیر یاب',
+      cancelText: 'انصراف',
+    });
   }
 
   _renderItem({ item, index }) {
