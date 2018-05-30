@@ -125,20 +125,18 @@ export default class GymDetail extends Component {
     }
   }
   handleMapClick() {
-    if (isIOS) {
-      this.setState({isVisible: true});
-    } else {
-      const { latgym, longgym } = this.props;
-      const url = `geo:${latgym},${longgym}`;
-      Linking.canOpenURL(url).then((supported) => {
-        if (!supported) {
-          console.log(`Can't handle url: ${url}`);
-        } else {
-          return Linking.openURL(url);
-        }
-      }).catch(err => console.error('An error occurred', err));
-    }
+    const { latgym, longgym } = this.props;
+    const scheme = isIOS ? 'maps:' : 'geo:';
+    const url = `${scheme}${latgym},${longgym}`;
+    Linking.canOpenURL(url).then((supported) => {
+      if (!supported) {
+        console.log(`Can't handle url: ${url}`);
+      } else {
+        return Linking.openURL(url);
+      }
+    }).catch(err => console.error('An error occurred', err));
   }
+
   _renderItem({ item, index }) {
     return (
       <View key={index} style={styles.slide}>
@@ -148,7 +146,7 @@ export default class GymDetail extends Component {
   }
   render() {
     const {
-      datesave, httpserver, pathserver, picgym, latgym, longgym,
+      datesave, httpserver, pathserver, picgym,
       descgym, namegym, addressgym,
       RateNumber, visitgym, telgym
     } = this.props;
@@ -187,22 +185,6 @@ export default class GymDetail extends Component {
     return (
       <Container>
         <AppHeader rightTitle="باشگاه یاب" />
-        {isIOS && <Popup
-          isVisible={this.state.isVisible}
-          onCancelPressed={() => this.setState({ isVisible: false })}
-          onAppPressed={() => this.setState({ isVisible: false })}
-          onBackButtonPressed={() => this.setState({ isVisible: false })}
-          modalProps={{ // you can put all react-native-modal props inside.
-            animationIn: 'slideInUp'
-          }}
-          options={{
-            latitude: latgym,
-            longitude: longgym,
-            dialogTitle: 'نمایش باشگاه در نقشه', // optional (default: 'Open in Maps')
-            dialogMessage: 'کدام اپلیکیشن؟', // optional (default: 'What app would you like to use?')
-            cancelText: 'انصراف', // optional (default: 'Cancel')
-          }}
-        />}
         <Content>
           <Card style={{ flex: 0 }}>
             <CardItem>

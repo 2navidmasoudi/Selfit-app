@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Content, Header, Left, Right, Switch } from 'native-base';
-import { Alert, FlatList } from 'react-native';
+import { Alert, FlatList, View } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import AppHeader from '../../header';
@@ -133,7 +133,7 @@ export default class BuffetKeeper extends Component {
             </Text>
           </Right>
         </Header>
-        <Content padder scrollEnabled={false}>
+        <View style={{ flex: 1, padding: 10 }}>
           <FlatList
             data={this.props.orderList}
             renderItem={item => this.renderItem(item)}
@@ -141,9 +141,8 @@ export default class BuffetKeeper extends Component {
             onRefresh={this._getOrderBuffet.bind(this)}
             refreshing={this.state.refreshing}
             ListEmptyComponent={<Text style={{ flex: 1 }}>هیچ سفارشی دریافت نشد!</Text>}
-            scrollEnabled={false}
           />
-        </Content>
+        </View>
       </Container>
     );
   }
