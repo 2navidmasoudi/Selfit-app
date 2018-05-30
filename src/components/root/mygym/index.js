@@ -9,7 +9,7 @@ import { receiveGym, tokenGym } from '../../../redux/actions';
 import { getSingleGym } from '../../../services/gym';
 import { Text } from '../../Kit';
 import { mainColor } from '../../../assets/variables/colors';
-import {persianNumber} from "../../../utils/persian";
+import { persianNumber } from '../../../utils/persian';
 
 @connect(state => ({
   user: state.user,
@@ -26,7 +26,7 @@ export default class MyGym extends Component {
     this.getInfo();
   }
   onPressHandler() {
-    Actions.editGym({gym: this.props.gym});
+    Actions.editGym({ gym: this.props.gym });
   }
   async getInfo() {
     await this.props.tokenGym('selfit.gym');

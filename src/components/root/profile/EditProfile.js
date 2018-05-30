@@ -160,7 +160,6 @@ export default class EditProfile extends React.Component {
                 <Text style={{color:white}}>انتخاب تصویر</Text>
               </Button>
               <Button
-                success
                 disabled={this.state.UploadButtonDisable}
                 style={{backgroundColor:mainColor}}
                 onPress={this.uploadImage.bind(this)}

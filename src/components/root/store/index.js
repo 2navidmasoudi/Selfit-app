@@ -11,7 +11,6 @@ import {
   Icon,
   Left,
   Right,
-  Text
 } from 'native-base';
 import { connect } from 'react-redux';
 import listToTree from 'list-to-tree-lite';
@@ -21,6 +20,9 @@ import { putCheckToken } from '../../../services/index';
 import { tokenStore } from '../../../redux/actions';
 import { logError } from '../../../services/log';
 import { getAllCategoryProduct } from '../../../services/categoryProduct';
+import {persianNumber} from "../../../utils/persian";
+import {Text} from "../../Kit";
+import {mainColor, white} from "../../../assets/variables/colors";
 
 // TODO: LIST FOR PRODUCT
 
@@ -91,25 +93,23 @@ export default class Store extends Component {
             badge
             full
             style={{
-                    paddingTop: 10,
-                    backgroundColor: '#0F9D7A'
-                  }}
+              paddingTop: 15,
+              backgroundColor: mainColor
+            }}
             onPress={() => Actions.productBasket()}
           >
-            <Badge><Text>{(this.props.Count).toLocaleString('fa')}</Text></Badge>
+            <Badge style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ color: white }}>
+                {persianNumber((this.props.Count).toLocaleString())}
+              </Text>
+            </Badge>
             <Icon name="basket" style={{ color: 'white' }} />
-            <Text style={{
-              fontFamily: 'IRANSansMobile',
-              fontSize: 18,
-              color: 'white',
-              paddingTop: 12
-            }}
-            >
+            <Text style={{ color: 'white' }}>
               سبد سفارش
             </Text>
           </Button>
         </FooterTab>
-       </Footer>);
+      </Footer>);
     return (
       <Container>
         <AppHeader rightTitle="فروشگاه" backButton="flex" />
@@ -117,7 +117,12 @@ export default class Store extends Component {
           <Card style={{ flex: 0 }}>
             <CardItem style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} header bordered>
               <Left style={{ flex: 1 }} />
-              <Text style={{ flex: 5, textAlign: 'center' }}>دسته بندی فروشگاه</Text>
+              <Text
+                type="bold"
+                style={{ flex: 5, textAlign: 'center' }}
+              >
+                دسته بندی فروشگاه
+              </Text>
               <Icon active name="cart" style={{ flex: 1 }} />
             </CardItem>
             {this.state.productCategory.map(c => (
@@ -127,7 +132,7 @@ export default class Store extends Component {
                 bordered
                 onPress={() => this.onItemPress(c)}
               >
-                <Text style={{ flex: 5, textAlign: 'right' }}>{c.namecategory}</Text>
+                <Text style={{ flex: 5 }}>{c.namecategory}</Text>
                 <Right style={{ flex: 1, alignItems: 'center' }}>
                   <Icon name="arrow-forward" />
                 </Right>

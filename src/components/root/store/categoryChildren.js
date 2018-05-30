@@ -13,7 +13,6 @@ import {
   Left,
   Right,
   Spinner,
-  Text
 } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
@@ -22,6 +21,9 @@ import AppHeader from '../../header';
 import { putCheckToken } from '../../../services/index';
 import { receiveProduct, tokenStore } from '../../../redux/actions';
 import { getAllAccessProduct } from '../../../services/product';
+import { Text } from '../../Kit';
+import { persianNumber } from '../../../utils/persian';
+import { mainColor, white } from '../../../assets/variables/colors';
 
 @connect(state => ({
   user: state.user,
@@ -78,20 +80,18 @@ export default class CategoryChildren extends Component {
             badge
             full
             style={{
-                    paddingTop: 10,
-                    backgroundColor: '#0F9D7A'
-                  }}
+              paddingTop: 15,
+              backgroundColor: mainColor
+            }}
             onPress={() => Actions.productBasket()}
           >
-            <Badge><Text>{(this.props.Count).toLocaleString('fa')}</Text></Badge>
+            <Badge style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ color: white }}>
+                {persianNumber((this.props.Count).toLocaleString())}
+              </Text>
+            </Badge>
             <Icon name="basket" style={{ color: 'white' }} />
-            <Text style={{
-              fontFamily: 'IRANSansMobile',
-              fontSize: 18,
-              color: 'white',
-              paddingTop: 12
-            }}
-            >
+            <Text style={{ color: 'white' }}>
               سبد سفارش
             </Text>
           </Button>
@@ -104,7 +104,12 @@ export default class CategoryChildren extends Component {
           <Card style={{ flex: 0 }}>
             <CardItem style={{ flex: 1, alignItems: 'center' }} header bordered>
               <Left style={{ flex: 1 }} />
-              <Text style={{ flex: 5, textAlign: 'center' }}>{this.props.categoryTitle}</Text>
+              <Text
+                type="bold"
+                style={{ flex: 5, textAlign: 'center' }}
+              >
+                {this.props.categoryTitle}
+              </Text>
               <Icon active name="cart" style={{ flex: 1 }} />
             </CardItem>
             {this.props.productCategory.map(c => (
@@ -115,7 +120,7 @@ export default class CategoryChildren extends Component {
                 onPress={() => this.onItemPress(c)}
               >
                 {/* <Icon active name="logo-googleplus" /> */}
-                <Text style={{ flex: 5, textAlign: 'right' }}>{c.namecategory}</Text>
+                <Text style={{ flex: 5 }}>{c.namecategory}</Text>
                 <Right style={{ flex: 1, alignItems: 'center' }}>
                   <Icon name="arrow-forward" />
                 </Right>
@@ -126,12 +131,8 @@ export default class CategoryChildren extends Component {
             data={this.state.Product}
             renderItem={item => this.renderProduct(item)}
             keyExtractor={item => item.idproduct}
-            ListEmptyComponent={() => <Spinner />}
+            ListEmptyComponent={<Text style={{ textAlign: 'center' }}>هیچ آیتمی یافت نشد.</Text>}
             scrollEnabled={false}
-            // onRefresh={this.handleRefresh.bind(this)}
-            // refreshing={this.state.refreshing}
-            // onEndReachedThreshold={0.5}
-            // ListFooterComponent={this.renderFooter.bind(this)}
           />
         </Content>
         {FooterComponent}

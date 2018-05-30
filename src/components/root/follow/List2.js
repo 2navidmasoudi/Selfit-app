@@ -44,12 +44,13 @@ export default class List2 extends Component {
   }
   async getPayedFactors() {
     try {
+      this.setState({ refreshing: true });
       const { tokenmember } = await this.props.user;
-      const { tokenapi } = await this.props;
+      const { tokenapiBuffet } = await this.props;
       const { max, min, ssort, fsort } = await this.state;
       const payedFactor = await getFactorBuffet(
         1, 1,
-        tokenmember, tokenapi,
+        tokenmember, tokenapiBuffet,
         max, min, ssort, fsort
       );
       this.setState({ payedFactor });
@@ -65,7 +66,7 @@ export default class List2 extends Component {
       const { tokenapiProduct } = await this.props;
       const { max, min, ssort, fsort } = await this.state;
       const payedFactorProduct = await getFactorProduct(
-        true,
+        false,
         tokenmember, tokenapiProduct,
         max, min, ssort, fsort
       );
@@ -78,9 +79,36 @@ export default class List2 extends Component {
       this.setState({ refreshingP: false });
     }
   }
-  renderItem = ({ item }) => (
-    <FactorCardBuffet item={item} />
-  );
+  renderItem = ({ item }) => {
+    const m = moment(`${item.datesavefactorbuffet}`, 'YYYY/MM/DDTHH:mm:ss').format('jYYYY/jMM/jDD HH:mm:ss');
+    return (
+      <TouchableOpacity onPress={() => Actions.followBuffet({ item })}>
+        <Card>
+          <CardItem>
+            <Text style={{ flex: 1 }}>
+              تاریخ: {persianNumber(m)}
+            </Text>
+            <Text style={{ flex: 1 }}>
+              فاکتور شماره: {persianNumber(item.idfactorbuffet)}
+            </Text>
+          </CardItem>
+          <CardItem bordered>
+            <Text style={{ flex: 1 }}>
+              وضعیت فاکتور:{' '}<Text style={{ color: mainColor }}>پرداخت شده</Text>
+            </Text>
+          </CardItem>
+          <CardItem bordered>
+            <Text style={{ flex: 1 }}>
+              مبلغ پرداخت شده:{' '}
+              <Text style={{ color: mainColor }}>
+                {persianNumber(item.finalpricefactorbuffet.toLocaleString())} تومان
+              </Text>
+            </Text>
+          </CardItem>
+        </Card>
+      </TouchableOpacity>
+    );
+  };
   renderItem2 = ({ item }) => {
     const m = moment(`${item.datesaveorder}`, 'YYYY/MM/DDTHH:mm:ss').format('jYYYY/jMM/jDD HH:mm:ss');
     return (

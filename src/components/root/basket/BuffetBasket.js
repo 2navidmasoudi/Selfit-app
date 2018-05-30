@@ -55,7 +55,7 @@ export default class BuffetBasket extends Component {
       const {
         Basket,
         PriceAll
-      } = await getAllOrder(active, false, tokenmember, tokenapi, max, min);
+      } = await getAllOrder(active, tokenmember, tokenapi, max, min);
       console.log(Basket, 'basket for Buffet!', PriceAll, 'priceAll');
       this.props.reBasketBuffet(Basket, Basket.length, PriceAll);
     } catch (e) {

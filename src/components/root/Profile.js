@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Image, TouchableWithoutFeedback } from 'react-native';
-import { Button, Container, Text, View } from 'native-base';
+import { Button, Container, Content, View } from 'native-base';
 import { connect } from 'react-redux';
 import moment from 'moment-jalaali';
 import { Base64 } from 'js-base64';
@@ -11,6 +11,9 @@ import AppHeader from '../header';
 import { getSingleToken, putUserLogout } from '../../services';
 import { setUser } from '../../redux/actions';
 import { logError } from '../../services/log';
+import { persianNumber } from '../../utils/persian';
+import { Text } from '../Kit';
+import { mainColor, white } from '../../assets/variables/colors';
 
 moment.loadPersian({ dialect: 'persian-modern' });
 
@@ -56,11 +59,14 @@ export default class Profile extends Component {
     const ImgYear = m.jYear();
     const ImgMonth = m.jMonth() + 1;
     const ImgSrc = `${Base64.decode(httpserver)}${Base64.decode(pathserver)}${ImgYear}/${ImgMonth}/${picmember}`;
+    const name = Base64.decode(namefamilymember);
+    const ph = Base64.decode(phone);
+    const mail = Base64.decode(mailmember);
     const jalaliBirthDay = birthdaymember === null ? '?' : moment(birthdaymember, 'YYYY/MM/DD').toNow(true);
     return (
       <Container>
         <AppHeader rightTitle="پروفایل" backButton="flex" />
-        <View style={{ flex: 1, padding: 20 }}>
+        <Content padder>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <TouchableWithoutFeedback onPress={() => Actions.showImage({ uri: ImgSrc })}>
               <Image
@@ -70,27 +76,27 @@ export default class Profile extends Component {
             </TouchableWithoutFeedback>
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={form.submitText}>نام: {Base64.decode(namefamilymember)}</Text>
-            <Text style={form.submitText}>شماره موبایل: {Base64.decode(phone)}</Text>
-            <Text style={form.submitText}>سن: {jalaliBirthDay}</Text>
-            <Text style={form.submitText}>ایمیل: {Base64.decode(mailmember)}</Text>
+            <Text>نام: {name}</Text>
+            <Text>شماره موبایل: {persianNumber(ph)}</Text>
+            <Text>سن: {persianNumber(jalaliBirthDay)}</Text>
+            <Text>ایمیل: {mail}</Text>
           </View>
-          <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-end' }}>
-            <Button
-              full
-              onPress={() => Actions.editProfile()}
-              style={[form.submitButton, { marginTop: 5, marginBottom: 10 }]}
-            >
-              <Text style={form.submitText}>ویرایش حساب کاربری</Text>
-            </Button>
-            <Button
-              full
-              onPress={() => this._putUserLogout()}
-              style={[form.submitButton, { marginTop: 5 }]}
-            >
-              <Text style={form.submitText}>خروج از حساب کاربری</Text>
-            </Button>
-          </View>
+        </Content>
+        <View style={{ margin: 10, flexDirection: 'column', justifyContent: 'flex-end' }}>
+          <Button
+            block
+            onPress={() => Actions.editProfile()}
+            style={[form.submitButton, { marginTop: 5, marginBottom: 10 }]}
+          >
+            <Text style={{ color: white }}>ویرایش حساب کاربری</Text>
+          </Button>
+          <Button
+            block
+            onPress={() => this._putUserLogout()}
+            style={{ marginTop: 5, backgroundColor: mainColor }}
+          >
+            <Text style={{ color: white }}>خروج از حساب کاربری</Text>
+          </Button>
         </View>
       </Container>
     );

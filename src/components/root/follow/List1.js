@@ -35,6 +35,7 @@ export default class List1 extends Component {
 
   async getUnpayedFactors() {
     try {
+      this.setState({ refreshing: true });
       const { tokenmember } = await this.props.user;
       const { tokenapi } = await this.props;
       const { max, min, ssort, fsort } = await this.state;
@@ -57,31 +58,14 @@ export default class List1 extends Component {
 
   render() {
     return (
-      <Content padder>
-        <Separator>
-          <Text type="bold" style={{ flex: 1, textAlign: 'center', padding: 5 }}>تایید شده توسط بوفه دار</Text>
-        </Separator>
+      <Content padder scrollEnabled={false}>
         <FlatList
           data={this.state.unpayedFactors}
           renderItem={item => this.renderItem(item)}
           keyExtractor={item => item.idfactorbuffet}
           ListEmptyComponent={<Text style={{ marginRight: 20 }}>هیچ فاکتوری دریافت نشد...</Text>}
           refreshing={this.state.refreshing}
-          // onRefresh={() => <Spinner />}
-          scrollEnabled={false}
-          onEndReachedThreshold={0.5}
-        />
-        <Separator>
-          <Text type="bold" style={{ flex: 1, textAlign: 'center', padding: 5 }}>منتظر تایید توسط بوفه دار </Text>
-        </Separator>
-        <FlatList
-          data={this.props.order}
-          renderItem={item => this.renderItem(item)}
-          keyExtractor={item => item.idcoach}
-          ListEmptyComponent={<Text style={{ marginRight: 20 }}>هیچ فاکتوری دریافت نشد...</Text>}
-          refreshing={this.state.refreshing}
-          scrollEnabled={false}
-          onEndReachedThreshold={0.5}
+          onRefresh={this.getUnpayedFactors.bind(this)}
         />
       </Content>
     );

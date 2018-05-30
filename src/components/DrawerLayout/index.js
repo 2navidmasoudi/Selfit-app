@@ -69,7 +69,7 @@ export default class DrawerLayout extends Component {
       const {
         Basket,
         PriceAll
-      } = await getAllOrder(active, false, tokenmember, buffetToken, max, min);
+      } = await getAllOrder(active, tokenmember, buffetToken, max, min);
       console.log(Basket, 'basket for Buffet!', PriceAll, 'priceAll');
       this.props.reBasketBuffet(Basket, Basket.length, PriceAll);
     } catch (e) {
@@ -194,7 +194,7 @@ export default class DrawerLayout extends Component {
             <Text>پشتیبانی</Text>
             <Icon name="call" style={drawer.itemIcon} />
           </Item>
-          <Item style={drawer.item}>
+          <Item style={drawer.item} onPress={() => Actions.webView({ title: 'درباره ما', url: 'https://selfit.ir/#/Home/Index' })}>
             <Text>درباره ما</Text>
             <Icon name="bookmarks" style={drawer.itemIcon} />
           </Item>
@@ -206,7 +206,7 @@ export default class DrawerLayout extends Component {
             <Text>راهنمای برنامه</Text>
             <Icon name="help" style={drawer.itemIcon} />
           </Item>
-          <Item style={drawer.item} onPress={() => Actions.rules()}>
+          <Item style={drawer.item} onPress={() => Actions.webView({ title: 'قوانین و تعهدات', url: 'https://selfit.ir/#/Home/Law' })}>
             <Text>قوانین و تعهدات</Text>
             <Icon name="help" style={drawer.itemIcon} />
           </Item>

@@ -32,21 +32,7 @@ export const getMenuFood = async (id, catid, token, tokenapi, max, min, ssort, f
   const json = await response.json();
   return json.MenufoodBuffet.$values;
 };
-export const putAcceptBuffet = async (memberid, factorid, active, token, tokenapi) => {
-  const response = await fetch(`${Selfit}${Buffet}PutAccept`, {
-    method: PUT,
-    headers,
-    body: JSON.stringify({
-      memberid,
-      factorid,
-      active,
-      token,
-      tokenapi
-    })
-  });
-  const json = await response.json();
-  return json;
-};
+
 export const putActiveBuffet = async (idbuffet, active, token, tokenapi) => {
   const response = await fetch(`${Selfit}${Buffet}PutActiveBuffet`, {
     method: PUT,
