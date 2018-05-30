@@ -7,7 +7,7 @@ import AppHeader from '../../header';
 import { selectBuffet, tokenBuffet } from '../../../redux/actions/index';
 import { logError } from '../../../services/log';
 import { putCheckToken } from '../../../services';
-import { getSingleIDMember } from '../../../services/buffet';
+import {getSingleIDMember, getSingleIDMemberBuffet} from '../../../services/buffet';
 import { Text } from '../../Kit';
 import { darkColor, mainColor } from '../../../assets/variables/colors';
 
@@ -35,9 +35,7 @@ export default class FoodList extends Component {
     try {
       const { tokenapi } = await this.props;
       const { tokenmember } = await this.props.user;
-      const BuffetKeeperInfo = await getSingleIDMember(tokenmember, tokenapi);
-      return BuffetKeeperInfo;
-      // this.props.selectBuffet(BuffetKeeperInfo.idbuffet);
+      return await getSingleIDMemberBuffet(tokenmember, tokenapi);
     } catch (error) {
       console.log(error);
       logError(error, '_getSingleIDMember', 'BuffetMenu/index', 'getSingleIDMember');

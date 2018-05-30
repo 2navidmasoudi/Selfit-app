@@ -7,7 +7,7 @@ import { Text } from '../Kit';
 export default () => (
   <TouchableWithoutFeedback onPress={() => Actions.mygymRoot()}>
     <View style={styles.animationView}>
-      <Text style={styles.animationTitle}>
+      <Text type="bold" style={styles.animationTitle}>
               باشگاه من
       </Text>
       <Text style={styles.animationDetail}>

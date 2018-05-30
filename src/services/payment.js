@@ -1,5 +1,6 @@
-import { GET, headers, Payment, Selfit } from './type';
 import { Linking } from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import { GET, headers, Payment, Selfit } from './type';
 
 export const getPayment = async (type, token, tokenapi) => {
   try {
@@ -25,7 +26,7 @@ export const getRequestPayment = async (type, token, tokenapi = 'selfit.member')
         if (!supported) {
           console.log(`Can't handle url: ${url}`);
         } else {
-          return Linking.openURL(url);
+          return Actions.paymentWebView({ url });
         }
       }).catch(err => console.error('An error occurred', err)));
   } catch (e) {

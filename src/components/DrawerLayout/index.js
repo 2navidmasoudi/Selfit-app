@@ -69,7 +69,7 @@ export default class DrawerLayout extends Component {
       const {
         Basket,
         PriceAll
-      } = await getAllOrder(active, false, tokenmember, buffetToken, max, min);
+      } = await getAllOrder(active, tokenmember, buffetToken, max, min);
       console.log(Basket, 'basket for Buffet!', PriceAll, 'priceAll');
       this.props.reBasketBuffet(Basket, Basket.length, PriceAll);
     } catch (e) {
@@ -148,12 +148,13 @@ export default class DrawerLayout extends Component {
                 backgroundColor: '#0F9D7A',
                 height: 30,
                 width: 30,
+                display: !(this.props.buffetBasketCount + this.props.materialBasketCount) ? 'none' : 'flex',
                 justifyContent: 'center',
                 alignItems: 'center'
               }}
               >
                 <Text style={{ color: 'white', textAlign: 'center' }}>
-                  {persianNumber(this.props.buffetBasketCount + this.props.materialBasketCount) || persianNumber('0')}
+                  {persianNumber(this.props.buffetBasketCount + this.props.materialBasketCount)}
                 </Text>
               </Badge>
             </Left>
@@ -171,12 +172,14 @@ export default class DrawerLayout extends Component {
                 backgroundColor: '#0F9D7A',
                 height: 30,
                 width: 30,
+                display: !(this.props.productBasketCount) ? 'none' : 'flex',
+
                 justifyContent: 'center',
                 alignItems: 'center'
               }}
               >
                 <Text style={{ color: 'white', textAlign: 'center' }}>
-                  {persianNumber(this.props.productBasketCount) || persianNumber('0')}
+                  {persianNumber(this.props.productBasketCount)}
                 </Text>
               </Badge>
             </Left>
@@ -191,7 +194,7 @@ export default class DrawerLayout extends Component {
             <Text>پشتیبانی</Text>
             <Icon name="call" style={drawer.itemIcon} />
           </Item>
-          <Item style={drawer.item}>
+          <Item style={drawer.item} onPress={() => Actions.webView({ title: 'درباره ما', url: 'https://selfit.ir/#/Home/Index' })}>
             <Text>درباره ما</Text>
             <Icon name="bookmarks" style={drawer.itemIcon} />
           </Item>
@@ -203,7 +206,7 @@ export default class DrawerLayout extends Component {
             <Text>راهنمای برنامه</Text>
             <Icon name="help" style={drawer.itemIcon} />
           </Item>
-          <Item style={drawer.item} onPress={() => Actions.rules()}>
+          <Item style={drawer.item} onPress={() => Actions.webView({ title: 'قوانین و تعهدات', url: 'https://selfit.ir/#/Home/Law' })}>
             <Text>قوانین و تعهدات</Text>
             <Icon name="help" style={drawer.itemIcon} />
           </Item>

@@ -7,6 +7,7 @@ import { Actions } from 'react-native-router-flux';
 import { mapStyle } from '../../../assets/styles/map';
 import { getAllGym } from '../../../services/gym';
 import { receiveGym, tokenGym } from '../../../redux/actions/index';
+import { mainColor } from '../../../assets/variables/colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -166,7 +167,12 @@ export default class GymMap extends Component {
         {this.state.MarkerReady === false ? <Spinner /> :
         <Button
           block
-          style={{ margin: 25, marginHorizontal: 100, borderRadius: 5, backgroundColor: '#0F9D7A', }}
+          style={{
+            margin: 25,
+            marginHorizontal: 100,
+            borderRadius: 5,
+            backgroundColor: mainColor,
+          }}
           onPress={() => this.getNewGym()}
         >
           <Text style={{ color: 'white' }}>گرفتن باشکاه ها در این مکان</Text>

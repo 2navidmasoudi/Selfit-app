@@ -7,7 +7,7 @@ import { Text } from '../Kit';
 export default () => (
   <TouchableWithoutFeedback onPress={() => Actions.storeRoot()}>
     <View style={styles.animationView}>
-      <Text style={styles.animationTitle}>
+      <Text type="bold" style={styles.animationTitle}>
               فروشگاه
       </Text>
       {/* To do : text-align : justify with WebView Html */}

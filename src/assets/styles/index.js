@@ -1,5 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Dimensions } from 'react-native';
+import { mainColor } from '../variables/colors';
 
 const window = Dimensions.get('window');
 
@@ -147,7 +148,7 @@ export const EditProfileStyle = EStyleSheet.create({
   textStyle: { fontFamily: '$IS' },
   uploadView: { justifyContent: 'center', alignItems: 'center', flex: 1 },
   uploadViewButton: { flexDirection: 'row', marginTop: 10, marginBottom: 10 },
-  uploadButton: { marginRight: 10 },
+  uploadButton: { marginRight: 10, backgroundColor: mainColor },
   btnText: { fontFamily: '$IS', paddingRight: 10, paddingLeft: 10, paddingTop: 5 },
   formInputText: {
     fontFamily: '$IS',

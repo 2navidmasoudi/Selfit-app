@@ -26,3 +26,4 @@ export const PicProduct = '/PicProduct/';
 export const CategoryProduct = '/CategoryProduct/';
 export const Payment = '/Payment/';
 export const Coach = '/Coach/';
+export const Orders = '/Orders/';

@@ -53,9 +53,12 @@ import finalOrderBuffet from './components/root/basket/finalOrderBuffet';
 import finalOrderProduct from './components/root/basket/finalOrderProduct';
 import OrderDetail from './components/root/buffetKeepr/OrderDetail';
 import Complaints from './components/root/Complaints';
-import Rules from './components/root/Rules';
+import WebViewComponent from './components/root/WebViewComponent';
 import Follow from './components/root/follow';
+import FactorProductDetail from './components/root/follow/FactorProductDetail';
+import PaymentWeb from './components/root/payment';
 import { darkColor, mainColor } from './assets/variables/colors';
+import FactorBuffetDetail from './components/root/follow/FactorBuffetDetail';
 
 Geocoder.setApiKey('AIzaSyBlgHjeMbqK3xEZfh6HK2o8RdjhhgTOh0s');
 const window = Dimensions.get('window');
@@ -255,8 +258,11 @@ export default class App extends Component {
                       <Scene key="profile" hideNavBar component={Profile} />
                       <Scene key="editProfile" component={EditProfile} hideNavBar />
                       <Scene key="complaints" component={Complaints} hideNavBar />
-                      <Scene key="rules" component={Rules} hideNavBar />
+                      <Scene key="webView" component={WebViewComponent} hideNavBar />
                       <Scene key="follow" component={Follow} hideNavBar />
+                      <Scene key="followProduct" component={FactorProductDetail} hideNavBar />
+                      <Scene key="followBuffet" component={FactorBuffetDetail} hideNavBar />
+                      <Scene key="paymentWebView" component={PaymentWeb} hideNavBar />
                     </Scene>
                   </Drawer>
                 </Scene>

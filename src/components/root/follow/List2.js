@@ -1,16 +1,25 @@
 import React, { Component } from 'react';
-import { FlatList, View } from 'react-native';
-import { Separator, Spinner } from 'native-base';
+import { FlatList, TouchableOpacity } from 'react-native';
+import { Card, CardItem, Content, Separator } from 'native-base';
 import { connect } from 'react-redux';
+import moment from 'moment-jalaali';
+import { Actions } from 'react-native-router-flux';
 import { getFactorBuffet } from '../../../services/orderBuffet';
-import { tokenBuffet } from '../../../redux/actions';
+import { tokenBuffet, tokenStore } from '../../../redux/actions';
 import { Text } from '../../Kit';
+import { getFactorProduct } from '../../../services/orderProduct';
+import FactorCardBuffet from './FactorCardBuffet';
+import { persianNumber } from '../../../utils/persian';
+import { mainColor } from '../../../assets/variables/colors';
 
 @connect(state => ({
   user: state.user,
-  tokenapi: state.buffet.tokenapi,
+  tokenapiBuffet: state.buffet.tokenapi,
+  tokenapiProduct: state.store.tokenapi,
+
 }), {
   tokenBuffet,
+  tokenStore,
 })
 export default class List2 extends Component {
   state = {
@@ -19,23 +28,29 @@ export default class List2 extends Component {
     ssort: false,
     fsort: 0,
     payedFactor: null,
+    payedFactorProduct: null,
     refreshing: true,
+    refreshingP: true,
+
   };
   componentWillMount() {
     this.getInfo();
   }
   async getInfo() {
     await this.props.tokenBuffet('selfit.buffet');
+    await this.props.tokenStore('selfit.store');
     await this.getPayedFactors();
+    await this.getPayedFactorsProduct();
   }
   async getPayedFactors() {
     try {
+      this.setState({ refreshing: true });
       const { tokenmember } = await this.props.user;
-      const { tokenapi } = await this.props;
+      const { tokenapiBuffet } = await this.props;
       const { max, min, ssort, fsort } = await this.state;
       const payedFactor = await getFactorBuffet(
         1, 1,
-        tokenmember, tokenapi,
+        tokenmember, tokenapiBuffet,
         max, min, ssort, fsort
       );
       this.setState({ payedFactor });
@@ -45,12 +60,88 @@ export default class List2 extends Component {
       this.setState({ refreshing: false });
     }
   }
-  renderItem = ({ item }) => (
-    <FactorCard item={item} />
-  );
+  async getPayedFactorsProduct() {
+    try {
+      const { tokenmember } = await this.props.user;
+      const { tokenapiProduct } = await this.props;
+      const { max, min, ssort, fsort } = await this.state;
+      const payedFactorProduct = await getFactorProduct(
+        false,
+        tokenmember, tokenapiProduct,
+        max, min, ssort, fsort
+      );
+      console.log('payedFactorProduct');
+      console.log(payedFactorProduct);
+      this.setState({ payedFactorProduct });
+      this.setState({ refreshingP: false });
+    } catch (e) {
+      console.log(e);
+      this.setState({ refreshingP: false });
+    }
+  }
+  renderItem = ({ item }) => {
+    const m = moment(`${item.datesavefactorbuffet}`, 'YYYY/MM/DDTHH:mm:ss').format('jYYYY/jMM/jDD HH:mm:ss');
+    return (
+      <TouchableOpacity onPress={() => Actions.followBuffet({ item })}>
+        <Card>
+          <CardItem>
+            <Text style={{ flex: 1 }}>
+              تاریخ: {persianNumber(m)}
+            </Text>
+            <Text style={{ flex: 1 }}>
+              فاکتور شماره: {persianNumber(item.idfactorbuffet)}
+            </Text>
+          </CardItem>
+          <CardItem bordered>
+            <Text style={{ flex: 1 }}>
+              وضعیت فاکتور:{' '}<Text style={{ color: mainColor }}>پرداخت شده</Text>
+            </Text>
+          </CardItem>
+          <CardItem bordered>
+            <Text style={{ flex: 1 }}>
+              مبلغ پرداخت شده:{' '}
+              <Text style={{ color: mainColor }}>
+                {persianNumber(item.finalpricefactorbuffet.toLocaleString())} تومان
+              </Text>
+            </Text>
+          </CardItem>
+        </Card>
+      </TouchableOpacity>
+    );
+  };
+  renderItem2 = ({ item }) => {
+    const m = moment(`${item.datesaveorder}`, 'YYYY/MM/DDTHH:mm:ss').format('jYYYY/jMM/jDD HH:mm:ss');
+    return (
+      <TouchableOpacity onPress={() => Actions.followProduct({ factor: item })}>
+        <Card>
+          <CardItem>
+            <Text style={{ flex: 1 }}>
+              تاریخ: {persianNumber(m)}
+            </Text>
+            <Text style={{ flex: 1 }}>
+              فاکتور شماره: {persianNumber(item.factorid)}
+            </Text>
+          </CardItem>
+          <CardItem bordered>
+            <Text style={{ flex: 1 }}>
+              وضعیت فاکتور:{' '}<Text style={{ color: mainColor }}>پرداخت شده</Text>
+            </Text>
+          </CardItem>
+          <CardItem bordered>
+            <Text style={{ flex: 1 }}>
+              مبلغ پرداخت شده:{' '}
+              <Text style={{ color: mainColor }}>
+                {persianNumber(item.finalpricefactor.toLocaleString())} تومان
+              </Text>
+            </Text>
+          </CardItem>
+        </Card>
+      </TouchableOpacity>
+    );
+  };
   render() {
     return (
-      <View>
+      <Content padder>
         <Separator>
           <Text type="bold" style={{ flex: 1, textAlign: 'center', padding: 5 }}>بوفه</Text>
         </Separator>
@@ -68,15 +159,15 @@ export default class List2 extends Component {
           <Text type="bold" style={{ flex: 1, textAlign: 'center', padding: 5 }}>فروشگاه</Text>
         </Separator>
         <FlatList
-          data={this.props.order}
-          renderItem={item => this.renderItem(item)}
-          keyExtractor={item => item.idcoach}
+          data={this.state.payedFactorProduct}
+          renderItem={item => this.renderItem2(item)}
+          keyExtractor={item => item.factorid}
           ListEmptyComponent={<Text style={{ marginRight: 20 }}>هیچ فاکتوری دریافت نشد...</Text>}
-          refreshing={this.state.refreshing}
+          refreshing={this.state.refreshingP}
           scrollEnabled={false}
           onEndReachedThreshold={0.5}
         />
-      </View>
+      </Content>
     );
   }
 }

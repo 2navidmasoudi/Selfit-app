@@ -22,6 +22,12 @@ import { logError } from '../../../services/log';
   selectBuffet,
 })
 export default class BuffetGrid extends Component {
+  // static propTypes = {
+  //   user: PropTypes.node.isRequired,
+  //   buffetid: PropTypes.node.isRequired,
+  //   tokenBuffet: PropTypes.func.isRequired,
+  //   selectBuffet: PropTypes.func.isRequired,
+  // };
   componentDidMount() {
     this.setInfo();
     // TODO: BACKGROUND TIMER ON IOS
@@ -73,9 +79,4 @@ export default class BuffetGrid extends Component {
   }
 }
 
-BuffetGrid.propTypes = {
-  user: PropTypes.node.isRequired,
-  buffetid: PropTypes.node.isRequired,
-  tokenBuffet: PropTypes.func.isRequired,
-  selectBuffet: PropTypes.func.isRequired,
-};
+

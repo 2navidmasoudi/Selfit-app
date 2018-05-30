@@ -1,34 +1,40 @@
 import React, { Component } from 'react';
-import { Button, Container, Content, Form, Input, Item, Label, Text, } from 'native-base';
+import { Button, Container, Content } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import AppHeader from '../../header';
 import { putCheckToken } from '../../../services/index';
 import { receiveGym, tokenGym } from '../../../redux/actions';
 import { getSingleGym, putGym } from '../../../services/gym';
-import { SignStyle } from '../../../assets/styles/sign';
+import { Text } from '../../Kit';
+import InputText from '../../Kit/TextInput/TextInput';
+import { mainColor, white } from '../../../assets/variables/colors';
+import {latinNumber, persianNumber} from '../../../utils/persian';
 
 @connect(state => ({
   user: state.user,
   tokenapi: state.gym.tokenapi,
-  gym: state.gym.GymList,
+  // gym: state.gym.GymList,
 }), {
   tokenGym,
   receiveGym,
 })
 export default class EditGym extends Component {
-  state = {
-    namegym: null,
-    descgym: null,
-    picgym: null,
-    tuitiongym: null,
-    addressgym: null,
-    numbertuitiongym: null,
-    latgym: null,
-    longgym: null,
-    active: null,
-    telgym: null,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      namegym: props.gym.namegym,
+      addressgym: props.gym.addressgym,
+      descgym: props.gym.descgym,
+      picgym: props.gym.picgym,
+      tuitiongym: props.gym.tuitiongym.toString(),
+      numbertuitiongym: props.gym.numbertuitiongym.toString(),
+      latgym: props.gym.latgym.toString(),
+      longgym: props.gym.longgym.toString(),
+      active: props.gym.active,
+      telgym: props.gym.telgym,
+    };
+  }
   componentWillMount() {
     const { tokenmember, tokenapi } = this.props.user;
     putCheckToken(tokenmember, tokenapi);
@@ -63,19 +69,7 @@ export default class EditGym extends Component {
   }
   async getInfo() {
     await this.props.tokenGym('selfit.gym');
-    await this._getSingLeGym();
-    await this.setState({
-      namegym: this.props.gym.namegym,
-      addressgym: this.props.gym.addressgym,
-      descgym: this.props.gym.descgym,
-      picgym: this.props.gym.picgym,
-      tuitiongym: this.props.gym.tuitiongym.toString(),
-      numbertuitiongym: this.props.gym.numbertuitiongym.toString(),
-      latgym: this.props.gym.latgym.toString(),
-      longgym: this.props.gym.longgym.toString(),
-      active: this.props.gym.active,
-      telgym: this.props.gym.telgym,
-    });
+    // await this._getSingLeGym();
   }
   async _getSingLeGym() {
     try {
@@ -90,9 +84,6 @@ export default class EditGym extends Component {
     }
   }
   render() {
-    const {
-      item, formInputText, formStyle,
-    } = SignStyle;
     const { gym } = this.props;
     const html = `<div>${gym.descgym}</div>`;
     return (
@@ -100,76 +91,45 @@ export default class EditGym extends Component {
         <AppHeader rightTitle="باشگاه من" backButton="flex" />
         <Content padder>
           <Text style={{ textAlign: 'center', fontSize: 20, margin: 10 }}>ویرایش باشگاه</Text>
-          <Form style={formStyle}>
-            <Item style={item}>
-              <Input
-                style={formInputText}
-                value={this.state.namegym}
-                onChangeText={namegym => this.setState({ namegym })}
-              />
-              <Label>اسم</Label>
-            </Item>
-            <Item style={item}>
-              <Input
-                style={formInputText}
-                value={this.state.addressgym}
-                onChangeText={addressgym => this.setState({ addressgym })}
-              />
-              <Label>آدرس</Label>
-            </Item>
-            <Item style={item}>
-              <Input
-                style={formInputText}
-                multiline
-                value={this.state.descgym}
-                onChangeText={descgym => this.setState({ descgym })}
-              />
-              <Label>توضیحات</Label>
-            </Item>
-            <Item style={item}>
-              <Input
-                style={formInputText}
-                value={this.state.telgym}
-                onChangeText={telgym => this.setState({ telgym })}
-              />
-              <Label>تلقن</Label>
-            </Item>
-            <Item style={item}>
-              <Input
-                style={formInputText}
-                value={this.state.tuitiongym}
-                onChangeText={tuitiongym => this.setState({ tuitiongym })}
-              />
-              <Label>شهریه</Label>
-            </Item>
-            <Item style={item}>
-              <Input
-                style={formInputText}
-                value={this.state.latgym}
-                onChangeText={latgym => this.setState({ latgym })}
-              />
-              <Label>عرض جغرافیایی</Label>
-            </Item>
-            <Item style={item}>
-              <Input
-                style={formInputText}
-                value={this.state.longgym}
-                onChangeText={longgym => this.setState({ longgym })}
-              />
-              <Label>طول جغرافیایی</Label>
-            </Item>
-            <Item style={item}>
-              <Input
-                style={formInputText}
-                value={this.state.numbertuitiongym}
-                onChangeText={numbertuitiongym => this.setState({ numbertuitiongym })}
-              />
-              <Label>ظرفیت</Label>
-            </Item>
-          </Form>
+          <InputText
+            label="اسم"
+            value={this.state.namegym}
+            onChangeText={namegym => this.setState({ namegym })}
+          />
+          <InputText
+            label="آدرس"
+            multiline
+            value={this.state.addressgym}
+            onChangeText={addressgym => this.setState({ addressgym })}
+          />
+          <InputText
+            label="توضیحات"
+            multiline
+            value={this.state.descgym}
+            onChangeText={descgym => this.setState({ descgym })}
+          />
+          <InputText
+            label="تلفن"
+            value={persianNumber(this.state.telgym)}
+            onChangeText={telgym => this.setState({ telgym: latinNumber(telgym) })}
+          />
+          <InputText
+            label="شهریه (تومان)"
+            value={persianNumber(this.state.tuitiongym.toLocaleString())}
+            onChangeText={tuitiongym => this.setState({ tuitiongym: latinNumber(tuitiongym) })}
+          />
+          <InputText
+            label="ظرفیت (نفر)"
+            value={persianNumber(this.state.numbertuitiongym.toLocaleString())}
+            onChangeText={numbertuitiongym => this.setState({ numbertuitiongym: latinNumber(numbertuitiongym) })}
+          />
         </Content>
-        <Button full onPress={this.onPressHandler.bind(this)}>
-          <Text>ثبت و تائید</Text>
+        <Button
+          full
+          style={{ backgroundColor: mainColor }}
+          onPress={this.onPressHandler.bind(this)}
+        >
+          <Text style={{ color: white }}>ثبت و تائید</Text>
         </Button>
       </Container>
     );

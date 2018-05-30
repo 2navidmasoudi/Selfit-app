@@ -19,7 +19,6 @@ export default class Couch extends Component {
     return (
       <Container>
         <AppHeader rightTitle="مربیان" />
-        <Content>
           <Tabs
             locked
             tabBarPosition="top"
@@ -44,7 +43,6 @@ export default class Couch extends Component {
               <List2 />
             </Tab>
           </Tabs>
-        </Content>
       </Container>
     );
   }

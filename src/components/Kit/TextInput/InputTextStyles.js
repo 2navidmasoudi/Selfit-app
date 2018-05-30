@@ -31,7 +31,7 @@ export default StyleSheet.create({
         fontFamily: 'IRANSansMobile-Medium'
       },
       android: {
-        fontFamily: 'IRANSansMedium',
+        fontFamily: 'IRANSansMobile',
         padding: 0
       }
     })

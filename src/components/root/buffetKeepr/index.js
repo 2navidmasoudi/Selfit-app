@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Body, Container, Content, Header, Left, Right, Spinner, Switch } from 'native-base';
+import { Container, Content, Header, Left, Right, Switch } from 'native-base';
 import { Alert, FlatList } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import AppHeader from '../../header';
 import { putCheckToken } from '../../../services/index';
@@ -26,11 +27,18 @@ export default class BuffetKeeper extends Component {
   state = {
     Active: true,
     order: [],
+    refreshing: true,
+    refresh: true,
   };
   componentWillMount() {
     const { tokenmember, tokenapi } = this.props.user;
     putCheckToken(tokenmember, tokenapi);
     this.setInfo();
+  }
+  async componentWillReceiveProps() {
+    await this.setState({ refresh: true });
+    console.log('GetProps!');
+    if (this.state.refresh) { this._getOrderBuffet(); }
   }
   async setInfo() {
     await this.props.tokenBuffet('selfit.buffet');
@@ -41,8 +49,7 @@ export default class BuffetKeeper extends Component {
     try {
       const { tokenapi, buffetid } = await this.props;
       const { tokenmember } = await this.props.user;
-      const buffetInformation = await getSingleBuffet(buffetid, tokenmember, tokenapi);
-      return buffetInformation;
+      return await getSingleBuffet(buffetid, tokenmember, tokenapi);
     } catch (err) {
       console.log(err);
       logError(err, 'getSingleBuffet', 'root/buffetKeeper/index', '_getSingleBuffet');
@@ -50,13 +57,16 @@ export default class BuffetKeeper extends Component {
   }
   async _getOrderBuffet() {
     try {
+      this.setState({ refreshing: true });
       const { tokenmember } = await this.props.user;
       const { tokenapi, buffetid } = await this.props;
       const order = await getOrderBuffetAll(0, 0, 0, buffetid, tokenmember, tokenapi, 30, 0, true, 0);
       console.log(order);
       this.props.getOrderBuffet(order);
+      this.setState({ refreshing: false, refresh: false });
     } catch (e) {
       console.log(e);
+      this.setState({ refreshing: false, refresh: false });
     }
   }
   async checkActiveBuffet() {
@@ -123,13 +133,15 @@ export default class BuffetKeeper extends Component {
             </Text>
           </Right>
         </Header>
-        <Content padder>
+        <Content padder scrollEnabled={false}>
           <FlatList
             data={this.props.orderList}
             renderItem={item => this.renderItem(item)}
             keyExtractor={item => item.idfactorbuffet}
-            ListEmptyComponent={() => <Spinner />}
-            // onRefresh={this.handleRefresh.bind(this)}
+            onRefresh={this._getOrderBuffet.bind(this)}
+            refreshing={this.state.refreshing}
+            ListEmptyComponent={<Text style={{ flex: 1 }}>هیچ سفارشی دریافت نشد!</Text>}
+            scrollEnabled={false}
           />
         </Content>
       </Container>

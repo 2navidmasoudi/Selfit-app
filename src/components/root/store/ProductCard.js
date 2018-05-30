@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { Image, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import { Button, Card, CardItem, Icon, Left, Right, Text } from 'native-base';
+import { Button, Card, CardItem, Icon, Left, Right } from 'native-base';
 import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { reBasketProduct } from '../../../redux/actions';
 import { logError } from '../../../services/log';
 import { deleteBasketProduct, getBasketProduct, postOrderProduct } from '../../../services/orderProduct';
+import { Text } from '../../Kit';
+import { persianNumber } from '../../../utils/persian';
 
 @connect(state => ({
   user: state.user,
@@ -88,11 +90,11 @@ export default class ProductCard extends Component {
               </TouchableWithoutFeedback>
             </Left>
             <Right style={{ flex: 2 }}>
-              <Text style={{ textAlign: 'right' }}>
+              <Text>
                 {product.titleproduct}
               </Text>
-              <Text note style={{ textAlign: 'right', textAlign: 'right', fontFamily: 'IRANSansMobile' }}>
-                {product.priceproduct.toLocaleString('fa')} تومان
+              <Text type="light">
+                {persianNumber(product.priceproduct.toLocaleString())} تومان
               </Text>
               <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
                 <Button
@@ -105,17 +107,15 @@ export default class ProductCard extends Component {
                 </Button>
                 <Text style={{
                   paddingHorizontal: 10,
-                  textAlign: 'right',
-                  fontFamily: 'IRANSansMobile',
                   display: this.state.numberProduct <= 0 ? 'none' : 'flex'
                 }}
                 >
-                  {this.state.numberProduct.toLocaleString('fa')}
+                  {persianNumber(this.state.numberProduct.toLocaleString())}
                 </Text>
                 <Button
                   disabled={!product.numberproduct}
-                  success={!!product.numberproduct}
-                  bordered={!!product.numberproduct}
+                  success={product.numberproduct}
+                  bordered={product.numberproduct}
                   onPress={() => this.addButtonHandle()}
                 >
                   <Icon name="add-circle" />

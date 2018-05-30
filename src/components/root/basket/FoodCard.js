@@ -21,7 +21,7 @@ export default class FoodCard extends Component {
       const { idbasketbuffet } = this.props.food;
       const deletedOrder = await deleteOrderBuffet(idbasketbuffet, tokenmember, tokenapi);
       console.log(deletedOrder, 'deletedOrder?');
-      const { Basket, PriceAll } = await getAllOrder(true, false, tokenmember, tokenapi, 30, 0);
+      const { Basket, PriceAll } = await getAllOrder(true, tokenmember, tokenapi, 30, 0);
       this.props.reBasketBuffet(Basket, Basket.length, PriceAll);
     } catch (e) {
       console.log(e);

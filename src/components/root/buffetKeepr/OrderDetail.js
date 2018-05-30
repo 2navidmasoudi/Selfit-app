@@ -1,27 +1,15 @@
 import React, { Component } from 'react';
 import { FlatList } from 'react-native';
-import {
-  Button,
-  Card,
-  CardItem,
-  Container,
-  Content,
-  Footer,
-  FooterTab,
-  Left,
-  ListItem,
-  Right,
-  Separator
-} from 'native-base';
+import { Button, Card, CardItem, Container, Content, Footer, FooterTab, Left, ListItem, Right } from 'native-base';
+import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import moment from 'moment-jalaali';
 import AppHeader from '../../header';
-import { getBasketOrderAllBuffet } from '../../../services/orderBuffet';
-import { getAllMixMaterial, getBasketOrderMaterial } from '../../../services/orderMaterial';
-import { putAcceptBuffet } from '../../../services/buffet';
 import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
-import { mainColor } from '../../../assets/variables/colors';
-import {tokenBuffet} from "../../../redux/actions";
+import { errorColor, mainColor } from '../../../assets/variables/colors';
+import { tokenBuffet } from '../../../redux/actions';
+import { getOrderBuffet, putAcceptBuffet } from '../../../services/orders';
 
 @connect(state => ({
   user: state.user,
@@ -34,9 +22,7 @@ import {tokenBuffet} from "../../../redux/actions";
 export default class OrderDetail extends Component {
   state = {
     disableAddButton: false,
-    disableRemoveButton: false,
     buffetOrder: null,
-    idbasketmaterial: null,
     materialOrder: null,
     Accepted: false,
   };
@@ -45,73 +31,27 @@ export default class OrderDetail extends Component {
   }
   async getInfo() {
     await this.props.tokenBuffet('selfit.buffet');
-    this._getBasketOrderAllBuffet();
-    setTimeout(() => this._getBasketOrderMaterial(),100);
-    // this._getMixMaterial(0);
-    console.log(this.props);
+    await this._getOrderBuffet();
   }
-  async _getBasketOrderAllBuffet() {
+  async _getOrderBuffet() {
     try {
-      const { idmember, buffetidfactor, activemethodpayed } = await this.props.order;
       const { tokenmember } = await this.props.user;
-      const { tokenapi } = await this.props;
-      let buffetOrder = await getBasketOrderAllBuffet(
-        idmember,
-        buffetidfactor,
-        activemethodpayed,
-        false,
-        tokenmember,
-        tokenapi, 30, 0, true
-      );
-      if (!buffetOrder) {
-        this.setState({ Accepted: true });
-        buffetOrder = await getBasketOrderAllBuffet(
-          idmember,
-          buffetidfactor,
-          activemethodpayed,
-          true,
-          tokenmember,
-          tokenapi, 30, 0, true
-        );
+      const { tokenapi, order } = await this.props;
+      const active = await order.statepayedid === 2;
+      const json = await getOrderBuffet(order.idfactorbuffet, active, tokenmember, tokenapi, 30, 0, true);
+      const buffetOrder = await json.Buffet_BasketBuffetOrderList.$values;
+      const basketMaterial = await json.Buffet_BasketMaterialOrderList.$values;
+      let materialOrder = [];
+      for (let i = 0; i < basketMaterial.length; i++) {
+        for (let j = 0; j < basketMaterial[i].MixMaterialList.$values.length; j++) {
+          materialOrder = [...materialOrder, basketMaterial[i].MixMaterialList.$values[j]];
+        }
       }
-      console.log(buffetOrder, 'BuffetOrder');
-      this.setState({ buffetOrder });
-    } catch (e) {
-      console.log(e);
-    }
-  }
-  async _getBasketOrderMaterial() {
-    try {
-      const { idmember, buffetidfactor } = await this.props.order;
-      const { tokenmember } = await this.props.user;
-      const { tokenapi } = await this.props;
-      const materialOrderid = await getBasketOrderMaterial(
-        idmember,
-        buffetidfactor,
-        false,
-        tokenmember,
-        tokenapi, 30, 0, true
-      );
-      console.log(materialOrderid, 'MaterialOrderid');
-      const id = await materialOrderid[0].idbasketmaterial;
-      // TODO: FIX THIS SHIT PLEASE
-      this._getMixMaterial(id);
-    } catch (e) {
-      console.log(e);
-    }
-  }
-  async _getMixMaterial(id) {
-    try {
-      const { tokenmember } = await this.props.user;
-      const { tokenapi } = await this.props;
-      const { Basket, PriceAll } = await getAllMixMaterial(
-        id,
-        false,
-        tokenmember,
-        tokenapi, 30, 0, false
-      );
-      console.log(Basket, 'materialOrder');
-      this.setState({ materialOrder: Basket });
+      // console.log('buffetOrder');
+      // console.log(buffetOrder);
+      // console.log('materialOrder');
+      // console.log(materialOrder);
+      this.setState({ buffetOrder, materialOrder });
     } catch (e) {
       console.log(e);
     }
@@ -131,8 +71,8 @@ export default class OrderDetail extends Component {
       if (result === 1) {
         await this.setState({
           disableAddButton: true,
-          disableRemoveButton: true,
         });
+        Actions.pop({ refresh: { refresh: Math.random() } });
       }
     } catch (e) {
       console.log(e);
@@ -161,7 +101,32 @@ export default class OrderDetail extends Component {
     </ListItem>
   );
   render() {
-    const FooterComponent = (!this.state.Accepted) ?
+    const { order } = this.props;
+    const acceptedFooter = order.idstatepayed === 2 ?
+      (<Footer>
+        <FooterTab>
+          <Button
+            success
+          >
+            <Text style={{ color: 'white' }}>
+              فاکتور قبول شده و منتظر پرداخت است.
+            </Text>
+          </Button>
+        </FooterTab>
+      </Footer>)
+      :
+      (<Footer>
+        <FooterTab>
+          <Button
+            style={{ backgroundColor: mainColor }}
+          >
+            <Text style={{ color: 'white' }}>
+              پرداخت
+            </Text>
+          </Button>
+        </FooterTab>
+      </Footer>);
+    const FooterComponent = (!order.acceptfactor) ?
       (<Footer>
         <FooterTab>
           <Button
@@ -180,25 +145,39 @@ export default class OrderDetail extends Component {
             disabled={this.state.disableAddButton}
             onPress={() => this.sendAccept(true)}
           >
-            <Text style={{ color: 'white', }}>
+            <Text style={{ color: 'white' }}>
               قبول فاکتور
             </Text>
           </Button>
         </FooterTab>
        </Footer>)
       :
-      (<Footer>
-        <FooterTab>
-          <Button
-            style={{ backgroundColor: mainColor }}
-          >
-            <Text style={{ color: 'white' }}>
-              فاکتور قبول شده.
-            </Text>
-          </Button>
-        </FooterTab>
-      </Footer>);
-    const { order } = this.props;
+      acceptedFooter;
+    const m = moment(`${order.datesavefactorbuffet}`, 'YYYY/MM/DDTHH:mm:ss').format('jYYYY/jMM/jDD HH:mm');
+    const statePayed = order.idstatepayed === 2 ?
+      (<Text>
+        <Text style={{ color: mainColor }}>
+          تایید شده
+        </Text>
+        {' '}و{' '}
+        <Text style={{ color: errorColor }}>
+          منتظر پرداخت
+        </Text>
+      </Text>)
+      :
+      (<Text>
+        <Text style={{ color: mainColor }}>
+          تایید شده
+        </Text>
+        {' '}و{' '}
+        <Text style={{ color: mainColor }}>
+          پرداخت شده، سفارش را آماده کنید!
+        </Text>
+      </Text>);
+    const stateFactor = order.acceptfactor ? statePayed :
+      (<Text style={{ color: errorColor }}>
+        منتظر تایید.
+      </Text>);
     return (
       <Container>
         <AppHeader rightTitle="مشخصات سفارش" backButton="flex" />
@@ -213,6 +192,7 @@ export default class OrderDetail extends Component {
             <FlatList
               data={this.state.buffetOrder}
               renderItem={this.renderItem}
+              scrollEnabled={false}
               keyExtractor={item => item.idmenufood}
             />
             <Card style={{ flex: 0 }}>
@@ -223,11 +203,17 @@ export default class OrderDetail extends Component {
             <FlatList
               data={this.state.materialOrder}
               renderItem={this.renderItem2}
-              keyExtractor={item => item.idmaterial}
+              scrollEnabled={false}
+              keyExtractor={item => item.idmixmaterial}
             />
-            <CardItem bordered footer>
+            <CardItem bordered>
               <Text style={{ flex: 1, marginHorizontal: 10 }}>
                 توضیحات:  {order.descfactor ? order.descfactor : 'ندارد.'}
+              </Text>
+            </CardItem>
+            <CardItem bordered>
+              <Text style={{ flex: 1, textAlign: 'center' }}>
+                وضعیت فاکتور: {stateFactor}
               </Text>
             </CardItem>
             <CardItem bordered footer>

@@ -73,7 +73,7 @@ export default class Gym extends Component {
   render() {
     return (
       <Container>
-        <AppHeader rightTitle="باشگاه یاب" backButton="flex" />
+        <AppHeader rightTitle="باشگاه یاب" />
         <Tabs locked tabBarPosition="top">
           <Tab
             heading={this.state.tabTitle}
