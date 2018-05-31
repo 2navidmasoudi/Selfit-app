@@ -1,13 +1,27 @@
 import React, { Component } from 'react';
-import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Image, StyleSheet, View } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import { Container, Content, Icon } from 'native-base';
+import { Card, Container, Content, Icon } from 'native-base';
 import Slider from 'react-native-slider';
 import Video from 'react-native-video';
+import { connect } from 'react-redux';
 import AppHeader from '../header';
+import { darkColor, mainColor } from '../../assets/variables/colors';
+import { persianNumber } from '../../utils/persian';
+import { Text } from '../Kit';
+import { tokenBlog } from '../../redux/actions';
+import { getAllMusic } from '../../services/music';
 
+const SelfitMusic = 'https://selfit.ir/Resource/music/';
 const window = Dimensions.get('window');
+const image = require('../../assets/Logo.jpg');
 
+@connect(state => ({
+  user: state.user,
+  tokenapi: state.blog.tokenapi,
+}), {
+  tokenBlog,
+})
 export default class Music extends Component {
   constructor() {
     super();
@@ -19,14 +33,33 @@ export default class Music extends Component {
       currentTime: 0,
       // songIndex: props.songIndex,
       songIndex: 0,
-
+      songNumbers: null,
       songs: [{
         title: 'Selfit',
         album: 'Start Up!',
         albumImage: require('../../assets/Logo.jpg'),
-        url: 'https://hw6.asset.aparat.com/aparat-video/a6c54d51d5e38b409bd9318f9830695a8042277-360p__56626.apt/chunk.m3u8',
+        url: 'https://selfit.ir/Resource/music/BazamRaft.mp3',
       }]
     };
+  }
+  componentWillMount() {
+    this.getInfo();
+  }
+  async getInfo() {
+    await this.props.tokenBlog('selfit.public');
+    await this.getSongs();
+  }
+  async getSongs() {
+    try {
+      const { tokenmember } = await this.props.user;
+      const { tokenapi } = await this.props;
+      const songs = await getAllMusic(tokenmember, tokenapi, 30, 0, false, 0);
+      console.log('songs');
+      console.log(songs);
+      this.setState({ songs, songNumbers: songs.length - 1 });
+    } catch (e) {
+      console.log(e);
+    }
   }
   onLoad(params) {
     this.setState({ songDuration: params.duration });
@@ -56,18 +89,30 @@ export default class Music extends Component {
         songIndex: this.state.songIndex - 1,
         currentTime: 0,
       });
+    } else if (this.state.songIndex === 0) {
+      this.setState({
+        songIndex: this.state.songNumbers,
+        currentTime: 0,
+      });
     } else {
-      this.refs.audio.seek(0);
       this.setState({
         currentTime: 0,
       });
     }
+    this.refs.audio.seek(0);
   }
   goForward() {
-    this.setState({
-      songIndex: this.state.shuffle ? this.randomSongIndex() : this.state.songIndex + 1,
-      currentTime: 0,
-    });
+    if (this.state.songNumbers !== this.state.songIndex) {
+      this.setState({
+        songIndex: this.state.songIndex + 1,
+        currentTime: 0,
+      });
+    } else {
+      this.setState({
+        songIndex: 0,
+        currentTime: 0,
+      });
+    }
     this.refs.audio.seek(0);
   }
   randomSongIndex() {
@@ -88,6 +133,7 @@ export default class Music extends Component {
   render() {
     // let songPlaying = this.props.songs[this.state.songIndex];
     const songPlaying = this.state.songs[this.state.songIndex];
+    const uri = `${SelfitMusic}${songPlaying.urlmusic}`;
     let songPercentage;
     if (this.state.songDuration !== undefined) {
       songPercentage = this.state.currentTime / this.state.songDuration;
@@ -101,25 +147,20 @@ export default class Music extends Component {
     } else {
       playButton = <Icon onPress={this.togglePlay.bind(this)} style={styles.play} name="ios-play" size={70} />;
     }
-    let forwardButton;
     // if( !this.state.shuffle && this.state.songIndex + 1 === this.props.songs.length ){
-    if (!this.state.shuffle && this.state.songIndex + 1 === this.state.songs.length) {
-      forwardButton = <Icon style={styles.forward} name="ios-skip-forward" size={25} color="#333" />;
-    } else {
-      forwardButton = (<Icon
-        onPress={this.goForward.bind(this)}
-        style={styles.forward}
-        name="ios-skip-forward"
-        size={25}
-        color="#fff"
-      />);
-    }
+    const forwardButton = (<Icon
+      onPress={this.goForward.bind(this)}
+      style={styles.forward}
+      name="ios-skip-forward"
+      size={25}
+      color="#fff"
+    />);
     let volumeButton;
     if (this.state.muted) {
       volumeButton = (<Icon
         onPress={this.toggleVolume.bind(this)}
         style={styles.volume}
-        name="md-volume-off"
+        name="volume-off"
         size={18}
         color="#fff"
       />);
@@ -132,8 +173,8 @@ export default class Music extends Component {
       shuffleButton =
         (<Icon
           onPress={this.toggleShuffle.bind(this)}
-          style={[styles.shuffle, { color: '#f62976' }]}
-          name="md-shuffle"
+          style={[styles.shuffle, { color: '#0f9d7a' }]}
+          name="shuffle"
           size={18}
         />);
     } else {
@@ -141,11 +182,10 @@ export default class Music extends Component {
         (<Icon
           onPress={this.toggleShuffle.bind(this)}
           style={[styles.shuffle, { color: '#fff' }]}
-          name="md-shuffle"
+          name="shuffle"
           size={18}
         />);
     }
-    const image = songPlaying.albumImage ? songPlaying.albumImage : this.props.artist.background;
     // let image = null;
     return (
       <Container style={{ flex: 1, width: window.width }}>
@@ -153,7 +193,7 @@ export default class Music extends Component {
         <Content>
           <View style={styles.container}>
             <Video
-              source={{ uri: songPlaying.url }}
+              source={{ uri }}
               // source={{uri: '../../assets/StartUp.mp3' }}
               ref="audio"
               volume={this.state.muted ? 0 : 1.0}
@@ -171,34 +211,35 @@ export default class Music extends Component {
               </Text>
             </View>
             <View style={styles.headerClose}>
-              <Icon onPress={Actions.pop} name="md-arrow-down" size={15} style={{ color: '#fff' }} />
+              <Icon onPress={Actions.pop} name="arrow-down" size={15} style={{ color: '#fff' }} />
             </View>
             <Image
               style={styles.songImage}
               source={image}
             />
             <Text style={[styles.songTitle, {}]}>
-              {songPlaying.title}
+              {songPlaying.urlmusic}
             </Text>
             <Text style={styles.albumTitle}>
-              {songPlaying.album}
+              {songPlaying.descmusic}
             </Text>
             <View style={styles.sliderContainer}>
               <Slider
                 onSlidingStart={this.onSlidingStart.bind(this)}
                 onSlidingComplete={this.onSlidingComplete.bind(this)}
                 onValueChange={this.onSlidingChange.bind(this)}
-                minimumTrackTintColor="#851c44"
+                minimumTrackTintColor={mainColor}
                 style={styles.slider}
                 trackStyle={styles.sliderTrack}
                 thumbStyle={styles.sliderThumb}
                 value={songPercentage}
               />
               <View style={styles.timeInfo}>
-                <Text style={styles.time}>{formattedTime(this.state.currentTime)}</Text>
-                <Text
-                  style={styles.timeRight}
-                >- {formattedTime(this.state.songDuration - this.state.currentTime)}
+                <Text style={styles.time}>
+                  {persianNumber(formattedTime(this.state.currentTime))}
+                </Text>
+                <Text style={styles.timeRight}>
+                  {`${persianNumber(formattedTime(this.state.songDuration - this.state.currentTime))} -`}
                 </Text>
               </View>
             </View>
@@ -216,6 +257,9 @@ export default class Music extends Component {
               {volumeButton}
             </View>
           </View>
+          <Card style={{ flex: 0, backgroundColor: darkColor }}>
+            <Text>موزیک</Text>
+          </Card>
         </Content>
       </Container>
     );
@@ -226,7 +270,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingBottom: 20,
-    backgroundColor: '#000',
+    backgroundColor: darkColor,
   },
   header: {
     marginTop: 17,
@@ -255,14 +299,11 @@ const styles = StyleSheet.create({
   },
   songTitle: {
     color: 'white',
-    fontFamily: 'Helvetica Neue',
     marginBottom: 10,
     marginTop: 13,
     fontSize: 19
   },
   albumTitle: {
-    color: '#BBB',
-    fontFamily: 'Helvetica Neue',
     fontSize: 14,
     marginBottom: 20,
   },
@@ -301,6 +342,7 @@ const styles = StyleSheet.create({
   },
   time: {
     color: '#FFF',
+    textAlign: 'left',
     flex: 1,
     fontSize: 10,
   },
@@ -320,7 +362,7 @@ const styles = StyleSheet.create({
   sliderThumb: {
     width: 10,
     height: 10,
-    backgroundColor: '#f62976',
+    backgroundColor: '#0f9d7a',
     borderRadius: 10 / 2,
     shadowColor: 'red',
     shadowOffset: { width: 0, height: 0 },
