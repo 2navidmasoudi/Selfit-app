@@ -74,9 +74,14 @@ export default class Gym extends Component {
     return (
       <Container>
         <AppHeader rightTitle="باشگاه یاب" />
-        <Tabs locked tabBarPosition="top">
+        <Tabs
+          locked
+          tabBarPosition="top"
+          tabBarUnderlineStyle={TabsStyle.underLine}
+        >
           <Tab
             heading={this.state.tabTitle}
+            activeTextStyle={TabsStyle.activeText}
             textStyle={TabsStyle.text}
             activeTabStyle={TabsStyle.activeTab}
             tabStyle={TabsStyle.notActiveTabs}

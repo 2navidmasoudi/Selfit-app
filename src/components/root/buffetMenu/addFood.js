@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
-import { FlatList, TouchableWithoutFeedback, View } from 'react-native';
-import { Button, Container, Grid, Header, Icon, Input, Item, Left, Picker, Row, Spinner } from 'native-base';
+import { FlatList } from 'react-native';
+import { Container, Spinner } from 'native-base';
 import { connect } from 'react-redux';
+import { SearchBar } from 'react-native-elements';
 import FoodCard from './FoodCard';
 import AppHeader from '../../header';
 import { receiveMenuFood, tokenBuffet } from '../../../redux/actions/index';
 import { getAllMenuFood, getFoodCategory, getSearchMenuFood } from '../../../services/MenuFood';
 import { logError } from '../../../services/log';
 import { putCheckToken } from '../../../services';
-import Loader from '../../loader';
-import { Text } from '../../Kit';
 
 @connect(state => ({
   user: state.user,
@@ -33,16 +32,19 @@ export default class AddFood extends Component {
     FoodCategory: 0,
     CategoryList: [],
   };
+
   componentWillMount() {
     this.setInfo();
     const { tokenmember, tokenapi } = this.props.user;
     putCheckToken(tokenmember, tokenapi);
   }
+
   async setInfo() {
     await this.props.tokenBuffet('selfit.buffet');
     await this._getFoodCategory();
     await this._getAllMenuFood(0);
   }
+
   async searchText(text) {
     if (text) {
       await this.setState({
@@ -56,6 +58,7 @@ export default class AddFood extends Component {
       this._getAllMenuFood();
     }
   }
+
   searchButton() {
     this.setState({ SelectedBar: true, SelectedBarName: 'search' });
   }
@@ -63,6 +66,7 @@ export default class AddFood extends Component {
   categoryButton() {
     this.setState({ SelectedBar: true, SelectedBarName: 'category' });
   }
+
   FoodCategoryChanged(value) {
     this.setState({
       FoodCategory: value
@@ -73,18 +77,21 @@ export default class AddFood extends Component {
     );
     this._getAllMenuFood(value);
   }
+
   cancleSearch() {
     this.setState({ SelectedBar: false });
     if (this.state.searchMode) {
       this.searchText(null);
     }
   }
+
   cancleCategory() {
     this.setState({ SelectedBar: false });
     if (this.state.FoodCategory) {
       this._getAllMenuFood(0);
     }
   }
+
   async _getSearchMenuFood() {
     try {
       await this.setState({
@@ -101,6 +108,7 @@ export default class AddFood extends Component {
       logError(error, 'getSearchAll', 'BuffetKeeper/FoodList', '_getSearchMenuFood');
     }
   }
+
   async _getAllMenuFood(catid = 0) {
     try {
       this.setState({ loading: true });
@@ -116,6 +124,7 @@ export default class AddFood extends Component {
       logError(error, 'GetAllMenuFood', 'BuffetKeeper/FoodList', '_getAllMenuFood');
     }
   }
+
   async _getFoodCategory() {
     try {
       const { tokenmember } = await this.props.user;
@@ -128,6 +137,7 @@ export default class AddFood extends Component {
       logError(error, 'getCategory', 'BuffetKeeper/FoodList', '_getFoodCategory');
     }
   }
+
   handleRefresh() {
     this.setState({ refreshing: true });
     if (!this.state.searchMode) {
@@ -136,93 +146,101 @@ export default class AddFood extends Component {
       this._getSearchMenuFood();
     }
   }
+
   renderItem({ item }) {
     return <FoodCard food={item} />;
   }
+
   renderFooter() {
     if (!this.state.loading) return null;
     return <Spinner />;
   }
-  render() {
-    const ShowWhichButton = this.state.SelectedBarName === 'search' ?
-      (<Header searchBar rounded style={{ backgroundColor: 'white' }}>
-        <Item style={{ flex: 4 }}>
-          <Icon name="search" />
-          <Input placeholder="نام غذا..." onChangeText={text => this.searchText(text)} />
-          <Icon name="people" />
-        </Item>
-        <TouchableWithoutFeedback
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center', height: 20, width: 30 }}
-          onPress={() => this.cancleSearch()}
-        >
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Icon name="close" />
-          </View>
-        </TouchableWithoutFeedback>
-       </Header>)
-      :
-      (<Header rounded style={{ backgroundColor: 'white' }}>
-        <View style={{ flex: 5, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-          <Picker
-            iosHeader="انتخاب دسته بندی"
-            mode="dropdown"
-            placeholder="همه"
-            style={{ flex: 1, width: undefined }}
-            selectedValue={this.state.FoodCategory}
-            onValueChange={this.FoodCategoryChanged.bind(this)}
-          >
-            <Picker.Item label="همه غذاها" value={0} key={100} />
-            {this.state.CategoryList.map(category => (
-              <Picker.Item
-                label={category.namecategoryfood}
-                value={category.idcategoryfood}
-                key={category.idcategoryfood}
-              />
-            ))}
-          </Picker>
-          <Text>
-            دسته بندی بر اساس:
-          </Text>
-        </View>
-        <TouchableWithoutFeedback
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center', height: 20, width: 30 }}
-          onPress={() => this.cancleCategory()}
-        >
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Icon name="close" />
-          </View>
-        </TouchableWithoutFeedback>
-       </Header>);
-    const searchOrCategory = this.state.SelectedBar ? ShowWhichButton :
-      (<Header rounded style={{ backgroundColor: 'white' }} androidStatusBarColor="#313131" iosBarStyle="light-content">
-        <View style={{ flex: 1, flexDirection: 'row' }}>
-          <Button
-            iconLeft
-            bordered
-            success
-            style={{ flex: 1, marginHorizontal: 6 }}
-            onPress={this.categoryButton.bind(this)}
-          >
-            <Icon name="clipboard" />
-            <Text style={{ flex: 1, textAlign: 'center' }}>دسته بندی</Text>
-          </Button>
-          <Button
-            iconLeft
-            bordered
-            success
-            style={{ flex: 1, marginHorizontal: 6 }}
-            onPress={this.searchButton.bind(this)}
-          >
-            <Icon name="search" />
-            <Text style={{ flex: 1, textAlign: 'center' }}>جستجو</Text>
-          </Button>
 
-        </View>
-      </Header>);
+  render() {
+    // const ShowWhichButton = this.state.SelectedBarName === 'search' ?
+    //   (<Header searchBar rounded style={{ backgroundColor: 'white' }}>
+    //     <Item style={{ flex: 4 }}>
+    //       <Icon name="search" />
+    //       <Input placeholder="نام غذا..." onChangeText={text => this.searchText(text)} />
+    //       <Icon name="people" />
+    //     </Item>
+    //     <TouchableWithoutFeedback
+    //       style={{ flex: 1, justifyContent: 'center', alignItems: 'center', height: 20, width: 30 }}
+    //       onPress={() => this.cancleSearch()}
+    //     >
+    //       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    //         <Icon name="close" />
+    //       </View>
+    //     </TouchableWithoutFeedback>
+    //    </Header>)
+    //   :
+    //   (<Header rounded style={{ backgroundColor: 'white' }}>
+    //     <View style={{ flex: 5, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+    //       <Picker
+    //         iosHeader="انتخاب دسته بندی"
+    //         mode="dropdown"
+    //         placeholder="همه"
+    //         style={{ flex: 1, width: undefined }}
+    //         selectedValue={this.state.FoodCategory}
+    //         onValueChange={this.FoodCategoryChanged.bind(this)}
+    //       >
+    //         <Picker.Item label="همه غذاها" value={null} key={100} />
+    //         {this.state.CategoryList.map(category => (
+    //           <Picker.Item
+    //             label={category.namecategoryfood}
+    //             value={category.idcategoryfood}
+    //             key={category.idcategoryfood}
+    //           />
+    //         ))}
+    //       </Picker>
+    //       <Text>
+    //         دسته بندی بر اساس:
+    //       </Text>
+    //     </View>
+    //     <TouchableWithoutFeedback
+    //       style={{ flex: 1, justifyContent: 'center', alignItems: 'center', height: 20, width: 30 }}
+    //       onPress={() => this.cancleCategory()}
+    //     >
+    //       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    //         <Icon name="close" />
+    //       </View>
+    //     </TouchableWithoutFeedback>
+    //    </Header>);
+    // const searchOrCategory = this.state.SelectedBar ? ShowWhichButton :
+    //   (<Header rounded style={{ backgroundColor: 'white' }} androidStatusBarColor="#313131" iosBarStyle="light-content">
+    //     <View style={{ flex: 1, flexDirection: 'row' }}>
+    //       <Button
+    //         iconLeft
+    //         bordered
+    //         success
+    //         style={{ flex: 1, marginHorizontal: 6 }}
+    //         onPress={this.categoryButton.bind(this)}
+    //       >
+    //         <Icon name="clipboard" />
+    //         <Text style={{ flex: 1, textAlign: 'center' }}>دسته بندی</Text>
+    //       </Button>
+    //       <Button
+    //         iconLeft
+    //         bordered
+    //         success
+    //         style={{ flex: 1, marginHorizontal: 6 }}
+    //         onPress={this.searchButton.bind(this)}
+    //       >
+    //         <Icon name="search" />
+    //         <Text style={{ flex: 1, textAlign: 'center' }}>جستجو</Text>
+    //       </Button>
+    //
+    //     </View>
+    //   </Header>);
     return (
       <Container>
         <AppHeader rightTitle="منو آماده" backButton="flex" />
-        {searchOrCategory}
+        {/* {searchOrCategory} */}
+        <SearchBar
+          showLoading
+          onChangeText={this.searchText.bind(this)}
+          placeholder="نام غذا ..."
+        />
         <FlatList
           data={this.props.MenuFood}
           renderItem={item => this.renderItem(item)}

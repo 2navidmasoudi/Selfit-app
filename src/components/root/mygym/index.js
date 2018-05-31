@@ -10,6 +10,7 @@ import { getSingleGym } from '../../../services/gym';
 import { Text } from '../../Kit';
 import { mainColor } from '../../../assets/variables/colors';
 import { persianNumber } from '../../../utils/persian';
+import { htmlStyle } from '../../../assets/styles/html';
 
 @connect(state => ({
   user: state.user,
@@ -46,7 +47,8 @@ export default class MyGym extends Component {
   }
   render() {
     const { gym } = this.props;
-    const html = `<div>${gym.descgym}</div>`;
+    const htmlContent = gym.descgym ? persianNumber(gym.descgym.replace(/(\r\n|\n|\r)/gm, '')) : '<p>فاقد توضیحات.</p>';
+    const tuitiongym = gym.tuitiongym ? gym.tuitiongym.toLocaleString() : '؟';
     return (
       <Container>
         <AppHeader rightTitle="باشگاه من" />
@@ -55,10 +57,11 @@ export default class MyGym extends Component {
           <Text>آدرس: {gym.addressgym}</Text>
           <Text>توضیحات: </Text>
           <HTMLView
-            value={html}
+            value={htmlContent}
+            stylesheet={htmlStyle}
           />
           <Text>تلقن باشگاه: {persianNumber(gym.telgym)}</Text>
-          <Text>شهریه باشگاه: {persianNumber(gym.tuitiongym)}</Text>
+          <Text>شهریه باشگاه: {persianNumber(tuitiongym)} تومان</Text>
           <Text>فعالیت باشگاه: {gym.activegym ? 'فعال' : 'غیر فعال'}</Text>
           <Text>ظرفیت باشگاه: {persianNumber(gym.numbertuitiongym)}</Text>
           <Text>تعداد بازدید: {persianNumber(gym.visitgym)}</Text>
