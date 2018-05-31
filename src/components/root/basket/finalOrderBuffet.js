@@ -1,12 +1,28 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Container, Content, Footer, FooterTab, Icon, Input, Item, Label } from 'native-base';
+import {
+  Body,
+  Button,
+  Card,
+  CardItem,
+  Container,
+  Content,
+  Footer,
+  FooterTab,
+  Icon,
+  Input,
+  Item,
+  Label, Left,
+  ListItem, Right
+} from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { postAddressOrderBuffet, postFactor } from '../../../services/orderBuffet';
 import AppHeader from '../../header';
 import { reBasketBuffet, reBasketMaterial, setRoad, tokenBuffet } from '../../../redux/actions';
 import { SignStyle } from '../../../assets/styles/sign';
 import { Text } from '../../Kit';
+import {persianNumber} from "../../../utils/persian";
+import {FlatList} from "react-native";
 // TODO: ADD LIST FOR FINAL ORDER
 @connect(state => ({
   user: state.user,
@@ -16,6 +32,9 @@ import { Text } from '../../Kit';
   buffetid: state.buffet.buffetid,
   Count1: state.basket.materialBasketCount,
   Count2: state.basket.buffetBasketCount,
+  PriceAllBuffet: state.basket.PriceAllBuffet,
+  PriceAllMaterial: state.basket.PriceAllMaterial,
+
 }), {
   tokenBuffet,
   reBasketMaterial,
@@ -58,7 +77,35 @@ export default class finalOrderBuffet extends Component {
       console.log(e);
     }
   }
+  renderItem = ({ item }) => (
+    <ListItem>
+      <Left>
+        <Text>{persianNumber(item.pricemenufood.toLocaleString())} تومان</Text>
+      </Left>
+      <Body>
+        <Text style={{ textAlign: 'center' }}>{item.namemenufood}</Text>
+      </Body>
+      <Right>
+        <Text>{persianNumber(item.numbermenufood)} عدد</Text>
+      </Right>
+    </ListItem>
+  );
+  renderItem2 = ({ item }) => (
+    <ListItem>
+      <Left>
+        <Text>{persianNumber(item.pricematerial.toLocaleString())} تومان</Text>
+      </Left>
+      <Body>
+        <Text style={{ textAlign: 'center' }}>{item.namematerial}</Text>
+      </Body>
+      <Right>
+        <Text>{persianNumber(item.numbermaterial)} عدد</Text>
+      </Right>
+    </ListItem>
+  );
   render() {
+    const totalPrice = (this.props.PriceAllBuffet+this.props.PriceAllMaterial).toLocaleString();
+    const addressTitle = Base64.decode(this.props.address.titleaddressmember);
     const {
       item, formInputText
     } = SignStyle;
@@ -80,14 +127,56 @@ export default class finalOrderBuffet extends Component {
       </Footer>);
     return (
       <Container>
-        <AppHeader rightTitle="سبد غذا" backButton="flex" />
+        <AppHeader rightTitle="صدور فاکتور بوفه" backButton="flex" />
         <Content padder>
-          <Text>صدور فاکتور</Text>
+            <Card style={{ flex: 0 }}>
+              <CardItem>
+                <Text style={{ flex: 1, textAlign: 'center' }} type="bold">مشخصات فاکتور</Text>
+              </CardItem>
+              <Card style={{ flex: 0 }}>
+                <CardItem>
+                  <Text type="bold" style={{ flex: 1, marginHorizontal: 10 }}>غذای آماده</Text>
+                </CardItem>
+              </Card>
+              <FlatList
+                data={this.props.buffetBasket}
+                renderItem={this.renderItem}
+                scrollEnabled={false}
+                keyExtractor={item => item.idmenufood}
+              />
+              <Card style={{ flex: 0 }}>
+                <CardItem>
+                  <Text type="bold" style={{ flex: 1, marginHorizontal: 10 }}>غذای انتخابی</Text>
+                </CardItem>
+              </Card>
+              <FlatList
+                data={this.props.materialBasket}
+                renderItem={this.renderItem2}
+                scrollEnabled={false}
+                keyExtractor={item => item.idmixmaterial}
+              />
+              <CardItem bordered>
+                <Right style={{ flex: 1 }}>
+                  <Text style={{ flex: 1 }}>
+                    به آدرس:{` ${addressTitle}`}
+                  </Text>
+                  <Text style={{ flex: 1 }}>
+                    توضیحات:{` ${this.state.descfactor}`}
+                  </Text>
+                </Right>
+
+              </CardItem>
+              <CardItem bordered>
+                <Text style={{ flex: 1 }}>
+                  قیمت نهایی:{` ${persianNumber(totalPrice)} تومان`}
+                </Text>
+              </CardItem>
+            </Card>
           <Item style={[item, { flex: 1 }]}>
             <Icon active name="clipboard" />
             <Input
               style={formInputText}
-              value={this.state.descgym}
+              value={this.state.descfactor}
               multiline
               onChangeText={descfactor => this.setState({ descfactor })}
             />

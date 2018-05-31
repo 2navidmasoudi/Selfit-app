@@ -9,6 +9,7 @@ import { SignStyle } from '../../../assets/styles/sign';
 import { getTimeAccessStore } from '../../../services/orderProduct';
 import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
+import {mainColor, white} from "../../../assets/variables/colors";
 
 @connect(state => ({
   user: state.user,
@@ -30,6 +31,7 @@ export default class TimeStore extends Component {
     fsort: 0,
     ssort: false,
     selected: false,
+    selectedTime: null,
     TimeAccess: null,
     descProducet: '',
   };
@@ -94,18 +96,29 @@ export default class TimeStore extends Component {
               flexWrap: 'wrap',
               justifyContent: 'space-around',
               alignContent: 'center',
-              margin: 10
             }}
             >
               {this.state.TimeAccess &&
               this.state.TimeAccess.map(c => (
                 <Button
                   key={c.idtimefactor}
-                  light={c.activetimefactor}
+                  light={c.activetimefactor !== this.state.selectedTime}
                   disabled={!c.activetimefactor}
-                  onPress={() => this._putTimeFactor(c.idtimefactor)}
+                  onPress={() => {
+                    this._putTimeFactor(c.idtimefactor);
+                    this.setState({selectedTime:c.idtimefactor})}
+                  }
+                  style={{
+                    margin:5,
+                    backgroundColor: c.idtimefactor === this.state.selectedTime ? mainColor : white,
+                  }}
                 >
-                  <Text>
+                  <Text
+                    style={{
+                      paddingHorizontal:5,
+                      color: c.idtimefactor === this.state.selectedTime ? white : '#000',
+                    }}
+                  >
                     {persianNumber(c.fromdatehour)} الی {persianNumber(c.todatehour)}
                   </Text>
                 </Button>

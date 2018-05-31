@@ -114,8 +114,8 @@ export default class ProductCard extends Component {
                 </Text>
                 <Button
                   disabled={!product.numberproduct}
-                  success={product.numberproduct}
-                  bordered={product.numberproduct}
+                  success={!!product.numberproduct}
+                  bordered={!!product.numberproduct}
                   onPress={() => this.addButtonHandle()}
                 >
                   <Icon name="add-circle" />

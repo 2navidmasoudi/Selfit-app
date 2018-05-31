@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Container, Content, Footer, FooterTab } from 'native-base';
+import { Body, Button, Card, CardItem, Container, Content, Footer, FooterTab, Left, ListItem, Right } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import AppHeader from '../../header';
 import { setRoad, tokenStore } from '../../../redux/actions';
 import { getRequestPayment } from '../../../services/payment';
 import { postAddressProduct, postFactorProduct, putTimeFactor } from '../../../services/orderProduct';
 import { Text } from '../../Kit';
+import { FlatList } from 'react-native';
+import { persianNumber } from '../../../utils/persian';
 
 // todo: add list for final order
 
@@ -16,89 +18,142 @@ import { Text } from '../../Kit';
   Count: state.basket.productBasketCount,
   totalPrice: state.basket.PriceAllProduct,
   idtimefactor: state.basket.idtimefactor,
-  descProducet: state.basket.descProducet,
+  descProduct: state.basket.descProduct,
+  productBasket: state.basket.productBasket,
 }), {
   tokenStore,
   setRoad,
 })
 export default class finalOrderProduct extends Component {
-    state = {
-      active: true,
-      state: false,
-      min: 0,
-      max: 30,
-      fsort: 0,
-      ssort: false,
-      total: 0,
-    };
-    componentWillMount() {
-      this.getInfo();
-      console.log(this.props, 'props');
+  state = {
+    active: true,
+    state: false,
+    min: 0,
+    max: 30,
+    fsort: 0,
+    ssort: false,
+    total: 0,
+  };
+
+  componentWillMount() {
+    this.getInfo();
+    console.log(this.props, 'props');
+  }
+
+  async getInfo() {
+    await this.props.tokenStore('selfit.store');
+    this.props.setRoad('Store');
+  }
+
+  async _getRequestPayment() {
+    getRequestPayment(2, this.props.user.tokenmember);
+  }
+
+  async _putTimeFactor(idfactor) {
+    try {
+      const { tokenmember } = await this.props.user;
+      const { tokenapi, idtimefactor } = await this.props;
+      const result = await putTimeFactor(idfactor, idtimefactor, tokenmember, tokenapi);
+      console.log(result, 'putTimeFactor');
+      this.setState({ selected: true });
+    } catch (e) {
+      console.log(e);
     }
-    async getInfo() {
-      await this.props.tokenStore('selfit.store');
-      this.props.setRoad('Store');
+  }
+
+  async _postAddressProduct(idfactor) {
+    try {
+      const { tokenmember } = await this.props.user;
+      const { tokenapi, address } = await this.props;
+      const result = await postAddressProduct(idfactor, address.idaddressmember, tokenmember, tokenapi);
+      console.log(result, 'postAddressProduct');
+      this.setState({ selected: true });
+    } catch (e) {
+      console.log(e);
     }
-    async _getRequestPayment() {
-      getRequestPayment(2, this.props.user.tokenmember);
+  }
+
+  async handleFooterPress() {
+    try {
+      const { tokenmember } = await this.props.user;
+      const { tokenapi, idtimefactor, descProduct } = await this.props;
+      const idfactor = await postFactorProduct(idtimefactor, descProduct, 1, tokenmember, tokenapi);
+      await this._putTimeFactor(idfactor);
+      await this._postAddressProduct(idfactor);
+      this._getRequestPayment();
+      Actions.reset('root');
+    } catch (e) {
+      console.log(e);
     }
-    async _putTimeFactor(idfactor) {
-      try {
-        const { tokenmember } = await this.props.user;
-        const { tokenapi, idtimefactor } = await this.props;
-        const result = await putTimeFactor(idfactor, idtimefactor, tokenmember, tokenapi);
-        console.log(result, 'putTimeFactor');
-        this.setState({ selected: true });
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    async _postAddressProduct(idfactor) {
-      try {
-        const { tokenmember } = await this.props.user;
-        const { tokenapi, address } = await this.props;
-        const result = await postAddressProduct(idfactor, address.idaddressmember, tokenmember, tokenapi);
-        console.log(result, 'postAddressProduct');
-        this.setState({ selected: true });
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    async handleFooterPress() {
-      try {
-        const { tokenmember } = await this.props.user;
-        const { tokenapi, idtimefactor, descProduct } = await this.props;
-        const idfactor = await postFactorProduct(idtimefactor, descProduct, 1, tokenmember, tokenapi);
-        await this._putTimeFactor(idfactor);
-        await this._postAddressProduct(idfactor);
-        this._getRequestPayment();
-        Actions.reset('root');
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    render() {
-      const FooterComponent = (this.props.Count) === 0 ? null :
-        (<Footer>
-          <FooterTab>
-            <Button
-              style={{ backgroundColor: '#0F9D7A' }}
-              onPress={this.handleFooterPress.bind(this)}
-            >
-              <Text style={{ color: 'white' }}>
-                پرداخت: {this.props.totalPrice.toLocaleString('fa')} تومان
+  }
+
+  renderItem = ({ item }) => (
+    <ListItem style={{ flex: 1 }}>
+      <Left>
+        <Text>{persianNumber(item.priceproduct.toLocaleString())} تومان</Text>
+      </Left>
+      <Body>
+        <Text style={{ textAlign: 'center' }}>{item.titleproduct}</Text>
+      </Body>
+      <Right>
+        <Text>{persianNumber(item.numberbasket)} عدد</Text>
+      </Right>
+    </ListItem>
+  );
+
+  render() {
+    const totalPrice = this.props.totalPrice.toLocaleString();
+    const addressTitle = Base64.decode(this.props.address.titleaddressmember);
+    const FooterComponent = (this.props.Count) === 0 ? null :
+      (<Footer>
+        <FooterTab>
+          <Button
+            style={{ backgroundColor: '#0F9D7A' }}
+            onPress={this.handleFooterPress.bind(this)}
+          >
+            <Text style={{ color: 'white' }}>
+              پرداخت: {persianNumber(totalPrice)} تومان
+            </Text>
+          </Button>
+        </FooterTab>
+      </Footer>);
+    return (
+      <Container>
+        <AppHeader rightTitle="صدور فاکتور فروشگاه" backButton="flex" />
+        <Content padder>
+          <Card>
+            <Card style={{ flex: 0 }}>
+              <CardItem>
+                <Text style={{ flex: 1, textAlign: 'center' }} type="bold">مشخصات فاکتور</Text>
+              </CardItem>
+
+            </Card>
+            <FlatList
+              data={this.props.productBasket}
+              renderItem={this.renderItem}
+              keyExtractor={item => item.idproduct}
+              scrollEnabled={false}
+            />
+            <CardItem bordered>
+              <Right style={{ flex: 1 }}>
+                <Text style={{ flex: 1 }}>
+                  به آدرس:{` ${addressTitle}`}
+                </Text>
+                <Text style={{ flex: 1 }}>
+                  توضیحات:{` ${this.props.descProduct}`}
+                </Text>
+              </Right>
+
+            </CardItem>
+            <CardItem bordered>
+              <Text style={{ flex: 1 }}>
+                قیمت نهایی:{` ${persianNumber(totalPrice)} تومان`}
               </Text>
-            </Button>
-          </FooterTab>
-         </Footer>);
-      return (
-        <Container>
-          <AppHeader rightTitle="صدور فاکتور فروشگاه" backButton="flex" />
-          <Content padder>
-            <Text>صدور فاکتور</Text>
-          </Content>
-          {FooterComponent}
-        </Container>
-      );
-    }
+            </CardItem>
+          </Card>
+        </Content>
+        {FooterComponent}
+      </Container>
+    );
+  }
 }
