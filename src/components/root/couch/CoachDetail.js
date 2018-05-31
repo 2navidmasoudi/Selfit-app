@@ -16,6 +16,8 @@ import { Actions } from 'react-native-router-flux';
 import AppHeader from '../../header';
 import { form } from '../../../assets/styles/index';
 import { Text } from '../../Kit';
+import { persianNumber } from '../../../utils/persian';
+import { htmlStyle } from '../../../assets/styles/html';
 
 export default ({ coach }) => {
   const m = moment(`${coach.datesave}`, 'YYYY/MM/DDTHH:mm:ss');
@@ -23,7 +25,8 @@ export default ({ coach }) => {
   const ImgYear = m.jYear();
   const ImgMonth = m.jMonth() + 1;
   const ImgSrc = `${coach.httpserver}${coach.pathserver}${ImgYear}/${ImgMonth}/${coach.piccoach}`;
-  const htmlContent = coach.desccoach;
+  const htmlContent = coach.desccoach ? persianNumber(coach.desccoach.replace(/(\r\n|\n|\r)/gm, '')) : '<p>فاقد توضیحات.</p>';
+
   return (
     <Container>
       <AppHeader rightTitle="مربیان" backButton="flex" />
@@ -32,9 +35,9 @@ export default ({ coach }) => {
           <CardItem>
             <Left style={{ flex: 1 }}>
               <Body>
-              <Text style={{ marginRight: 10 }}>
-                {coach.namecoach}
-              </Text>
+                <Text style={{ marginRight: 10 }}>
+                  {coach.namecoach}
+                </Text>
               </Body>
               <TouchableWithoutFeedback onPress={() => Actions.showImage({ uri: ImgSrc })}>
                 <Thumbnail source={{ uri: ImgSrc }} />
@@ -50,7 +53,7 @@ export default ({ coach }) => {
             <ScrollView style={{ flex: 1 }}>
               <HTMLView
                 value={htmlContent}
-                stylesheet={{ flex: 1, fontFamily: 'IRANSansMobile' }}
+                stylesheet={htmlStyle}
               />
             </ScrollView>
           </CardItem>

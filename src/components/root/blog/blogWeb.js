@@ -16,14 +16,16 @@ import { Actions } from 'react-native-router-flux';
 import AppHeader from '../../header';
 import { form } from '../../../assets/styles/index';
 import { Text } from '../../Kit';
+import { persianNumber } from '../../../utils/persian';
+import { htmlStyle } from '../../../assets/styles/html';
 
 export default ({ blog }) => {
   const m = moment(`${blog.datesave}`, 'YYYY/MM/DDTHH:mm:ss');
   const ImgYear = m.jYear();
   const ImgMonth = m.jMonth() + 1;
   const ImgSrc = `${blog.httpserver}${blog.pathserver}${ImgYear}/${ImgMonth}/${blog.picblog}`;
-  // const htmlContent = `<div>${blog.descblog}</div>`;
-  const htmlContent = blog.descblog;
+  const htmlContent = blog.descblog ? persianNumber(blog.descblog.replace(/(\r\n|\n|\r)/gm, '')) : '<p>فاقد توضیحات.</p>';
+
   return (
     <Container>
       <AppHeader rightTitle="بیشتر بدانید" backButton="flex" />
@@ -50,7 +52,7 @@ export default ({ blog }) => {
             <ScrollView style={{ flex: 1 }}>
               <HTMLView
                 value={htmlContent}
-                stylesheet={{ flex: 1, fontFamily: 'IRANSansMobile' }}
+                stylesheet={htmlStyle}
               />
             </ScrollView>
           </CardItem>

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
   Image,
-  Platform,
   ScrollView,
   StyleSheet,
   TouchableWithoutFeedback,
@@ -22,9 +21,9 @@ import { form } from '../../../assets/styles/index';
 import { mainColor } from '../../../assets/variables/colors';
 import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
+import { htmlStyle } from '../../../assets/styles/html';
 
 moment.loadPersian({ dialect: 'persian-modern' });
-const isIOS = Platform.OS === 'ios';
 const horizontalMargin = 30;
 const slideWidth = 280;
 
@@ -62,20 +61,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const htmlStyle = StyleSheet.create({
-  p: {
-    fontFamily: 'IRANSansMobile',
-    textAlign: 'right'
-  },
-  ul: {
-    fontFamily: 'IRANSansMobile',
-    textAlign: 'right'
-  },
-  li: {
-    fontFamily: 'IRANSansMobile',
-    textAlign: 'right'
-  }
-});
+
 @connect(state => ({
   user: state.user,
   tokenapi: state.gym.tokenapi,
@@ -151,15 +137,6 @@ export default class GymDetail extends Component {
   }
   handleMapClick() {
     const { latgym, longgym } = this.props;
-    // const scheme = isIOS ? 'maps:' : 'geo:';
-    // const url = `${scheme}${latgym},${longgym}`;
-    // Linking.canOpenURL(url).then((supported) => {
-    //   if (!supported) {
-    //     console.log(`Can't handle url: ${url}`);
-    //   } else {
-    //     return Linking.openURL(url);
-    //   }
-    // }).catch(err => console.error('An error occurred', err));
     openMap({
       latitude: latgym,
       longitude: longgym,
@@ -186,7 +163,7 @@ export default class GymDetail extends Component {
     const ImgYear = m.jYear();
     const ImgMonth = m.jMonth() + 1;
     const ImgSrc = `${httpserver}${pathserver}${ImgYear}/${ImgMonth}/${picgym}`;
-    const htmlContent = persianNumber(descgym);
+    const htmlContent = descgym ? persianNumber(descgym.replace(/(\r\n|\n|\r)/gm, '')) : '<p>فاقد توضیحات.</p>';
     const slide = this.state.slideready ?
       (<Carousel
         data={this.state.dataSource}
