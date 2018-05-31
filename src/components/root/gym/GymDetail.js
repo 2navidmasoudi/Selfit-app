@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
-import { Image, Linking, Platform, ScrollView, StyleSheet, TouchableWithoutFeedback, View, Dimensions } from 'react-native';
+import {
+  Image,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+  Dimensions,
+} from 'react-native';
 import { Body, Button, Card, CardItem, Container, Content, Left, Right, Thumbnail } from 'native-base';
 import moment from 'moment-jalaali';
 import { Rating } from 'react-native-elements';
@@ -54,6 +62,20 @@ const styles = StyleSheet.create({
   }
 });
 
+const htmlStyle = StyleSheet.create({
+  p: {
+    fontFamily: 'IRANSansMobile',
+    textAlign: isIOS ? 'left' : 'right'
+  },
+  ul: {
+    fontFamily: 'IRANSansMobile',
+    textAlign: isIOS ? 'left' : 'right'
+  },
+  li: {
+    fontFamily: 'IRANSansMobile',
+    textAlign: isIOS ? 'left' : 'right'
+  }
+});
 @connect(state => ({
   user: state.user,
   tokenapi: state.gym.tokenapi,
@@ -91,21 +113,24 @@ export default class GymDetail extends Component {
       const { tokenmember } = await this.props.user;
       const allPicGym = await getAllPicGym(gymid, tokenmember, tokenapi, 20, 0, true);
       const PicArray = await allPicGym.PicGymList.$values;
+      let dataSource = [];
       console.log('pics', PicArray);
-      for (i = 0; i < PicArray.length; i++) {
-        const m = await moment(`${PicArray[i].datesave}`, 'YYYY/MM/DDTHH:mm:ss');
-        const ImgYear = await m.jYear();
-        const ImgMonth = await m.jMonth() + 1;
-        const ImgSrc = await `${PicArray[i].httpserver}${PicArray[i].pathserver}${ImgYear}/${ImgMonth}/${PicArray[i].picgym}`;
-        await this.setState(prevState => ({
-          dataSource: [...prevState.dataSource,
-            {
-              url: ImgSrc
-            }
-          ]
-        }));
+      for (let i = 0; i < PicArray.length; i++) {
+        const m = moment(`${PicArray[i].datesave}`, 'YYYY/MM/DDTHH:mm:ss');
+        const ImgYear = m.jYear();
+        const ImgMonth = m.jMonth() + 1;
+        const ImgSrc = `${PicArray[i].httpserver}${PicArray[i].pathserver}${ImgYear}/${ImgMonth}/${PicArray[i].picgym}`;
+        // await this.setState(prevState => ({
+        //   dataSource: [...prevState.dataSource,
+        //     {
+        //       url: ImgSrc
+        //     }
+        //   ]
+        // }));
+        dataSource = [...dataSource, { url: ImgSrc }];
       }
       this.setState({
+        dataSource,
         slideready: true
       });
       console.log(this.state.dataSource);
@@ -143,7 +168,7 @@ export default class GymDetail extends Component {
     });
   }
 
-  _renderItem({ item, index }) {
+  renderItem({ item, index }) {
     return (
       <View key={index} style={styles.slide}>
         <Image style={{ flex: 1, width: null }} resizeMode="cover" source={{ uri: item.url }} />
@@ -161,18 +186,16 @@ export default class GymDetail extends Component {
     const ImgYear = m.jYear();
     const ImgMonth = m.jMonth() + 1;
     const ImgSrc = `${httpserver}${pathserver}${ImgYear}/${ImgMonth}/${picgym}`;
-    const htmlContent = `<div>${descgym}</div>`;
+    const htmlContent = persianNumber(descgym);
     const slide = this.state.slideready ?
       (<Carousel
         data={this.state.dataSource}
-        renderItem={this._renderItem.bind(this)}
+        renderItem={this.renderItem}
         sliderWidth={sliderWidth}
         itemWidth={itemWidth}
-        inactiveSlideScale={0.95}
-        inactiveSlideOpacity={1}
         enableMomentum={false}
         layout="stack"
-        layoutCardOffset={18}
+        layoutCardOffset={25}
         loop
       />)
       :
@@ -224,6 +247,7 @@ export default class GymDetail extends Component {
                 </Text>
                 <HTMLView
                   value={htmlContent}
+                  stylesheet={htmlStyle}
                 />
                 <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
                   <Text>{persianNumber(telgym)}</Text>
@@ -261,3 +285,4 @@ export default class GymDetail extends Component {
     );
   }
 }
+
