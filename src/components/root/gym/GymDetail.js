@@ -65,15 +65,15 @@ const styles = StyleSheet.create({
 const htmlStyle = StyleSheet.create({
   p: {
     fontFamily: 'IRANSansMobile',
-    textAlign: isIOS ? 'left' : 'right'
+    textAlign: 'right'
   },
   ul: {
     fontFamily: 'IRANSansMobile',
-    textAlign: isIOS ? 'left' : 'right'
+    textAlign: 'right'
   },
   li: {
     fontFamily: 'IRANSansMobile',
-    textAlign: isIOS ? 'left' : 'right'
+    textAlign: 'right'
   }
 });
 @connect(state => ({
