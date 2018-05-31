@@ -5,6 +5,7 @@ const common = {
   textAlign: 'right'
 };
 export const htmlStyle = StyleSheet.create({
+  div: common,
   p: common,
   ul: common,
   li: common,
@@ -12,7 +13,4 @@ export const htmlStyle = StyleSheet.create({
   h2: common,
   h3: common,
   h4: common,
-  h5: common,
-  table: common,
-
 });
