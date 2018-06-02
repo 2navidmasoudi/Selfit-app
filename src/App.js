@@ -59,6 +59,7 @@ import FactorProductDetail from './components/root/follow/FactorProductDetail';
 import PaymentWeb from './components/root/payment';
 import { darkColor, mainColor } from './assets/variables/colors';
 import FactorBuffetDetail from './components/root/follow/FactorBuffetDetail';
+import HtmlEditor from './components/root/htmlEditor';
 
 Geocoder.setApiKey('AIzaSyBlgHjeMbqK3xEZfh6HK2o8RdjhhgTOh0s');
 const window = Dimensions.get('window');
@@ -252,6 +253,8 @@ export default class App extends Component {
                       <Scene key="mygymRoot" hideNavBar>
                         <Scene key="mygym" component={MyGym} initial hideNavBar />
                         <Scene key="editGym" component={EditGym} hideNavBar />
+                        <Scene key="htmlEditor" component={HtmlEditor} hideNavBar />
+
                       </Scene>
                       <Scene key="buffetOrder" component={BuffetOrder} hideNavBar />
                       <Scene key="showImage" component={ShowImage} hideNavBar />

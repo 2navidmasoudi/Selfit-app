@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Container, Content } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import HTMLView from 'react-native-htmlview';
 import AppHeader from '../../header';
 import { putCheckToken } from '../../../services/index';
 import { receiveGym, tokenGym } from '../../../redux/actions';
@@ -9,12 +10,13 @@ import { getSingleGym, putGym } from '../../../services/gym';
 import { Text } from '../../Kit';
 import InputText from '../../Kit/TextInput/TextInput';
 import { mainColor, white } from '../../../assets/variables/colors';
-import {latinNumber, persianNumber} from '../../../utils/persian';
+import { latinNumber, persianNumber } from '../../../utils/persian';
+import { htmlStyle } from '../../../assets/styles/html';
 
 @connect(state => ({
   user: state.user,
   tokenapi: state.gym.tokenapi,
-  // gym: state.gym.GymList,
+  gym: state.gym.GymList,
 }), {
   tokenGym,
   receiveGym,
@@ -25,7 +27,6 @@ export default class EditGym extends Component {
     this.state = {
       namegym: props.gym.namegym,
       addressgym: props.gym.addressgym,
-      descgym: props.gym.descgym,
       picgym: props.gym.picgym,
       tuitiongym: props.gym.tuitiongym.toString(),
       numbertuitiongym: props.gym.numbertuitiongym.toString(),
@@ -44,10 +45,9 @@ export default class EditGym extends Component {
     try {
       const { tokenmember } = await this.props.user;
       const { tokenapi } = await this.props;
-      const { idgym } = await this.props.gym;
+      const { idgym, descgym } = await this.props.gym;
       const {
         namegym,
-        descgym,
         picgym,
         tuitiongym,
         addressgym,
@@ -57,7 +57,10 @@ export default class EditGym extends Component {
         active,
         telgym
       } = await this.state;
-      const json = await putGym(idgym, namegym, descgym, picgym, Number(tuitiongym), Number(numbertuitiongym), Number(latgym), Number(longgym), active, telgym, addressgym, tokenmember, tokenapi);
+      const json = await putGym(
+        idgym, namegym, descgym, picgym, Number(tuitiongym), Number(numbertuitiongym),
+        Number(latgym), Number(longgym), active, telgym, addressgym, tokenmember, tokenapi
+      );
       console.log('result: ', json);
       if (json) {
         await this._getSingLeGym();
@@ -85,7 +88,7 @@ export default class EditGym extends Component {
   }
   render() {
     const { gym } = this.props;
-    const html = `<div>${gym.descgym}</div>`;
+    const htmlContent = gym.descgym ? persianNumber(gym.descgym.replace(/(\r\n|\n|\r)/gm, '')) : '<p>فاقد توضیحات.</p>';
     return (
       <Container>
         <AppHeader rightTitle="باشگاه من" backButton="flex" />
@@ -102,12 +105,20 @@ export default class EditGym extends Component {
             value={this.state.addressgym}
             onChangeText={addressgym => this.setState({ addressgym })}
           />
-          <InputText
-            label="توضیحات"
-            multiline
-            value={this.state.descgym}
-            onChangeText={descgym => this.setState({ descgym })}
+          <Text>توضیحات: </Text>
+          <HTMLView
+            value={htmlContent}
+            stylesheet={htmlStyle}
           />
+          <Button
+            block
+            style={{ backgroundColor: mainColor }}
+            onPress={() => Actions.htmlEditor({ gym: { ...this.state, descgym: gym.descgym, idgym: gym.idgym } })}
+          >
+            <Text style={{ color: white }}>
+              ویرایش توضیحات
+            </Text>
+          </Button>
           <InputText
             label="تلفن"
             value={persianNumber(this.state.telgym)}
@@ -121,7 +132,9 @@ export default class EditGym extends Component {
           <InputText
             label="ظرفیت (نفر)"
             value={persianNumber(this.state.numbertuitiongym.toLocaleString())}
-            onChangeText={numbertuitiongym => this.setState({ numbertuitiongym: latinNumber(numbertuitiongym) })}
+            onChangeText={
+              numbertuitiongym => this.setState({ numbertuitiongym: latinNumber(numbertuitiongym) })
+            }
           />
         </Content>
         <Button
