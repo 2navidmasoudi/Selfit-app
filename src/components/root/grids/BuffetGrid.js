@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { ImageBackground, View } from 'react-native';
 import { Container } from 'native-base';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -51,7 +51,11 @@ export default class BuffetGrid extends Component {
   render() {
     return (
       <Container>
-        <View style={styles.mainContainer}>
+        <ImageBackground
+          source={require('../../../assets/BuffetGrid.jpeg')}
+          imageStyle={styles.background}
+          style={styles.mainContainer}
+        >
           <View style={styles.mainRowWrapper}>
             <View style={styles.wrapper}>
               <BuffetKeeper />
@@ -73,10 +77,9 @@ export default class BuffetGrid extends Component {
               </View>
             </View>
           </View>
-        </View>
+        </ImageBackground>
       </Container>
     );
   }
 }
-
 

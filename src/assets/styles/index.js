@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Dimensions } from 'react-native';
-import { mainColor } from '../variables/colors';
+import { darkColor, mainColor } from '../variables/colors';
 
 const window = Dimensions.get('window');
 
@@ -28,13 +28,17 @@ export const drawer = EStyleSheet.create({
 });
 export const main = EStyleSheet.create({
   pannelContainer: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center' },
-  pannelWrapper: { flex: 1, margin: 2 },
   pannelBtn: {
-    borderRadius: 5,
-    backgroundColor: '$statusBarColor',
+    flex: 1,
+    height: 20,
+    backgroundColor: mainColor,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderColor: darkColor,
+    justifyContent: 'center'
   },
   pannelTextBtn: {
-    fontFamily: '$IS',
+    textAlign: 'center',
     color: 'white',
   },
 

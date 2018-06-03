@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Text, View, } from 'react-native';
-import { Button, Container } from 'native-base';
+import { View, TouchableOpacity } from 'react-native';
+import { Container } from 'native-base';
 import { connect } from 'react-redux';
 import { main } from '../../assets/styles/index';
 import AppHeader from '../header';
@@ -8,6 +8,7 @@ import { putCheckToken } from '../../services';
 import MemberGrid from './grids/MemberGrid';
 import GymGrid from './grids/GymGrid';
 import BuffetGrid from './grids/BuffetGrid';
+import { Text } from '../Kit';
 
 @connect(state => ({
   user: state.user,
@@ -46,33 +47,24 @@ export default class Main extends Component {
       1 ?
         (<View>
           <View style={main.pannelContainer}>
-            <View style={main.pannelWrapper}>
-              <Button
-                full
-                style={main.pannelBtn}
-                onPress={() => this.setState({ viewComponent: <GymGrid /> })}
-              >
-                <Text style={main.pannelTextBtn}>باشگاه دار</Text>
-              </Button>
-            </View>
-            <View style={{ flex: 1, margin: 2 }}>
-              <Button
-                full
-                style={main.pannelBtn}
-                onPress={() => this.setState({ viewComponent: <BuffetGrid /> })}
-              >
-                <Text style={main.pannelTextBtn}>بوفه دار</Text>
-              </Button>
-            </View>
-            <View style={{ flex: 1, margin: 2 }}>
-              <Button
-                full
-                style={main.pannelBtn}
-                onPress={() => this.setState({ viewComponent: <MemberGrid /> })}
-              >
-                <Text style={main.pannelTextBtn}>ورزشکار</Text>
-              </Button>
-            </View>
+            <TouchableOpacity
+              style={main.pannelBtn}
+              onPress={() => this.setState({ viewComponent: <GymGrid /> })}
+            >
+              <Text style={main.pannelTextBtn}>باشگاه دار</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={main.pannelBtn}
+              onPress={() => this.setState({ viewComponent: <BuffetGrid /> })}
+            >
+              <Text style={main.pannelTextBtn}>بوفه دار</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={main.pannelBtn}
+              onPress={() => this.setState({ viewComponent: <MemberGrid /> })}
+            >
+              <Text style={main.pannelTextBtn}>ورزشکار</Text>
+            </TouchableOpacity>
           </View>
          </View>)
         : null;

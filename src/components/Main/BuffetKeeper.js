@@ -11,9 +11,7 @@ export default () => (
                   دریافت سفارش
       </Text>
       <Text style={styles.animationDetail}>
-                  سفارش های ارسال شده به خود را تایید
-                  و برای مشتری آماده کنید! هنوز در بوفه مورد نظر ثبت نشده اید؟
-                  با پشتیبانی تماس بگیرید.
+                  سفارش خود را مدیریت کنید
       </Text>
     </View>
   </TouchableWithoutFeedback>
