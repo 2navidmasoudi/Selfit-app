@@ -1,4 +1,4 @@
-import {BasketBuffet, DELETE, GET, headers, Orders, POST, Selfit} from './type';
+import { BasketBuffet, DELETE, GET, headers, Orders, POST, Selfit } from './type';
 // Basket Buffet
 export const getAllOrder = async (active, token, tokenapi, max, min) => {
   try {
