@@ -11,11 +11,11 @@ export default () => (
               موزیک
       </Text>
       {/* To do : text-align : justify with WebView Html */}
-      <Text style={styles.animationDetail}>
-              لطفا با موزیک ورزش کنید!
-              میکس های جدید هر هفته!
-              دانلود کنید و لذت ببرید.
-      </Text>
+      {/*<Text style={styles.animationDetail}>*/}
+              {/*لطفا با موزیک ورزش کنید!*/}
+              {/*میکس های جدید هر هفته!*/}
+              {/*دانلود کنید و لذت ببرید.*/}
+      {/*</Text>*/}
     </View>
   </TouchableWithoutFeedback>
 );

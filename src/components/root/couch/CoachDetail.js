@@ -25,7 +25,8 @@ export default ({ coach }) => {
   const ImgYear = m.jYear();
   const ImgMonth = m.jMonth() + 1;
   const ImgSrc = `${coach.httpserver}${coach.pathserver}${ImgYear}/${ImgMonth}/${coach.piccoach}`;
-  const htmlContent = coach.desccoach ? `<div>${persianNumber(coach.desccoach.replace(/(\\r\\n|\\n|\\r)/gm, ''))}</div>` : '<p>فاقد توضیحات.</p>';
+  const html = coach.desccoach ? persianNumber(coach.desccoach.replace(/(\\r\\n|\\n|\\r)/gm, '')) : null;
+  const htmlContent = html ? `<div>${html}</div>` : '<p>فاقد توضیحات.</p>';
 
   return (
     <Container>

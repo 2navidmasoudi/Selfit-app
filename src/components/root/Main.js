@@ -80,7 +80,7 @@ export default class Main extends Component {
       <Container>
         <AppHeader rightTitle="صفحه اصلی" hasBlog />
         {this.state.viewComponent}
-        {pannel}
+         {pannel}
       </Container>
     );
   }

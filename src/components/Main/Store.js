@@ -10,11 +10,11 @@ export default () => (
       <Text type="bold" style={styles.animationTitle}>
               فروشگاه
       </Text>
-      {/* To do : text-align : justify with WebView Html */}
-      <Text style={styles.animationDetail}>
-              نظرتون راجع به
-              فروشگاه ورزشی آنلاین اونم از طریق اپلیکیشن چیه؟
-      </Text>
+      {/* /!* To do : text-align : justify with WebView Html *!/ */}
+      {/* <Text style={styles.animationDetail}> */}
+      {/* نظرتون راجع به */}
+      {/* فروشگاه ورزشی آنلاین اونم از طریق اپلیکیشن چیه؟ */}
+      {/* </Text> */}
     </View>
   </TouchableWithoutFeedback>
 );

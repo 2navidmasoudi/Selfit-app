@@ -3,11 +3,12 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 const styles = EStyleSheet.create({
   animationView: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.2)',
-    borderRadius: 10,
-    borderColor: 'white',
-    borderWidth: 2,
+    // backgroundColor: 'rgba(0,0,0,0.2)',
+    // borderRadius: 10,
+    // borderColor: 'white',
+    // borderWidth: 2,
     margin: 5,
+    marginHorizontal: 6,
   },
   animationTitle: {
     color: 'white',

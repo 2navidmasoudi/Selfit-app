@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, ImageBackground } from 'react-native';
 import { Container } from 'native-base';
 import { connect } from 'react-redux';
 import { styles } from './style';
@@ -18,7 +18,11 @@ export default class MemberGrid extends Component {
   render() {
     return (
       <Container>
-        <View style={styles.mainContainer}>
+        <ImageBackground
+          source={require('../../../assets/MemberGrid.jpeg')}
+          imageStyle={styles.background}
+          style={styles.mainContainer}
+        >
           <View style={styles.mainRowWrapper}>
             <View style={styles.wrapper}>
               <Buffet />
@@ -40,7 +44,7 @@ export default class MemberGrid extends Component {
               </View>
             </View>
           </View>
-        </View>
+        </ImageBackground>
       </Container>
     );
   }
