@@ -15,6 +15,7 @@ import com.BV.LinearGradient.LinearGradientPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.microsoft.codepush.react.CodePush;
+import com.github.alinz.reactnativewebviewbridge.WebViewBridgePackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -53,8 +54,8 @@ public class MainApplication extends Application implements ReactApplication {
           new LinearGradientPackage(),
           new ImagePickerPackage(),
           new RNFetchBlobPackage(),
-          new CodePush(getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG)
-
+          new CodePush(getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG),
+          new WebViewBridgePackage()
       );
     }
 

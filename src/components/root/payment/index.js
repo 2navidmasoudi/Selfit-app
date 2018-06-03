@@ -8,6 +8,7 @@ export default ({ url }) => (
     <AppHeader rightTitle="درگاه پرداخت" />
     <WebView
       source={{ uri: url }}
+      javaScriptEnabled
     />
   </Container>
 );
