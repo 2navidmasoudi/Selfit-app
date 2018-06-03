@@ -12,9 +12,7 @@ export default () => (
       </Text>
       {/* To do : text-align : justify with WebView Html */}
       <Text style={styles.animationDetail}>
-              منو بوفه خودتون رو ویرایش کنید،
-              غذا اضافه و کم کنید،
-              غذا های تمام شده ی خود را غیر فعال کنید و...
+              منو بوفه خود را مدیریت کنید
       </Text>
     </View>
   </TouchableWithoutFeedback>

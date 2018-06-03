@@ -10,11 +10,8 @@ export default () => (
       <Text type="bold" style={styles.animationTitle}>
               باشگاه من
       </Text>
-      <Text style={styles.animationDetail}>
-              عکس و اطلاعات و توضیحات باشکاه خود را ویرایش کنید
-              تا بیشتر مورد توجه قرار بگیرید!
-              در باشگاه خود ثبت نشده اید؟
-              با پشتیبانی تماس بگیرید.
+      <Text type="bold" style={styles.animationDetail}>
+              باشگاه خود را مدیریت کنید
       </Text>
     </View>
   </TouchableWithoutFeedback>

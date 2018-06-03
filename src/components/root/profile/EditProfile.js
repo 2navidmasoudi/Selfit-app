@@ -11,8 +11,8 @@ import { setUser } from '../../../redux/actions/index';
 import { picker } from './imagePicker';
 import { uploader } from '../../../services/UploadImage';
 import { Member } from '../../../services/type';
-import {Text} from "../../Kit";
-import {mainColor, white} from "../../../assets/variables/colors";
+import { Text } from '../../Kit';
+import { mainColor, white } from '../../../assets/variables/colors';
 
 @connect(state => ({
   user: state.user,
@@ -157,11 +157,11 @@ export default class EditProfile extends React.Component {
                 style={EditProfileStyle.uploadButton}
                 onPress={this.showImagePicker.bind(this)}
               >
-                <Text style={{color:white}}>انتخاب تصویر</Text>
+                <Text style={{ color: white }}>انتخاب تصویر</Text>
               </Button>
               <Button
                 disabled={this.state.UploadButtonDisable}
-                style={{backgroundColor:mainColor}}
+                style={{ backgroundColor: mainColor }}
                 onPress={this.uploadImage.bind(this)}
               >
                 <Text style={EditProfileStyle.btnText}>آپلود تصویر</Text>

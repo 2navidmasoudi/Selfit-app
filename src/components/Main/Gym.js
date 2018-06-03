@@ -10,11 +10,15 @@ export default () => (
       <Text type="bold" style={styles.animationTitle}>
                   باشگاه یاب
       </Text>
-      {/* <Text style={styles.animationDetail}> */}
-      {/* باشگاه دور و */}
-      {/* اطراف خودتون رو پیدا کنید، عکس هاشو ببینید و */}
-      {/* نظرات بقیه رو راجع به باشگاه مورد نظرتون بخونید. */}
-      {/* </Text> */}
+      <Text style={styles.animationDetail}>
+       باشگاه های اطراف رو ببین
+      </Text>
+      <Text type="bold" style={styles.animationDetail}>
+        مقایسه کن
+      </Text>
+      <Text style={styles.animationDetail}>
+        بهترین رو انتخاب کن
+      </Text>
     </View>
   </TouchableWithoutFeedback>
 );
