@@ -52,21 +52,23 @@ export default class MaterialCard extends Component {
     }
   }
   async _deleteBuffetMaterial(food) {
+    const { tokenapi, buffetid, tokenmember } = this.props;
+    let result = null;
     try {
-      const { tokenapi, buffetid, tokenmember } = this.props;
-      const MaterialList = await getAllBuffetMaterial(buffetid, false, tokenmember, tokenapi, 30, 0, false, 0);
+      const MaterialList =
+        await getAllBuffetMaterial(buffetid, false, tokenmember, tokenapi, 30, 0, false, 0);
       for (let i = 0; i < MaterialList.length; i++) {
         if (food.idmaterial === MaterialList[i].idmaterial) {
           console.log('this is it:', MaterialList);
-          const result =
+          result =
             await deleteBuffetMaterial(MaterialList[i].idmaterial_buffet, tokenmember, tokenapi);
           return result;
         }
       }
-      return -6;
     } catch (error) {
       logError(error, '_deleteBuffetMaterial', 'BuffetMenu/MaterialCard', 'DeleteBuffetMaterial');
     }
+    return -6;
   }
   render() {
     const { food } = this.props;

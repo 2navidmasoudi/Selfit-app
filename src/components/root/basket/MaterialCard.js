@@ -3,7 +3,7 @@ import { Button, Card, CardItem, Icon, Left, Right } from 'native-base';
 import { connect } from 'react-redux';
 import {
   deleteMixMaterial,
-  getAllMixMaterial,
+  getAllBasketMaterial,
 } from '../../../services/orderMaterial';
 import { reBasketMaterial } from '../../../redux/actions';
 import { Text } from '../../Kit';
@@ -38,7 +38,7 @@ export default class MaterialCard extends Component {
       const {
         Basket,
         PriceAll
-      } = await getAllMixMaterial(0, state, tokenmember, tokenapi, max, min, ssort, fsort);
+      } = await getAllBasketMaterial(true, tokenmember, tokenapi, max, min, ssort);
       this.props.reBasketMaterial(Basket, Basket.length, PriceAll);
     } catch (e) {
       console.log(e);

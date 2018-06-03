@@ -27,7 +27,7 @@ export default class BuffetOrder extends Component {
     try {
       const { tokenmember } = this.props.user;
       const { tokenapi, buffetid } = this.props;
-      const AllFood = await getAllOrder(true, tokenmember, tokenapi, 20, 0);
+      const AllFood = await getAllOrder(true, tokenmember, tokenapi, 30, 0);
       console.log('foodOrdered:', AllFood);
       this.setState({ FoodList: AllFood, ready: true });
       console.log(this.state);

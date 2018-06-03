@@ -23,7 +23,7 @@ import AppHeader from '../../header';
 import { getMenuFood } from '../../../services/buffet';
 import { logError } from '../../../services/log';
 import { getFoodCategory } from '../../../services/MenuFood';
-import { getAllBuffetMaterial, getAllDish, postBasketMaterial } from '../../../services/orderMaterial';
+import { getAllBuffetMaterial, postBasketMaterial } from '../../../services/orderMaterial';
 import { receiveMaterial, receiveMenuFood, selectBuffet, setIDBasket, tokenBuffet } from '../../../redux/actions';
 import FoodCard from './FoodCard';
 import MaterialCard from './MaterialCard';
@@ -88,7 +88,7 @@ export default class BuffetMenu extends Component {
     MenuFood: [],
     CountReady: false,
     totalPrice: 0,
-    iddish: null,
+    iddish: 1,
     max: 30,
     min: 0,
     ssort: true,
@@ -107,7 +107,7 @@ export default class BuffetMenu extends Component {
     await this._getFoodCategory();
     await this._getMenuFood();
     await this._getMaterial();
-    await this._getDish();
+    // await this._getDish();
     await this._checkOrderBuffet();
   }
   async _getFoodCategory() {
@@ -145,26 +145,27 @@ export default class BuffetMenu extends Component {
       console.log(err);
     }
   }
-  async _getDish() {
-    try {
-      const { tokenapi } = await this.props;
-      const { tokenmember } = await this.props.user;
-      const { max, min, ssort } = await this.state;
-      const DishSize = await getAllDish(tokenmember, tokenapi, max, min, ssort);
-      await this.setState({ iddish: DishSize[0].iddish });
-      console.log(this.state);
-    } catch (e) {
-      console.log(e);
-      logError(e, '_getDish', 'Buffet/BuffetMenu', 'getAllDish');
-    }
-  }
+  // async _getDish() {
+  //   try {
+  //     const { tokenapi } = await this.props;
+  //     const { tokenmember } = await this.props.user;
+  //     const { max, min, ssort } = await this.state;
+  //     const DishSize = await getAllDish(tokenmember, tokenapi, max, min, ssort);
+  //     await this.setState({ iddish: DishSize[0].iddish });
+  //     console.log(this.state);
+  //   } catch (e) {
+  //     console.log(e);
+  //     logError(e, '_getDish', 'Buffet/BuffetMenu', 'getAllDish');
+  //   }
+  // }
+  // TODO: get permission to delete the last basket;
   async _checkOrderBuffet() {
     try {
       const { buffetid, tokenapi, idbasket } = await this.props;
       const { tokenmember } = await this.props.user;
       const result = await checkOrderBuffet(buffetid, tokenmember, tokenapi);
       console.log(result, 'checkOrder');
-      if (result === 1 || !idbasket) {
+      if (!idbasket || result === 1 || result === 2) {
         await this._postBasketMaterial();
       }
     } catch (e) {
@@ -178,7 +179,6 @@ export default class BuffetMenu extends Component {
       const { iddish } = await this.state;
       const deleteOrder = await deleteOrderAll(tokenmember, tokenapi);
       console.log(deleteOrder, 'deleteOrder?');
-
       const idbasket = await postBasketMaterial(iddish, buffetid, tokenmember, tokenapi);
       this.props.setIDBasket(idbasket);
       console.log(idbasket, 'idbasket?');
@@ -248,20 +248,23 @@ export default class BuffetMenu extends Component {
               </View>
             </ImageBackground>
           </TouchableWithoutFeedback>
-          <Tabs initialPage={1} locked ref={c => this._tabs = c}>
+          <Tabs
+            initialPage={1}
+            locked
+            ref={c => this._tabs = c}
+            tabBarUnderlineStyle={TabsStyle.underLine}
+          >
             <Tab
               heading="نظرات و اطلاعات"
+              activeTextStyle={TabsStyle.activeText}
               textStyle={TabsStyle.text}
               activeTabStyle={TabsStyle.activeTab}
               tabStyle={TabsStyle.notActiveTabs}
             >
               <Card>
                 <CardItem>
-                  <Text style={{
-                    textAlign: 'right',
-                    fontFamily: 'IRANSansMobile'
-                  }}
-                  >آدرس: {addressgym}
+                  <Text>
+                    آدرس: {addressgym}
                   </Text>
                 </CardItem>
                 <CardItem>
@@ -280,14 +283,19 @@ export default class BuffetMenu extends Component {
             </Tab>
             <Tab
               heading="منو"
+              activeTextStyle={TabsStyle.activeText}
               textStyle={TabsStyle.text}
               activeTabStyle={TabsStyle.activeTab}
               tabStyle={TabsStyle.notActiveTabs}
             >
-              <Tabs initialPage={1} ref={c => this._tabs2 = c}>
-
+              <Tabs
+                initialPage={1}
+                ref={c => this._tabs2 = c}
+                tabBarUnderlineStyle={TabsStyle.underLine}
+              >
                 <Tab
                   heading="منو انتخابی"
+                  activeTextStyle={TabsStyle.activeText}
                   textStyle={TabsStyle.text}
                   activeTabStyle={TabsStyle.activeTab}
                   tabStyle={TabsStyle.notActiveTabs}
@@ -306,6 +314,7 @@ export default class BuffetMenu extends Component {
                 </Tab>
                 <Tab
                   heading="منو آماده"
+                  activeTextStyle={TabsStyle.activeText}
                   textStyle={TabsStyle.text}
                   activeTabStyle={TabsStyle.activeTab}
                   tabStyle={TabsStyle.notActiveTabs}

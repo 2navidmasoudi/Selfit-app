@@ -24,7 +24,6 @@ export default class ActiveMaterial extends Component {
   }
   async handleSwitch(value) {
     const result = await this._activeBuffetMaterial(value);
-    console.log('handleSwitch:', result);
     if (result === 1) { this.setState({ Active: value }); }
   }
   async _activeBuffetMaterial(active) {
@@ -32,8 +31,6 @@ export default class ActiveMaterial extends Component {
       const { tokenapi, buffetid, tokenmember } = await this.props;
       const { idmaterial_buffet } = await this.props.food;
       const result = await putActiveBuffetMaterial(buffetid, idmaterial_buffet, active, tokenmember, tokenapi);
-      console.log('putActiveBuffetMaterial:', result);
-
       if (result === 1) return 1;
     } catch (error) {
       console.log(error);

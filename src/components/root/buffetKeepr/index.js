@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Container, Content, Header, Left, Right, Switch } from 'native-base';
+import { Container, Header, Left, Right, Switch } from 'native-base';
 import { Alert, FlatList, View } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import AppHeader from '../../header';
 import { putCheckToken } from '../../../services/index';

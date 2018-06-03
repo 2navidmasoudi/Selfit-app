@@ -4,7 +4,7 @@ import { Button, Card, CardItem, Icon, Left, Right } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { logError } from '../../../services/log';
-import { deleteMixMaterial, getAllMixMaterial, postMixMaterial } from '../../../services/orderMaterial';
+import { deleteMixMaterial, getAllBasketMaterial, postMixMaterial } from '../../../services/orderMaterial';
 import { reBasketMaterial } from '../../../redux/actions';
 import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
@@ -37,7 +37,7 @@ export default class MaterialCard extends Component {
       const { tokenmember } = await this.props.user;
       const { max, min, ssort, fsort, state } = await this.state;
       let deletedOrder;
-      // let FoodOrdered = await getAllMixMaterial(0,state, tokenmember, tokenapi, max, min, ssort, fsort);
+      // let FoodOrdered = await getAllBasketMaterial(0,state, tokenmember, tokenapi, max, min, ssort, fsort);
       const FoodOrdered = await this.props.materialBasket;
       console.log(FoodOrdered);
       for (i = 0; i < FoodOrdered.length; i++) {
@@ -51,7 +51,7 @@ export default class MaterialCard extends Component {
       const {
         Basket,
         PriceAll
-      } = await getAllMixMaterial(0, state, tokenmember, tokenapi, max, min, ssort, fsort);
+      } = await getAllBasketMaterial(true, tokenmember, tokenapi, max, min, ssort);
       this.props.reBasketMaterial(Basket, Basket.length, PriceAll);
     } catch (error) {
       console.log(error);
@@ -69,7 +69,7 @@ export default class MaterialCard extends Component {
       const { max, min, ssort, fsort, state } = await this.state;
       const result = await postMixMaterial(idbasket, Material.idmaterial, numberbuffet + 1, tokenmember, tokenapi);
       console.log('postOrderBuffet for', numberbuffet, Material.idmaterial, Material.pricematerial, result);
-      const { Basket, PriceAll } = await getAllMixMaterial(0, state, tokenmember, tokenapi, max, min, ssort, fsort);
+      const { Basket, PriceAll } = await getAllBasketMaterial(true, tokenmember, tokenapi, max, min);
       this.props.reBasketMaterial(Basket, Basket.length, PriceAll);
     } catch (error) {
       console.log(error);

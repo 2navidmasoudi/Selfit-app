@@ -1,113 +1,28 @@
-import { DELETE, GET, headers, OrderMaterial, POST, PUT, Selfit } from './type';
-//---------------------------------------------------------
-// وب سرویس برای دریافت تمامی متریال ها
-export const getAllMaterial = async (token, tokenapi, max, min, ssort, fsort) => {
-  try {
-    const response = await fetch(`${Selfit}${OrderMaterial}GetAll?&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
-      method: GET,
-      headers
-    });
-    const json = await response.json();
-    return json.MaterialList.$values;
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-// وب سرویس برای دریافت سبد خرید:
-// state : وضعیت سبد را مشخص می کند
+import { BasketMaterial, DELETE, GET, headers, Material, POST, PUT, Selfit } from './type';
+// BasketMaterial
 export const getAllBasketMaterial = async (active, token, tokenapi, max, min, ssort = false) => {
   try {
-    const response = await fetch(`${Selfit}${OrderMaterial}GetAllBasketMaterial?active=${active}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}`, {
-      method: GET,
-      headers
-    });
-    const json = await response.json();
-    return json.BasketMaterialList.$values;
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-export const getBasketOrderMaterial = async (id, buffetid, accept, token, tokenapi, max, min, ssort) => {
-  try {
-    const response = await fetch(`${Selfit}${OrderMaterial}GetBasketOrderAll/${id}?buffetid=${buffetid}&accpet=${accept}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}`, {
-      method: GET,
-      headers
-    });
-    if (response.status === 204) return [];
-    const json = await response.json();
-    return json.Buffet_BasketMaterialOrderList.$values;
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-export const getAllOrderMaterial = async (id, active, token, tokenapi, max, min, ssort, fsort) => {
-  try {
-    const response = await fetch(`${Selfit}${OrderMaterial}GetAllOrderMaterial?/${id}&active=${active}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
-      method: GET,
-      headers
-    });
-    const json = await response.json();
-    return json.Buffet_BasketMaterialOrderList.$values;
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-// وب سرویس برای دریافت متریال های افزوده شده به سبد خرید
-// id : شناسه بوفه
-// state : وضعیت پایداری سبد
-export const getAllMixMaterial = async (id, state, token, tokenapi, max, min, ssort) => {
-  try {
-    const response = await fetch(`${Selfit}${OrderMaterial}GetAllMixMaterial/${id}?state=${state}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}`, {
+    const response = await fetch(`${Selfit}${BasketMaterial}GetAll?active=${active}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}`, {
       method: GET,
       headers
     });
     if (response.status == 204) return { Basket: [], PriceAll: 0 };
     const json = await response.json();
-    return { Basket: json.MixMaterialList.$values, PriceAll: json.PriceAll };
+    const basketMaterial = await json.BasketMaterialList.$values;
+    let materialOrder = [];
+    for (let i = 0; i < basketMaterial.length; i++) {
+      for (let j = 0; j < basketMaterial[i].MixMaterialList.$values.length; j++) {
+        materialOrder = [...materialOrder, basketMaterial[i].MixMaterialList.$values[j]];
+      }
+    }
+    return { Basket: materialOrder, PriceAll: json.PriceAll };
   } catch (e) {
     console.log(e);
   }
 };
-
-// وب سرویس برای دریافت متریال های بوفه
-// id : شناسه بوفه
-export const getAllBuffetMaterial = async (id, state, token, tokenapi, max, min, ssort, fsort) => {
-  try {
-    const response = await fetch(`${Selfit}${OrderMaterial}GetAllBuffetMaterial/${id}?state=${state}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
-      method: GET,
-      headers
-    });
-    const json = await response.json();
-    return json.Buffet_MaterialList.$values;
-  } catch (e) {
-    console.log(e);
-  }
-};
-// fist we need to get the Dish size for OrderMaterial:
-export const getAllDish = async (token, tokenapi, max, min, ssort) => {
-  try {
-    const response = await fetch(`${Selfit}${OrderMaterial}GetAllDish?token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}`, {
-      method: GET,
-      headers
-    });
-    const json = await response.json();
-    return json.DishList.$values;
-  } catch (e) {
-    console.log(e);
-  }
-};
-//---------------------------------------------------------------
-// وب سرویس برای افزودن سبد
-// iddish : شناسه ظرف
-// buffetid : شناسه بوفه
-// توجه: وقتی عملیات افزودن سبد با موفقیت انجام می شود بجای یک شناسه سبد افزوده شده را بر می گرداند
 export const postBasketMaterial = async (iddish, buffetid, token, tokenapi) => {
   try {
-    const response = await fetch(`${Selfit}${OrderMaterial}PostBasketMaterial`, {
+    const response = await fetch(`${Selfit}${BasketMaterial}Post`, {
       method: POST,
       headers,
       body: JSON.stringify({
@@ -123,14 +38,9 @@ export const postBasketMaterial = async (iddish, buffetid, token, tokenapi) => {
     console.log(e);
   }
 };
-
-// وب سرویس برای افزودن متریال به سبد
-// idbasketmaterail : شناسه سبد
-// idmaterial : شناسه متریال
-// numbermaterial : تعداد متریال
 export const postMixMaterial = async (idbasketmaterail, idmaterial, numbermaterial, token, tokenapi) => {
   try {
-    const response = await fetch(`${Selfit}${OrderMaterial}PostMixMaterial`, {
+    const response = await fetch(`${Selfit}${BasketMaterial}PostMixMaterial`, {
       method: POST,
       headers,
       body: JSON.stringify({
@@ -147,15 +57,46 @@ export const postMixMaterial = async (idbasketmaterail, idmaterial, numbermateri
     console.log(e);
   }
 };
-
-// وب سرویس برای انتخاب متریال توسط بوفه دار
-// idmaterial : شناسه متریال
-// buffetid : شناسه بوفه
-// active : وضعیت فعال بودن متریال برای بوفه
-// percent : درصدی که روی مبلغ ثابت متریال می آید
+export const deleteMixMaterial = async (id, token, tokenapi) => {
+  try {
+    const response = await fetch(`${Selfit}${BasketMaterial}DeleteMixMaterial/${id}?token=${token}&tokenapi=${tokenapi}`, {
+      method: DELETE,
+      headers,
+    });
+    const json = await response.json();
+    return json;
+  } catch (e) {
+    console.log(e);
+  }
+};
+// Material
+export const getAllMaterial = async (token, tokenapi, max, min, ssort, fsort) => {
+  try {
+    const response = await fetch(`${Selfit}${Material}GetAll?&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
+      method: GET,
+      headers
+    });
+    const json = await response.json();
+    return json.MaterialList.$values;
+  } catch (e) {
+    console.log(e);
+  }
+};
+export const getAllBuffetMaterial = async (id, state, token, tokenapi, max, min, ssort, fsort) => {
+  try {
+    const response = await fetch(`${Selfit}${Material}GetAllBuffetMaterial/${id}?state=${state}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
+      method: GET,
+      headers
+    });
+    const json = await response.json();
+    return json.Buffet_MaterialList.$values;
+  } catch (e) {
+    console.log(e);
+  }
+};
 export const postBuffetMaterial = async (idmaterial, buffetid, active, percent, token, tokenapi) => {
   try {
-    const response = await fetch(`${Selfit}${OrderMaterial}PostBuffetMaterial`, {
+    const response = await fetch(`${Selfit}${Material}PostBuffetMaterial`, {
       method: POST,
       headers,
       body: JSON.stringify({
@@ -168,40 +109,25 @@ export const postBuffetMaterial = async (idmaterial, buffetid, active, percent, 
       })
     });
     const json = await response.json();
+    console.log('postBuffetMaterial');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
   }
 };
-//----------------------------------------------
-export const putActiveBuffetMaterial =
-  async (buffetid, idbuffet_material, active, token, tokenapi) => {
-    try {
-      const response = await fetch(`${Selfit}${OrderMaterial}PutActiveBuffetMaterial`, {
-        method: PUT,
-        headers,
-        body: JSON.stringify({
-          buffetid,
-          idbuffet_material,
-          active,
-          token,
-          tokenapi
-        })
-      });
-      const json = await response.json();
-      return json;
-    } catch (e) {
-      console.log(e);
-    }
-  };
-//------------------------------------------------
-// وب سرویس برای حذف سبد متریال
-// id : شناسه سبد
-export const deleteBasketMaterial = async (id, token, tokenapi) => {
+export const putActiveBuffetMaterial = async (buffetid, idbuffet_material, active, token, tokenapi) => {
   try {
-    const response = await fetch(`${Selfit}${OrderMaterial}DeleteBasketMaterial/${id}?token=${token}&tokenapi=${tokenapi}`, {
-      method: DELETE,
+    const response = await fetch(`${Selfit}${Material}PutActiveBuffetMaterial`, {
+      method: PUT,
       headers,
+      body: JSON.stringify({
+        buffetid,
+        idbuffet_material,
+        active,
+        token,
+        tokenapi
+      })
     });
     const json = await response.json();
     return json;
@@ -209,38 +135,9 @@ export const deleteBasketMaterial = async (id, token, tokenapi) => {
     console.log(e);
   }
 };
-export const deleteMixMaterial = async (id, token, tokenapi) => {
-  try {
-    const response = await fetch(`${Selfit}${OrderMaterial}DeleteMixMaterial/${id}?token=${token}&tokenapi=${tokenapi}`, {
-      method: DELETE,
-      headers,
-    });
-    const json = await response.json();
-    return json;
-  } catch (e) {
-    console.log(e);
-  }
-};
-// وب سرویس برای حذف متریال از سبد
-// id : شناسه متریال افزوده شده به سبد )دقت کنید که متریال این شناسه با شناسه اصلی متریال متفاوت است!(
-export const deleteAllBasketMaterial = async (id, token, tokenapi) => {
-  try {
-    const response = await fetch(`${Selfit}${OrderMaterial}DeleteBasketMaterialAll/${id}?token=${token}&tokenapi=${tokenapi}`, {
-      method: DELETE,
-      headers,
-    });
-    const json = await response.json();
-    return json;
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-// وب سرویس برای حذف متریال از بوفه
-// id : شناسه متریال
 export const deleteBuffetMaterial = async (id, token, tokenapi) => {
   try {
-    const response = await fetch(`${Selfit}${OrderMaterial}DeleteBuffetMaterial/${id}?token=${token}&tokenapi=${tokenapi}`, {
+    const response = await fetch(`${Selfit}${Material}DeleteBuffetMaterial/${id}?token=${token}&tokenapi=${tokenapi}`, {
       method: DELETE,
       headers,
     });
@@ -250,3 +147,28 @@ export const deleteBuffetMaterial = async (id, token, tokenapi) => {
     console.log(e);
   }
 };
+// Useless API(s)
+export const deleteAllBasketMaterial = async (id, token, tokenapi) => {
+  try {
+    const response = await fetch(`${Selfit}${BasketMaterial}Delete/${id}?token=${token}&tokenapi=${tokenapi}`, {
+      method: DELETE,
+      headers,
+    });
+    const json = await response.json();
+    return json;
+  } catch (e) {
+    console.log(e);
+  }
+};
+// export const getAllDish = async (token, tokenapi, max, min, ssort) => {
+//   try {
+//     const response = await fetch(`${Selfit}${OrderMaterial}GetAllDish?token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}`, {
+//       method: GET,
+//       headers
+//     });
+//     const json = await response.json();
+//     return json.DishList.$values;
+//   } catch (e) {
+//     console.log(e);
+//   }
+// };

@@ -121,7 +121,7 @@ export default class OrderDetail extends Component {
             style={{ backgroundColor: mainColor }}
           >
             <Text style={{ color: 'white' }}>
-              پرداخت
+              درحال آماده سازی غذا
             </Text>
           </Button>
         </FooterTab>

@@ -9,7 +9,7 @@ import { reBasketBuffet, reBasketMaterial, reBasketProduct, tokenBuffet, tokenSt
 import { getBasketProduct } from '../../services/orderProduct';
 import { logError } from '../../services/log';
 import { getAllOrder } from '../../services/orderBuffet';
-import { getAllMixMaterial } from '../../services/orderMaterial';
+import { getAllBasketMaterial } from '../../services/orderMaterial';
 import { putUserLogout } from '../../services';
 import { Text } from '../Kit';
 import { persianNumber } from '../../utils/persian';
@@ -85,12 +85,12 @@ export default class DrawerLayout extends Component {
       const {
         Basket,
         PriceAll
-      } = await getAllMixMaterial(0, state, tokenmember, buffetToken, max, min, ssort);
+      } = await getAllBasketMaterial(true, tokenmember, buffetToken, max, min, ssort);
       console.log(Basket, 'basket for Material!', PriceAll, 'priceAll');
       this.props.reBasketMaterial(Basket, Basket.length, PriceAll);
     } catch (e) {
       console.log(e);
-      logError(e, '_getBasketMaterial', 'DrawerLayout/index', 'getAllMixMaterial');
+      logError(e, '_getBasketMaterial', 'DrawerLayout/index', 'getAllBasketMaterial');
     }
   }
   async _putUserLogout() {

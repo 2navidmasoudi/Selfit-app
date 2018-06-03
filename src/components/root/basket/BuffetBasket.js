@@ -5,7 +5,7 @@ import { Button, Card, CardItem, Container, Content, Footer, FooterTab } from 'n
 import { Actions } from 'react-native-router-flux';
 import PropTypes from 'prop-types';
 import { getAllOrder } from '../../../services/orderBuffet';
-import { getAllMixMaterial } from '../../../services/orderMaterial';
+import { getAllBasketMaterial } from '../../../services/orderMaterial';
 import AppHeader from '../../header';
 import { reBasketBuffet, reBasketMaterial, setRoad, tokenBuffet } from '../../../redux/actions';
 import { logError } from '../../../services/log';
@@ -71,12 +71,12 @@ export default class BuffetBasket extends Component {
       const {
         Basket,
         PriceAll
-      } = await getAllMixMaterial(0, state, tokenmember, tokenapi, max, min, ssort, fsort);
+      } = await getAllBasketMaterial(true, tokenmember, tokenapi, max, min, ssort);
       console.log(Basket, 'basket for Material!', PriceAll, 'priceAll');
       this.props.reBasketMaterial(Basket, Basket.length, PriceAll);
     } catch (e) {
       console.log(e);
-      logError(e, '_getBasketMaterial', 'DrawerLayout/index', 'getAllMixMaterial');
+      logError(e, '_getBasketMaterial', 'DrawerLayout/index', 'getAllBasketMaterial');
     }
   }
   returnBuffetItem({ item }) {
