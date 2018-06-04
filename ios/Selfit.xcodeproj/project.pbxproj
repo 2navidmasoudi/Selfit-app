@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		003385CE20C5778B0066F6EF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 003385CD20C5778A0066F6EF /* GoogleService-Info.plist */; };
 		005D632C20B8D42B0051727E /* Images-2.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 005D632B20B8D42B0051727E /* Images-2.xcassets */; };
-		00801D7020C4292C002D3EEC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 00801D6F20C4292B002D3EEC /* GoogleService-Info.plist */; };
 		00801D7720C432BA002D3EEC /* libReact-Native-Webview-Bridge.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00801D7620C4329C002D3EEC /* libReact-Native-Webview-Bridge.a */; };
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -347,8 +347,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		003385CD20C5778A0066F6EF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		005D632B20B8D42B0051727E /* Images-2.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Images-2.xcassets"; path = "Selfit/Images-2.xcassets"; sourceTree = "<group>"; };
-		00801D6F20C4292B002D3EEC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		00801D7120C4329C002D3EEC /* React-Native-Webview-Bridge.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "React-Native-Webview-Bridge.xcodeproj"; path = "../node_modules/react-native-webview-bridge-updated/ios/React-Native-Webview-Bridge.xcodeproj"; sourceTree = "<group>"; };
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTActionSheet.xcodeproj; path = "../node_modules/react-native/Libraries/ActionSheetIOS/RCTActionSheet.xcodeproj"; sourceTree = "<group>"; };
@@ -549,7 +549,7 @@
 		13B07FAE1A68108700A75B9A /* Selfit */ = {
 			isa = PBXGroup;
 			children = (
-				00801D6F20C4292B002D3EEC /* GoogleService-Info.plist */,
+				003385CD20C5778A0066F6EF /* GoogleService-Info.plist */,
 				3C0545A620B6E6250027556B /* Selfit.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -1168,7 +1168,7 @@
 				0C381D964EFC4B18AA78C5E3 /* Roboto.ttf in Resources */,
 				7CC9398130FF4D0E88B167AB /* rubicon-icon-font.ttf in Resources */,
 				FC34F5B91C364C00B7FBFB03 /* SimpleLineIcons.ttf in Resources */,
-				00801D7020C4292C002D3EEC /* GoogleService-Info.plist in Resources */,
+				003385CE20C5778B0066F6EF /* GoogleService-Info.plist in Resources */,
 				005D632C20B8D42B0051727E /* Images-2.xcassets in Resources */,
 				FA9FD30F988F40FCAB1A85B2 /* Zocial.ttf in Resources */,
 			);

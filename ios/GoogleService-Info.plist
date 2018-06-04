@@ -7,9 +7,9 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>1081449263893-p9mlo2270a5g61ddeq9jsts4qh8e136r.apps.googleusercontent.com</string>
+	<string>1081449263893-qrl9rq170q04vnn90ijm3cbc6hkegupb.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.1081449263893-p9mlo2270a5g61ddeq9jsts4qh8e136r</string>
+	<string>com.googleusercontent.apps.1081449263893-qrl9rq170q04vnn90ijm3cbc6hkegupb</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBbjM1WfSjzfEOIa2gTB6YRIUv8KnLnGE4</string>
 	<key>GCM_SENDER_ID</key>
@@ -17,7 +17,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>comcom.selfit.universal</string>
+	<string>com.selfit.universal</string>
 	<key>PROJECT_ID</key>
 	<string>selfit-app</string>
 	<key>STORAGE_BUCKET</key>
@@ -33,7 +33,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1081449263893:ios:793aac9c93d7f61b</string>
+	<string>1:1081449263893:ios:c9ca1ed2b9191370</string>
 	<key>DATABASE_URL</key>
 	<string>https://selfit-app.firebaseio.com</string>
 </dict>
