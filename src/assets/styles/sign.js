@@ -1,4 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { errorColor } from '../variables/colors';
 
 export const SignStyle = EStyleSheet.create({
   backgroundStyle: {
@@ -10,25 +11,22 @@ export const SignStyle = EStyleSheet.create({
   },
   SignBackground: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
   },
   headerColor: {
     backgroundColor: '$headerColor',
   },
   loginBox: {
     backgroundColor: '$signBoxColor',
-    flex: 1,
     marginLeft: 20,
     marginRight: 20,
     borderRadius: 5,
+    padding: 5,
   },
   authBox: {
     flex: 1,
-    backgroundColor: '$signBoxColor',
-    justifyContent: 'center',
-    padding: 24,
-    borderRadius: 5,
+    padding: 20,
   },
   loginTitle: {
     fontFamily: '$IS',
@@ -52,36 +50,23 @@ export const SignStyle = EStyleSheet.create({
     marginRight: 20,
   },
   labelText: {
-    fontFamily: '$IS',
-    fontSize: 18,
-    textAlign: 'right',
     marginBottom: 10,
     color: '#5256c9',
   },
   labelRedText: {
-    fontFamily: '$IS',
-    fontSize: 14,
     textAlign: 'center',
-    paddingTop: 5,
-    marginBottom: 5,
-    color: '#e53935',
+    marginVertical: 5,
+    color: errorColor,
   },
   inputText: {
-    fontFamily: '$IS',
-    fontSize: 18,
-    textAlign: 'left',
-    borderColor: 'rgba(0,0,0,0.1)',
+    borderColor: 'rgba(0,0,0,0.2)',
     borderWidth: 2,
-    padding: 10,
-    borderRadius: 5,
   },
   authInput: {
-    fontFamily: '$IS',
     fontSize: 18,
     textAlign: 'center',
-    borderColor: 'rgba(0,0,0,0.1)',
+    borderColor: 'rgba(0,0,0,0.4)',
     borderWidth: 2,
-    padding: 10,
     borderRadius: 5,
   },
   signButtonImg: {
@@ -157,20 +142,18 @@ export const SignStyle = EStyleSheet.create({
 });
 export const LightBoxStyle = EStyleSheet.create({
   container: {
-    backgroundColor: 'rgba(52,52,52,0.5)',
+    backgroundColor: 'rgba(0,0,0,0.3)',
     position: 'absolute',
     top: 0,
     right: 0,
     left: 0,
     bottom: 0,
     alignItems: 'center',
-    paddingTop: 70,
+    justifyContent: 'center',
   },
   viewStyle: {
     flexDirection: 'row',
     backgroundColor: '$signBoxColor',
-    justifyContent: 'center',
-    alignItems: 'center',
     borderRadius: 10
   },
   closeButton: {

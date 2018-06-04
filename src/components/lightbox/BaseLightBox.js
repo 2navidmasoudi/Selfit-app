@@ -2,6 +2,7 @@ import React from 'react';
 import { Animated, Dimensions } from 'react-native';
 import { View, Button, Icon } from 'native-base';
 import { Actions } from 'react-native-router-flux';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { LightBoxStyle } from '../../assets/styles/sign';
 
 const { height: deviceHeight, width: deviceWidth } = Dimensions.get('window');
@@ -26,7 +27,7 @@ export default class BaseLightBox extends React.Component {
     const width = verticalPercent ? deviceWidth * verticalPercent : deviceWidth;
     const height = horizontalPercent ? deviceHeight * horizontalPercent : deviceHeight;
     return (
-      <View style={[LightBoxStyle.viewStyle, { width, height }]}>
+      <View style={[LightBoxStyle.viewStyle, { width }]}>
         {children}
         <Button transparent style={LightBoxStyle.closeButton} onPress={() => this.close()}>
           <Icon name="close-circle" style={LightBoxStyle.closeIcon} />
@@ -38,6 +39,7 @@ export default class BaseLightBox extends React.Component {
     return (
       <Animated.View style={[LightBoxStyle.container, { opacity: this.state.opacity }]}>
         {this._renderLightBox()}
+        <KeyboardSpacer />
       </Animated.View>
     );
   }

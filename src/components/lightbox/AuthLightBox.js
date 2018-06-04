@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { View, ImageBackground, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { View, Alert } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import { Button } from 'native-base';
 import BaseLightBox from './BaseLightBox';
 import { SignStyle } from '../../assets/styles/sign';
 import { setTokenmember } from '../../redux/actions';
 import { putCodeLogin } from '../../services';
-import { Text } from '../Kit';
+import { Text, TextInput } from '../Kit';
+import { darkColor, white } from '../../assets/variables/colors';
+import { persianNumber } from '../../utils/persian';
 
 @connect(state => ({ user: state.user }), { setTokenmember })
 export default class AuthLightBox extends Component {
@@ -50,14 +53,18 @@ export default class AuthLightBox extends Component {
   render() {
     const { tokenPhoneError } = this.state;
     const {
-      authBox, authTitle, labelRedText,
-      authInput, signButtonImg, reAuth, signButtonStyle
+      authBox, labelRedText,
+      authInput,
     } = SignStyle;
     return (
-      <BaseLightBox verticalPercent={0.90} horizontalPercent={0.55}>
+      <BaseLightBox verticalPercent={0.90}>
         <View style={authBox}>
-          <Text style={authTitle}>کد تایید</Text>
-          <Text style={labelRedText}>لطفا کد ارسال شده به تلفن همراه خود را وارد کنید</Text>
+          <Text type="bold" style={{ color: white, textAlign: 'center', marginBottom: 5 }}>
+            کد تایید
+          </Text>
+          <Text style={{ color: white, textAlign: 'center' }}>
+            کد دریافت شده را وارد کنید.
+          </Text>
           <TextInput
             style={authInput}
             placeholder="xxxxx"
@@ -68,17 +75,21 @@ export default class AuthLightBox extends Component {
             onChangeText={text => this.changeTokenPhone(text)}
           />
           <View style={{ alignItems: 'center' }}>
-            <Text style={labelRedText}>{tokenPhoneError}</Text>
-            <TouchableOpacity onPress={(this.checkTokenPhone.bind(this))}>
-              <ImageBackground
-                imageStyle={signButtonStyle}
-                source={require('../../assets/S_Logo.png')}
-                style={signButtonImg}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={reAuth}>ارسال مجدد کد</Text>
-            </TouchableOpacity>
+            <Text style={[labelRedText, { display: tokenPhoneError ? 'flex' : 'none' }]}>
+              {persianNumber(tokenPhoneError)}
+            </Text>
+            <Button
+              block
+              style={{ backgroundColor: darkColor }}
+              onPress={(this.checkTokenPhone.bind(this))}
+            >
+              <Text style={{ color: white }}>
+                تايید
+              </Text>
+            </Button>
+            {/* <TouchableOpacity> */}
+            {/* <Text style={reAuth}>ارسال مجدد کد</Text> */}
+            {/* </TouchableOpacity> */}
           </View>
         </View>
       </BaseLightBox>

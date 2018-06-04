@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Alert } from 'react-native';
 import {
   Button,
   Container,
@@ -7,31 +7,25 @@ import {
   Footer,
   FooterTab,
   Form,
-  Icon,
-  Input,
-  Item,
-  Label,
-  ListItem,
   Picker,
-  Radio,
-  Right,
-  Text
 } from 'native-base';
 import moment from 'moment';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import { SignStyle } from '../assets/styles/sign';
+import LinearGradient from 'react-native-linear-gradient';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
+import { CheckBox, Divider } from 'react-native-elements';
 import { getSingleToken, putMember } from '../services';
 import { setUser } from '../redux/actions';
 import Status from './status';
+import { TextInput, Text } from './Kit';
+import { darkColor, mainColor, white } from '../assets/variables/colors';
 
-const ItemSelect = Picker.Item;
 @connect(state => ({ user: state.user }), { setUser })
 export default class Register extends Component {
   state = {
-    fistName: '',
-    lastName: '',
-    typememberid: 6,
+    namefamilymember: null,
+    typememberid: null,
     city: 'تهران',
     sexmember: 1,
     mailmember: null,
@@ -43,209 +37,197 @@ export default class Register extends Component {
       sexmember: value
     });
   }
-
   onCityChange(value) {
     this.setState({
       city: value
     });
   }
-
-  changeName(text) {
-    this.setState({
-      fistName: text
-    });
-  }
-
-  changeFamily(text) {
-    this.setState({
-      lastName: text
-    });
-  }
-
-  changeEmail(text) {
-    this.setState({
-      mailmember: text
-    });
-  }
-
   async changeAge(age) {
     const date = await moment().subtract(age, 'years');
     const birthdaymember = await date.format('YYYY-MM-DDTHH:mm:ss');
     await this.setState({ birthdaymember });
   }
-
   async submitButtonPress() {
-    try {
-      const {
-        fistName, lastName, mailmember,
-        typememberid, sexmember, birthdaymember
-      } = await this.state;
-      const { phone, tokenapi, tokenmember } = await this.props.user;
-      const namefamilymember = `${await fistName} ${lastName}`;
-      const json = await putMember(
-        namefamilymember,
-        mailmember,
-        birthdaymember,
-        sexmember,
-        typememberid,
-        phone,
-        tokenmember,
-        tokenapi
-      );
-      if (json === 1) {
-        const jsonInfo = await getSingleToken(tokenmember, tokenapi);
-        console.log(jsonInfo, 'JsonInfo');
-        await this.props.setUser(jsonInfo.MemberSingleToken);
-        Actions.reset('root');
-      } else {
-        console.log('PUT member response:', json);
+    const {
+      namefamilymember, mailmember,
+      typememberid, sexmember, birthdaymember
+    } = await this.state;
+    if (namefamilymember && typememberid && birthdaymember) {
+      try {
+        const { phone, tokenapi, tokenmember } = await this.props.user;
+        const json = await putMember(
+          namefamilymember,
+          mailmember,
+          birthdaymember,
+          sexmember,
+          typememberid,
+          phone,
+          tokenmember,
+          tokenapi
+        );
+        if (json === 1) {
+          const jsonInfo = await getSingleToken(tokenmember, tokenapi);
+          console.log(jsonInfo, 'JsonInfo');
+          await this.props.setUser(jsonInfo.MemberSingleToken);
+          Actions.reset('root');
+        } else {
+          console.log('PUT member response:', json);
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
+    } else {
+      Alert.alert(
+        'خطا',
+        'نام، سن و نوع کاربری نباید خالی باشند.',
+        [
+          { text: 'باشه' }
+        ]
+      );
     }
   }
 
   render() {
-    const {
-      item, formInputText, formStyle, submitButton,
-      submitButtonText, selectViewStyle, formSelectStyle, listSelectStyle,
-    } = SignStyle;
     return (
       <Container>
         <Status />
-        <Content padder>
-          <Text style={{ textAlign: 'center', fontSize: 20, margin: 10 }}>ثبت نام</Text>
-          <Form style={formStyle}>
-            <Item style={item}>
-              <Icon active name="person" />
-              <Input style={formInputText} onChangeText={text => this.changeName(text)} />
-              <Label>نام</Label>
-            </Item>
-            <Item style={item}>
-              <Icon active name="contacts" />
-              <Input style={formInputText} onChangeText={text => this.changeFamily(text)} />
-              <Label>نام خانوادگی</Label>
-            </Item>
-            <Item style={item}>
-              <Icon active name="mail" />
-              <Input
-                keyboardType="email-address"
-                style={formInputText}
-                onChangeText={text => this.changeEmail(text)}
-              />
-              <Label>ایمیل (اختیاری)</Label>
-            </Item>
-            <Item style={item}>
-              <Icon active name="calendar" />
-              <Input
-                keyboardType="numeric"
-                style={formInputText}
-                onChangeText={text => this.changeAge(text)}
-              />
-              <Label>سن</Label>
-            </Item>
-            <View style={selectViewStyle}>
-              <Form style={formSelectStyle}>
-                <Label>نوع کاربر</Label>
-                <ListItem
-                  style={listSelectStyle}
-                  onPress={() => this.setState({ typememberid: 6 })}
-                >
-                  <Text>ورزشکار</Text>
-                  <Right>
-                    <Radio
-                      selected={this.state.typememberid === 6}
-                      onPress={() => this.setState({ typememberid: 6 })}
-                    />
-                  </Right>
-                </ListItem>
-                <ListItem
-                  style={listSelectStyle}
-                  onPress={() => this.setState({ typememberid: 5 })}
-                >
-                  <Text>بوفه دار</Text>
-                  <Right>
-                    <Radio
-                      selected={this.state.typememberid === 5}
-                      onPress={() => this.setState({ typememberid: 5 })}
-                    />
-                  </Right>
-                </ListItem>
-                <ListItem
-                  style={listSelectStyle}
-                  onPress={() => this.setState({ typememberid: 4 })}
-                >
-                  <Text> باشگاه دار </Text>
-                  <Right>
-                    <Radio
-                      selected={this.state.typememberid === 4}
-                      onPress={() => this.setState({ typememberid: 4 })}
-                    />
-                  </Right>
-                </ListItem>
-              </Form>
-              <Form style={{ flex: 2, flexDirection: 'column' }}>
-                <Label style={formInputText}>جنسیت</Label>
+        <LinearGradient
+          colors={[darkColor, darkColor, mainColor]}
+          // locations={[0.6, 1]}
+          style={{ flex: 1, padding: 20 }}
+        >
+          <Content>
+            <Text style={{ textAlign: 'center', fontSize: 20, margin: 10, color: white }}>
+              ثبت نام
+            </Text>
+            <TextInput
+              placeholder="نام و نام خانوادگی"
+              placeholderTextColor="#000"
+              iconName="contacts"
+              onChangeText={text => this.setState({ namefamilymember: text })}
+            />
+            <TextInput
+              placeholder="ایمیل (اختیاری)"
+              placeholderTextColor="#000"
+              keyboardType="email-address"
+              iconName="mail"
+              onChangeText={text => this.setState({ mailmember: text })}
+            />
+            <TextInput
+              placeholder="سن"
+              placeholderTextColor="#000"
+              iconName="calendar"
+              keyboardType="numeric"
+              onChangeText={text => this.changeAge(text)}
+            />
+            <Divider style={{ backgroundColor: darkColor }} />
+            <Text style={{ color: white, marginTop: 5 }}>نوع کاربر</Text>
+            <CheckBox
+              right
+              iconRight
+              title="ورزشکار"
+              fontFamily="IRANSansMobile"
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+              checkedColor={mainColor}
+              checked={this.state.typememberid === 6}
+              onPress={() => this.setState({ typememberid: 6 })}
+            />
+            <CheckBox
+              right
+              iconRight
+              title="بوفه دار"
+              fontFamily="IRANSansMobile"
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+              checkedColor={mainColor}
+              checked={this.state.typememberid === 5}
+              onPress={() => this.setState({ typememberid: 5 })}
+            />
+            <CheckBox
+              right
+              iconRight
+              title="باشگاه دار"
+              fontFamily="IRANSansMobile"
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+              checkedColor={mainColor}
+              checked={this.state.typememberid === 4}
+              onPress={() => this.setState({ typememberid: 4 })}
+            />
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+              <Form style={{ flexDirection: 'row', justifyContent: 'center', margin: 5 }}>
                 <Picker
                   placeholder="انتخاب جنسیت"
                   iosHeader="انتخاب جنسیت"
+                  headerBackButtonText="بازگشت"
                   mode="dropdown"
                   selectedValue={this.state.sexmember}
                   onValueChange={this.onSexChange.bind(this)}
-                  itemTextStyle={formInputText}
+                  textStyle={{ fontFamily: 'IRANSansMobile', color: white }}
+                  itemTextStyle={{ fontFamily: 'IRANSansMobile', color: white }}
                 >
-                  <ItemSelect label="مرد" value={1} />
-                  <ItemSelect label="زن" value={2} />
+                  <Picker.Item label="مرد" value={1} />
+                  <Picker.Item label="زن" value={2} />
                 </Picker>
-                <Label style={formInputText}>استان</Label>
+                <Text style={{ color: white }}>جنسیت:</Text>
+              </Form>
+              <Form style={{ flexDirection: 'row', justifyContent: 'flex-end', margin: 5 }}>
                 <Picker
-                  placeholder="انتخاب شهر"
-                  iosHeader="انتخاب شهر"
+                  placeholder="استان"
+                  iosHeader="استان"
                   mode="dropdown"
                   selectedValue={this.state.city}
                   onValueChange={this.onCityChange.bind(this)}
-                  itemTextStyle={formInputText}
+                  textStyle={{ fontFamily: 'IRANSansMobile', color: white }}
+                  itemTextStyle={{ fontFamily: 'IRANSansMobile', color: white }}
                 >
-                  <ItemSelect label="آذربایجان شرقی" value="آذربایجان شرقی" />
-                  <ItemSelect label="آذربایجان غربی" value="آذربایجان غربی" />
-                  <ItemSelect label="اردبیل" value="اردبیل" />
-                  <ItemSelect label="اصفهان" value="اصفهان" />
-                  <ItemSelect label="البرز" value="البرز" />
-                  <ItemSelect label="ایلام" value="ایلام" />
-                  <ItemSelect label="بوشهر" value="بوشهر" />
-                  <ItemSelect label="تهران" value="تهران" />
-                  <ItemSelect label="چهارمحال و بختیاری" value="چهارمحال و بختیاری" />
-                  <ItemSelect label="خراسان جنوبی" value="خراسان جنوبی" />
-                  <ItemSelect label="خراسان رضوی" value="خراسان رضوی" />
-                  <ItemSelect label="خراسان شمالی" value="خراسان شمالی" />
-                  <ItemSelect label="خوزستان" value="خوزستان" />
-                  <ItemSelect label="زنجان" value="زنجان" />
-                  <ItemSelect label="سمنان" value="سمنان" />
-                  <ItemSelect label="سیستان و بلوچستان" value="سیستان و بلوچستان" />
-                  <ItemSelect label="فارس" value="فارس" />
-                  <ItemSelect label="قم" value="قم" />
-                  <ItemSelect label="کرمانشاه" value="کرمانشاه" />
-                  <ItemSelect label="کهگیلویه و بویراحمد" value="کهگیلویه و بویراحمد" />
-                  <ItemSelect label="گلستان" value="گلستان" />
-                  <ItemSelect label="گیلان" value="گیلان" />
-                  <ItemSelect label="لرستان" value="لرستان" />
-                  <ItemSelect label="مازندران" value="مازندران" />
-                  <ItemSelect label="مرکزی" value="مرکزی" />
-                  <ItemSelect label="هرمزگان" value="هرمزگان" />
-                  <ItemSelect label="همدان" value="همدان" />
-                  <ItemSelect label="یزد" value="یزد" />
+                  <Picker.Item label="آذربایجان شرقی" value="آذربایجان شرقی" />
+                  <Picker.Item label="آذربایجان غربی" value="آذربایجان غربی" />
+                  <Picker.Item label="اردبیل" value="اردبیل" />
+                  <Picker.Item label="اصفهان" value="اصفهان" />
+                  <Picker.Item label="البرز" value="البرز" />
+                  <Picker.Item label="ایلام" value="ایلام" />
+                  <Picker.Item label="بوشهر" value="بوشهر" />
+                  <Picker.Item label="تهران" value="تهران" />
+                  <Picker.Item label="چهارمحال و بختیاری" value="چهارمحال و بختیاری" />
+                  <Picker.Item label="خراسان جنوبی" value="خراسان جنوبی" />
+                  <Picker.Item label="خراسان رضوی" value="خراسان رضوی" />
+                  <Picker.Item label="خراسان شمالی" value="خراسان شمالی" />
+                  <Picker.Item label="خوزستان" value="خوزستان" />
+                  <Picker.Item label="زنجان" value="زنجان" />
+                  <Picker.Item label="سمنان" value="سمنان" />
+                  <Picker.Item label="سیستان و بلوچستان" value="سیستان و بلوچستان" />
+                  <Picker.Item label="فارس" value="فارس" />
+                  <Picker.Item label="قم" value="قم" />
+                  <Picker.Item label="کرمانشاه" value="کرمانشاه" />
+                  <Picker.Item label="کهگیلویه و بویراحمد" value="کهگیلویه و بویراحمد" />
+                  <Picker.Item label="گلستان" value="گلستان" />
+                  <Picker.Item label="گیلان" value="گیلان" />
+                  <Picker.Item label="لرستان" value="لرستان" />
+                  <Picker.Item label="مازندران" value="مازندران" />
+                  <Picker.Item label="مرکزی" value="مرکزی" />
+                  <Picker.Item label="هرمزگان" value="هرمزگان" />
+                  <Picker.Item label="همدان" value="همدان" />
+                  <Picker.Item label="یزد" value="یزد" />
                 </Picker>
+                <Text style={{ color: white }}>استان:</Text>
               </Form>
             </View>
-          </Form>
-        </Content>
+          </Content>
+        </LinearGradient>
         <Footer>
           <FooterTab>
-            <Button full onPress={this.submitButtonPress.bind(this)} style={submitButton}>
-              <Text style={submitButtonText}>ثبت نام</Text>
+            <Button
+              full
+              onPress={this.submitButtonPress.bind(this)}
+              style={{ backgroundColor: mainColor }}
+            >
+              <Text style={{ color: white }}>ثبت نام</Text>
             </Button>
           </FooterTab>
         </Footer>
+        <KeyboardSpacer />
       </Container>
     );
   }

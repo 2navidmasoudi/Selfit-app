@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
-import { ImageBackground, TextInput, TouchableOpacity, View } from 'react-native';
-import { Container, Text } from 'native-base';
+import { ImageBackground, TouchableOpacity, View, Dimensions } from 'react-native';
+import { Button, Container, Content } from 'native-base';
 import LinearGradient from 'react-native-linear-gradient';
 import { Actions } from 'react-native-router-flux';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { connect } from 'react-redux';
 import { SignStyle } from '../assets/styles/sign';
 import { setPhone, setTokenapi, setUser } from '../redux/actions';
 import { getSingleToken, postMember, putMemberLogin } from '../services';
 import Status from './status';
+import { Text, TextInput } from './Kit';
+import { darkColor, mainColor, white } from '../assets/variables/colors';
 
+const { width, height } = Dimensions.get('window');
 @connect(state => ({ user: state.user }), { setUser, setPhone, setTokenapi })
 export default class Login extends Component {
   constructor(props) {
@@ -136,21 +140,20 @@ export default class Login extends Component {
   render() {
     const phoneNumberError = this.state.phoneNumber.error;
     const {
-      loginBox, loginTitle, inputGroup, labelText,
-      inputText, signButtonImg, backgroundStyle, labelRedText, signCustomBtn
+      loginBox, inputGroup,
+      inputText, labelRedText
     } = SignStyle;
     return (
       <Container>
         <Status />
         <LinearGradient
-          colors={['#05785C', '#0F9D7A']}
-          style={backgroundStyle}
-          activeOpacity={0.85}
+          colors={[darkColor, darkColor, mainColor]}
+          style={{ flex: 1, justifyContent: 'center' }}
         >
           <View style={loginBox}>
-            <Text style={loginTitle}>ورود</Text>
+            <Text style={{ color: white, textAlign: 'center' }}>ورود</Text>
             <View style={inputGroup}>
-              <Text style={labelText}>شماره موبایل :</Text>
+              <Text style={{ color: white }}>شماره موبایل :</Text>
               <TextInput
                 style={inputText}
                 placeholder="09xxxxxxxxx"
@@ -159,19 +162,25 @@ export default class Login extends Component {
                 maxLength={11}
                 onChangeText={text => this.changeMobileNumber(text)}
               />
-              <Text style={labelRedText}>{phoneNumberError}</Text>
-              <View style={{ alignItems: 'center' }}>
-                <TouchableOpacity onPress={this.login.bind(this)}>
-                  <ImageBackground
-                    imageStyle={signCustomBtn}
-                    source={require('./../assets/S_Logo.png')}
-                    style={signButtonImg}
-                  />
-                </TouchableOpacity>
-              </View>
+              <Text
+                style={[labelRedText, { display: phoneNumberError ? 'flex' : 'none' }]}
+              >
+                {phoneNumberError}
+              </Text>
+              <Button
+                block
+                style={{ backgroundColor: darkColor }}
+                onPress={this.login.bind(this)}
+              >
+                <Text style={{ color: white }}>
+                    تايید
+                </Text>
+              </Button>
             </View>
           </View>
+
         </LinearGradient>
+        <KeyboardSpacer />
       </Container>
     );
   }

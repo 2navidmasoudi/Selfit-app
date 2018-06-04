@@ -18,11 +18,11 @@ export default StyleSheet.create({
   iconContainer: {
     position: 'absolute',
     right: 8,
-    top: 6,
+    // top: 6,
     height: 24,
     paddingLeft: 8,
     borderLeftColor: grayLight,
-    borderLeftWidth: 1
+    // borderLeftWidth: 1
   },
   inputContainer: {},
   input: {
