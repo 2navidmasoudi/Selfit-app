@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ImageBackground, TouchableWithoutFeedback, View } from 'react-native';
+import { ImageBackground, TouchableWithoutFeedback, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
@@ -92,6 +92,16 @@ export default class DrawerLayout extends Component {
       console.log(e);
       logError(e, '_getBasketMaterial', 'DrawerLayout/index', 'getAllBasketMaterial');
     }
+  }
+  getRequestLogout() {
+    Alert.alert(
+      'اجازه خروج',
+      'آیا می خواهید از حساب کاربری خود خارج شوید؟',
+      [
+        { text: 'خیر' },
+        { text: 'بله', onPress: () => this._putUserLogout() },
+      ]
+    );
   }
   async _putUserLogout() {
     try {
@@ -210,7 +220,7 @@ export default class DrawerLayout extends Component {
             <Text>قوانین و تعهدات</Text>
             <Icon name="help" style={drawer.itemIcon} />
           </Item>
-          <Item style={drawer.item} onPress={() => this._putUserLogout()}>
+          <Item style={drawer.item} onPress={() => this.getRequestLogout()}>
             <Text>خروج از حساب</Text>
             <Icon name="backspace" style={drawer.itemIcon} />
           </Item>
