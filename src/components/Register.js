@@ -165,7 +165,7 @@ export default class Register extends Component {
                   selectedValue={this.state.sexmember}
                   onValueChange={this.onSexChange.bind(this)}
                   textStyle={{ fontFamily: 'IRANSansMobile', color: white }}
-                  itemTextStyle={{ fontFamily: 'IRANSansMobile', color: white }}
+                  itemTextStyle={{ fontFamily: 'IRANSansMobile' }}
                 >
                   <Picker.Item label="مرد" value={1} />
                   <Picker.Item label="زن" value={2} />
@@ -174,11 +174,10 @@ export default class Register extends Component {
                 <Picker
                   placeholder="استان"
                   iosHeader="استان"
-                  mode="dropdown"
                   selectedValue={this.state.city}
                   onValueChange={this.onCityChange.bind(this)}
                   textStyle={{ fontFamily: 'IRANSansMobile', color: white }}
-                  itemTextStyle={{ fontFamily: 'IRANSansMobile', color: white }}
+                  itemTextStyle={{ fontFamily: 'IRANSansMobile' }}
                 >
                   <Picker.Item label="آذربایجان شرقی" value="آذربایجان شرقی" />
                   <Picker.Item label="آذربایجان غربی" value="آذربایجان غربی" />
