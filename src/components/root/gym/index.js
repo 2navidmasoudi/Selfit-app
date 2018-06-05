@@ -98,23 +98,7 @@ export default class Gym extends Component {
           >
             <Text style={{ fontSize: 18 }}>{this.state.tabTitle === 'لیست' ? 'نقشه' : 'لیست'}</Text>
           </Fab>
-          <Fab
-            style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: 50,
-          width: 120,
-          left: 5,
-          bottom: 60,
-          borderRadius: 10,
-          backgroundColor: '#0F9D7A'
-          }}
-            position="bottomLeft"
-            onPress={() => Actions.fullMap()}
-          >
-            <Text style={{ fontSize: 18 }}>کل باشگاه ها</Text>
-          </Fab>
+
         </View>
       </Container>
     );

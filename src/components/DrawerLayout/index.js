@@ -38,61 +38,61 @@ export default class DrawerLayout extends Component {
     ssort: false,
   };
   componentWillMount() {
-    this.getInfo();
+    // this.getInfo();
   }
   async getInfo() {
-    await this.props.tokenStore('selfit.store');
-    await this.props.tokenBuffet('selfit.buffet');
+    // await this.props.tokenStore('selfit.store');
+    // await this.props.tokenBuffet('selfit.buffet');
     // await this._getAllOrder();
-    await this._getBasketProduct();
-    await this._getBasketBuffet();
-    await this._getBasketMaterial();
+    // await this._getBasketProduct();
+    // await this._getBasketBuffet();
+    // await this._getBasketMaterial();
   }
-  async _getBasketProduct() {
-    try {
-      const { tokenmember } = await this.props.user;
-      const { storeToken } = await this.props;
-      const { active, max, min, fsort, ssort } = await this.state;
-      const Basket = await getBasketProduct(active, tokenmember, storeToken, max, min, ssort, fsort);
-      console.log(Basket, 'basket for Product!');
-      this.props.reBasketProduct(Basket, Basket.length);
-    } catch (e) {
-      console.log(e);
-      logError(e, '_getBasketProduct', 'DrawerLayout/index', 'getBasketProduct');
-    }
-  }
-  async _getBasketBuffet() {
-    try {
-      const { tokenmember } = await this.props.user;
-      const { buffetToken } = await this.props;
-      const { active, max, min } = await this.state;
-      const {
-        Basket,
-        PriceAll
-      } = await getAllOrder(active, tokenmember, buffetToken, max, min);
-      console.log(Basket, 'basket for Buffet!', PriceAll, 'priceAll');
-      this.props.reBasketBuffet(Basket, Basket.length, PriceAll);
-    } catch (e) {
-      console.log(e);
-      logError(e, '_getBasketBuffet', 'DrawerLayout/index', 'getAllOrder');
-    }
-  }
-  async _getBasketMaterial() {
-    try {
-      const { tokenmember } = await this.props.user;
-      const { buffetToken } = await this.props;
-      const { state, max, min, fsort, ssort } = await this.state;
-      const {
-        Basket,
-        PriceAll
-      } = await getAllBasketMaterial(true, tokenmember, buffetToken, max, min, ssort);
-      console.log(Basket, 'basket for Material!', PriceAll, 'priceAll');
-      this.props.reBasketMaterial(Basket, Basket.length, PriceAll);
-    } catch (e) {
-      console.log(e);
-      logError(e, '_getBasketMaterial', 'DrawerLayout/index', 'getAllBasketMaterial');
-    }
-  }
+  // async _getBasketProduct() {
+  //   try {
+  //     const { tokenmember } = await this.props.user;
+  //     const { storeToken } = await this.props;
+  //     const { active, max, min, fsort, ssort } = await this.state;
+  //     const Basket = await getBasketProduct(active, tokenmember, storeToken, max, min, ssort, fsort);
+  //     console.log(Basket, 'basket for Product!');
+  //     this.props.reBasketProduct(Basket, Basket.length);
+  //   } catch (e) {
+  //     console.log(e);
+  //     logError(e, '_getBasketProduct', 'DrawerLayout/index', 'getBasketProduct');
+  //   }
+  // }
+  // async _getBasketBuffet() {
+  //   try {
+  //     const { tokenmember } = await this.props.user;
+  //     const { buffetToken } = await this.props;
+  //     const { active, max, min } = await this.state;
+  //     const {
+  //       Basket,
+  //       PriceAll
+  //     } = await getAllOrder(active, tokenmember, buffetToken, max, min);
+  //     console.log(Basket, 'basket for Buffet!', PriceAll, 'priceAll');
+  //     this.props.reBasketBuffet(Basket, Basket.length, PriceAll);
+  //   } catch (e) {
+  //     console.log(e);
+  //     logError(e, '_getBasketBuffet', 'DrawerLayout/index', 'getAllOrder');
+  //   }
+  // }
+  // async _getBasketMaterial() {
+  //   try {
+  //     const { tokenmember } = await this.props.user;
+  //     const { buffetToken } = await this.props;
+  //     const { state, max, min, fsort, ssort } = await this.state;
+  //     const {
+  //       Basket,
+  //       PriceAll
+  //     } = await getAllBasketMaterial(true, tokenmember, buffetToken, max, min, ssort);
+  //     console.log(Basket, 'basket for Material!', PriceAll, 'priceAll');
+  //     this.props.reBasketMaterial(Basket, Basket.length, PriceAll);
+  //   } catch (e) {
+  //     console.log(e);
+  //     logError(e, '_getBasketMaterial', 'DrawerLayout/index', 'getAllBasketMaterial');
+  //   }
+  // }
   getRequestLogout() {
     Alert.alert(
       'اجازه خروج',

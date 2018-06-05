@@ -32,7 +32,7 @@ export default class List2 extends Component {
   state = {
     max: 70,
     ssort: true,
-    fsort: 0,
+    fsort: 1,
     loading: 0,
     refreshing: false,
     search: null,

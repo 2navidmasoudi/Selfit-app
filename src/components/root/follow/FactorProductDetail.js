@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FlatList } from 'react-native';
-import { Card, CardItem, Container, Content, Left, ListItem, Right, } from 'native-base';
+import { Body, Card, CardItem, Container, Content, Left, ListItem, Right, } from 'native-base';
 import { connect } from 'react-redux';
 import moment from 'moment-jalaali';
 import AppHeader from '../../header';
@@ -26,9 +26,7 @@ export default class FactorProductDetail extends Component {
     try {
       const { tokenmember } = await this.props.user;
       const { tokenapi, factor } = await this.props;
-      const orders = await getFactorDetailProduct(
-        factor.idorder, tokenmember, tokenapi, 30, 0, false, 0
-      );
+      const orders = await getFactorDetailProduct(factor.idorder, tokenmember, tokenapi, 30, 0, false, 0);
       this.setState({ orders });
       console.log('factorDetailProduct');
       console.log(orders);
@@ -42,7 +40,9 @@ export default class FactorProductDetail extends Component {
       <Left>
         <Text>{persianNumber(item.priceproduct.toLocaleString())} تومان</Text>
       </Left>
-      <Text style={{ textAlign: 'center' }}>{item.titleproduct}</Text>
+      <Body>
+        <Text style={{ textAlign: 'center' }}>{item.titleproduct}</Text>
+      </Body>
       <Right>
         <Text>{persianNumber(item.numberbasket)} عدد</Text>
       </Right>

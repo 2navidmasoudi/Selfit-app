@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FlatList } from 'react-native';
-import { Button, Card, CardItem, Container, Content, Left, ListItem, Right } from 'native-base';
+import {Body, Button, Card, CardItem, Container, Content, Left, ListItem, Right} from 'native-base';
 import { connect } from 'react-redux';
 import moment from 'moment-jalaali';
 import AppHeader from '../../header';
@@ -59,7 +59,9 @@ export default class FactorBuffetDetail extends Component {
       <Left>
         <Text>{persianNumber(item.pricemenufood.toLocaleString())} تومان</Text>
       </Left>
-      <Text style={{ textAlign: 'center' }}>{item.namemenufood}</Text>
+      <Body>
+        <Text style={{ textAlign: 'center' }}>{item.namemenufood}</Text>
+      </Body>
       <Right>
         <Text>{persianNumber(item.numbermenufood)} عدد</Text>
       </Right>
@@ -70,7 +72,9 @@ export default class FactorBuffetDetail extends Component {
       <Left>
         <Text>{persianNumber(item.pricematerial.toLocaleString())} تومان</Text>
       </Left>
-      <Text style={{ textAlign: 'center' }}>{item.namematerial}</Text>
+      <Body>
+        <Text style={{ textAlign: 'center' }}>{item.namematerial}</Text>
+      </Body>
       <Right>
         <Text>{persianNumber(item.numbermaterial)} عدد</Text>
       </Right>

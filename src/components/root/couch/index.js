@@ -34,7 +34,7 @@ export default class Couch extends Component {
               <List1 />
             </Tab>
             <Tab
-              heading="بر اساس رتبه"
+              heading="بر اساس حروف الفبا"
               activeTextStyle={TabsStyle.activeText}
               textStyle={TabsStyle.text}
               activeTabStyle={TabsStyle.activeTab}

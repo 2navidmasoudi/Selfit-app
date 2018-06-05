@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { FlatList, View } from 'react-native';
 import { SearchBar } from 'react-native-elements';
-import { Spinner } from 'native-base';
+import { Actions } from 'react-native-router-flux';
+import { Fab, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import { getAllGym, getSearchGym } from '../../../services/gym';
 import GymCard from './GymCard';
 import { decrementMin, incrementMin, receiveGym, refreshGym, tokenGym } from '../../../redux/actions/index';
+import { Text } from '../../Kit';
 
 @connect(state => ({
   gym: state.gym.GymList,
@@ -131,6 +133,23 @@ export default class List extends Component {
           onEndReachedThreshold={0.5}
           ListFooterComponent={this.renderFooter.bind(this)}
         />
+        <Fab
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: 50,
+            width: 120,
+            right: 5,
+            bottom: 5,
+            borderRadius: 10,
+            backgroundColor: '#0F9D7A'
+          }}
+          position="bottomRight"
+          onPress={() => Actions.fullMap()}
+        >
+          <Text style={{ fontSize: 18 }}>کل باشگاه ها</Text>
+        </Fab>
       </View>
     );
   }
