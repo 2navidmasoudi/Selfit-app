@@ -55,7 +55,10 @@ export default class InputText extends Component {
       onChangeText,
       value,
       meta,
-      rtl
+      rtl,
+      autoFocus,
+      dataDetectorTypes,
+      maxLength,
     } = this.props;
     const inputStyles = [
       styles.input,
@@ -94,13 +97,16 @@ export default class InputText extends Component {
               keyboardType={keyboardType}
               onChangeText={onChangeText}
               value={value}
+              dataDetectorTypes={dataDetectorTypes}
               placeholder={placeholder}
+              maxLength={maxLength}
               autoCorrect={autoCorrect}
               autoCapitalize={autoCapitalize}
               secureTextEntry={secureTextEntry}
               placeholderTextColor={placeholderTextColor}
               underlineColorAndroid={white}
               multiline={multiline}
+              autoFocus={autoFocus}
               numberOfLines={numberOfLines}
               returnKeyType={returnKeyType}
               onSubmitEditing={onSubmitEditing}

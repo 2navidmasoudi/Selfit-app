@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { ImageBackground, TouchableOpacity, View, Dimensions } from 'react-native';
-import { Button, Container, Content } from 'native-base';
+import { View, Platform } from 'react-native';
+import {Button, Container, Content} from 'native-base';
 import LinearGradient from 'react-native-linear-gradient';
 import { Actions } from 'react-native-router-flux';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
@@ -12,7 +12,7 @@ import Status from './status';
 import { Text, TextInput } from './Kit';
 import { darkColor, mainColor, white } from '../assets/variables/colors';
 
-const { width, height } = Dimensions.get('window');
+const isIOS = Platform.OS === 'ios';
 @connect(state => ({ user: state.user }), { setUser, setPhone, setTokenapi })
 export default class Login extends Component {
   constructor(props) {
@@ -159,6 +159,8 @@ export default class Login extends Component {
                 placeholder="09xxxxxxxxx"
                 underlineColorAndroid="transparent"
                 keyboardType="numeric"
+                autoFocus
+                dataDetectorTypes="phoneNumber"
                 maxLength={11}
                 onChangeText={text => this.changeMobileNumber(text)}
               />
@@ -178,9 +180,8 @@ export default class Login extends Component {
               </Button>
             </View>
           </View>
-
         </LinearGradient>
-        <KeyboardSpacer />
+        {isIOS && <KeyboardSpacer />}
       </Container>
     );
   }

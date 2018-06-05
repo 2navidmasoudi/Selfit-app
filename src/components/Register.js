@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { View, Alert } from 'react-native';
+import { View, Alert, Platform } from 'react-native';
 import {
   Button,
   Container,
   Content,
   Footer,
   FooterTab,
-  Form,
   Picker,
 } from 'native-base';
 import moment from 'moment';
@@ -21,6 +20,7 @@ import Status from './status';
 import { TextInput, Text } from './Kit';
 import { darkColor, mainColor, white } from '../assets/variables/colors';
 
+const isIOS = Platform.OS === 'ios';
 @connect(state => ({ user: state.user }), { setUser })
 export default class Register extends Component {
   state = {
@@ -93,7 +93,6 @@ export default class Register extends Component {
         <Status />
         <LinearGradient
           colors={[darkColor, darkColor, mainColor]}
-          // locations={[0.6, 1]}
           style={{ flex: 1, padding: 20 }}
         >
           <Content>
@@ -121,7 +120,7 @@ export default class Register extends Component {
               onChangeText={text => this.changeAge(text)}
             />
             <Divider style={{ backgroundColor: darkColor }} />
-            <Text style={{ color: white, marginTop: 5 }}>نوع کاربر</Text>
+            <Text style={{ color: white, marginTop: 5 }}>نوع حساب کاربری</Text>
             <CheckBox
               right
               iconRight
@@ -156,63 +155,58 @@ export default class Register extends Component {
               onPress={() => this.setState({ typememberid: 4 })}
             />
             <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-              <Form style={{ flexDirection: 'row', justifyContent: 'center', margin: 5 }}>
-                <Picker
-                  placeholder="انتخاب جنسیت"
-                  iosHeader="انتخاب جنسیت"
-                  headerBackButtonText="بازگشت"
-                  mode="dropdown"
-                  selectedValue={this.state.sexmember}
-                  onValueChange={this.onSexChange.bind(this)}
-                  textStyle={{ fontFamily: 'IRANSansMobile', color: white }}
-                  itemTextStyle={{ fontFamily: 'IRANSansMobile', color: white }}
-                >
-                  <Picker.Item label="مرد" value={1} />
-                  <Picker.Item label="زن" value={2} />
-                </Picker>
-                <Text style={{ color: white }}>جنسیت:</Text>
-              </Form>
-              <Form style={{ flexDirection: 'row', justifyContent: 'flex-end', margin: 5 }}>
-                <Picker
-                  placeholder="استان"
-                  iosHeader="استان"
-                  mode="dropdown"
-                  selectedValue={this.state.city}
-                  onValueChange={this.onCityChange.bind(this)}
-                  textStyle={{ fontFamily: 'IRANSansMobile', color: white }}
-                  itemTextStyle={{ fontFamily: 'IRANSansMobile', color: white }}
-                >
-                  <Picker.Item label="آذربایجان شرقی" value="آذربایجان شرقی" />
-                  <Picker.Item label="آذربایجان غربی" value="آذربایجان غربی" />
-                  <Picker.Item label="اردبیل" value="اردبیل" />
-                  <Picker.Item label="اصفهان" value="اصفهان" />
-                  <Picker.Item label="البرز" value="البرز" />
-                  <Picker.Item label="ایلام" value="ایلام" />
-                  <Picker.Item label="بوشهر" value="بوشهر" />
-                  <Picker.Item label="تهران" value="تهران" />
-                  <Picker.Item label="چهارمحال و بختیاری" value="چهارمحال و بختیاری" />
-                  <Picker.Item label="خراسان جنوبی" value="خراسان جنوبی" />
-                  <Picker.Item label="خراسان رضوی" value="خراسان رضوی" />
-                  <Picker.Item label="خراسان شمالی" value="خراسان شمالی" />
-                  <Picker.Item label="خوزستان" value="خوزستان" />
-                  <Picker.Item label="زنجان" value="زنجان" />
-                  <Picker.Item label="سمنان" value="سمنان" />
-                  <Picker.Item label="سیستان و بلوچستان" value="سیستان و بلوچستان" />
-                  <Picker.Item label="فارس" value="فارس" />
-                  <Picker.Item label="قم" value="قم" />
-                  <Picker.Item label="کرمانشاه" value="کرمانشاه" />
-                  <Picker.Item label="کهگیلویه و بویراحمد" value="کهگیلویه و بویراحمد" />
-                  <Picker.Item label="گلستان" value="گلستان" />
-                  <Picker.Item label="گیلان" value="گیلان" />
-                  <Picker.Item label="لرستان" value="لرستان" />
-                  <Picker.Item label="مازندران" value="مازندران" />
-                  <Picker.Item label="مرکزی" value="مرکزی" />
-                  <Picker.Item label="هرمزگان" value="هرمزگان" />
-                  <Picker.Item label="همدان" value="همدان" />
-                  <Picker.Item label="یزد" value="یزد" />
-                </Picker>
-                <Text style={{ color: white }}>استان:</Text>
-              </Form>
+              <Picker
+                placeholder="انتخاب جنسیت"
+                iosHeader="انتخاب جنسیت"
+                headerBackButtonText="بازگشت"
+                mode="dropdown"
+                selectedValue={this.state.sexmember}
+                onValueChange={this.onSexChange.bind(this)}
+                textStyle={{ fontFamily: 'IRANSansMobile', color: white }}
+                itemTextStyle={{ fontFamily: 'IRANSansMobile' }}
+              >
+                <Picker.Item label="مرد" value={1} />
+                <Picker.Item label="زن" value={2} />
+              </Picker>
+              <Text style={{ color: white }}>جنسیت:</Text>
+              <Picker
+                placeholder="استان"
+                iosHeader="استان"
+                selectedValue={this.state.city}
+                onValueChange={this.onCityChange.bind(this)}
+                textStyle={{ fontFamily: 'IRANSansMobile', color: white }}
+                itemTextStyle={{ fontFamily: 'IRANSansMobile' }}
+              >
+                <Picker.Item label="آذربایجان شرقی" value="آذربایجان شرقی" />
+                <Picker.Item label="آذربایجان غربی" value="آذربایجان غربی" />
+                <Picker.Item label="اردبیل" value="اردبیل" />
+                <Picker.Item label="اصفهان" value="اصفهان" />
+                <Picker.Item label="البرز" value="البرز" />
+                <Picker.Item label="ایلام" value="ایلام" />
+                <Picker.Item label="بوشهر" value="بوشهر" />
+                <Picker.Item label="تهران" value="تهران" />
+                <Picker.Item label="چهارمحال و بختیاری" value="چهارمحال و بختیاری" />
+                <Picker.Item label="خراسان جنوبی" value="خراسان جنوبی" />
+                <Picker.Item label="خراسان رضوی" value="خراسان رضوی" />
+                <Picker.Item label="خراسان شمالی" value="خراسان شمالی" />
+                <Picker.Item label="خوزستان" value="خوزستان" />
+                <Picker.Item label="زنجان" value="زنجان" />
+                <Picker.Item label="سمنان" value="سمنان" />
+                <Picker.Item label="سیستان و بلوچستان" value="سیستان و بلوچستان" />
+                <Picker.Item label="فارس" value="فارس" />
+                <Picker.Item label="قم" value="قم" />
+                <Picker.Item label="کرمانشاه" value="کرمانشاه" />
+                <Picker.Item label="کهگیلویه و بویراحمد" value="کهگیلویه و بویراحمد" />
+                <Picker.Item label="گلستان" value="گلستان" />
+                <Picker.Item label="گیلان" value="گیلان" />
+                <Picker.Item label="لرستان" value="لرستان" />
+                <Picker.Item label="مازندران" value="مازندران" />
+                <Picker.Item label="مرکزی" value="مرکزی" />
+                <Picker.Item label="هرمزگان" value="هرمزگان" />
+                <Picker.Item label="همدان" value="همدان" />
+                <Picker.Item label="یزد" value="یزد" />
+              </Picker>
+              <Text style={{ color: white }}>استان:</Text>
             </View>
           </Content>
         </LinearGradient>
@@ -227,7 +221,7 @@ export default class Register extends Component {
             </Button>
           </FooterTab>
         </Footer>
-        <KeyboardSpacer />
+        {isIOS && <KeyboardSpacer />}
       </Container>
     );
   }
