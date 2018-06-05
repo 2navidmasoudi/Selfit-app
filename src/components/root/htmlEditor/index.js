@@ -65,7 +65,6 @@ export default class HtmlEditor extends Component {
         <RichTextToolbar
           getEditor={() => this.richtext}
         />
-        {Platform.OS === 'ios' && <KeyboardSpacer />}
         <Button
           full
           style={{ backgroundColor: mainColor }}
@@ -75,6 +74,7 @@ export default class HtmlEditor extends Component {
             ثبت تغیرات
           </Text>
         </Button>
+        {Platform.OS === 'ios' && <KeyboardSpacer />}
       </Container>
     );
   }
