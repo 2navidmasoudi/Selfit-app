@@ -196,7 +196,7 @@ export default class App extends Component {
           >
             <RouterWithRedux hideNavBar>
               <Scene key="rootMain" hideNavbar>
-                <Scene key="splash" initial component={Splash} hideNavBar />
+                <Scene key="splash"  component={Splash} hideNavBar />
                 <Scene key="sign" component={Sign} hideNavBar />
                 <Scene key="root" hideNavBar>
                   <Drawer
@@ -269,10 +269,10 @@ export default class App extends Component {
                     </Scene>
                   </Drawer>
                 </Scene>
-                <Lightbox key="signUp" hideNavBar>
+                <Lightbox key="signUp" initial hideNavBar>
                   <Scene hideNavBar>
                     <Scene key="login" component={Login} />
-                    <Scene key="register" component={Register} />
+                    <Scene key="register" initial component={Register} />
                   </Scene>
                   <Scene key="authLightBox" component={AuthLightBox} />
                 </Lightbox>

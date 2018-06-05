@@ -1,11 +1,12 @@
 import React from 'react';
-import { Animated, Dimensions } from 'react-native';
+import { Animated, Dimensions, Platform } from 'react-native';
 import { View, Button, Icon } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { LightBoxStyle } from '../../assets/styles/sign';
 
-const { height: deviceHeight, width: deviceWidth } = Dimensions.get('window');
+const isIOS = Platform.OS === 'ios';
+const { width: deviceWidth } = Dimensions.get('window');
 export default class BaseLightBox extends React.Component {
   state = {
     opacity: new Animated.Value(0),
@@ -23,9 +24,8 @@ export default class BaseLightBox extends React.Component {
     }).start(Actions.pop);
   }
   _renderLightBox() {
-    const { children, verticalPercent = 1, horizontalPercent = 1 } = this.props;
+    const { children, verticalPercent = 1 } = this.props;
     const width = verticalPercent ? deviceWidth * verticalPercent : deviceWidth;
-    const height = horizontalPercent ? deviceHeight * horizontalPercent : deviceHeight;
     return (
       <View style={[LightBoxStyle.viewStyle, { width }]}>
         {children}
@@ -39,7 +39,7 @@ export default class BaseLightBox extends React.Component {
     return (
       <Animated.View style={[LightBoxStyle.container, { opacity: this.state.opacity }]}>
         {this._renderLightBox()}
-        <KeyboardSpacer />
+        {isIOS && <KeyboardSpacer />}
       </Animated.View>
     );
   }

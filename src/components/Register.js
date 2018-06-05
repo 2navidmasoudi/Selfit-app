@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Alert } from 'react-native';
+import { View, Alert, Platform } from 'react-native';
 import {
   Button,
   Container,
@@ -21,6 +21,7 @@ import Status from './status';
 import { TextInput, Text } from './Kit';
 import { darkColor, mainColor, white } from '../assets/variables/colors';
 
+const isIOS = Platform.OS === 'ios';
 @connect(state => ({ user: state.user }), { setUser })
 export default class Register extends Component {
   state = {
@@ -156,7 +157,6 @@ export default class Register extends Component {
               onPress={() => this.setState({ typememberid: 4 })}
             />
             <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-              <Form style={{ flexDirection: 'row', justifyContent: 'center', margin: 5 }}>
                 <Picker
                   placeholder="انتخاب جنسیت"
                   iosHeader="انتخاب جنسیت"
@@ -171,8 +171,6 @@ export default class Register extends Component {
                   <Picker.Item label="زن" value={2} />
                 </Picker>
                 <Text style={{ color: white }}>جنسیت:</Text>
-              </Form>
-              <Form style={{ flexDirection: 'row', justifyContent: 'flex-end', margin: 5 }}>
                 <Picker
                   placeholder="استان"
                   iosHeader="استان"
@@ -212,7 +210,6 @@ export default class Register extends Component {
                   <Picker.Item label="یزد" value="یزد" />
                 </Picker>
                 <Text style={{ color: white }}>استان:</Text>
-              </Form>
             </View>
           </Content>
         </LinearGradient>
@@ -227,7 +224,7 @@ export default class Register extends Component {
             </Button>
           </FooterTab>
         </Footer>
-        <KeyboardSpacer />
+        {isIOS && <KeyboardSpacer />}
       </Container>
     );
   }
