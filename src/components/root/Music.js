@@ -14,7 +14,7 @@ import { getAllMusic } from '../../services/music';
 
 const SelfitMusic = 'https://selfit.ir/Resource/music/';
 const window = Dimensions.get('window');
-const image = require('../../assets/Logo.jpg');
+const image = require('../../assets/music.jpg');
 
 @connect(state => ({
   user: state.user,
@@ -37,7 +37,6 @@ export default class Music extends Component {
       songs: [{
         title: 'Selfit',
         album: 'Start Up!',
-        albumImage: require('../../assets/Logo.jpg'),
         url: 'https://selfit.ir/Resource/music/BazamRaft.mp3',
       }]
     };
