@@ -11,8 +11,19 @@ export default ({ rightTitle, hasBlog }) => (
       <TouchableWithoutFeedback
         onPress={() => Actions.pop({ refresh: { refresh: Math.random() } })}
       >
-        <View style={{ display: hasBlog ? 'none' : 'flex', justifyContent: 'center', alignItems: 'center', height: 50, width: 50 }}>
-          <Icon name="arrow-back" onPress={() => Actions.pop()} style={{ color: 'white', fontWeight: 500, display: hasBlog ? 'none' : 'flex', marginHorizontal: 5 }} />
+        <View style={{
+          display: hasBlog ? 'none' : 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: 50,
+          width: 50
+        }}
+        >
+          <Icon
+            name="arrow-back"
+            onPress={() => Actions.pop()}
+            style={{ color: 'white', fontWeight: 500, display: hasBlog ? 'none' : 'flex', marginHorizontal: 5 }}
+          />
         </View>
       </TouchableWithoutFeedback>
       <TouchableWithoutFeedback onPress={() => Actions.blogRoot()}>
