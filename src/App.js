@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Drawer, Lightbox, Router, Scene } from 'react-native-router-flux';
-import { Dimensions, NetInfo, Linking } from 'react-native';
+import { Dimensions, NetInfo, Linking, View } from 'react-native';
 import firebase from 'react-native-firebase';
 import { Root } from 'native-base';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import Geocoder from 'react-native-geocoding';
 import codePush, { codePushDownloadDidProgress, codePushStatusDidChange } from 'react-native-code-push';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect, Provider } from 'react-redux';
 import { setEnabled } from './utils/analytics';
 import Splash from './components/Splash';
@@ -60,6 +61,10 @@ import PaymentWeb from './components/root/payment';
 import { darkColor, mainColor } from './assets/variables/colors';
 import FactorBuffetDetail from './components/root/follow/FactorBuffetDetail';
 import HtmlEditor from './components/root/htmlEditor';
+import MiniPlayer from './components/root/music/containers/MiniPlayer';
+import Player from './components/root/music/containers/Player';
+import Search from './components/root/music/containers/Search';
+import Downloads from './components/root/music/containers/Downloads';
 
 Geocoder.setApiKey('AIzaSyBlgHjeMbqK3xEZfh6HK2o8RdjhhgTOh0s');
 const window = Dimensions.get('window');
@@ -74,6 +79,9 @@ EStyleSheet.build({
 
 //     code-push release-react Selfit-Android android
 //      adb shell input keyevent 82
+
+const TabIcon = props => <Icon size={24} name={props.name} color={props.selected ? 'black' : '#c8c3c3'} />;
+
 
 const onBeforeLift = async () => {
   function handleFirstConnectivityChange(connectionInfo) {
@@ -194,90 +202,99 @@ export default class App extends Component {
             onBeforeLift={onBeforeLift}
             persistor={persistor}
           >
-            <RouterWithRedux hideNavBar>
-              <Scene key="rootMain" hideNavbar>
-                <Scene key="splash" initial component={Splash} hideNavBar />
-                <Scene key="sign" component={Sign} hideNavBar />
-                <Scene key="root" hideNavBar>
-                  <Drawer
-                    key="drawer"
-                    drawerPosition="right"
-                    contentComponent={DrawerLayout}
-                    drawerWidth={window.width / 1.7}
-                  >
-                    <Scene key="componentMain" hideNavbar>
-                      <Scene key="Home" hideNavBar initial component={Main} />
-                      <Scene key="Music" hideNavBar component={Music} />
-                      <Scene key="support" component={Support} hideNavBar />
-                      <Scene key="gym" component={Gym} hideNavBar />
-                      <Scene key="fullMap" component={FullMap} hideNavBar />
-                      <Scene key="gymDetail" component={GymDetail} hideNavBar />
-                      <Scene key="buffet" component={Buffet} hideNavBar />
-                      <Scene key="buffetMenu" component={BuffetMenu} hideNavBar />
-                      <Scene key="buffetBasket" component={BuffetBasket} hideNavBar />
-                      <Scene key="productBasket" component={ProductBasket} hideNavBar />
-                      <Scene key="timeStore" component={TimeStore} hideNavBar />
-                      <Scene key="factorBuffet" component={finalOrderBuffet} hideNavBar />
-                      <Scene key="factorProduct" component={finalOrderProduct} hideNavBar />
-                      <Scene key="addressRoot" hideNavBar>
-                        <Scene key="address" component={Address} initial hideNavBar />
-                        <Scene key="mapAddress" component={MapAddress} hideNavBar />
-                        <Scene key="addAddress" component={AddAddress} hideNavBar />
-                        <Scene key="editAddress" component={EditAddress} hideNavBar />
-                      </Scene>
-                      <Scene key="buffetKeeperRoot" hideNavBar>
-                        <Scene key="buffetKeeper" component={BuffetKeeper} initial hideNavBar />
-                        <Scene key="orderDetail" component={OrderDetail} hideNavBar />
-                      </Scene>
-                      <Scene key="buffetMenuRoot" hideNavBar>
-                        <Scene key="buffetMenu" component={FoodList} initial hideNavBar />
-                        <Scene key="addFood" component={AddFood} hideNavBar />
-                        <Scene key="addMaterial" component={AddMaterial} hideNavBar />
-                        <Scene key="menuList" component={MenuList} hideNavBar />
-                      </Scene>
-                      <Scene key="couchRoot" hideNavBar>
-                        <Scene key="couch" component={Couch} initial hideNavBar />
-                        <Scene key="coachDetail" component={CouchDetail} hideNavBar />
-                      </Scene>
-                      <Scene key="storeRoot" hideNavBar>
-                        <Scene key="store" component={Store} initial hideNavBar />
-                        <Scene key="categoryChildren" component={CategoryChildren} hideNavBar />
-                      </Scene>
-                      <Scene key="blogRoot" hideNavBar>
-                        <Scene key="blog" component={Blog} initial hideNavBar />
-                        <Scene key="blogWeb" component={BlogWeb} hideNavBar />
-                      </Scene>
-                      <Scene key="healthdeviceRoot" hideNavBar>
-                        <Scene key="healthdevice" component={HealthDevice} initial hideNavBar />
-                      </Scene>
-                      <Scene key="mygymRoot" hideNavBar>
-                        <Scene key="mygym" component={MyGym} initial hideNavBar />
-                        <Scene key="editGym" component={EditGym} hideNavBar />
-                        <Scene key="htmlEditor" component={HtmlEditor} hideNavBar />
-
-                      </Scene>
-                      <Scene key="buffetOrder" component={BuffetOrder} hideNavBar />
-                      <Scene key="showImage" component={ShowImage} hideNavBar />
-                      <Scene key="profile" hideNavBar component={Profile} />
-                      <Scene key="editProfile" component={EditProfile} hideNavBar />
-                      <Scene key="complaints" component={Complaints} hideNavBar />
-                      <Scene key="webView" component={WebViewComponent} hideNavBar />
-                      <Scene key="follow" component={Follow} hideNavBar />
-                      <Scene key="followProduct" component={FactorProductDetail} hideNavBar />
-                      <Scene key="followBuffet" component={FactorBuffetDetail} hideNavBar />
-                      <Scene key="paymentWebView" component={PaymentWeb} hideNavBar />
-                    </Scene>
-                  </Drawer>
-                </Scene>
-                <Lightbox key="signUp" hideNavBar>
-                  <Scene hideNavBar>
-                    <Scene key="login" component={Login} />
-                    <Scene key="register" component={Register} />
+            <View style={{ flex: 1 }}>
+              <MiniPlayer />
+              <RouterWithRedux hideNavBar>
+                <Scene key="rootMain" hideNavbar>
+                  <Scene key="splash" initial component={Splash} hideNavBar />
+                  <Scene key="sign" component={Sign} hideNavBar />
+                  <Scene key="Music" tabs>
+                    <Scene key="search" component={Search} title="Search" duration={0} icon={TabIcon} animation="fade" />
+                    <Scene key="download" component={Downloads} initial title="Downloads" icon={TabIcon} duration={0} animation="fade" />
                   </Scene>
-                  <Scene key="authLightBox" component={AuthLightBox} />
-                </Lightbox>
-              </Scene>
-            </RouterWithRedux>
+                  <Scene key="root" hideNavBar>
+                    <Drawer
+                      key="drawer"
+                      drawerPosition="right"
+                      contentComponent={DrawerLayout}
+                      drawerWidth={window.width / 1.7}
+                    >
+                      <Scene key="componentMain" hideNavbar>
+                        <Scene key="Home" hideNavBar initial component={Main} />
+                        {/* <Scene key="Music" hideNavBar component={Music} /> */}
+                        <Scene key="support" component={Support} hideNavBar />
+                        <Scene key="gym" component={Gym} hideNavBar />
+                        <Scene key="fullMap" component={FullMap} hideNavBar />
+                        <Scene key="gymDetail" component={GymDetail} hideNavBar />
+                        <Scene key="buffet" component={Buffet} hideNavBar />
+                        <Scene key="buffetMenu" component={BuffetMenu} hideNavBar />
+                        <Scene key="buffetBasket" component={BuffetBasket} hideNavBar />
+                        <Scene key="productBasket" component={ProductBasket} hideNavBar />
+                        <Scene key="timeStore" component={TimeStore} hideNavBar />
+                        <Scene key="factorBuffet" component={finalOrderBuffet} hideNavBar />
+                        <Scene key="factorProduct" component={finalOrderProduct} hideNavBar />
+                        <Scene key="addressRoot" hideNavBar>
+                          <Scene key="address" component={Address} initial hideNavBar />
+                          <Scene key="mapAddress" component={MapAddress} hideNavBar />
+                          <Scene key="addAddress" component={AddAddress} hideNavBar />
+                          <Scene key="editAddress" component={EditAddress} hideNavBar />
+                        </Scene>
+                        <Scene key="buffetKeeperRoot" hideNavBar>
+                          <Scene key="buffetKeeper" component={BuffetKeeper} initial hideNavBar />
+                          <Scene key="orderDetail" component={OrderDetail} hideNavBar />
+                        </Scene>
+                        <Scene key="buffetMenuRoot" hideNavBar>
+                          <Scene key="buffetMenu" component={FoodList} initial hideNavBar />
+                          <Scene key="addFood" component={AddFood} hideNavBar />
+                          <Scene key="addMaterial" component={AddMaterial} hideNavBar />
+                          <Scene key="menuList" component={MenuList} hideNavBar />
+                        </Scene>
+                        <Scene key="couchRoot" hideNavBar>
+                          <Scene key="couch" component={Couch} initial hideNavBar />
+                          <Scene key="coachDetail" component={CouchDetail} hideNavBar />
+                        </Scene>
+                        <Scene key="storeRoot" hideNavBar>
+                          <Scene key="store" component={Store} initial hideNavBar />
+                          <Scene key="categoryChildren" component={CategoryChildren} hideNavBar />
+                        </Scene>
+                        <Scene key="blogRoot" hideNavBar>
+                          <Scene key="blog" component={Blog} initial hideNavBar />
+                          <Scene key="blogWeb" component={BlogWeb} hideNavBar />
+                        </Scene>
+                        <Scene key="healthdeviceRoot" hideNavBar>
+                          <Scene key="healthdevice" component={HealthDevice} initial hideNavBar />
+                        </Scene>
+                        <Scene key="mygymRoot" hideNavBar>
+                          <Scene key="mygym" component={MyGym} initial hideNavBar />
+                          <Scene key="editGym" component={EditGym} hideNavBar />
+                          <Scene key="htmlEditor" component={HtmlEditor} hideNavBar />
+
+                        </Scene>
+                        <Scene key="buffetOrder" component={BuffetOrder} hideNavBar />
+                        <Scene key="showImage" component={ShowImage} hideNavBar />
+                        <Scene key="profile" hideNavBar component={Profile} />
+                        <Scene key="editProfile" component={EditProfile} hideNavBar />
+                        <Scene key="complaints" component={Complaints} hideNavBar />
+                        <Scene key="webView" component={WebViewComponent} hideNavBar />
+                        <Scene key="follow" component={Follow} hideNavBar />
+                        <Scene key="followProduct" component={FactorProductDetail} hideNavBar />
+                        <Scene key="followBuffet" component={FactorBuffetDetail} hideNavBar />
+                        <Scene key="paymentWebView" component={PaymentWeb} hideNavBar />
+                      </Scene>
+                    </Drawer>
+                  </Scene>
+                  <Lightbox key="signUp" hideNavBar>
+                    <Scene hideNavBar>
+                      <Scene key="login" component={Login} />
+                      <Scene key="register" component={Register} />
+                    </Scene>
+                    <Scene key="authLightBox" component={AuthLightBox} />
+                  </Lightbox>
+                  <Scene key="player" component={Player} hideNavBar hideTabBar direction="vertical" />
+                </Scene>
+              </RouterWithRedux>
+            </View>
+
           </PersistGate>
         </Provider>
       </Root>
