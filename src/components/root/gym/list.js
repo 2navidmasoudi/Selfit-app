@@ -133,7 +133,7 @@ export default class List extends Component {
           onEndReachedThreshold={0.5}
           ListFooterComponent={this.renderFooter.bind(this)}
         />
-        <Fab
+        { this.props.user.typememberid === 1 && <Fab
           style={{
             flex: 1,
             justifyContent: 'center',
@@ -149,7 +149,7 @@ export default class List extends Component {
           onPress={() => Actions.fullMap()}
         >
           <Text style={{ fontSize: 18 }}>کل باشگاه ها</Text>
-        </Fab>
+        </Fab>}
       </View>
     );
   }

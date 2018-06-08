@@ -133,9 +133,10 @@ export default class GymDetail extends Component {
   async submitRate() {
     try {
       const { tokenmember } = await this.props.user;
-      const { tokenapi, idgym } = await this.props;
-      const { rate } = await this.state;
-      const result = await postRateGym(idgym, rate, tokenmember, tokenapi);
+      const { tokenapi, gymid } = await this.props;
+      let { rate } = await this.state;
+      rate = await Number(rate);
+      const result = await postRateGym(gymid, rate, tokenmember, tokenapi);
       console.log(result, 'postRateGym');
       this.setState({ disableRate: true });
     } catch (e) {
@@ -243,17 +244,6 @@ export default class GymDetail extends Component {
               <Left style={{ flex: 1 }}>
                 <Text>تعداد بازدید: {persianNumber(visitgym)}</Text>
               </Left>
-              <Body style={{ flex: 1 }}>
-                <Button
-                  style={{ backgroundColor: mainColor }}
-                  disabled={this.state.disableRate}
-                  onPress={this.submitRate.bind(this)}
-                >
-                  <Text style={{ color: white }}>
-                    ثبت امتیاز
-                  </Text>
-                </Button>
-              </Body>
               <Right style={{ flex: 1 }}>
                 <Rating
                   ratingCount={5}
@@ -263,6 +253,16 @@ export default class GymDetail extends Component {
                   onFinishRating={this.ratingCompleted.bind(this)}
                   style={{ paddingVertical: 10 }}
                 />
+                <Button
+                  block
+                  disabled={this.state.disableRate}
+                  style={{ backgroundColor: mainColor }}
+                  onPress={this.submitRate.bind(this)}
+                >
+                  <Text style={{ color: white }}>
+                    ثبت امتیاز
+                  </Text>
+                </Button>
               </Right>
             </CardItem>
           </Card>

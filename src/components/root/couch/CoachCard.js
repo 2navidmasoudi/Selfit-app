@@ -34,7 +34,7 @@ export default class CoachCard extends Component {
               <Rating
                 readonly
                 fractions={1}
-                startingValue={coach.RateNumber || 5}
+                startingValue={coach.RateNumber}
                 imageSize={10}
                 style={{ marginRight: 10 }}
               />

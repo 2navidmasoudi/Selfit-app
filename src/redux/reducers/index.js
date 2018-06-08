@@ -5,9 +5,9 @@ import buffet from './buffetReducer';
 import store from './storeReducer';
 import blog from './blogReducer';
 import basket from './basketReducer';
-import * as api from '../../components/root/music/reducers/api.reducer';
-import * as player from '../../components/root/music/reducers/player.reducer';
-import * as routes from '../../components/root/music/reducers/routes';
+// import * as api from '../../components/root/music/reducers/api.reducer';
+// import * as player from '../../components/root/music/reducers/player.reducer';
+// import * as routes from '../../components/root/music/reducers/routes';
 
 const rehydrated = (state = false, action) => {
   switch (action.type) {
@@ -26,8 +26,8 @@ export default combineReducers({
   store,
   blog,
   basket,
-  ...api,
-  ...player,
-  ...routes,
+  // ...api,
+  // ...player,
+  // ...routes,
 });
 

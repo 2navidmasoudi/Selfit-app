@@ -38,7 +38,7 @@ export default class GymCard extends Component {
               <Rating
                 readonly
                 fractions={1}
-                startingValue={gym.RateNumber || 5}
+                startingValue={gym.RateNumber}
                 imageSize={10}
                 style={{ marginRight: 10 }}
               />

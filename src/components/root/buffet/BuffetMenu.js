@@ -18,9 +18,10 @@ import {
 } from 'native-base';
 import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
+import { Rating } from 'react-native-elements';
 import { connect } from 'react-redux';
 import AppHeader from '../../header';
-import { getMenuFood } from '../../../services/buffet';
+import {getMenuFood, postRateBuffet} from '../../../services/buffet';
 import { logError } from '../../../services/log';
 import { getFoodCategory } from '../../../services/MenuFood';
 import { getAllBuffetMaterial, postBasketMaterial } from '../../../services/orderMaterial';
@@ -30,7 +31,8 @@ import MaterialCard from './MaterialCard';
 import { TabsStyle } from '../../../assets/styles/gym';
 import { checkOrderBuffet, deleteOrderAll } from '../../../services/orderBuffet';
 import { Text } from '../../Kit';
-import { persianNumber } from '../../../utils/persian';
+import { persianNumber, latinNumber } from '../../../utils/persian';
+import { mainColor, white } from '../../../assets/variables/colors';
 
 moment.loadPersian({ dialect: 'persian-modern' });
 const styles = StyleSheet.create({
@@ -93,6 +95,8 @@ export default class BuffetMenu extends Component {
     min: 0,
     ssort: true,
     fsort: 0,
+    rate:null,
+    disableRate:false,
   };
   componentWillMount() {
     this.getInfo();
@@ -187,6 +191,23 @@ export default class BuffetMenu extends Component {
       logError(e, '_postBasketMaterial', 'Buffet/BuffetMenu', 'postBasketMaterial');
     }
   }
+  ratingCompleted(rate) {
+    console.log(`Rating is: ${rate}`);
+    this.setState({ rate });
+  }
+  async submitRate() {
+    try {
+      const { tokenmember } = await this.props.user;
+      const { tokenapi, buffetid } = await this.props;
+      let { rate } = await this.state;
+      rate = await Number(rate);
+      const result = await postRateBuffet(buffetid, rate, tokenmember, tokenapi);
+      console.log(result, 'postRateGym');
+      this.setState({ disableRate: true });
+    } catch (e) {
+      console.log(e);
+    }
+  }
   renderItem({ item }) {
     return <FoodCard MenuFood={item} />;
   }
@@ -270,12 +291,23 @@ export default class BuffetMenu extends Component {
                 <CardItem>
                   <Left style={{ flex: 1 }} />
                   <Right style={{ flex: 1 }}>
+                    <Rating
+                      ratingCount={5}
+                      fractions={2}
+                      startingValue={RateNumber}
+                      imageSize={30}
+                      onFinishRating={this.ratingCompleted.bind(this)}
+                      style={{ paddingVertical: 10 }}
+                    />
                     <Button
-                      transparent
-                      textStyle={{ color: '#87838B' }}
+                      block
+                      disabled={this.state.disableRate}
+                      style={{ backgroundColor: mainColor }}
+                      onPress={this.submitRate.bind(this)}
                     >
-                      <Icon name="md-star" />
-                      <Text>امتیاز: 5/{RateNumber}</Text>
+                      <Text style={{ color: white }}>
+                        ثبت امتیاز
+                      </Text>
                     </Button>
                   </Right>
                 </CardItem>
