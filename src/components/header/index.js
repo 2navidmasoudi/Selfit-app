@@ -5,11 +5,13 @@ import { Actions } from 'react-native-router-flux';
 import { header } from '../../assets/styles';
 import { Text } from '../Kit';
 
-export default ({ rightTitle, hasBlog }) => (
+export default ({ rightTitle, hasBlog, noPop }) => (
   <Header hasSubtitle style={header.headerColor} androidStatusBarColor="#313131" iosBarStyle="light-content">
     <Left style={{ flex: 1, flexDirection: 'row' }}>
       <TouchableWithoutFeedback
-        onPress={() => Actions.pop({ refresh: { refresh: Math.random() } })}
+        onPress={
+          !noPop ? () => Actions.pop({ refresh: { refresh: Math.random() } }) : () => Actions.Home()
+        }
       >
         <View style={{
           display: hasBlog ? 'none' : 'flex',
@@ -21,7 +23,7 @@ export default ({ rightTitle, hasBlog }) => (
         >
           <Icon
             name="arrow-back"
-            onPress={() => Actions.pop()}
+            onPress={!noPop ? () => Actions.pop({ refresh: { refresh: Math.random() } }) : () => Actions.Home()}
             style={{ color: 'white', fontWeight: 500, display: hasBlog ? 'none' : 'flex', marginHorizontal: 5 }}
           />
         </View>

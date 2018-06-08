@@ -7,7 +7,8 @@ export function searchSong(query) {
   return async (dispatch) => {
     dispatch(setSearchResults([]));
     dispatch(setLoading(true));
-    let res = await fetch(`${Config.SEARCH_API_URL}${query}`);
+    // TODO: search Song?
+    let res = await fetch(`${Config.SEARCH_API_URL}`);
     res = await res.json();
     res = await setDownloadedSongs(Utils.filterSearchResults(res));
     dispatch(setLoading(false));
@@ -32,7 +33,7 @@ function setLoading(res) {
 async function setDownloadedSongs(songs) {
   const downloadedSongs = await Utils.getSongsFromStorage();
   return _.map(songs, (song) => {
-    const findedSong = _.findWhere(downloadedSongs, { id: song.id });
+    const findedSong = _.findWhere(downloadedSongs, { id: song.idmusic });
     if (findedSong) {
       findedSong.downloaded = true;
       return findedSong;

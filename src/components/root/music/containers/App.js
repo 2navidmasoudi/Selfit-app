@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { Scene, Router } from 'react-native-router-flux';
 import { createStore, applyMiddleware } from 'redux';
 import { connect, Provider } from 'react-redux';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { Icon } from 'native-base';
 import thunk from 'redux-thunk';
 import reducer from '../../../../redux/reducers';
 import Downloads from './Downloads';

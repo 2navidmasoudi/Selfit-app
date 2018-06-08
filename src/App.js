@@ -208,10 +208,11 @@ export default class App extends Component {
                 <Scene key="rootMain" hideNavbar>
                   <Scene key="splash" initial component={Splash} hideNavBar />
                   <Scene key="sign" component={Sign} hideNavBar />
-                  <Scene key="Music" tabs>
-                    <Scene key="search" component={Search} title="Search" duration={0} icon={TabIcon} animation="fade" />
-                    <Scene key="download" component={Downloads} initial title="Downloads" icon={TabIcon} duration={0} animation="fade" />
-                  </Scene>
+                  {/* <Scene key="Music" tabs> */}
+                  {/* <Scene key="search" component={Search} title="Search" duration={0} icon={TabIcon} animation="fade" /> */}
+                  {/* <Scene key="download" component={Downloads} initial title="Downloads" icon={TabIcon} duration={0} animation="fade" /> */}
+                  {/* </Scene> */}
+                  <Scene key="Music" hideNavBar component={Music} />
                   <Scene key="root" hideNavBar>
                     <Drawer
                       key="drawer"
@@ -221,7 +222,6 @@ export default class App extends Component {
                     >
                       <Scene key="componentMain" hideNavbar>
                         <Scene key="Home" hideNavBar initial component={Main} />
-                        {/* <Scene key="Music" hideNavBar component={Music} /> */}
                         <Scene key="support" component={Support} hideNavBar />
                         <Scene key="gym" component={Gym} hideNavBar />
                         <Scene key="fullMap" component={FullMap} hideNavBar />
@@ -290,7 +290,7 @@ export default class App extends Component {
                     </Scene>
                     <Scene key="authLightBox" component={AuthLightBox} />
                   </Lightbox>
-                  <Scene key="player" component={Player} hideNavBar hideTabBar direction="vertical" />
+                  {/*<Scene key="player" component={Player} hideNavBar hideTabBar direction="vertical" />*/}
                 </Scene>
               </RouterWithRedux>
             </View>

@@ -9,7 +9,7 @@ import Styles from '../styles';
 import SearchResults from './SearchResults';
 
 class Search extends Component {
-  state = { searchQuery: '', page: 'search' }
+  state = { searchQuery: '', page: 'search' };
 
   render() {
     return (

@@ -43,7 +43,8 @@ export function filterSearchResults(res) {
 }
 
 export function getSongUrl(id) {
-  return `${Config.API_URL}${id}`;
+  // TODO : songs list?
+  return `${Config.API_URL}`;
 }
 
 export async function getSongsFromStorage() {

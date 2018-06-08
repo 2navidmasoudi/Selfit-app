@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Dimensions, Image, Platform, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import * as Progress from 'react-native-progress';
 import ActionCreators from '../actions';
 import Styles from '../styles';
 import {
@@ -13,7 +14,6 @@ import {
   SongSlider,
   VolumeButton
 } from '../components/PlayerButtons';
-import * as Progress from 'react-native-progress';
 
 const { height, width } = Dimensions.get('window');
 

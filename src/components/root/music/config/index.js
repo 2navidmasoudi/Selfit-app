@@ -1,5 +1,12 @@
-const YOUTUBE_API_KEY = 'YOUR_API_KEY';
+import { Music, Selfit } from '../../../../services/type';
+
+const tokenapi = 'selfit.public';
+const max = 30;
+const min = 0;
+const ssort = false;
+const fsort = 0;
+const token = 'C77D40AB-38FF-49CE-A053-7F9C3A54EBCD';
 export default {
-  API_URL: 'http://52.232.85.160/api?vid=',
-  SEARCH_API_URL: `https://www.googleapis.com/youtube/v3/search?key=${YOUTUBE_API_KEY}&type=video&part=snippet&maxResults=40&q=`
+  API_URL: `${Selfit}${Music}GetAll?token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`,
+  SEARCH_API_URL: `${Selfit}${Music}GetAll?token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`
 };

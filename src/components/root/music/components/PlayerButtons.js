@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { Icon } from 'native-base';
 import Slider from 'react-native-slider';
 import Styles from '../styles';
 import * as Utils from '../helpers/utils';
@@ -22,10 +21,10 @@ export class ForwardButton extends Component {
   render() {
     let forwardButton = null;
     if (!this.props.shuffle && this.props.songIndex + 1 === this.props.songs.length) {
-      forwardButton = <FontAwesome style={Styles.forward} name="forward" size={25} color="#333" />;
+      forwardButton = <Icon style={Styles.forward} name="ios-skip-forward" size={25} color="#333" />;
     } else {
       forwardButton =
-        <FontAwesome onPress={this.props.goForward} style={Styles.forward} name="forward" size={25} color="#fff" />;
+        <Icon onPress={this.props.goForward} style={Styles.forward} name="ios-skip-forward" size={25} color="#fff" />;
     }
 
     return forwardButton;
@@ -34,13 +33,13 @@ export class ForwardButton extends Component {
 
 export class BackwardButton extends Component {
   render() {
-    return <FontAwesome onPress={this.props.goBackward} style={Styles.back} name="backward" size={25} color="#fff" />;
+    return <Icon onPress={this.props.goBackward} style={Styles.back} name="ios-skip-backward" size={25} color="#fff" />;
   }
 }
 
 export class VolumeButton extends Component {
   render() {
-    return (<FontAwesome
+    return (<Icon
       onPress={this.props.toggleVolume}
       style={Styles.volume}
       name={this.props.volume ? 'volume-up' : 'volume-off'}
@@ -52,10 +51,10 @@ export class VolumeButton extends Component {
 
 export class ShuffleButton extends Component {
   render() {
-    return (<FontAwesome
+    return (<Icon
       onPress={this.props.toggleShuffle}
       style={Styles.shuffle}
-      name="random"
+      name="shuffle"
       size={18}
       color={this.props.shuffle ? '#f62976' : '#fff'}
     />);
@@ -65,9 +64,9 @@ export class ShuffleButton extends Component {
 export class DownloadButton extends Component {
   render() {
     if (this.props.downloading || this.props.downloaded) {
-      return <FontAwesome style={Styles.downloadButton} name="download" size={25} color="#333" />;
+      return <Icon style={Styles.downloadButton} name="download" size={25} color="#333" />;
     }
-    return (<FontAwesome
+    return (<Icon
       onPress={this.props.downloadMusic}
       style={Styles.downloadButton}
       name="download"

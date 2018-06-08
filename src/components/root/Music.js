@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dimensions, Image, StyleSheet, View } from 'react-native';
+import { Dimensions, Image, StyleSheet, View, BackHandler } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { Card, Container, Content, Icon } from 'native-base';
 import Slider from 'react-native-slider';
@@ -40,9 +40,17 @@ export default class Music extends Component {
         url: 'https://selfit.ir/Resource/music/BazamRaft.mp3',
       }]
     };
+    this._pasEditUnmountFunction = this._pasEditUnmountFunction.bind(this);
   }
   componentWillMount() {
     this.getInfo();
+  }
+  componentDidMount() {
+    console.log(this.props);
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', this._pasEditUnmountFunction);
+  }
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this._pasEditUnmountFunction);
   }
   async getInfo() {
     await this.props.tokenBlog('selfit.public');
@@ -80,6 +88,13 @@ export default class Music extends Component {
   setTime(params) {
     if (!this.state.sliding) {
       this.setState({ currentTime: params.currentTime });
+    }
+  }
+  _pasEditUnmountFunction() {
+    if (this.props.routeName === 'Music') {
+      Actions.Home();
+      this.backHandler.remove();
+      return true;
     }
   }
   goBackward() {
@@ -188,7 +203,7 @@ export default class Music extends Component {
     // let image = null;
     return (
       <Container style={{ flex: 1, width: window.width }}>
-        <AppHeader rightTitle="موزیک" backButton="flex" />
+        <AppHeader rightTitle="موزیک" noPop />
         <Content>
           <View style={styles.container}>
             <Video
@@ -197,6 +212,9 @@ export default class Music extends Component {
               ref="audio"
               volume={this.state.muted ? 0 : 1.0}
               muted={false}
+              playInBackground
+              playWhenInactive
+              ignoreSilentSwitch="ignore"
               paused={!this.state.playing}
               onLoad={this.onLoad.bind(this)}
               onProgress={this.setTime.bind(this)}
@@ -219,9 +237,9 @@ export default class Music extends Component {
             <Text style={[styles.songTitle, {}]}>
               {songPlaying.urlmusic}
             </Text>
-            <Text style={styles.albumTitle}>
-              {songPlaying.descmusic}
-            </Text>
+            {/* <Text style={styles.albumTitle}> */}
+            {/* {songPlaying.descmusic} */}
+            {/* </Text> */}
             <View style={styles.sliderContainer}>
               <Slider
                 onSlidingStart={this.onSlidingStart.bind(this)}
@@ -256,9 +274,9 @@ export default class Music extends Component {
               {volumeButton}
             </View>
           </View>
-          <Card style={{ flex: 0, backgroundColor: darkColor }}>
-            <Text>موزیک</Text>
-          </Card>
+          {/* <Card style={{ flex: 0, backgroundColor: darkColor }}> */}
+          {/* <Text>موزیک</Text> */}
+          {/* </Card> */}
         </Content>
       </Container>
     );

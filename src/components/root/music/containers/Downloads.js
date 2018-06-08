@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FlatList, List, TouchableOpacity, View } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { Icon } from 'native-base';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Styles from '../styles';

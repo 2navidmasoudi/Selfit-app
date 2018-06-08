@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ActivityIndicator, Dimensions, Image, Platform, Text, TouchableOpacity, View } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import Swipeout from 'react-native-swipe-out';
+import { Icon } from 'native-base';
+import Swipeout from 'react-native-swipeout';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -11,7 +11,7 @@ import ActionCreators from '../actions';
 const { height, width } = Dimensions.get('window');
 
 class Song extends Component {
-  state = { songImage: '../img/music.jpg', downloading: false }
+  state = { songImage: '../img/music.jpg', downloading: false };
   swipeBtns = [{
     text: 'Delete',
     backgroundColor: 'red',
