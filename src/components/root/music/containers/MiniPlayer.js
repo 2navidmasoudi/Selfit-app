@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import MusicControl from 'react-native-music-control';
 import _ from 'underscore';
 import { bindActionCreators } from 'redux';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {Icon} from 'native-base';
 import Video from 'react-native-video';
 import ActionCreators from '../actions';
 
@@ -209,7 +209,7 @@ class Player extends Component {
           />
           }
           <Text>{text.slice(0, 30)}...</Text>
-          <FontAwesome
+          <Icon
             onPress={() => this.togglePlay(!this.props.playing)}
             name={this.props.playing ? 'stop' : 'play'}
             size={20}
@@ -223,9 +223,9 @@ class Player extends Component {
 
 function renderForwardButton() {
   if (this.props.songIndex + 1 === this.props.songs.length) {
-    return <FontAwesome name="forward" size={20} color="#333" />;
+    return <Icon name="forward" size={20} color="#333" />;
   }
-  return <FontAwesome onPress={this.goForward.bind(this)} name="forward" size={20} />;
+  return <Icon onPress={this.goForward.bind(this)} name="forward" size={20} />;
 }
 
 function mapDispatchToProps(dispatch) {

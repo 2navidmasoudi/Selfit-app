@@ -18,7 +18,7 @@ import { Actions } from 'react-native-router-flux';
 import AppHeader from '../../header';
 import { getAllPicGym, postRateGym, putVisit } from '../../../services/gym';
 import { form } from '../../../assets/styles/index';
-import { mainColor } from '../../../assets/variables/colors';
+import { mainColor, white } from '../../../assets/variables/colors';
 import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
 import { htmlStyle } from '../../../assets/styles/html';
@@ -74,6 +74,8 @@ export default class GymDetail extends Component {
     interval: null,
     dataSource: [],
     isVisible: false,
+    rate: null,
+    disableRate: false,
   };
   componentWillMount() {
     this.getInfo();
@@ -124,13 +126,18 @@ export default class GymDetail extends Component {
       console.log(err);
     }
   }
-  async ratingCompleted(rate) {
+  ratingCompleted(rate) {
+    console.log(`Rating is: ${rate}`);
+    this.setState({ rate });
+  }
+  async submitRate() {
     try {
-      console.log(`Rating is: ${rate}`);
       const { tokenmember } = await this.props.user;
       const { tokenapi, idgym } = await this.props;
+      const { rate } = await this.state;
       const result = await postRateGym(idgym, rate, tokenmember, tokenapi);
       console.log(result, 'postRateGym');
+      this.setState({ disableRate: true });
     } catch (e) {
       console.log(e);
     }
@@ -236,6 +243,17 @@ export default class GymDetail extends Component {
               <Left style={{ flex: 1 }}>
                 <Text>تعداد بازدید: {persianNumber(visitgym)}</Text>
               </Left>
+              <Body style={{ flex: 1 }}>
+                <Button
+                  style={{ backgroundColor: mainColor }}
+                  disabled={this.state.disableRate}
+                  onPress={this.submitRate.bind(this)}
+                >
+                  <Text style={{ color: white }}>
+                    ثبت امتیاز
+                  </Text>
+                </Button>
+              </Body>
               <Right style={{ flex: 1 }}>
                 <Rating
                   ratingCount={5}
