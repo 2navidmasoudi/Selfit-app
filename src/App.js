@@ -212,7 +212,7 @@ export default class App extends Component {
                 {/* <Scene key="download" component={Downloads} initial title="Downloads" icon={TabIcon} duration={0} animation="fade" /> */}
                 {/* </Scene> */}
                 <Scene key="Music" hideNavBar component={Music} />
-                <Scene key="root" initial hideNavBar>
+                <Scene key="root" hideNavBar>
                   <Drawer
                     key="drawer"
                     drawerPosition="right"
