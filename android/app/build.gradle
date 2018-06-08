@@ -166,6 +166,8 @@ dependencies {
     implementation "com.google.firebase:firebase-messaging:15.0.2"
     implementation 'me.leolin:ShortcutBadger:1.1.21@aar'
     implementation project(':react-native-video')
+    implementation project(':react-native-music-control')
+    implementation project(':react-native-fs')
     implementation project(':react-native-linear-gradient')
     implementation project(':react-native-image-picker')
     implementation project(':react-native-fetch-blob')
@@ -191,3 +193,4 @@ project.afterEvaluate {
     copyEditorHtmlToAppAssets(file('../../node_modules/react-native-zss-rich-text-editor'))
 }
 apply plugin: 'com.google.gms.google-services'
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"

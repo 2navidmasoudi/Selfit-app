@@ -62,6 +62,24 @@ export const postMenuFoodBuffet = async (idbuffet, menufoodidval, active, token,
   const json = await response.json();
   return json;
 };
+export const postRateBuffet = async (idbuffet, rate, token, tokenapi) => {
+  try {
+    const response = await fetch(`${Selfit}${Buffet}PostRate`, {
+      method: POST,
+      headers,
+      body: JSON.stringify({
+        idbuffet,
+        rate,
+        token,
+        tokenapi,
+      })
+    });
+    const json = await response.json();
+    return json;
+  } catch (e) {
+    console.log(e);
+  }
+};
 export const putActiveMenuFood = async (idbuffet, idmenufood_buffet, active, token, tokenapi) => {
   const response = await fetch(`${Selfit}${Buffet}PutActiveMenufood`, {
     method: PUT,

@@ -5,7 +5,7 @@ import { styles } from './style';
 import { Text } from '../Kit';
 
 export default () => (
-  <TouchableWithoutFeedback onPress={() => Actions.Music()}>
+  <TouchableWithoutFeedback onPress={() => { Actions.reset('root'); Actions.Music(); }}>
     <View style={styles.animationView}>
       <Text type="bold" style={styles.animationTitle}>
               موزیک

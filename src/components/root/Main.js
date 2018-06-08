@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, BackHandler } from 'react-native';
 import { Container } from 'native-base';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 import { main } from '../../assets/styles/index';
 import AppHeader from '../header';
 import { putCheckToken } from '../../services';
