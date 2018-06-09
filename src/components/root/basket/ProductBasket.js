@@ -42,7 +42,7 @@ export default class ProductBasket extends Component {
     await this.props.setRoad('Store');
   }
   async _getPayment() {
-    const totalPrice = await getPayment(2, this.props.user.tokenmember, 'selfit.member');
+    const totalPrice = await getPayment(2, this.props.user.tokenmember, 0, 'selfit.member');
     this.props.setProductPriceAll(totalPrice);
   }
   async _getBasketProduct() {

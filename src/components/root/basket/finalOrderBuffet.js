@@ -21,8 +21,10 @@ import AppHeader from '../../header';
 import { reBasketBuffet, reBasketMaterial, setRoad, tokenBuffet } from '../../../redux/actions';
 import { SignStyle } from '../../../assets/styles/sign';
 import { Text } from '../../Kit';
-import {persianNumber} from "../../../utils/persian";
-import {FlatList} from "react-native";
+import { persianNumber } from '../../../utils/persian';
+import { FlatList } from 'react-native';
+import { sendPrice } from '../../../services/Alopeyk';
+import { getSingleBuffet } from '../../../services/buffet';
 // TODO: ADD LIST FOR FINAL ORDER
 @connect(state => ({
   user: state.user,
@@ -51,6 +53,9 @@ export default class finalOrderBuffet extends Component {
     ssort: false,
     total: 0,
     descfactor: '',
+    sendServicePrice: 0,
+    lat: null,
+    long: null,
   };
   componentWillMount() {
     this.getInfo();
@@ -58,7 +63,9 @@ export default class finalOrderBuffet extends Component {
   }
   async getInfo() {
     await this.props.tokenBuffet('selfit.buffet');
-    this.props.setRoad('buffet');
+    await this.props.setRoad('buffet');
+    await this._getSingleBuffet();
+    this._sendPrice();
   }
   async sendOrderBuffet() {
     try {
@@ -73,6 +80,34 @@ export default class finalOrderBuffet extends Component {
         Actions.reset('root');
       }
       console.log(result);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  async _getSingleBuffet() {
+    try {
+      const { tokenmember } = await this.props.user;
+      const { buffetid, tokenapi } = await this.props;
+      const buffetInfo = await getSingleBuffet(buffetid, tokenmember, tokenapi);
+      console.log('buffetInfo');
+      console.log(buffetInfo);
+      await this.setState({
+        lat: buffetInfo.latgym,
+        long: buffetInfo.longgym,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  async _sendPrice() {
+    try {
+      const { lataddressmember, longaddressmember } = await this.props.address;
+      const { lat, long } = await this.state;
+      const sendServicePrice = await sendPrice(lat, long, lataddressmember, longaddressmember);
+      console.log(sendServicePrice);
+      await this.setState({
+        sendServicePrice: sendServicePrice.object.price,
+      });
     } catch (e) {
       console.log(e);
     }
@@ -104,12 +139,14 @@ export default class finalOrderBuffet extends Component {
     </ListItem>
   );
   render() {
-    const totalPrice = (this.props.PriceAllBuffet+this.props.PriceAllMaterial).toLocaleString();
+    const totalPrice =
+      (this.props.PriceAllBuffet + this.props.PriceAllMaterial + this.state.sendServicePrice*3/5)
+        .toLocaleString();
     const addressTitle = Base64.decode(this.props.address.titleaddressmember);
     const {
       item, formInputText
     } = SignStyle;
-    const FooterComponent = (this.props.Count1 + this.props.Count2) === 0 ? null :
+    const FooterComponent = ((this.props.Count1 + this.props.Count2) === 0 && this.state.sendServicePrice === 0)  ? null :
       (<Footer>
         <FooterTab>
           <Button
@@ -129,49 +166,52 @@ export default class finalOrderBuffet extends Component {
       <Container>
         <AppHeader rightTitle="صدور فاکتور بوفه" backButton="flex" />
         <Content padder>
+          <Card style={{ flex: 0 }}>
+            <CardItem>
+              <Text style={{ flex: 1, textAlign: 'center' }} type="bold">مشخصات فاکتور</Text>
+            </CardItem>
             <Card style={{ flex: 0 }}>
               <CardItem>
-                <Text style={{ flex: 1, textAlign: 'center' }} type="bold">مشخصات فاکتور</Text>
-              </CardItem>
-              <Card style={{ flex: 0 }}>
-                <CardItem>
-                  <Text type="bold" style={{ flex: 1, marginHorizontal: 10 }}>غذای آماده</Text>
-                </CardItem>
-              </Card>
-              <FlatList
-                data={this.props.buffetBasket}
-                renderItem={this.renderItem}
-                scrollEnabled={false}
-                keyExtractor={item => item.idmenufood}
-              />
-              <Card style={{ flex: 0 }}>
-                <CardItem>
-                  <Text type="bold" style={{ flex: 1, marginHorizontal: 10 }}>غذای انتخابی</Text>
-                </CardItem>
-              </Card>
-              <FlatList
-                data={this.props.materialBasket}
-                renderItem={this.renderItem2}
-                scrollEnabled={false}
-                keyExtractor={item => item.idmixmaterial}
-              />
-              <CardItem bordered>
-                <Right style={{ flex: 1 }}>
-                  <Text style={{ flex: 1 }}>
-                    به آدرس:{` ${addressTitle}`}
-                  </Text>
-                  <Text style={{ flex: 1 }}>
-                    توضیحات:{` ${this.state.descfactor}`}
-                  </Text>
-                </Right>
-
-              </CardItem>
-              <CardItem bordered>
-                <Text style={{ flex: 1 }}>
-                  قیمت نهایی:{` ${persianNumber(totalPrice)} تومان`}
-                </Text>
+                <Text type="bold" style={{ flex: 1, marginHorizontal: 10 }}>غذای آماده</Text>
               </CardItem>
             </Card>
+            <FlatList
+              data={this.props.buffetBasket}
+              renderItem={this.renderItem}
+              scrollEnabled={false}
+              keyExtractor={item => item.idmenufood}
+            />
+            <Card style={{ flex: 0 }}>
+              <CardItem>
+                <Text type="bold" style={{ flex: 1, marginHorizontal: 10 }}>غذای انتخابی</Text>
+              </CardItem>
+            </Card>
+            <FlatList
+              data={this.props.materialBasket}
+              renderItem={this.renderItem2}
+              scrollEnabled={false}
+              keyExtractor={item => item.idmixmaterial}
+            />
+            <CardItem bordered>
+              <Right style={{ flex: 1 }}>
+                <Text style={{ flex: 1 }}>
+                    به آدرس:{` ${addressTitle}`}
+                </Text>
+                <Text style={{ flex: 1 }}>
+                    هزینه ارسال:{` ${persianNumber(this.state.sendServicePrice * 3 / 5)}تومان`}
+                </Text>
+                <Text style={{ flex: 1 }}>
+                    توضیحات:{` ${this.state.descfactor}`}
+                </Text>
+              </Right>
+
+            </CardItem>
+            <CardItem bordered>
+              <Text style={{ flex: 1 }}>
+                  قیمت نهایی:{` ${persianNumber(totalPrice)} تومان`}
+              </Text>
+            </CardItem>
+          </Card>
           <Item style={[item, { flex: 1 }]}>
             <Icon active name="clipboard" />
             <Input

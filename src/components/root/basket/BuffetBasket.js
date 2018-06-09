@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { getAllOrder } from '../../../services/orderBuffet';
 import { getAllBasketMaterial } from '../../../services/orderMaterial';
 import AppHeader from '../../header';
-import { reBasketBuffet, reBasketMaterial, setRoad, tokenBuffet } from '../../../redux/actions';
+import { reBasketBuffet, reBasketMaterial, selectBuffet, setRoad, tokenBuffet } from '../../../redux/actions';
 import { logError } from '../../../services/log';
 import FoodCard from './FoodCard';
 import MaterialCard from './MaterialCard';
@@ -27,6 +27,7 @@ import { persianNumber } from '../../../utils/persian';
   reBasketBuffet,
   reBasketMaterial,
   setRoad,
+  selectBuffet
 })
 export default class BuffetBasket extends Component {
   state = {
@@ -70,10 +71,12 @@ export default class BuffetBasket extends Component {
       const { state, max, min, fsort, ssort } = await this.state;
       const {
         Basket,
-        PriceAll
+        PriceAll,
+        idbuffet
       } = await getAllBasketMaterial(true, tokenmember, tokenapi, max, min, ssort);
       console.log(Basket, 'basket for Material!', PriceAll, 'priceAll');
       this.props.reBasketMaterial(Basket, Basket.length, PriceAll);
+      this.props.selectBuffet(idbuffet);
     } catch (e) {
       console.log(e);
       logError(e, '_getBasketMaterial', 'DrawerLayout/index', 'getAllBasketMaterial');

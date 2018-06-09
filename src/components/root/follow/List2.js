@@ -8,7 +8,7 @@ import { getFactorBuffet } from '../../../services/orderBuffet';
 import { tokenBuffet, tokenStore } from '../../../redux/actions';
 import { Text } from '../../Kit';
 import { getFactorProduct } from '../../../services/orderProduct';
-import FactorCardBuffet from './FactorCardBuffet';
+import FactorCard from './FactorCardBuffet';
 import { persianNumber } from '../../../utils/persian';
 import { mainColor } from '../../../assets/variables/colors';
 
@@ -38,9 +38,9 @@ export default class List2 extends Component {
   }
   async getInfo() {
     await this.props.tokenBuffet('selfit.buffet');
+    this.getPayedFactors();
     await this.props.tokenStore('selfit.store');
-    await this.getPayedFactors();
-    await this.getPayedFactorsProduct();
+    this.getPayedFactorsProduct();
   }
   async getPayedFactors() {
     try {
@@ -82,31 +82,7 @@ export default class List2 extends Component {
   renderItem = ({ item }) => {
     const m = moment(`${item.datesavefactorbuffet}`, 'YYYY/MM/DDTHH:mm:ss').format('jYYYY/jMM/jDD HH:mm:ss');
     return (
-      <TouchableOpacity onPress={() => Actions.followBuffet({ item })}>
-        <Card>
-          <CardItem>
-            <Text style={{ flex: 1 }}>
-              تاریخ: {persianNumber(m)}
-            </Text>
-            <Text style={{ flex: 1 }}>
-              فاکتور شماره: {persianNumber(item.idfactorbuffet)}
-            </Text>
-          </CardItem>
-          <CardItem bordered>
-            <Text style={{ flex: 1 }}>
-              وضعیت فاکتور:{' '}<Text style={{ color: mainColor }}>پرداخت شده</Text>
-            </Text>
-          </CardItem>
-          <CardItem bordered>
-            <Text style={{ flex: 1 }}>
-              مبلغ پرداخت شده:{' '}
-              <Text style={{ color: mainColor }}>
-                {persianNumber(item.finalpricefactorbuffet.toLocaleString())} تومان
-              </Text>
-            </Text>
-          </CardItem>
-        </Card>
-      </TouchableOpacity>
+      <FactorCard item={item} />
     );
   };
   renderItem2 = ({ item }) => {

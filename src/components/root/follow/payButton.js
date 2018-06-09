@@ -22,7 +22,7 @@ export default class PayButton extends Component {
           full
           style={{ flex: 1, backgroundColor: mainColor }}
           onPress={() => {
-          getRequestPayment(1, this.props.user.tokenmember);
+          getRequestPayment(1, this.props.user.tokenmember, 0);
           Actions.reset('root');
         }}
         >

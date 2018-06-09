@@ -9,13 +9,14 @@ export const getAllBasketMaterial = async (active, token, tokenapi, max, min, ss
     if (response.status == 204) return { Basket: [], PriceAll: 0 };
     const json = await response.json();
     const basketMaterial = await json.BasketMaterialList.$values;
+    console.log(basketMaterial);
     let materialOrder = [];
     for (let i = 0; i < basketMaterial.length; i++) {
       for (let j = 0; j < basketMaterial[i].MixMaterialList.$values.length; j++) {
         materialOrder = [...materialOrder, basketMaterial[i].MixMaterialList.$values[j]];
       }
     }
-    return { Basket: materialOrder, PriceAll: json.PriceAll };
+    return { Basket: materialOrder, PriceAll: json.PriceAll, idbuffet: basketMaterial[0].idbuffet };
   } catch (e) {
     console.log(e);
   }

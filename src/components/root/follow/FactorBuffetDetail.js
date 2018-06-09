@@ -107,9 +107,10 @@ export default class FactorBuffetDetail extends Component {
       (<Text style={{ color: errorColor }}>
         منتظر تایید توسط بوفه دار.
       </Text>);
-    const payBtn = (item.acceptfactor && item.idstatepayed === 2) ?
-      <PayButton />
+    const payBtn = (item.acceptfactor && item.idstatepayed === 2 && this.props.sendPrice) ?
+      <PayButton sendPrice={this.props.sendPrice} />
       : null;
+    const totalPrice = item.finalpricefactorbuffet + this.props.sendPrice * 3 / 5;
     return (
       <Container>
         <AppHeader rightTitle="فاکتور خرید" />
@@ -157,7 +158,12 @@ export default class FactorBuffetDetail extends Component {
             </CardItem>
             <CardItem bordered>
               <Text style={{ flex: 1 }}>
-            قیمت نهایی فاکتور: {persianNumber(item.finalpricefactorbuffet.toLocaleString())} تومان
+                هزینه ارسال: {persianNumber((this.props.sendPrice * 3 / 5).toLocaleString())} تومان
+              </Text>
+            </CardItem>
+            <CardItem bordered>
+              <Text style={{ flex: 1 }}>
+            قیمت نهایی فاکتور: {persianNumber(totalPrice.toLocaleString())} تومان
               </Text>
             </CardItem>
             <CardItem bordered>

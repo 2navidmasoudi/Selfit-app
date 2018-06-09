@@ -44,36 +44,33 @@ export default class Main extends Component {
   }
   render() {
     const pannel =
-      this.props.user.typememberid ===
-      1 ?
-        (<View>
-          <View style={main.pannelContainer}>
-            <TouchableOpacity
-              style={main.pannelBtn}
-              onPress={() => this.setState({ viewComponent: <GymGrid /> })}
-            >
-              <Text style={main.pannelTextBtn}>باشگاه دار</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={main.pannelBtn}
-              onPress={() => this.setState({ viewComponent: <BuffetGrid /> })}
-            >
-              <Text style={main.pannelTextBtn}>بوفه دار</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={main.pannelBtn}
-              onPress={() => this.setState({ viewComponent: <MemberGrid /> })}
-            >
-              <Text style={main.pannelTextBtn}>ورزشکار</Text>
-            </TouchableOpacity>
-          </View>
-         </View>)
-        : null;
+      (<View>
+        <View style={main.pannelContainer}>
+          <TouchableOpacity
+            style={main.pannelBtn}
+            onPress={() => this.setState({ viewComponent: <GymGrid /> })}
+          >
+            <Text style={main.pannelTextBtn}>باشگاه دار</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={main.pannelBtn}
+            onPress={() => this.setState({ viewComponent: <BuffetGrid /> })}
+          >
+            <Text style={main.pannelTextBtn}>بوفه دار</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={main.pannelBtn}
+            onPress={() => this.setState({ viewComponent: <MemberGrid /> })}
+          >
+            <Text style={main.pannelTextBtn}>ورزشکار</Text>
+          </TouchableOpacity>
+        </View>
+       </View>);
     return (
       <Container>
         <AppHeader rightTitle="صفحه اصلی" hasBlog />
         {this.state.viewComponent}
-        {pannel}
+        {this.props.user.typememberid === 1 && pannel}
       </Container>
     );
   }

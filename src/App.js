@@ -293,7 +293,6 @@ export default class App extends Component {
               </Scene>
             </RouterWithRedux>
             {/* </View> */}
-
           </PersistGate>
         </Provider>
       </Root>

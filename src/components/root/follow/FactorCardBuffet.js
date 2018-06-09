@@ -9,6 +9,8 @@ import { persianNumber } from '../../../utils/persian';
 import { Text } from '../../Kit';
 import { tokenBuffet } from '../../../redux/actions';
 import PayButton from './payButton';
+import { getSingleBuffet } from '../../../services/buffet';
+import { sendPrice } from '../../../services/Alopeyk';
 
 @connect(state => ({
   user: state.user,
@@ -21,17 +23,57 @@ export default class FactorBuffet extends Component {
     buffetOrder: null,
     materialOrder: null,
     refreshing: true,
+    lat: null,
+    long: null,
+    sendServicePrice: 0,
   };
   componentWillMount() {
     this.getInfo();
   }
   async getInfo() {
     await this.props.tokenBuffet('selfit.buffet');
-    await this._getOrderBuffet();
+    await this._getSingleBuffet();
+    await this._sendPrice();
+  }
+  async _getSingleBuffet() {
+    try {
+      const { tokenmember } = await this.props.user;
+      const { tokenapi } = await this.props;
+      const { buffetidfactor } = await this.props.item;
+      const buffetInfo = await getSingleBuffet(buffetidfactor, tokenmember, tokenapi);
+      console.log('buffetInfo');
+      console.log(buffetInfo);
+      await this.setState({
+        lat: buffetInfo.latgym,
+        long: buffetInfo.longgym,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  async _sendPrice() {
+    try {
+      const { lataddressmember, longaddressmember } = await this.props.item;
+      const { lat, long } = await this.state;
+      const sendServicePrice = await sendPrice(lat, long, lataddressmember, longaddressmember);
+      console.log(sendServicePrice);
+      await this.setState({
+        sendServicePrice: sendServicePrice.object.price,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  followOrder() {
+    if (this.state.sendServicePrice) {
+      Actions.followBuffet({ item: this.props.item, sendPrice: this.state.sendServicePrice });
+    }
   }
   render() {
     const { item } = this.props;
     const m = moment(`${item.datesavefactorbuffet}`, 'YYYY/MM/DDTHH:mm:ss').format('jYYYY/jMM/jDD HH:mm');
+    const sendPrice = this.state.sendServicePrice * 3 / 5;
+    const totalPrice = item.finalpricefactorbuffet + sendPrice;
     const statePayed = item.idstatepayed === 2 ?
       (<Text>
         <Text style={{ color: mainColor }}>
@@ -56,18 +98,22 @@ export default class FactorBuffet extends Component {
       (<Text style={{ color: errorColor }}>
         منتظر تایید توسط بوفه دار.
       </Text>);
-    const payBtn = (item.acceptfactor && item.idstatepayed === 2) ?
-      <PayButton />
+    const payBtn = (item.acceptfactor && item.idstatepayed === 2 && sendPrice) ?
+      <PayButton sendPrice={this.state.sendServicePrice} />
       : null;
     return (
-      <TouchableOpacity onPress={() => Actions.followBuffet({ item })}>
+      <TouchableOpacity
+        onPress={this.followOrder.bind(this)}
+      >
         <Card>
           <CardItem>
             <Left style={{ flex: 1 }}>
               <Text style={{ flex: 1 }}>{persianNumber(m)}</Text>
             </Left>
             <Right style={{ flex: 1 }}>
-              <Text style={{ flex: 1 }}>فاکتور خرید شماره: {persianNumber(item.idfactorbuffet)}</Text>
+              <Text style={{ flex: 1 }}>
+                فاکتور خرید شماره: {persianNumber(item.idfactorbuffet)}
+              </Text>
             </Right>
           </CardItem>
           <CardItem>
@@ -82,7 +128,12 @@ export default class FactorBuffet extends Component {
           </CardItem>
           <CardItem bordered>
             <Text style={{ flex: 1 }}>
-            قیمت نهایی فاکتور: {persianNumber(item.finalpricefactorbuffet.toLocaleString())} تومان
+              هزینه ارسال: {persianNumber(sendPrice.toLocaleString())} تومان
+            </Text>
+          </CardItem>
+          <CardItem bordered>
+            <Text style={{ flex: 1 }}>
+            قیمت نهایی فاکتور: {persianNumber(totalPrice.toLocaleString())} تومان
             </Text>
           </CardItem>
           <CardItem bordered>
