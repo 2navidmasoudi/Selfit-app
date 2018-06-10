@@ -227,9 +227,9 @@ export default class Music extends Component {
                 {/* { this.props.artist.name } */}
               </Text>
             </View>
-            <View style={styles.headerClose}>
-              <Icon onPress={Actions.pop} name="arrow-down" size={15} style={{ color: '#fff' }} />
-            </View>
+            {/* <View style={styles.headerClose}> */}
+            {/* <Icon onPress={Actions.pop} name="arrow-down" size={15} style={{ color: '#fff' }} /> */}
+            {/* </View> */}
             <Image
               style={styles.songImage}
               source={image}

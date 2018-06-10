@@ -33,13 +33,13 @@ export default class List2 extends Component {
     refreshingP: true,
 
   };
-  componentWillMount() {
+  async componentWillMount() {
+    await this.props.tokenBuffet('selfit.buffet');
+    await this.props.tokenStore('selfit.store');
     this.getInfo();
   }
   async getInfo() {
-    await this.props.tokenBuffet('selfit.buffet');
     this.getPayedFactors();
-    await this.props.tokenStore('selfit.store');
     this.getPayedFactorsProduct();
   }
   async getPayedFactors() {
@@ -50,7 +50,7 @@ export default class List2 extends Component {
       const { max, min, ssort, fsort } = await this.state;
       const payedFactor = await getFactorBuffet(
         1, 1,
-        tokenmember, tokenapiBuffet,
+        tokenmember, 'selfit.buffet',
         max, min, ssort, fsort
       );
       this.setState({ payedFactor });
@@ -67,7 +67,7 @@ export default class List2 extends Component {
       const { max, min, ssort, fsort } = await this.state;
       const payedFactorProduct = await getFactorProduct(
         false,
-        tokenmember, tokenapiProduct,
+        tokenmember, 'selfit.store',
         max, min, ssort, fsort
       );
       console.log('payedFactorProduct');

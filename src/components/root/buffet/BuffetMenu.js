@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, ImageBackground, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { Alert, FlatList, ImageBackground, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import {
   Badge,
   Button,
@@ -21,7 +21,7 @@ import { Actions } from 'react-native-router-flux';
 import { Rating } from 'react-native-elements';
 import { connect } from 'react-redux';
 import AppHeader from '../../header';
-import {getMenuFood, postRateBuffet} from '../../../services/buffet';
+import { getMenuFood, postRateBuffet } from '../../../services/buffet';
 import { logError } from '../../../services/log';
 import { getFoodCategory } from '../../../services/MenuFood';
 import { getAllBuffetMaterial, postBasketMaterial } from '../../../services/orderMaterial';
@@ -95,8 +95,8 @@ export default class BuffetMenu extends Component {
     min: 0,
     ssort: true,
     fsort: 0,
-    rate:null,
-    disableRate:false,
+    rate: null,
+    disableRate: false,
   };
   componentWillMount() {
     this.getInfo();
@@ -162,15 +162,36 @@ export default class BuffetMenu extends Component {
   //     logError(e, '_getDish', 'Buffet/BuffetMenu', 'getAllDish');
   //   }
   // }
-  // TODO: get permission to delete the last basket;
   async _checkOrderBuffet() {
     try {
       const { buffetid, tokenapi, idbasket } = await this.props;
       const { tokenmember } = await this.props.user;
       const result = await checkOrderBuffet(buffetid, tokenmember, tokenapi);
       console.log(result, 'checkOrder');
-      if (!idbasket || result === 1 || result === 2) {
+      if (!idbasket) {
         await this._postBasketMaterial();
+      } else if (result === 1) {
+        Alert.alert(
+          'وضعیت سفارش',
+          'شما قبلا از بوفه ی دیگری سفارش داده بودید، آیا می خواهید سفارش های قبلی خود را حذف کنید؟',
+          [
+            { text: 'خیر', onPress: () => Actions.pop() },
+            { text: 'بله', onPress: () => this._postBasketMaterial() },
+          ], {
+            cancelable: false,
+          }
+        );
+      } else if (result === 2) {
+        Alert.alert(
+          'وضعیت سفارش',
+          'شما قبلا از فاکتوری صادر کرده بودید، آیا می خواهید فاکتور قبلی خود را حذف کنید؟',
+          [
+            { text: 'خیر', onPress: () => Actions.pop() },
+            { text: 'بله', onPress: () => this._postBasketMaterial() },
+          ], {
+            cancelable: false,
+          }
+        );
       }
     } catch (e) {
       console.log(e);

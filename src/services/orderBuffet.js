@@ -65,11 +65,7 @@ export const getFactorBuffet = async (methodpayed, statepayed, token, tokenapi, 
       method: GET,
       headers
     });
-
-    if (response.status === 204) return null;
     const json = await response.json();
-    console.log('response for get factor buffet:');
-    console.log(json);
     return json.FactorBuffetList.$values;
   } catch (e) {
     console.log(e);

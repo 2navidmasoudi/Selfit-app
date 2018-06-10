@@ -3,7 +3,6 @@ import { Image, TouchableWithoutFeedback } from 'react-native';
 import { Button, Container, Content, View } from 'native-base';
 import { connect } from 'react-redux';
 import moment from 'moment-jalaali';
-import { Base64 } from 'js-base64';
 import { Actions } from 'react-native-router-flux';
 import { form } from '../../assets/styles/index';
 import AppHeader from '../header';

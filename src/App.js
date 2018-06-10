@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Drawer, Lightbox, Router, Scene } from 'react-native-router-flux';
-import { Dimensions, NetInfo, Linking, View } from 'react-native';
+import { Dimensions, NetInfo, Linking, View, Platform } from 'react-native';
 import firebase from 'react-native-firebase';
 import { Root, Icon } from 'native-base';
 import { PersistGate } from 'redux-persist/es/integration/react';
@@ -80,6 +80,7 @@ EStyleSheet.build({
 //      adb shell input keyevent 82
 
 // const TabIcon = props => <Icon size={24} name={props.name} color={props.selected ? 'black' : '#c8c3c3'} />;
+const activeBackGesture = (Platform.OS === 'android') ? null : undefined;
 
 
 const onBeforeLift = async () => {
@@ -211,7 +212,7 @@ export default class App extends Component {
                 {/* <Scene key="search" component={Search} title="Search" duration={0} icon={TabIcon} animation="fade" /> */}
                 {/* <Scene key="download" component={Downloads} initial title="Downloads" icon={TabIcon} duration={0} animation="fade" /> */}
                 {/* </Scene> */}
-                <Scene key="Music" hideNavBar component={Music} />
+                <Scene key="Music" hideNavBar component={Music} panHandlers={activeBackGesture} />
                 <Scene key="root" hideNavBar>
                   <Drawer
                     key="drawer"

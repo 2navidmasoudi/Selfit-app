@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
 import { Icon, Item, Badge, Left, Content } from 'native-base';
+import { Base64 } from 'js-base64';
 import { drawer } from '../../assets/styles/index';
 import { putUserLogout } from '../../services';
 import { Text } from '../Kit';
@@ -23,7 +24,9 @@ export default class DrawerLayout extends Component {
       [
         { text: 'خیر' },
         { text: 'بله', onPress: () => this._putUserLogout() },
-      ]
+      ], {
+        cancelable: false,
+      }
     );
   }
   async _putUserLogout() {
