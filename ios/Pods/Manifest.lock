@@ -22,27 +22,27 @@ PODS:
     - JWT (~> 3.0.0-beta.7)
     - React
     - SSZipArchive (~> 2.1)
-  - Crashlytics (3.10.1):
-    - Fabric (~> 1.7.5)
+  - Crashlytics (3.10.2):
+    - Fabric (~> 1.7.7)
   - DoubleConversion (1.1.5)
-  - Fabric (1.7.6)
-  - Firebase/Core (5.0.1):
+  - Fabric (1.7.7)
+  - Firebase/Core (5.2.0):
     - Firebase/CoreOnly
-    - FirebaseAnalytics (= 5.0.0)
-  - Firebase/CoreOnly (5.0.1):
-    - FirebaseCore (= 5.0.1)
-  - Firebase/Crash (5.0.1):
+    - FirebaseAnalytics (= 5.0.1)
+  - Firebase/CoreOnly (5.2.0):
+    - FirebaseCore (= 5.0.3)
+  - Firebase/Crash (5.2.0):
     - Firebase/Core
     - FirebaseCrash (= 3.0.0)
-  - Firebase/Messaging (5.0.1):
+  - Firebase/Messaging (5.2.0):
     - Firebase/CoreOnly
-    - FirebaseMessaging (= 3.0.0)
-  - FirebaseAnalytics (5.0.0):
+    - FirebaseMessaging (= 3.0.2)
+  - FirebaseAnalytics (5.0.1):
     - FirebaseCore (~> 5.0)
     - FirebaseInstanceID (~> 3.0)
     - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
     - nanopb (~> 0.3)
-  - FirebaseCore (5.0.1):
+  - FirebaseCore (5.0.3):
     - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
   - FirebaseCrash (3.0.0):
     - FirebaseAnalytics (~> 5.0)
@@ -50,9 +50,9 @@ PODS:
     - GoogleToolboxForMac/Logger (~> 2.1)
     - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
     - Protobuf (~> 3.5)
-  - FirebaseInstanceID (3.0.0):
+  - FirebaseInstanceID (3.1.0):
     - FirebaseCore (~> 5.0)
-  - FirebaseMessaging (3.0.0):
+  - FirebaseMessaging (3.0.2):
     - FirebaseCore (~> 5.0)
     - FirebaseInstanceID (~> 3.0)
     - GoogleToolboxForMac/Logger (~> 2.1)
@@ -95,7 +95,7 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
-  - Protobuf (3.5.0)
+  - Protobuf (3.6.0)
   - React (0.52.2):
     - React/Core (= 0.52.2)
   - react-native-fetch-blob (0.10.6):
@@ -104,6 +104,8 @@ PODS:
     - GoogleMaps (= 2.5.0)
     - React
   - react-native-maps (0.19.0):
+    - React
+  - react-native-music-control (0.5.5):
     - React
   - React/Core (0.52.2):
     - yoga (= 0.52.2.React)
@@ -150,7 +152,9 @@ PODS:
     - React/Core
     - React/fishhook
     - React/RCTBlob
-  - SSZipArchive (2.1.2)
+  - RNFS (2.9.12):
+    - React
+  - SSZipArchive (2.1.3)
   - yoga (0.52.2.React)
 
 DEPENDENCIES:
@@ -169,6 +173,7 @@ DEPENDENCIES:
   - react-native-fetch-blob (from `../node_modules/react-native-fetch-blob`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-maps (from `../node_modules/react-native-maps`)
+  - react-native-music-control (from `../node_modules/react-native-music-control`)
   - React/Core (from `../node_modules/react-native`)
   - React/CxxBridge (from `../node_modules/react-native`)
   - React/DevSupport (from `../node_modules/react-native`)
@@ -182,6 +187,7 @@ DEPENDENCIES:
   - React/RCTText (from `../node_modules/react-native`)
   - React/RCTVibration (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
+  - RNFS (from `../node_modules/react-native-fs`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga/yoga.podspec`)
 
 SPEC REPOS:
@@ -223,6 +229,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-maps"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
+  react-native-music-control:
+    :path: "../node_modules/react-native-music-control"
+  RNFS:
+    :path: "../node_modules/react-native-fs"
   yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga/yoga.podspec"
 
@@ -231,15 +241,15 @@ SPEC CHECKSUMS:
   boost: 30a15ffb6d9aa4646dd3caffc960753f4cb4ca4e
   BVLinearGradient: 4b3f3bdf1ac1a52a5ef5e65c9585d793a7c3f825
   CodePush: f6b348759cdc42c734d9c3a46ceb2997c270b12e
-  Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
+  Crashlytics: 0360624eea1c978a743feddb2fb1ef8b37fb7a0d
   DoubleConversion: ebb6747c5b66026ad4f97b789c3ceac6f18e57a6
-  Fabric: f8d42c893bb187326a7968b62abe55c36a987a46
-  Firebase: d6861c2059d8c32d1e6dd8932e22ada346d90a3a
-  FirebaseAnalytics: 19812b49fa5f283dd6b23edf8a14b5d477029ab8
-  FirebaseCore: cafc814b2d84fc8733f09e653041cc2165332ad7
+  Fabric: bda89e242bce1b7b8ab264248cf3407774ce0095
+  Firebase: 25ed0412036d7d008568d1fb4d2e9d81ea8a0a2c
+  FirebaseAnalytics: b3628aea54c50464c32c393fb2ea032566e7ecc2
+  FirebaseCore: a3c87242451633fff8490183898075ce77d168d2
   FirebaseCrash: 8900571fd763fd5bdda04522ec53da979456e3ce
-  FirebaseInstanceID: 83e0040351565df711a5db3d8ebe5ea21aca998a
-  FirebaseMessaging: f2360a966ecfb0d14facf0fbdf306efc2df0ddbe
+  FirebaseInstanceID: 05d779cbb97bd5bd5c51a38a903fc9cfe1b2454a
+  FirebaseMessaging: 6894b8fe0a0cf26c3b13dad729f1131654ae0bdb
   Folly: b7255b29f1d693c375d642d0f04f0592181156d9
   GLog: 3e4e4ae9746ce6bf6e9420c7fc1e08ad59c8ba1a
   Google-Maps-iOS-Utils: c32891ff472eaaa1fca032beedafa1a013af7875
@@ -247,14 +257,16 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: 91c824d21e85b31c2aae9bb011c5027c9b4e738f
   JWT: 6e7ec473b6febcb7498affc84f0e75d393914411
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
-  Protobuf: 8a9838fba8dae3389230e1b7f8c104aa32389c03
+  Protobuf: 0fc0ad8bec688b2a3017a139953e01374fedbd5f
   React: 43e97926f429d846050880666de1809e22dd5cc5
   react-native-fetch-blob: 63394b1d7b0781547b3e4463b3195790177b1222
   react-native-google-maps: 963fc78a5ac32dad3a726e4fa08b5307faa5cab2
   react-native-maps: 066c2afcc89e18726377bcc685315f989ca22449
-  SSZipArchive: d4009d2ce5520a421f231fd97028cc0e2667eed8
+  react-native-music-control: e397f7b8bdd39fc19288ef393e4016b433604b42
+  RNFS: bbb1a64eb245763daf34aea86f97c97c4e85f74c
+  SSZipArchive: 51a800ebb77f95a8329b6ced1faaff394b47f509
   yoga: 55da126afc384965b96bff46652464373b330add
 
-PODFILE CHECKSUM: 387cc4e6900678a70ee5bafe79a2c789a628f01b
+PODFILE CHECKSUM: 2eee0702f4b963db7c1601fb25364abd0df03049
 
 COCOAPODS: 1.5.0

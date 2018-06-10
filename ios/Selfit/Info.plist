@@ -39,6 +39,17 @@
 	<string>1</string>
 	<key>CodePushDeploymentKey</key>
 	<string>rMMegaoY-S1RWpbwvl78hinRwhaf9a15624f-c322-4826-b2b4-273e2c1cd5eb</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>comgooglemaps</string>
+		<string>citymapper</string>
+		<string>uber</string>
+		<string>lyft</string>
+		<string>transit</string>
+		<string>waze</string>
+		<string>yandexnavi</string>
+		<string>moovit</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -82,19 +93,9 @@
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
 	</array>
-	<key>LSApplicationQueriesSchemes</key>
-      <array>
-          <string>comgooglemaps</string>
-          <string>citymapper</string>
-          <string>uber</string>
-          <string>lyft</string>
-          <string>transit</string>
-          <string>waze</string>
-          <string>yandexnavi</string>
-          <string>moovit</string>
-      </array>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>audio</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UIRequiredDeviceCapabilities</key>
