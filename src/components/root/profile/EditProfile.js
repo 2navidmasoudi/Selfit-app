@@ -154,17 +154,19 @@ export default class EditProfile extends React.Component {
             <Text style={EditProfileStyle.textStyle}>عکس خود را انتخاب سپس آپلود کنید!</Text>
             <View style={EditProfileStyle.uploadViewButton}>
               <Button
+                block
                 style={EditProfileStyle.uploadButton}
                 onPress={this.showImagePicker.bind(this)}
               >
-                <Text style={{ color: white }}>انتخاب تصویر</Text>
+                <Text style={{ color: white, padding: 5 }}>انتخاب تصویر</Text>
               </Button>
               <Button
+                block
                 disabled={this.state.UploadButtonDisable}
                 style={{ backgroundColor: mainColor }}
                 onPress={this.uploadImage.bind(this)}
               >
-                <Text style={EditProfileStyle.btnText}>آپلود تصویر</Text>
+                <Text style={{color: white, padding: 5 }}>آپلود تصویر</Text>
               </Button>
             </View>
             {image}
@@ -202,10 +204,10 @@ export default class EditProfile extends React.Component {
             </Item>
             <Button
               full
-              style={form.submitButton}
+              style={{backgroundColor: mainColor}}
               onPress={() => this.handleSubmitButton()}
             >
-              <Text style={form.submitText}>ثبت تغییرات</Text>
+              <Text style={{color: white}}>ثبت تغییرات</Text>
             </Button>
           </Form>
         </Content>

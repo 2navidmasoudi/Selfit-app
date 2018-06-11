@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { ImageBackground, View } from 'react-native';
+import { Alert, ImageBackground, View } from 'react-native';
 import { Container } from 'native-base';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 import PropTypes from 'prop-types';
 import { styles } from './style';
 import Store from '../../Main/Store';
@@ -35,6 +36,18 @@ export default class BuffetGrid extends Component {
   async setInfo() {
     await this.props.tokenBuffet('selfit.buffet');
     const buffetInfo = await this.getSingleIDMember();
+    if (!buffetInfo) {
+      Alert.alert(
+        'اخطار',
+        'بوفه ی شما هنوز مشخص نشده، لطفا با پشتیبانی تماس بگیرید.',
+        [
+          { text: 'پشتیبانی', onPress: () => Actions.support() },
+        ], {
+          cancelable: false,
+        }
+      );
+      return;
+    }
     await this.props.selectBuffet(buffetInfo.idbuffet);
     console.log('buffet for this user:', buffetInfo.namebuffet, 'buffetid from props:', this.props.buffetid);
   }

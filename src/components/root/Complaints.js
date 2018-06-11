@@ -10,7 +10,7 @@ import { Text } from '../Kit';
 import { mainColor, white } from '../../assets/variables/colors';
 
 const args = {
-  number: '09011256662', // String value with the number to call
+  number: '02188058522', // String value with the number to call
   prompt: false,
 };
 
@@ -40,7 +40,7 @@ export default class Complaints extends Component {
         <Button
           block
           style={{ margin: 10, backgroundColor: mainColor }}
-          onPress={() => Linking.openURL('mailto:support@selfit.ir?subject=abcdefg&body=body')}
+          onPress={() => Linking.openURL('mailto:support@selfit.ir?subject=Selfit&body=Selfit')}
         >
           <Text style={{ color: white }}>ایمیل به پشتیبانی</Text>
         </Button>

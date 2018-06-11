@@ -1,10 +1,16 @@
 import React from 'react';
 import { Linking } from 'react-native';
 import { Button, Container, Content, View } from 'native-base';
+import call from 'react-native-phone-call';
 import { form } from '../../assets/styles/index';
 import AppHeader from '../header';
 import { Text } from '../Kit';
-import { white } from '../../assets/variables/colors';
+import { mainColor, white } from '../../assets/variables/colors';
+
+const args = {
+  number: '02188058522', // String value with the number to call
+  prompt: false,
+};
 
 export default () => (
   <Container>
@@ -21,6 +27,13 @@ export default () => (
     <View style={{ flexDirection: 'column', justifyContent: 'flex-end' }}>
       <Button
         block
+        onPress={() => call(args).catch(console.error)}
+        style={{ marginHorizontal: 10, backgroundColor: mainColor }}
+      >
+        <Text style={{ color: white }}>تماس با پشتیبانی</Text>
+      </Button>
+      <Button
+        block
         style={[form.submitButton, { margin: 10 }]}
         onPress={() => Linking.openURL('mailto:support@selfit.ir?subject=abcdefg&body=body')}
       >
@@ -34,15 +47,6 @@ export default () => (
         onPress={() => Linking.openURL('mailto:job@selfit.ir?subject=abcdefg&body=body')}
       >
         <Text style={{ color: white }}>استخدام در سلفیت</Text>
-      </Button>
-    </View>
-    <View style={{ flexDirection: 'column', justifyContent: 'flex-end' }}>
-      <Button
-        block
-        style={[form.submitButton, { margin: 10, marginTop: 0 }]}
-        onPress={() => Linking.openURL('https://telegram.me/navidmsd ')}
-      >
-        <Text style={{ color: white }}>تلگرام پشتیبانی</Text>
       </Button>
     </View>
   </Container>
