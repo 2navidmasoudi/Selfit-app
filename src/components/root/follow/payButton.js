@@ -7,7 +7,6 @@ import { Text } from '../../Kit';
 import { tokenBuffet } from '../../../redux/actions';
 import { getRequestPayment } from '../../../services/payment';
 
-
 @connect(state => ({
   user: state.user,
   tokenapi: state.buffet.tokenapi,
@@ -22,7 +21,7 @@ export default class PayButton extends Component {
           full
           style={{ flex: 1, backgroundColor: mainColor }}
           onPress={() => {
-          getRequestPayment(1, this.props.user.tokenmember);
+          getRequestPayment(1, this.props.user.tokenmember, this.props.sendPrice);
           Actions.reset('root');
         }}
         >
