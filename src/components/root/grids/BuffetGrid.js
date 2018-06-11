@@ -41,6 +41,7 @@ export default class BuffetGrid extends Component {
         'اخطار',
         'بوفه ی شما هنوز مشخص نشده، لطفا با پشتیبانی تماس بگیرید.',
         [
+          { text: 'بازگشت', },
           { text: 'پشتیبانی', onPress: () => Actions.support() },
         ], {
           cancelable: false,

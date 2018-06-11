@@ -53,7 +53,7 @@ export default class finalOrderBuffet extends Component {
     ssort: false,
     total: 0,
     descfactor: '',
-    sendServicePrice: 0,
+    sendServicePrice: 3500,
     lat: null,
     long: null,
   };
@@ -65,7 +65,7 @@ export default class finalOrderBuffet extends Component {
     await this.props.tokenBuffet('selfit.buffet');
     await this.props.setRoad('buffet');
     await this._getSingleBuffet();
-    this._sendPrice();
+    // this._sendPrice();
   }
   async sendOrderBuffet() {
     try {
@@ -99,19 +99,19 @@ export default class finalOrderBuffet extends Component {
       console.log(e);
     }
   }
-  async _sendPrice() {
-    try {
-      const { lataddressmember, longaddressmember } = await this.props.address;
-      const { lat, long } = await this.state;
-      const sendServicePrice = await sendPrice(lat, long, lataddressmember, longaddressmember);
-      console.log(sendServicePrice);
-      await this.setState({
-        sendServicePrice: sendServicePrice.object.price,
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  }
+  // async _sendPrice() {
+  //   try {
+  //     const { lataddressmember, longaddressmember } = await this.props.address;
+  //     const { lat, long } = await this.state;
+  //     const sendServicePrice = await sendPrice(lat, long, lataddressmember, longaddressmember);
+  //     console.log(sendServicePrice);
+  //     await this.setState({
+  //       sendServicePrice: sendServicePrice.object.price,
+  //     });
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // }
   renderItem = ({ item }) => (
     <ListItem>
       <Left>

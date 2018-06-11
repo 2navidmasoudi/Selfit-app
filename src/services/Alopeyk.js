@@ -1,4 +1,4 @@
-import { BasketMaterial, headers, POST, Selfit } from './type';
+import { POST } from './type';
 
 const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjE3MzIsImlzcyI6Imh0dHA6XC9cL3NhbmRib3gtcGFuZWwuYWxvcGV5ay5jb21cL2dlbmVyYXRlLXRva2VuXC8xNzMyIiwiaWF0IjoxNTIzNDQ1MjY5LCJleHAiOjUxMjM0NDg4NjksIm5iZiI6MTUyMzQ0NTI2OSwianRpIjoiNDkwNzEyOGU4Mzg4Yjc1ODA5MjcyNmExNGI5NzRkZTUifQ.Z6L1adIcCVQBY6Rq4y3Q_tm5ctsjTwFTlnq5iPm-f3I';
 
