@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Dimensions, Image, StyleSheet, View, BackHandler } from 'react-native';
+import { Dimensions, Image, StyleSheet, View, BackHandler, Linking, TouchableOpacity, FlatList } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import { Card, Container, Content, Icon } from 'native-base';
+import { Body, Card, CardItem, Container, Content, Icon, Left, Right, Spinner } from 'native-base';
 import Slider from 'react-native-slider';
 import Video from 'react-native-video';
 import { connect } from 'react-redux';
 import AppHeader from '../header';
-import { darkColor, mainColor } from '../../assets/variables/colors';
+import { darkColor, mainColor, white } from '../../assets/variables/colors';
 import { persianNumber } from '../../utils/persian';
 import { Text } from '../Kit';
 import { tokenBlog } from '../../redux/actions';
@@ -60,7 +60,7 @@ export default class Music extends Component {
     try {
       const { tokenmember } = await this.props.user;
       const { tokenapi } = await this.props;
-      const songs = await getAllMusic(tokenmember, tokenapi, 30, 0, false, 0);
+      const songs = await getAllMusic(tokenmember, tokenapi, 50, 0, false, 0);
       console.log('songs');
       console.log(songs);
       this.setState({ songs, songNumbers: songs.length - 1 });
@@ -144,6 +144,14 @@ export default class Music extends Component {
   togglePlay() {
     this.setState({ playing: !this.state.playing });
   }
+  selectMusic(index) {
+    console.log(index);
+    this.setState({
+      songIndex: index,
+      currentTime: 0,
+    });
+    this.refs.audio.seek(0);
+  }
   render() {
     // let songPlaying = this.props.songs[this.state.songIndex];
     const songPlaying = this.state.songs[this.state.songIndex];
@@ -204,7 +212,7 @@ export default class Music extends Component {
     return (
       <Container style={{ flex: 1, width: window.width }}>
         <AppHeader rightTitle="موزیک" noPop />
-        <Content>
+        <Content style={{ backgroundColor: darkColor }}>
           <View style={styles.container}>
             <Video
               source={{ uri }}
@@ -222,20 +230,23 @@ export default class Music extends Component {
               resizeMode="cover"
               repeat={false}
             />
-            <View style={styles.header}>
-              <Text style={styles.headerText}>
-                {/* { this.props.artist.name } */}
-              </Text>
-            </View>
-            {/* <View style={styles.headerClose}> */}
-            {/* <Icon onPress={Actions.pop} name="arrow-down" size={15} style={{ color: '#fff' }} /> */}
-            {/* </View> */}
+            <TouchableOpacity
+              onPress={() => Linking.openURL(uri).catch(err => console.error('An error occurred', err))}
+              style={styles.headerClose}
+            >
+              <Icon
+                onPress={() => Linking.openURL(uri).catch(err => console.error('An error occurred', err))}
+                name="download"
+                size={15}
+                style={{ color: '#fff' }}
+              />
+            </TouchableOpacity>
             <Image
               style={styles.songImage}
               source={image}
             />
             <Text style={[styles.songTitle, {}]}>
-              {songPlaying.urlmusic}
+              {songPlaying.namemusic}
             </Text>
             {/* <Text style={styles.albumTitle}> */}
             {/* {songPlaying.descmusic} */}
@@ -274,9 +285,32 @@ export default class Music extends Component {
               {volumeButton}
             </View>
           </View>
-          {/* <Card style={{ flex: 0, backgroundColor: darkColor }}> */}
-          {/* <Text>موزیک</Text> */}
-          {/* </Card> */}
+          <FlatList
+            data={this.state.songs}
+            keyExtractor={item => item.idmusic}
+            renderItem={({ item, index }) => (
+              <TouchableOpacity onPress={() => this.selectMusic(index)}>
+                <Card style={{ flex: 0 }}>
+                  <CardItem>
+                    <Left>
+                      <Icon name="musical-note" />
+                    </Left>
+                    <Body>
+                      <Text style={{ textAlign: 'center' }}>{item.namemusic}</Text>
+                    </Body>
+                    <Right>
+                      <Icon name="play" style={{ color: index === this.state.songIndex ? mainColor : darkColor }} />
+                    </Right>
+                  </CardItem>
+                </Card>
+              </TouchableOpacity>
+            )}
+            ListEmptyComponent={() => <Spinner color={mainColor} />}
+            // onRefresh={this.handleRefresh.bind(this)}
+            // refreshing={this.state.refreshing}
+            // onEndReachedThreshold={0.5}
+            // ListFooterComponent={this.renderFooter.bind(this)}
+          />
         </Content>
       </Container>
     );
@@ -284,7 +318,7 @@ export default class Music extends Component {
 }
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     alignItems: 'center',
     paddingBottom: 20,
     backgroundColor: darkColor,
@@ -309,7 +343,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   songImage: {
-    marginBottom: 20,
+    margin: 20,
     height: 190,
     width: window.width - 30,
     resizeMode: 'contain'

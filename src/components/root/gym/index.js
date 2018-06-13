@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
-import { Button, Container, Fab, Icon, Tab, Tabs, Text } from 'native-base';
+import { Container, Fab, Tab, Tabs, Text } from 'native-base';
 import { connect } from 'react-redux';
-import { Actions } from 'react-native-router-flux';
+import { View } from 'react-native';
 import AppHeader from '../../header';
 import List from './list';
 import { TabsStyle } from '../../../assets/styles/gym';
-import { locateUser } from '../../../redux/actions/index';
 import { putCheckToken } from '../../../services/index';
 import GymMap from './GymMap';
-import { View } from 'react-native';
 import { mainColor } from '../../../assets/variables/colors';
+import { locateUser, tokenGym } from '../../../redux/actions';
 
 const LATITUDE_DELTA = 0.05;
 const LONGITUDE_DELTA = 0.05;
@@ -18,6 +17,7 @@ const LONGITUDE_DELTA = 0.05;
   user: state.user,
 }), {
   locateUser,
+  tokenGym
 })
 export default class Gym extends Component {
   state = {
@@ -32,11 +32,14 @@ export default class Gym extends Component {
     active: 'true'
 
   };
+
   componentWillMount() {
+    this.props.tokenGym('selfit.gym');
     const { tokenmember, tokenapi } = this.props.user;
     putCheckToken(tokenmember, tokenapi);
     this.getCurrentPosition();
   }
+
   async getCurrentPosition() {
     try {
       await navigator.geolocation.getCurrentPosition(
@@ -57,6 +60,7 @@ export default class Gym extends Component {
       console.log(error);
     }
   }
+
   toggleComponent() {
     if (this.state.tabTitle === 'لیست') {
       this.setState({
@@ -70,6 +74,7 @@ export default class Gym extends Component {
       });
     }
   }
+
   render() {
     return (
       <Container>
@@ -92,7 +97,7 @@ export default class Gym extends Component {
 
         <View style={{ flex: 0 }}>
           <Fab
-            style={{ backgroundColor: '#0F9D7A' }}
+            style={{ backgroundColor: mainColor }}
             position="bottomLeft"
             onPress={this.toggleComponent.bind(this)}
           >

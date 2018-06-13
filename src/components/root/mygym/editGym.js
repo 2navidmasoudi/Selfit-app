@@ -17,6 +17,7 @@ import { htmlStyle } from '../../../assets/styles/html';
   user: state.user,
   tokenapi: state.gym.tokenapi,
   gym: state.gym.GymList,
+  gymid: state.gym.gymid,
 }), {
   tokenGym,
   receiveGym,
@@ -76,10 +77,9 @@ export default class EditGym extends Component {
   }
   async _getSingLeGym() {
     try {
-      // TODO: gymID
-      const { tokenapi } = await this.props;
+      const { tokenapi, gymid } = await this.props;
       const { tokenmember } = await this.props.user;
-      const gymInfo = await getSingleGym(79, tokenmember, tokenapi);
+      const gymInfo = await getSingleGym(gymid, tokenmember, tokenapi);
       console.log(gymInfo, 'gymInfo');
       this.props.receiveGym(gymInfo, 0);
     } catch (e) {

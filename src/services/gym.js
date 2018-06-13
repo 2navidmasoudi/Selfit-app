@@ -103,3 +103,11 @@ export const postRateGym = async (gymid, rate, token, tokenapi) => {
     console.log(e);
   }
 };
+export const getSingleIDMemberGym = async (token, tokenapi) => {
+  const response = await fetch(`${Selfit}${Gym}GetSingleIDMember?token=${token}&tokenapi=${tokenapi}`, {
+    method: GET,
+    headers
+  });
+  const json = await response.json();
+  return json;
+};

@@ -3,13 +3,15 @@ import {
   INCREMENT_MIN,
   RECEIVE_GYM,
   REFRESH_GYM,
+  SELECT_GYM,
   TOKEN_GYM
 } from '../actions/type';
 
 const initialState = {
   GymList: [],
   min: 0,
-  tokenapi: null
+  tokenapi: null,
+  gymid: null
 };
 
 export default gym = (state = initialState, action = {}) => {
@@ -46,6 +48,11 @@ export default gym = (state = initialState, action = {}) => {
         tokenapi: action.tokenapi,
       };
       break;
+    case SELECT_GYM:
+      return {
+        ...state,
+        gymid: action.gymid,
+      };
     default:
       return state;
   }

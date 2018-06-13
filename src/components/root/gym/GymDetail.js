@@ -22,6 +22,7 @@ import { mainColor, white } from '../../../assets/variables/colors';
 import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
 import { htmlStyle } from '../../../assets/styles/html';
+import { selectGym } from '../../../redux/actions';
 
 moment.loadPersian({ dialect: 'persian-modern' });
 const horizontalMargin = 30;
@@ -65,7 +66,9 @@ const styles = StyleSheet.create({
 @connect(state => ({
   user: state.user,
   tokenapi: state.gym.tokenapi,
-}))
+}), {
+  selectGym
+})
 export default class GymDetail extends Component {
   state = {
     ImgSrc: null,
@@ -83,6 +86,7 @@ export default class GymDetail extends Component {
   async getInfo() {
     await this._getAllPicGym();
     await this._putVisit();
+    this.props.selectGym(this.props.gymid);
   }
   async _putVisit() {
     try {
@@ -108,13 +112,6 @@ export default class GymDetail extends Component {
         const ImgYear = m.jYear();
         const ImgMonth = m.jMonth() + 1;
         const ImgSrc = `${PicArray[i].httpserver}${PicArray[i].pathserver}${ImgYear}/${ImgMonth}/${PicArray[i].picgym}`;
-        // await this.setState(prevState => ({
-        //   dataSource: [...prevState.dataSource,
-        //     {
-        //       url: ImgSrc
-        //     }
-        //   ]
-        // }));
         dataSource = [...dataSource, { url: ImgSrc }];
       }
       this.setState({

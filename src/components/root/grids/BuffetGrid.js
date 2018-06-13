@@ -31,12 +31,11 @@ export default class BuffetGrid extends Component {
   // };
   componentDidMount() {
     this.setInfo();
-    // TODO: BACKGROUND TIMER ON IOS
   }
   async setInfo() {
     await this.props.tokenBuffet('selfit.buffet');
-    const buffetInfo = await this.getSingleIDMember();
-    if (!buffetInfo) {
+    await this.getSingleIDMember();
+    if (!this.props.buffetid) {
       Alert.alert(
         'اخطار',
         'بوفه ی شما هنوز مشخص نشده، لطفا با پشتیبانی تماس بگیرید.',
@@ -47,16 +46,15 @@ export default class BuffetGrid extends Component {
           cancelable: false,
         }
       );
-      return;
     }
-    await this.props.selectBuffet(buffetInfo.idbuffet);
-    console.log('buffet for this user:', buffetInfo.namebuffet, 'buffetid from props:', this.props.buffetid);
   }
   async getSingleIDMember() {
     try {
       const { tokenapi } = await this.props;
       const { tokenmember } = await this.props.user;
-      return await getSingleIDMemberBuffet(tokenmember, tokenapi);
+      const buffetInfo = await getSingleIDMemberBuffet(tokenmember, tokenapi);
+      await this.props.selectBuffet(buffetInfo.idbuffet);
+      console.log('buffet for this user:', buffetInfo.namebuffet, 'buffetid from props:', this.props.buffetid);
     } catch (error) {
       console.log(error);
       logError(error, '_getSingleIDMember', 'BuffetMenu/index', 'getSingleIDMember');

@@ -17,7 +17,7 @@ import {
   REFRESH_BUFFET,
   REFRESH_GYM,
   REFRESH_PRODUCT,
-  SELECT_BUFFET,
+  SELECT_BUFFET, SELECT_GYM,
   SET_DESC_PRODUCT,
   SET_ID_BASKET,
   SET_ORDER_ID_BUFFET,
@@ -101,6 +101,10 @@ export const tokenBuffet = tokenapi => ({
 export const selectBuffet = buffetid => ({
   type: SELECT_BUFFET,
   buffetid
+});
+export const selectGym = gymid => ({
+  type: SELECT_GYM,
+  gymid
 });
 export const receiveMenuFood = MenuFood => ({
   type: RECIEVE_MENUFOOD,

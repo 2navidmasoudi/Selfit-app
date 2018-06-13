@@ -23,7 +23,7 @@ export const TOKEN_BUFFET = 'TOKEN_BUFFET';
 export const RECIEVE_MENUFOOD = 'RECIEVE_MENUFOOD';
 export const RECIEVE_MATERIAL = 'RECIEVE_MATERIAL';
 export const SELECT_BUFFET = 'SELECT_BUFFET';
-
+export const SELECT_GYM = 'SELECT_GYM';
 // Store and Products in Store
 export const RECEIVE_PRODUCT = 'RECEIVE_PRODUCT';
 export const TOKEN_STORE = 'TOKEN_STORE';
