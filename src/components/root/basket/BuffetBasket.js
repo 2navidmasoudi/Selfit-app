@@ -68,7 +68,7 @@ export default class BuffetBasket extends Component {
     try {
       const { tokenmember } = await this.props.user;
       const { tokenapi } = await this.props;
-      const { state, max, min, fsort, ssort } = await this.state;
+      const { max, min, ssort } = await this.state;
       const {
         Basket,
         PriceAll,
@@ -143,16 +143,16 @@ export default class BuffetBasket extends Component {
     );
   }
 }
-// TODO : DO THIS FOR ALL PROJECT
-BuffetBasket.propTypes = {
-  user: PropTypes.node.isRequired,
-  buffetBasket: PropTypes.node.isRequired,
-  materialBasket: PropTypes.node.isRequired,
-  Count1: PropTypes.number.isRequired,
-  Count2: PropTypes.number.isRequired,
-  PriceAll: PropTypes.string.isRequired,
-  tokenBuffet: PropTypes.func.isRequired,
-  reBasketBuffet: PropTypes.func.isRequired,
-  reBasketMaterial: PropTypes.func.isRequired,
-  setRoad: PropTypes.func.isRequired,
-};
+// // TODO : DO THIS FOR ALL PROJECT
+// BuffetBasket.propTypes = {
+//   user: PropTypes.node.isRequired,
+//   buffetBasket: PropTypes.node.isRequired,
+//   materialBasket: PropTypes.node.isRequired,
+//   Count1: PropTypes.number.isRequired,
+//   Count2: PropTypes.number.isRequired,
+//   PriceAll: PropTypes.string.isRequired,
+//   tokenBuffet: PropTypes.func.isRequired,
+//   reBasketBuffet: PropTypes.func.isRequired,
+//   reBasketMaterial: PropTypes.func.isRequired,
+//   setRoad: PropTypes.node.isRequired,
+// };

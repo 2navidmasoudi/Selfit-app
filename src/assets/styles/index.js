@@ -59,7 +59,7 @@ export const form = EStyleSheet.create({
   },
   submitButton: {
     // borderRadius: 5,
-    backgroundColor: '$statusBarColor',
+    backgroundColor: mainColor,
   },
   submitText: {
     fontSize: 16,
@@ -77,7 +77,7 @@ export const header = EStyleSheet.create({
     backgroundColor: '$headerColor',
     width: window.width
   },
-  statusBarColor: '$statusBarColor',
+  statusBarColor: mainColor,
   headerTextStyle: {
     color: 'white',
     fontSize: 18,

@@ -21,10 +21,10 @@ import { getAllBuffet, getSearchBuffet } from '../../../services/buffet';
 })
 export default class List extends Component {
   state = {
-    max: 10,
+    max: 70,
     ssort: false,
     fsort: 0,
-    loading: 0,
+    loading: false,
     refreshing: false,
     search: null,
     searchMode: false,
@@ -45,7 +45,7 @@ export default class List extends Component {
       this.setState({ loading: false, refreshing: false });
     } catch (error) {
       console.log(error);
-      this.setState({ loading: false });
+      this.setState({ loading: false, refreshing: false });
     }
   }
   async searchBuffet() {
@@ -63,7 +63,7 @@ export default class List extends Component {
       this.setState({ loading: false, refreshing: false });
     } catch (error) {
       console.log(error);
-      this.setState({ loading: false });
+      this.setState({ loading: false, refreshing: false });
     }
   }
   async searchText(text) {
@@ -101,16 +101,17 @@ export default class List extends Component {
       this.searchBuffet();
     }
   }
-  renderItem({ item }) {
-    return <BuffetCard buffet={item} />;
-  }
   renderFooter() {
     if (!this.state.loading) return null;
     return <Spinner />;
   }
   render() {
     return (
-      <View>
+      <View style={{
+        flex: 1,
+        justifyContent: 'flex-end',
+      }}
+      >
         <SearchBar
           showLoading
           onChangeText={this.searchText.bind(this)}
@@ -118,7 +119,7 @@ export default class List extends Component {
         />
         <FlatList
           data={this.props.buffet}
-          renderItem={item => this.renderItem(item)}
+          renderItem={({ item }) => <BuffetCard buffet={item} />}
           keyExtractor={item => item.buffetid}
           ListEmptyComponent={() => <Spinner />}
           onRefresh={this.handleRefresh.bind(this)}

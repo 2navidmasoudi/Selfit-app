@@ -43,7 +43,9 @@ export default class List extends Component {
       const { max, ssort, fsort } = await this.state;
       const { tokenmember, latval, longval } = await this.props.user;
       const { min, tokenapi } = await this.props;
-      const GymList = await getAllGym(latval, longval, tokenmember, tokenapi, 10, min, ssort, fsort);
+      const GymList = await getAllGym(
+        latval, longval, tokenmember, tokenapi, 70, min, ssort, fsort
+      );
       console.log(GymList);
       await this.props.receiveGym(GymList, min);
       this.setState({ loading: false, refreshing: false });
@@ -83,7 +85,7 @@ export default class List extends Component {
     }
   }
   async handleLoadMore() {
-    if (this.props.gym.length >= 10 && !this.state.loading) {
+    if (this.props.gym.length >= 70 && !this.state.loading) {
       console.log('Request Load More');
       await this.props.incrementMin();
       await this.setState({ loading: true });
@@ -103,9 +105,6 @@ export default class List extends Component {
       this.searchGym();
     }
   }
-  renderItem({ item }) {
-    return <GymCard gym={item} />;
-  }
   renderFooter() {
     if (!this.state.loading) return null;
     return <Spinner />;
@@ -124,7 +123,7 @@ export default class List extends Component {
         />
         <FlatList
           data={this.props.gym}
-          renderItem={item => this.renderItem(item)}
+          renderItem={({ item }) => <GymCard gym={item} />}
           keyExtractor={item => item.idgym}
           ListEmptyComponent={() => <Spinner />}
           onRefresh={this.handleRefresh.bind(this)}

@@ -1,28 +1,25 @@
-import { applyMiddleware, compose, createStore } from 'redux';
-import thunk from 'redux-thunk';
+import { createStore, compose, applyMiddleware } from 'redux';
+import { persistStore, persistCombineReducers } from 'redux-persist';
 import { createLogger } from 'redux-logger';
-import storage from 'redux-persist/lib/storage';
-import { persistReducer, persistStore } from 'redux-persist';
+import storage from 'redux-persist/es/storage'; // default: localStorage if web, AsyncStorage if react-native
 import reducers from '../reducers';
 
-const middleware = [thunk];
-middleware.push(createLogger());
-
-const persistConfig = {
-  key: 'main',
+const config = {
+  key: 'root',
   storage,
-  // blacklist: ['gym','buffet']
   whitelist: ['user']
 };
+const middleware = [];
 
-const persistedReducer = persistReducer(persistConfig, reducers);
+if (__DEV__) { middleware.push(createLogger()); }
 
-export default () => {
-  const store = createStore(
-    persistedReducer,
-    undefined,
-    compose(applyMiddleware(...middleware))
-  );
-  const persistor = persistStore(store);
-  return { store, persistor };
-};
+const persistedReducer = persistCombineReducers(config, reducers);
+const enhancers = [applyMiddleware(...middleware)];
+const persistConfig = { enhancers };
+const store = createStore(persistedReducer, undefined, compose(...enhancers));
+const persistor = persistStore(store, persistConfig, () => {
+  console.log(store.getState());
+});
+const configureStore = () => ({ persistor, store });
+
+export default configureStore;

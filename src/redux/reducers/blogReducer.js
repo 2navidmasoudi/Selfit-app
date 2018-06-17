@@ -6,7 +6,7 @@ const initialState = {
   tokenapi: null,
 };
 
-export default blog = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
     case RECEIVE_BLOG:
       const { blog, min } = action.payload;

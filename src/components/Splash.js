@@ -8,20 +8,20 @@ import { putCheckToken } from '../services';
 import Status from './status';
 import SplashVideo from '../assets/1.mp4';
 
-@connect(state => ({ user: state.user, rehydrated: state.rehydrated }))
+@connect(state => ({ user: state.user }))
 export default class Splash extends Component {
   state = {
     tokenChecked: false,
   };
   componentDidMount() {
-    if (this.props.rehydrated === true) {
-      this.checkToken();
-    }
+    this.checkToken();
   }
   async checkToken() {
     try {
       const { tokenmember, tokenapi } = await this.props.user;
       const json = await putCheckToken(tokenmember, tokenapi);
+      console.log('json for login');
+      console.log(json);
       if (json === 1) {
         this.setState({ tokenChecked: true });
       } else {
@@ -32,7 +32,7 @@ export default class Splash extends Component {
     }
   }
   leadToScreen() {
-    if (this.state.tokenChecked) {
+    if (this.state.tokenChecked === true) {
       Actions.reset('root');
     } else {
       Actions.reset('sign');
@@ -55,9 +55,6 @@ export default class Splash extends Component {
 const styles2 = StyleSheet.create({
   backgroundVideo: {
     flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    // backgroundColor: 'white'
     position: 'absolute',
     top: -50,
     left: -50,

@@ -27,7 +27,6 @@ import { selectGym } from '../../../redux/actions';
 moment.loadPersian({ dialect: 'persian-modern' });
 const horizontalMargin = 30;
 const slideWidth = 280;
-
 const sliderWidth = Dimensions.get('window').width;
 const itemWidth = slideWidth + horizontalMargin * 2;
 const itemHeight = 200;
@@ -62,12 +61,11 @@ const styles = StyleSheet.create({
   }
 });
 
-
 @connect(state => ({
   user: state.user,
   tokenapi: state.gym.tokenapi,
 }), {
-  selectGym
+  selectGym,
 })
 export default class GymDetail extends Component {
   state = {
@@ -86,12 +84,12 @@ export default class GymDetail extends Component {
   async getInfo() {
     await this._getAllPicGym();
     await this._putVisit();
-    this.props.selectGym(this.props.gymid);
   }
   async _putVisit() {
     try {
       const { gymid, tokenapi } = await this.props;
       const { tokenmember } = await this.props.user;
+      this.props.selectGym(gymid);
       const json = await putVisit(gymid, tokenmember, tokenapi);
       console.log('put visit? ', json);
     } catch (e) {

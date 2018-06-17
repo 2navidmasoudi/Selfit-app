@@ -102,8 +102,8 @@ export default class BuffetMenu extends Component {
     this.getInfo();
   }
   componentDidMount() {
-    setTimeout(this._tabs.goToPage.bind(this._tabs, 1), 100);
-    setTimeout(this._tabs2.goToPage.bind(this._tabs2, 1), 500);
+    setTimeout(this._tabs.goToPage.bind(this._tabs, 1), 50);
+    setTimeout(this._tabs2.goToPage.bind(this._tabs2, 1), 50);
   }
   async getInfo() {
     await this.props.tokenBuffet('selfit.buffet');
@@ -164,23 +164,25 @@ export default class BuffetMenu extends Component {
   // }
   async _checkOrderBuffet() {
     try {
-      const { buffetid, tokenapi, idbasket } = await this.props;
+      const { buffetid, tokenapi, idbasket, Count1, Count2 } = await this.props;
       const { tokenmember } = await this.props.user;
       const result = await checkOrderBuffet(buffetid, tokenmember, tokenapi);
       console.log(result, 'checkOrder');
       if (!idbasket) {
         await this._postBasketMaterial();
       } else if (result === 1) {
-        Alert.alert(
-          'وضعیت سفارش',
-          'شما قبلا از بوفه ی دیگری سفارش داده بودید، آیا می خواهید سفارش های قبلی خود را حذف کنید؟',
-          [
-            { text: 'خیر', onPress: () => Actions.pop() },
-            { text: 'بله', onPress: () => this._postBasketMaterial() },
-          ], {
-            cancelable: false,
-          }
-        );
+        if (Count1 || Count2) {
+          Alert.alert(
+            'وضعیت سفارش',
+            'شما قبلا از بوفه ی دیگری سفارش داده بودید، آیا می خواهید سفارش های قبلی خود را حذف کنید؟',
+            [
+              { text: 'خیر', onPress: () => Actions.pop() },
+              { text: 'بله', onPress: () => this._postBasketMaterial() },
+            ], {
+              cancelable: false,
+            }
+          );
+        } else this._postBasketMaterial();
       } else if (result === 2) {
         Alert.alert(
           'وضعیت سفارش',
@@ -228,12 +230,6 @@ export default class BuffetMenu extends Component {
     } catch (e) {
       console.log(e);
     }
-  }
-  renderItem({ item }) {
-    return <FoodCard MenuFood={item} />;
-  }
-  renderMaterial({ item }) {
-    return <MaterialCard Material={item} />;
   }
   render() {
     const FooterComponent = (this.props.Count1 + this.props.Count2) === 0 ? null :
@@ -355,7 +351,7 @@ export default class BuffetMenu extends Component {
                 >
                   {this.props.idbasket && <FlatList
                     data={this.props.Material}
-                    renderItem={item => this.renderMaterial(item)}
+                    renderItem={({ item }) => <MaterialCard Material={item} />}
                     keyExtractor={item => item.idmaterial}
                     ListEmptyComponent={() => <Spinner />}
                     scrollEnabled={false}
@@ -374,7 +370,7 @@ export default class BuffetMenu extends Component {
                 >
                   <FlatList
                     data={this.props.MenuFood}
-                    renderItem={item => this.renderItem(item)}
+                    renderItem={({ item }) => <FoodCard MenuFood={item} />}
                     keyExtractor={item => item.idmenufood}
                     ListEmptyComponent={() => <Spinner />}
                     scrollEnabled={false}

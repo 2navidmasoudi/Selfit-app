@@ -11,10 +11,10 @@ const initialState = {
   GymList: [],
   min: 0,
   tokenapi: null,
-  gymid: null
+  gymid: null,
 };
 
-export default gym = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
     case RECEIVE_GYM:
       const { gym, min } = action.payload;
@@ -53,6 +53,7 @@ export default gym = (state = initialState, action = {}) => {
         ...state,
         gymid: action.gymid,
       };
+      break;
     default:
       return state;
   }

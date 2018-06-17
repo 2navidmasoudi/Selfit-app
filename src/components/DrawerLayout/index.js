@@ -17,6 +17,12 @@ import { persianNumber } from '../../utils/persian';
   productBasketCount: state.basket.productBasketCount,
 }))
 export default class DrawerLayout extends Component {
+  // state = {
+  //   special
+  // }
+  // componentDidMount() {
+  //
+  // }
   getRequestLogout() {
     Alert.alert(
       'اجازه خروج',
@@ -45,7 +51,7 @@ export default class DrawerLayout extends Component {
   render() {
     const {
       namefamilymember, phone,
-      datesave, httpserver, pathserver, picmember
+      datesave, httpserver, pathserver, picmember, typememberid
     } = this.props.user;
     const m = moment(`${datesave}`, 'YYYY-MM-DDTHH:mm:ss');
     const ImgYear = m.jYear();
@@ -53,6 +59,7 @@ export default class DrawerLayout extends Component {
     const ImgSrc = `${Base64.decode(httpserver)}${Base64.decode(pathserver)}${ImgYear}/${ImgMonth}/${picmember}`;
     const Name = Base64.decode(namefamilymember);
     const phoneNumber = Base64.decode(phone);
+
     return (
       <View style={drawer.container}>
         <TouchableWithoutFeedback onPress={() => Actions.profile()}>
@@ -109,7 +116,6 @@ export default class DrawerLayout extends Component {
                 height: 30,
                 width: 30,
                 display: !(this.props.productBasketCount) ? 'none' : 'flex',
-
                 justifyContent: 'center',
                 alignItems: 'center'
               }}

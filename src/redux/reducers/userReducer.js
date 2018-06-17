@@ -16,50 +16,43 @@ const initialState = {
   picmember: null,
 };
 
-export default user = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
     case SET_USER:
-      const { user } = action;
       return {
         ...state,
-        namefamilymember: user.namefamilymember,
-        mailmember: user.mailmember,
-        sexmember: user.sexmember,
-        birthdaymember: user.birthdaymember,
-        typememberid: user.typememberid,
-        phone: user.phone,
-        datesave: user.datesave,
-        httpserver: user.httpserver,
-        pathserver: user.pathserver,
-        picmember: user.picmember,
+        namefamilymember: action.user.namefamilymember,
+        mailmember: action.user.mailmember,
+        sexmember: action.user.sexmember,
+        birthdaymember: action.user.birthdaymember,
+        typememberid: action.user.typememberid,
+        phone: action.user.phone,
+        datesave: action.user.datesave,
+        httpserver: action.user.httpserver,
+        pathserver: action.user.pathserver,
+        picmember: action.user.picmember,
       };
-      break;
     case SET_PHONE:
       return {
         ...state,
         phone: action.user.phone,
       };
     case SET_TOKEN_API:
-      // const { user } = action;
       return {
         ...state,
         tokenapi: action.user.tokenapi
       };
-      break;
     case SET_TOKEN_MEMBER:
-      // const { user } = action;
       return {
         ...state,
         tokenmember: action.user.tokenmember
       };
-      break;
     case LOCATE_USER:
       return {
         ...state,
         latval: action.payload.latval,
         longval: action.payload.longval,
       };
-      break;
     default:
       return state;
   }

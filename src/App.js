@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import { Drawer, Lightbox, Router, Scene } from 'react-native-router-flux';
-import { Dimensions, NetInfo, Linking, View, Platform } from 'react-native';
-import firebase from 'react-native-firebase';
-import { Root, Icon } from 'native-base';
+import { Dimensions, Linking, Platform } from 'react-native';
 import { PersistGate } from 'redux-persist/es/integration/react';
-import Geocoder from 'react-native-geocoding';
+import { Drawer, Lightbox, Router, Scene } from 'react-native-router-flux';
+import firebase from 'react-native-firebase';
+import { Root, Spinner } from 'native-base';
 import codePush, { codePushDownloadDidProgress, codePushStatusDidChange } from 'react-native-code-push';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { connect, Provider } from 'react-redux';
 import { setEnabled } from './utils/analytics';
+import configureStore from './redux/store/configureStore';
 import Splash from './components/Splash';
 import Login from './components/Login';
 import Register from './components/Register';
@@ -21,7 +21,6 @@ import CouchDetail from './components/root/couch/CoachDetail';
 import Blog from './components/root/blog';
 import Store from './components/root/store';
 import CategoryChildren from './components/root/store/categoryChildren';
-import HealthDevice from './components/root/healthdevice';
 import MyGym from './components/root/mygym';
 import EditGym from './components/root/mygym/editGym';
 import FullMap from './components/root/gym/fullMap';
@@ -30,7 +29,6 @@ import AuthLightBox from './components/lightbox/AuthLightBox';
 import Music from './components/root/Music';
 import Profile from './components/root/Profile';
 import Support from './components/root/Support';
-import configureStore from './redux/store/configureStore';
 import GymDetail from './components/root/gym/GymDetail';
 import BuffetMenu from './components/root/buffet/BuffetMenu';
 import EditProfile from './components/root/profile/EditProfile';
@@ -60,15 +58,10 @@ import PaymentWeb from './components/root/payment';
 import { darkColor, mainColor } from './assets/variables/colors';
 import FactorBuffetDetail from './components/root/follow/FactorBuffetDetail';
 import HtmlEditor from './components/root/htmlEditor';
-// import MiniPlayer from './components/root/music/containers/MiniPlayer';
-// import Player from './components/root/music/containers/Player';
-// import Search from './components/root/music/containers/Search';
-// import Downloads from './components/root/music/containers/Downloads';
 
-Geocoder.setApiKey('AIzaSyBlgHjeMbqK3xEZfh6HK2o8RdjhhgTOh0s');
+// Geocoder.setApiKey('AIzaSyBlgHjeMbqK3xEZfh6HK2o8RdjhhgTOh0s');
 const window = Dimensions.get('window');
 const { persistor, store } = configureStore();
-
 EStyleSheet.build({
   $statusBarColor: mainColor,
   $headerColor: darkColor,
@@ -76,31 +69,11 @@ EStyleSheet.build({
   $IS: 'IRANSansMobile'
 });
 
-//     code-push release-react Selfit-Android android
-//      adb shell input keyevent 82
-
-// const TabIcon = props => <Icon size={24} name={props.name} color={props.selected ? 'black' : '#c8c3c3'} />;
 const activeBackGesture = (Platform.OS === 'android') ? null : undefined;
-
-
-const onBeforeLift = async () => {
-  function handleFirstConnectivityChange(connectionInfo) {
-    console.log(`Network change, type: ${connectionInfo.type}, effectiveType: ${connectionInfo.effectiveTypes}`);
-    console.log(connectionInfo);
-    NetInfo.removeEventListener(
-      'connectionChange',
-      handleFirstConnectivityChange
-    );
-  }
-
-  NetInfo.addEventListener(
-    'connectionChange',
-    handleFirstConnectivityChange
-  );
-};
-
+const onBeforeLift = async () => {};
 export default class App extends Component {
   componentDidMount() {
+    // persistor.purge();
     Linking.getInitialURL().then((url) => {
       if (url) {
         console.log(`Initial url is: ${url}`);
@@ -165,7 +138,6 @@ export default class App extends Component {
     console.log('Incoming url');
     console.log(event.url);
   }
-
   codePushStatusDidChange(status) {
     switch (status) {
       case codePush.SyncStatus.CHECKING_FOR_UPDATE:
@@ -187,7 +159,6 @@ export default class App extends Component {
         break;
     }
   }
-
   codePushDownloadDidProgress(progress) {
     console.log(`${connectionInfo.effectiveTypes} of ${progress.totalBytes} received.`);
   }
@@ -198,20 +169,14 @@ export default class App extends Component {
       <Root>
         <Provider store={store}>
           <PersistGate
-            // loading={<Splash/>}
+            loading={<Spinner />}
             onBeforeLift={onBeforeLift}
             persistor={persistor}
           >
-            {/* <View style={{ flex: 1 }}> */}
-            {/* <MiniPlayer /> */}
             <RouterWithRedux hideNavBar>
               <Scene key="rootMain" hideNavbar>
                 <Scene key="splash" initial component={Splash} hideNavBar />
                 <Scene key="sign" component={Sign} hideNavBar />
-                {/* <Scene key="Music" tabs> */}
-                {/* <Scene key="search" component={Search} title="Search" duration={0} icon={TabIcon} animation="fade" /> */}
-                {/* <Scene key="download" component={Downloads} initial title="Downloads" icon={TabIcon} duration={0} animation="fade" /> */}
-                {/* </Scene> */}
                 <Scene key="Music" hideNavBar component={Music} panHandlers={activeBackGesture} />
                 <Scene key="root" hideNavBar>
                   <Drawer
@@ -261,9 +226,6 @@ export default class App extends Component {
                         <Scene key="blog" component={Blog} initial hideNavBar />
                         <Scene key="blogWeb" component={BlogWeb} hideNavBar />
                       </Scene>
-                      <Scene key="healthdeviceRoot" hideNavBar>
-                        <Scene key="healthdevice" component={HealthDevice} initial hideNavBar />
-                      </Scene>
                       <Scene key="mygymRoot" hideNavBar>
                         <Scene key="mygym" component={MyGym} initial hideNavBar />
                         <Scene key="editGym" component={EditGym} hideNavBar />
@@ -290,10 +252,8 @@ export default class App extends Component {
                   </Scene>
                   <Scene key="authLightBox" component={AuthLightBox} />
                 </Lightbox>
-                {/* <Scene key="player" component={Player} hideNavBar hideTabBar direction="vertical" /> */}
               </Scene>
             </RouterWithRedux>
-            {/* </View> */}
           </PersistGate>
         </Provider>
       </Root>

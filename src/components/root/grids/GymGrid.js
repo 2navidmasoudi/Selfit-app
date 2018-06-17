@@ -11,6 +11,7 @@ import Coach from '../../Main/Coach';
 import { logError } from '../../../services/log';
 import { selectGym, tokenGym } from '../../../redux/actions';
 import { getSingleIDMemberGym } from '../../../services/gym';
+import Buffet from '../../Main/Buffet';
 
 @connect(state => ({
   user: state.user,
@@ -65,15 +66,20 @@ export default class GymGrid extends Component {
               <MyGym />
             </View>
             <View style={styles.wrapper}>
-              <Coach />
+              <Buffet />
             </View>
           </View>
           <View style={styles.mainRowWrapper}>
             <View style={styles.wrapper}>
-              <Store />
+              <Coach />
             </View>
             <View style={styles.wrapper}>
-              <Music />
+              <View style={styles.wrapper}>
+                <Store />
+              </View>
+              <View style={styles.wrapper}>
+                <Music />
+              </View>
             </View>
           </View>
         </ImageBackground>

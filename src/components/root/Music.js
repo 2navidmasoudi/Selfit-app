@@ -332,10 +332,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     left: 0,
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
   },
   headerText: {
     color: '#FFF',
@@ -349,7 +347,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain'
   },
   songTitle: {
-    color: 'white',
+    color: white,
     marginBottom: 10,
     marginTop: 13,
     fontSize: 19

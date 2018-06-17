@@ -18,7 +18,7 @@ const initialState = {
   Material: [],
 };
 
-export default buffet = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
     case RECEIVE_BUFFET:
       const { buffet, min } = action.payload;

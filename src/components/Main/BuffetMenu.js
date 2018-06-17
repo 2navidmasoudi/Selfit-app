@@ -1,11 +1,14 @@
 import React from 'react';
-import { TouchableWithoutFeedback, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { styles } from './style';
 import { Text } from '../Kit';
 
 export default () => (
-  <TouchableWithoutFeedback onPress={() => Actions.buffetMenuRoot()}>
+  <TouchableOpacity
+    style={{ flex: 1 }}
+    onPress={() => Actions.buffetMenuRoot()}
+  >
     <View style={styles.animationView}>
       <Text type="bold" style={styles.animationTitle}>
               منو بوفه
@@ -15,5 +18,5 @@ export default () => (
               منو بوفه خود را مدیریت کنید
       </Text>
     </View>
-  </TouchableWithoutFeedback>
+  </TouchableOpacity>
 );

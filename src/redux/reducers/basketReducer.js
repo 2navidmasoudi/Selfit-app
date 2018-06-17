@@ -32,7 +32,7 @@ const initialState = {
   idtimefactor: null,
 };
 // TODO: Erase Break
-export default basket = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
     case GET_BUFFET_BASKET:
       return {
@@ -41,7 +41,6 @@ export default basket = (state = initialState, action = {}) => {
         buffetBasketCount: action.buffetBasketCount,
         PriceAllBuffet: action.PriceAll,
       };
-      break;
     case GET_MATERIAL_BASKET:
       return {
         ...state,
@@ -49,20 +48,17 @@ export default basket = (state = initialState, action = {}) => {
         materialBasketCount: action.materialBasketCount,
         PriceAllMaterial: action.PriceAll,
       };
-      break;
     case SET_ID_BASKET:
       return {
         ...state,
         idbasket: action.idbasket,
       };
-      break;
     case GET_PRODUCT_BASKET:
       return {
         ...state,
         productBasket: action.productBasket,
         productBasketCount: action.productBasketCount,
       };
-      break;
     case SET_ROAD:
       return {
         ...state,
@@ -73,7 +69,6 @@ export default basket = (state = initialState, action = {}) => {
         ...state,
         idOrderBuffet: action.orderid,
       };
-      break;
     case GET_ORDER_BUFFET:
       return {
         ...state,
@@ -94,7 +89,6 @@ export default basket = (state = initialState, action = {}) => {
         ...state,
         PriceAllProduct: action.PriceAllProduct,
       };
-      break;
     case SET_PRODUCT_IDACCESS:
       return {
         ...state,

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, TouchableWithoutFeedback } from 'react-native';
-import { Card, CardItem, Thumbnail, Button, Icon, Left, Right } from 'native-base';
+import { TouchableWithoutFeedback } from 'react-native';
+import { Card, CardItem, Left, Right, Thumbnail } from 'native-base';
+import { Rating } from 'react-native-elements';
 import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
 import { Text } from '../../Kit';
@@ -11,6 +12,7 @@ export default class BuffetCard extends Component {
     Actions.buffetMenu(buffet);
     console.log(buffet);
   }
+
   render() {
     const { buffet } = this.props;
     const m = moment(`${buffet.datesave}`, 'YYYY/MM/DDTHH:mm:ss');
@@ -38,12 +40,13 @@ export default class BuffetCard extends Component {
               >
                 {buffet.addressgym}
               </Text>
-              <View style={{ justifyContent: 'flex-end' }}>
-                <Button transparent textStyle={{ color: '#87838B' }}>
-                  <Icon name="md-star" />
-                  <Text>امتیاز: 5/{buffet.RateNumber}</Text>
-                </Button>
-              </View>
+              <Rating
+                readonly
+                fractions={1}
+                startingValue={buffet.RateNumber}
+                imageSize={10}
+                style={{ marginRight: 10 }}
+              />
             </Right>
           </CardItem>
         </Card>
