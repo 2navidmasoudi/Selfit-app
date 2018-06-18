@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
+import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { Body, Button, Card, CardItem, Container, Content, Footer, FooterTab, Left, ListItem, Right } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import AppHeader from '../../header';
-import { setRoad, tokenStore } from '../../../redux/actions';
-import { getRequestPayment } from '../../../services/payment';
+import {setProductPriceAll, setRoad, tokenStore} from '../../../redux/actions';
+import {getPayment, getRequestPayment} from '../../../services/payment';
 import { postAddressProduct, postFactorProduct, putTimeFactor } from '../../../services/orderProduct';
 import { Text } from '../../Kit';
-import { FlatList } from 'react-native';
 import { persianNumber } from '../../../utils/persian';
 
 // todo: add list for final order
@@ -23,6 +23,7 @@ import { persianNumber } from '../../../utils/persian';
 }), {
   tokenStore,
   setRoad,
+  setProductPriceAll,
 })
 export default class finalOrderProduct extends Component {
   state = {
@@ -42,9 +43,13 @@ export default class finalOrderProduct extends Component {
 
   async getInfo() {
     await this.props.tokenStore('selfit.store');
+    await this._getPayment();
     this.props.setRoad('Store');
   }
-
+  async _getPayment() {
+    const totalPrice = await getPayment(2, this.props.user.tokenmember, 0, 'selfit.member');
+    this.props.setProductPriceAll(totalPrice);
+  }
   async _getRequestPayment() {
     getRequestPayment(2, this.props.user.tokenmember);
   }
