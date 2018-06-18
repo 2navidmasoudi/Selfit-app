@@ -32,7 +32,7 @@ import { TabsStyle } from '../../../assets/styles/gym';
 import { checkOrderBuffet, deleteOrderAll } from '../../../services/orderBuffet';
 import { Text } from '../../Kit';
 import { persianNumber, latinNumber } from '../../../utils/persian';
-import { mainColor, white } from '../../../assets/variables/colors';
+import { errorColor, mainColor, white } from '../../../assets/variables/colors';
 
 moment.loadPersian({ dialect: 'persian-modern' });
 const styles = StyleSheet.create({
@@ -74,7 +74,6 @@ const styles = StyleSheet.create({
   MenuFood: state.buffet.MenuFood,
   Count2: state.basket.materialBasketCount,
   Count1: state.basket.buffetBasketCount,
-  // Count: state.basket.materialBasketCount + state.basket.buffetBasketCount,
   Material: state.buffet.Material,
   idbasket: state.basket.idbasket,
 }), {
@@ -257,13 +256,14 @@ export default class BuffetMenu extends Component {
         </FooterTab>
       </Footer>);
     const {
-      datesave, RateNumber, httpserver,
+      datesave, RateNumber, httpserver, activebuffet,
       pathserver, picbuffet, namebuffet, addressgym,
     } = this.props;
     const m = moment(`${datesave}`, 'YYYY/MM/DDTHH:mm:ss');
     const ImgYear = m.jYear();
     const ImgMonth = m.jMonth() + 1;
     const ImgSrc = `${httpserver}${pathserver}${ImgYear}/${ImgMonth}/${picbuffet}`;
+    const activity = activebuffet ? 'بوفه سفارش می پذیرد.' : 'بوفه در حال حاضر تعطیل است.';
     return (
       <Container>
         <AppHeader rightTitle="بوفه آنلاین" backButton="flex" />
@@ -278,10 +278,17 @@ export default class BuffetMenu extends Component {
                 <Text style={{
                   textAlign: 'center',
                   color: 'white',
-                  margin: 10
                 }}
                 >
                   بوفه {namebuffet}
+                </Text>
+                <Text style={{
+                  textAlign: 'center',
+                  color: activebuffet ? white : errorColor,
+                  margin: 10
+                }}
+                >
+                  {activity}
                 </Text>
               </View>
             </ImageBackground>
@@ -351,7 +358,7 @@ export default class BuffetMenu extends Component {
                 >
                   {this.props.idbasket && <FlatList
                     data={this.props.Material}
-                    renderItem={({ item }) => <MaterialCard Material={item} />}
+                    renderItem={({ item }) => <MaterialCard Material={item} active={activebuffet} />}
                     keyExtractor={item => item.idmaterial}
                     ListEmptyComponent={() => <Spinner />}
                     scrollEnabled={false}
@@ -370,7 +377,7 @@ export default class BuffetMenu extends Component {
                 >
                   <FlatList
                     data={this.props.MenuFood}
-                    renderItem={({ item }) => <FoodCard MenuFood={item} />}
+                    renderItem={({ item }) => <FoodCard MenuFood={item} active={activebuffet} />}
                     keyExtractor={item => item.idmenufood}
                     ListEmptyComponent={() => <Spinner />}
                     scrollEnabled={false}

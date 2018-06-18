@@ -57,16 +57,16 @@ export default class GymGrid extends Component {
     return (
       <Container>
         <ImageBackground
-          source={require('../../../assets/GymGrid.jpeg')}
+          source={require('../../../assets/MemberGrid.jpeg')}
           imageStyle={styles.background}
           style={styles.mainContainer}
         >
           <View style={styles.mainRowWrapper}>
             <View style={styles.wrapper}>
-              <MyGym />
+              <Buffet />
             </View>
             <View style={styles.wrapper}>
-              <Buffet />
+              <MyGym />
             </View>
           </View>
           <View style={styles.mainRowWrapper}>

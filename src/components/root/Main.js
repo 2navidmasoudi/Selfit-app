@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity, BackHandler } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { Container } from 'native-base';
 import { connect } from 'react-redux';
-import { Actions } from 'react-native-router-flux';
 import { main } from '../../assets/styles/index';
 import AppHeader from '../header';
 import { putCheckToken } from '../../services';
@@ -18,6 +17,7 @@ export default class Main extends Component {
   state = {
     viewComponent: <MemberGrid />,
   };
+
   componentWillMount() {
     const { typememberid } = this.props.user;
     this._putCheckToken();
@@ -38,10 +38,12 @@ export default class Main extends Component {
         break;
     }
   }
+
   async _putCheckToken() {
     const { tokenmember, tokenapi } = await this.props.user;
     await putCheckToken(tokenmember, tokenapi);
   }
+
   render() {
     const pannel =
       (<View>
@@ -65,7 +67,7 @@ export default class Main extends Component {
             <Text style={main.pannelTextBtn}>ورزشکار</Text>
           </TouchableOpacity>
         </View>
-       </View>);
+      </View>);
     return (
       <Container>
         <AppHeader rightTitle="صفحه اصلی" hasBlog />

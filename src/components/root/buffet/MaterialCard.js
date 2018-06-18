@@ -37,7 +37,6 @@ export default class MaterialCard extends Component {
       const { tokenmember } = await this.props.user;
       const { max, min, ssort, fsort, state } = await this.state;
       let deletedOrder;
-      // let FoodOrdered = await getAllBasketMaterial(0,state, tokenmember, tokenapi, max, min, ssort, fsort);
       const FoodOrdered = await this.props.materialBasket;
       console.log(FoodOrdered);
       for (i = 0; i < FoodOrdered.length; i++) {
@@ -59,6 +58,7 @@ export default class MaterialCard extends Component {
     }
   }
   async addButtonHandle() {
+    if (!this.props.active) return;
     try {
       const { numberbuffet } = this.state;
       this.setState({

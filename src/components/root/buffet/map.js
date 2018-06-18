@@ -79,6 +79,7 @@ export default class MapComponent extends Component {
   }
   async getBuffet() {
     try {
+      // TODO: LAT AND LONG.
       const { tokenmember, latval, longval } = await this.props.user;
       const { latitude, longitude } = await this.state.region;
       const { tokenapi } = this.props;

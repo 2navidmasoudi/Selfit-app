@@ -23,7 +23,6 @@ export default class FactorBuffetDetail extends Component {
     buffetOrder: null,
     materialOrder: null,
     refreshing: true,
-    sendPrice: 3500,
   };
   componentWillMount() {
     this.getInfo();
@@ -108,11 +107,10 @@ export default class FactorBuffetDetail extends Component {
       (<Text style={{ color: errorColor }}>
         منتظر تایید توسط بوفه دار.
       </Text>);
-    // TODO: this.props.sendPrice
-    const payBtn = (item.acceptfactor && item.idstatepayed === 2 && this.state.sendPrice) ?
-      <PayButton sendPrice={this.state.sendPrice} />
+    const payBtn = (item.acceptfactor && item.idstatepayed === 2 && this.props.sendPrice) ?
+      <PayButton sendPrice={this.props.sendPrice} />
       : null;
-    const totalPrice = item.finalpricefactorbuffet + this.state.sendPrice * 3 / 5;
+    const totalPrice = item.finalpricefactorbuffet + this.props.sendPrice * 3 / 5;
     return (
       <Container>
         <AppHeader rightTitle="فاکتور خرید" />
@@ -160,7 +158,7 @@ export default class FactorBuffetDetail extends Component {
             </CardItem>
             <CardItem bordered>
               <Text style={{ flex: 1 }}>
-                هزینه ارسال: {persianNumber((this.state.sendPrice * 3 / 5).toLocaleString())} تومان
+                هزینه ارسال: {persianNumber((this.props.sendPrice * 3 / 5).toLocaleString())} تومان
               </Text>
             </CardItem>
             <CardItem bordered>

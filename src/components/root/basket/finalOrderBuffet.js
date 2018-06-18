@@ -25,7 +25,7 @@ import { persianNumber } from '../../../utils/persian';
 import { FlatList } from 'react-native';
 import { sendPrice } from '../../../services/Alopeyk';
 import { getSingleBuffet } from '../../../services/buffet';
-// TODO: ADD LIST FOR FINAL ORDER
+
 @connect(state => ({
   user: state.user,
   tokenapi: state.buffet.tokenapi,
@@ -53,7 +53,7 @@ export default class finalOrderBuffet extends Component {
     ssort: false,
     total: 0,
     descfactor: '',
-    sendServicePrice: 3500,
+    sendServicePrice: 0,
     lat: null,
     long: null,
   };
@@ -65,7 +65,7 @@ export default class finalOrderBuffet extends Component {
     await this.props.tokenBuffet('selfit.buffet');
     await this.props.setRoad('buffet');
     await this._getSingleBuffet();
-    // this._sendPrice();
+    this._sendPrice();
   }
   async sendOrderBuffet() {
     try {
@@ -99,19 +99,19 @@ export default class finalOrderBuffet extends Component {
       console.log(e);
     }
   }
-  // async _sendPrice() {
-  //   try {
-  //     const { lataddressmember, longaddressmember } = await this.props.address;
-  //     const { lat, long } = await this.state;
-  //     const sendServicePrice = await sendPrice(lat, long, lataddressmember, longaddressmember);
-  //     console.log(sendServicePrice);
-  //     await this.setState({
-  //       sendServicePrice: sendServicePrice.object.price,
-  //     });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // }
+  async _sendPrice() {
+    try {
+      const { lataddressmember, longaddressmember } = await this.props.address;
+      const { lat, long } = await this.state;
+      const sendServicePrice = await sendPrice(lat, long, lataddressmember, longaddressmember);
+      console.log(sendServicePrice);
+      await this.setState({
+        sendServicePrice: sendServicePrice.object.price,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
   renderItem = ({ item }) => (
     <ListItem>
       <Left>
@@ -146,7 +146,7 @@ export default class finalOrderBuffet extends Component {
     const {
       item, formInputText
     } = SignStyle;
-    const FooterComponent = ((this.props.Count1 + this.props.Count2) === 0 && this.state.sendServicePrice === 0)  ? null :
+    const FooterComponent = ((this.props.Count1 + this.props.Count2) === 0 || this.state.sendServicePrice === 0)  ? null :
       (<Footer>
         <FooterTab>
           <Button

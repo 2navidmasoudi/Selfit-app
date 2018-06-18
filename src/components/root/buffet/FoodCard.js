@@ -56,6 +56,7 @@ export default class FoodCard extends Component {
     }
   }
   async addButtonHandle() {
+    if (!this.props.active) return;
     try {
       const { numberbuffet } = this.state;
       const { MenuFood } = this.props;

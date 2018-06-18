@@ -4,7 +4,7 @@ import { PersistGate } from 'redux-persist/es/integration/react';
 import { Drawer, Lightbox, Router, Scene } from 'react-native-router-flux';
 import firebase from 'react-native-firebase';
 import { Root, Spinner } from 'native-base';
-import codePush, { codePushDownloadDidProgress, codePushStatusDidChange } from 'react-native-code-push';
+import codePush from 'react-native-code-push';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { connect, Provider } from 'react-redux';
 import { setEnabled } from './utils/analytics';
@@ -55,9 +55,9 @@ import WebViewComponent from './components/root/WebViewComponent';
 import Follow from './components/root/follow';
 import FactorProductDetail from './components/root/follow/FactorProductDetail';
 import PaymentWeb from './components/root/payment';
-import { darkColor, mainColor } from './assets/variables/colors';
 import FactorBuffetDetail from './components/root/follow/FactorBuffetDetail';
 import HtmlEditor from './components/root/htmlEditor';
+import { darkColor, mainColor } from './assets/variables/colors';
 
 // Geocoder.setApiKey('AIzaSyBlgHjeMbqK3xEZfh6HK2o8RdjhhgTOh0s');
 const window = Dimensions.get('window');
@@ -71,9 +71,10 @@ EStyleSheet.build({
 
 const activeBackGesture = (Platform.OS === 'android') ? null : undefined;
 const onBeforeLift = async () => {};
+
+@codePush
 export default class App extends Component {
   componentDidMount() {
-    // persistor.purge();
     Linking.getInitialURL().then((url) => {
       if (url) {
         console.log(`Initial url is: ${url}`);
@@ -129,47 +130,20 @@ export default class App extends Component {
         }
       });
   }
-
   componentWillUnmount() {
     Linking.removeEventListener('url', this.handleOpenURL);
   }
-
   handleOpenURL(event) {
     console.log('Incoming url');
     console.log(event.url);
   }
-  codePushStatusDidChange(status) {
-    switch (status) {
-      case codePush.SyncStatus.CHECKING_FOR_UPDATE:
-        console.log('Checking for updates.');
-        break;
-      case codePush.SyncStatus.DOWNLOADING_PACKAGE:
-        console.log('Downloading package.');
-        break;
-      case codePush.SyncStatus.INSTALLING_UPDATE:
-        console.log('Installing update.');
-        break;
-      case codePush.SyncStatus.UP_TO_DATE:
-        console.log('Up-to-date.');
-        break;
-      case codePush.SyncStatus.UPDATE_INSTALLED:
-        console.log('Update installed.');
-        break;
-      default:
-        break;
-    }
-  }
-  codePushDownloadDidProgress(progress) {
-    console.log(`${connectionInfo.effectiveTypes} of ${progress.totalBytes} received.`);
-  }
-
   render() {
     const RouterWithRedux = connect()(Router);
     return (
       <Root>
         <Provider store={store}>
           <PersistGate
-            loading={<Spinner />}
+            loading={<Spinner color={mainColor} />}
             onBeforeLift={onBeforeLift}
             persistor={persistor}
           >
@@ -247,10 +221,10 @@ export default class App extends Component {
                 </Scene>
                 <Lightbox key="signUp" hideNavBar>
                   <Scene hideNavBar>
-                    <Scene key="login" component={Login} />
-                    <Scene key="register" component={Register} />
+                    <Scene key="login" component={Login} panHandlers={activeBackGesture} />
+                    <Scene key="register" component={Register} panHandlers={activeBackGesture} />
                   </Scene>
-                  <Scene key="authLightBox" component={AuthLightBox} />
+                  <Scene key="authLightBox" component={AuthLightBox} panHandlers={activeBackGesture} />
                 </Lightbox>
               </Scene>
             </RouterWithRedux>

@@ -25,7 +25,7 @@ export default class FactorBuffet extends Component {
     refreshing: true,
     lat: null,
     long: null,
-    sendServicePrice: 3500,
+    sendServicePrice: 0,
   };
   componentWillMount() {
     this.getInfo();
@@ -33,7 +33,7 @@ export default class FactorBuffet extends Component {
   async getInfo() {
     await this.props.tokenBuffet('selfit.buffet');
     await this._getSingleBuffet();
-    // await this._sendPrice();
+    await this._sendPrice();
   }
   async _getSingleBuffet() {
     try {
@@ -51,19 +51,19 @@ export default class FactorBuffet extends Component {
       console.log(e);
     }
   }
-  // async _sendPrice() {
-  //   try {
-  //     const { lataddressmember, longaddressmember } = await this.props.item;
-  //     const { lat, long } = await this.state;
-  //     const sendServicePrice = await sendPrice(lat, long, lataddressmember, longaddressmember);
-  //     console.log(sendServicePrice);
-  //     await this.setState({
-  //       sendServicePrice: sendServicePrice.object.price,
-  //     });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // }
+  async _sendPrice() {
+    try {
+      const { lataddressmember, longaddressmember } = await this.props.item;
+      const { lat, long } = await this.state;
+      const sendServicePrice = await sendPrice(lat, long, lataddressmember, longaddressmember);
+      console.log(sendServicePrice);
+      await this.setState({
+        sendServicePrice: sendServicePrice.object.price,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
   followOrder() {
     if (this.state.sendServicePrice) {
       Actions.followBuffet({ item: this.props.item, sendPrice: this.state.sendServicePrice });
