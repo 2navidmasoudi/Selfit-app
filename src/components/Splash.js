@@ -14,7 +14,7 @@ export default class Splash extends Component {
     tokenChecked: false,
   };
   componentDidMount() {
-    this.checkToken();
+    setTimeout(() => this.checkToken(), 100);
   }
   async checkToken() {
     try {
@@ -25,7 +25,13 @@ export default class Splash extends Component {
       if (json === 1) {
         this.setState({ tokenChecked: true });
       } else {
-        this.setState({ tokenChecked: false });
+        putCheckToken(tokenmember, tokenapi).then((result) => {
+          console.log('json for login');
+          console.log(result);
+          if (result === 1) {
+            this.setState({ tokenChecked: true });
+          }
+        });
       }
     } catch (e) {
       console.log(e);

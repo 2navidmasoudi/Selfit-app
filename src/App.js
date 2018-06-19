@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Dimensions, Linking, Platform } from 'react-native';
+import { Dimensions, Linking, Platform, NetInfo, Alert } from 'react-native';
 import { PersistGate } from 'redux-persist/es/integration/react';
-import { Drawer, Lightbox, Router, Scene } from 'react-native-router-flux';
+import { Drawer, Lightbox, Router, Scene, Actions } from 'react-native-router-flux';
 import firebase from 'react-native-firebase';
 import { Root, Spinner } from 'native-base';
-import codePush from 'react-native-code-push';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { connect, Provider } from 'react-redux';
+import codePush from 'react-native-code-push';
 import { setEnabled } from './utils/analytics';
 import configureStore from './redux/store/configureStore';
 import Splash from './components/Splash';
@@ -58,8 +58,11 @@ import PaymentWeb from './components/root/payment';
 import FactorBuffetDetail from './components/root/follow/FactorBuffetDetail';
 import HtmlEditor from './components/root/htmlEditor';
 import { darkColor, mainColor } from './assets/variables/colors';
+import Federation from './components/root/federation';
+import FederationDetail from './components/root/federation/FederationDetail';
 
 // Geocoder.setApiKey('AIzaSyBlgHjeMbqK3xEZfh6HK2o8RdjhhgTOh0s');
+const RouterWithRedux = connect()(Router);
 const window = Dimensions.get('window');
 const { persistor, store } = configureStore();
 EStyleSheet.build({
@@ -74,13 +77,39 @@ const onBeforeLift = async () => {};
 
 @codePush
 export default class App extends Component {
+  componentWillMount() {
+    NetInfo.isConnected.fetch().then((isConnected) => {
+      console.log(`First, is ${isConnected ? 'online' : 'offline'}`);
+      if (!isConnected) {
+        Alert.alert(
+          'خطا',
+          'لطفا اتصال خود را به اینترنت بررسی کنید.',
+          [
+            { text: 'بازگشت', onPress: () => Actions.reset('splash') },
+          ], {
+            cancelable: false,
+          }
+        );
+      }
+    });
+    function handleFirstConnectivityChange(isConnected) {
+      console.log(`Then, is ${isConnected ? 'online' : 'offline'}`);
+      NetInfo.isConnected.removeEventListener(
+        'connectionChange',
+        handleFirstConnectivityChange
+      );
+    }
+    NetInfo.isConnected.addEventListener(
+      'connectionChange',
+      handleFirstConnectivityChange
+    );
+  }
   componentDidMount() {
     Linking.getInitialURL().then((url) => {
       if (url) {
         console.log(`Initial url is: ${url}`);
       }
     }).catch(err => console.error('An error occurred', err));
-
     Linking.addEventListener('url', this.handleOpenURL);
     if (__DEV__) {
       console.disableYellowBox = true;
@@ -88,57 +117,53 @@ export default class App extends Component {
     } else {
       setEnabled(true);
     }
-    firebase.messaging().hasPermission()
-      .then((enabled) => {
-        console.log('hasPermission');
-        console.log(enabled);
-        if (enabled) {
-          firebase.messaging().getToken()
-            .then((fcmToken) => {
-              if (fcmToken) {
-                console.log('getToken');
-                console.log(fcmToken);
-              } else {
-                // @TODO: user doesn't have a device token yet
-              }
-            });
-          // user has permissions
-          this.notificationListener = firebase.notifications().onNotification((notification) => {
-            console.log('notification');
-            console.log(notification);
-          });
-        } else {
-          firebase.messaging().requestPermission()
-            .then(() => {
-              firebase.messaging().getToken()
-                .then((fcmToken) => {
-                  if (fcmToken) {
-                    console.log('requestPermission getToken');
-                    console.log(fcmToken);
-                  } else {
-                    // @TODO: user doesn't have a device token yet
-                  }
-                });
-              this.notificationListener = firebase.notifications().onNotification((notification) => {
-                console.log('notification');
-                console.log(notification);
-              });
-            })
-            .catch((error) => {
-              // @TODO: User has rejected permissions
-            });
-        }
-      });
+    this.firebaseToken();
   }
   componentWillUnmount() {
     Linking.removeEventListener('url', this.handleOpenURL);
+  }
+  async firebaseToken() {
+    try {
+      const enabled = await firebase.messaging.hasPermission();
+      console.log('hasPermission');
+      console.log(enabled);
+      if (enabled) {
+        const fcmToken = firebase.messaging().getToken();
+        if (fcmToken) {
+          console.log('getToken');
+          console.log(fcmToken);
+        } else {
+          // @TODO: user doesn't have a device token yet
+        }
+        this.notificationListener = firebase.notifications().onNotification((notification) => {
+          console.log('notification');
+          console.log(notification);
+        });
+      } else {
+        await firebase.messaging().requestPermission();
+        const fcmToken = await firebase.messaging().getToken();
+        if (fcmToken) {
+          console.log('requestPermission getToken');
+          console.log(fcmToken);
+        } else {
+          // @TODO: user doesn't have a device token yet
+        }
+        this.notificationListener =
+          firebase.notifications().onNotification((notification) => {
+            console.log('notification');
+            console.log(notification);
+          });
+      }
+    } catch (e) {
+      // @TODO: User has rejected permissions
+      console.log(e);
+    }
   }
   handleOpenURL(event) {
     console.log('Incoming url');
     console.log(event.url);
   }
   render() {
-    const RouterWithRedux = connect()(Router);
     return (
       <Root>
         <Provider store={store}>
@@ -192,6 +217,10 @@ export default class App extends Component {
                         <Scene key="couch" component={Couch} initial hideNavBar />
                         <Scene key="coachDetail" component={CouchDetail} hideNavBar />
                       </Scene>
+                      <Scene key="federationRoot" hideNavBar>
+                        <Scene key="federation" component={Federation} initial hideNavBar />
+                        <Scene key="federationDetail" component={FederationDetail} hideNavBar />
+                      </Scene>
                       <Scene key="storeRoot" hideNavBar>
                         <Scene key="store" component={Store} initial hideNavBar />
                         <Scene key="categoryChildren" component={CategoryChildren} hideNavBar />
@@ -204,7 +233,6 @@ export default class App extends Component {
                         <Scene key="mygym" component={MyGym} initial hideNavBar />
                         <Scene key="editGym" component={EditGym} hideNavBar />
                         <Scene key="htmlEditor" component={HtmlEditor} hideNavBar />
-
                       </Scene>
                       <Scene key="buffetOrder" component={BuffetOrder} hideNavBar />
                       <Scene key="showImage" component={ShowImage} hideNavBar />
@@ -234,3 +262,46 @@ export default class App extends Component {
     );
   }
 }
+
+// firebase.messaging().hasPermission()
+//   .then((enabled) => {
+//     console.log('hasPermission');
+//     console.log(enabled);
+//     if (enabled) {
+//       firebase.messaging().getToken()
+//         .then((fcmToken) => {
+//           if (fcmToken) {
+//             console.log('getToken');
+//             console.log(fcmToken);
+//           } else {
+//             // @TODO: user doesn't have a device token yet
+//           }
+//         });
+//       // user has permissions
+//       this.notificationListener = firebase.notifications().onNotification((notification) => {
+//         console.log('notification');
+//         console.log(notification);
+//       });
+//     } else {
+//       firebase.messaging().requestPermission()
+//         .then(() => {
+//           firebase.messaging().getToken()
+//             .then((fcmToken) => {
+//               if (fcmToken) {
+//                 console.log('requestPermission getToken');
+//                 console.log(fcmToken);
+//               } else {
+//                 // @TODO: user doesn't have a device token yet
+//               }
+//             });
+//           this.notificationListener =
+//             firebase.notifications().onNotification((notification) => {
+//               console.log('notification');
+//               console.log(notification);
+//             });
+//         })
+//         .catch((error) => {
+//           // @TODO: User has rejected permissions
+//         });
+//     }
+//   });

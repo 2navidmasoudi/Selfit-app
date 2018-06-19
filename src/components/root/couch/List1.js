@@ -85,7 +85,7 @@ export default class List1 extends Component {
     }
   }
   async handleLoadMore() {
-    if (this.props.gym.length >= 70 && !this.state.loading) {
+    if (this.props.coach.length >= 70 && !this.state.loading) {
       console.log('Request Load More');
       await this.props.incrementMin();
       await this.setState({ loading: true });
