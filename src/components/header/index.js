@@ -44,8 +44,23 @@ export default ({ rightTitle, hasBlog, noPop }) => (
     </Body>
     <Right style={{ flex: 1, alignItems: 'flex-end' }}>
       <TouchableWithoutFeedback onPress={() => Actions.drawerOpen()}>
-        <View style={{ justifyContent: 'center', alignItems: 'center', height: 50, width: 50 }}>
-          <Icon name="menu" onPress={() => Actions.drawerOpen()} style={{ color: 'white', fontWeight: 500 }} />
+        <View style={{
+          display: noPop ? 'none' : 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: 50,
+          width: 50
+        }}
+        >
+          <Icon
+            name="menu"
+            onPress={() => Actions.drawerOpen()}
+            style={{
+                  display: noPop ? 'none' : 'flex',
+                  color: 'white',
+                  fontWeight: 500
+            }}
+          />
         </View>
       </TouchableWithoutFeedback>
     </Right>
