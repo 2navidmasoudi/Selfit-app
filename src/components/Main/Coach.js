@@ -26,7 +26,7 @@ export default () => (
     </TouchableOpacity>
     <Divider style={{ backgroundColor: darkColor, marginHorizontal: 10 }} />
     <TouchableOpacity
-      style={{ flex: 1 }}
+      style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.2)' }}
       onPress={() => Actions.federationRoot()}
     >
       <View style={styles.animationView}>
