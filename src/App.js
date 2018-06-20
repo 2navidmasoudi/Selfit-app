@@ -78,8 +78,8 @@ const onBeforeLift = async () => {};
 @codePush
 export default class App extends Component {
   componentWillMount() {
-    NetInfo.isConnected.fetch().then((isConnected) => {
-      console.log(`First, is ${isConnected ? 'online' : 'offline'}`);
+    function handleFirstConnectivityChange(isConnected) {
+      console.log(`Then, is ${isConnected ? 'online' : 'offline'}`);
       if (!isConnected) {
         Alert.alert(
           'خطا',
@@ -91,9 +91,6 @@ export default class App extends Component {
           }
         );
       }
-    });
-    function handleFirstConnectivityChange(isConnected) {
-      console.log(`Then, is ${isConnected ? 'online' : 'offline'}`);
       NetInfo.isConnected.removeEventListener(
         'connectionChange',
         handleFirstConnectivityChange
