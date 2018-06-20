@@ -123,41 +123,47 @@ export default class App extends Component {
     Linking.removeEventListener('url', this.handleOpenURL);
   }
   async firebaseToken() {
-    try {
-      const enabled = await firebase.messaging.hasPermission();
-      console.log('hasPermission');
-      console.log(enabled);
-      if (enabled) {
-        const fcmToken = firebase.messaging().getToken();
-        if (fcmToken) {
-          console.log('getToken');
-          console.log(fcmToken);
-        } else {
-          // @TODO: user doesn't have a device token yet
-        }
-        this.notificationListener = firebase.notifications().onNotification((notification) => {
-          console.log('notification');
-          console.log(notification);
-        });
-      } else {
-        await firebase.messaging().requestPermission();
-        const fcmToken = await firebase.messaging().getToken();
-        if (fcmToken) {
-          console.log('requestPermission getToken');
-          console.log(fcmToken);
-        } else {
-          // @TODO: user doesn't have a device token yet
-        }
-        this.notificationListener =
-          firebase.notifications().onNotification((notification) => {
+    firebase.messaging().hasPermission()
+      .then((enabled) => {
+        console.log('hasPermission');
+        console.log(enabled);
+        if (enabled) {
+          firebase.messaging().getToken()
+            .then((fcmToken) => {
+              if (fcmToken) {
+                console.log('getToken');
+                console.log(fcmToken);
+              } else {
+                // @TODO: user doesn't have a device token yet
+              }
+            });
+          // user has permissions
+          this.notificationListener = firebase.notifications().onNotification((notification) => {
             console.log('notification');
             console.log(notification);
           });
-      }
-    } catch (e) {
-      // @TODO: User has rejected permissions
-      console.log(e);
-    }
+        } else {
+          firebase.messaging().requestPermission()
+            .then(() => {
+              firebase.messaging().getToken()
+                .then((fcmToken) => {
+                  if (fcmToken) {
+                    console.log('requestPermission getToken');
+                    console.log(fcmToken);
+                  } else {
+                    // @TODO: user doesn't have a device token yet
+                  }
+                });
+              this.notificationListener = firebase.notifications().onNotification((notification) => {
+                console.log('notification');
+                console.log(notification);
+              });
+            })
+            .catch((error) => {
+              // @TODO: User has rejected permissions
+            });
+        }
+      });
   }
   handleOpenURL(event) {
     console.log('Incoming url');
