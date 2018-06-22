@@ -35,13 +35,13 @@ export default class AuthLightBox extends Component {
           tokenPhoneError: ''
         });
         const { phone, tokenapi } = await this.props.user;
-        const Method = await this.props.method;
-        console.log(Method);
-        const json = await putCodeLogin(Method, phone, tokenPhoneInput, tokenapi);
+        const { method } = await this.props;
+        console.log(method);
+        const json = await putCodeLogin(method, phone, tokenPhoneInput, tokenapi);
         if (json) {
           await this.props.setTokenmember(json);
           console.log('Token for this member added as:', this.props.user.tokenmember);
-          Actions.login({ authSuccess: true });
+          Actions.waiting();
         } else {
           console.log('error in code');
         }

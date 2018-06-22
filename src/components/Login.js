@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { View, Platform } from 'react-native';
-import {Button, Container, Content} from 'native-base';
+import { Button, Container } from 'native-base';
 import LinearGradient from 'react-native-linear-gradient';
 import { Actions } from 'react-native-router-flux';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { connect } from 'react-redux';
 import { SignStyle } from '../assets/styles/sign';
 import { setPhone, setTokenapi, setUser } from '../redux/actions';
-import { getSingleToken, postMember, putMemberLogin } from '../services';
+import { postMember, putMemberLogin } from '../services';
 import Status from './status';
 import { Text, TextInput } from './Kit';
 import { darkColor, mainColor, white } from '../assets/variables/colors';
@@ -15,47 +15,12 @@ import { darkColor, mainColor, white } from '../assets/variables/colors';
 const isIOS = Platform.OS === 'ios';
 @connect(state => ({ user: state.user }), { setUser, setPhone, setTokenapi })
 export default class Login extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      phoneNumber: {
-        value: '',
-        error: '',
-      },
-      Loading: this.props.authSuccess || false
-    };
-  }
-
-  componentWillMount() {
-    const authSuccess = this.props.authSuccess || false;
-    this.checkAuthSuccess(authSuccess);
-  }
-
-  async checkAuthSuccess(authSuccess) {
-    if (authSuccess) {
-      this.checkNullParams();
-    }
-    console.log('authSucces:', authSuccess);
-  }
-
-  async checkNullParams() {
-    try {
-      const { tokenmember, tokenapi } = await this.props.user;
-      const json = await getSingleToken(tokenmember, tokenapi);
-      const { typememberid } = await json.MemberSingleToken;
-      if (!typememberid) {
-        this.setState({ Loading: false });
-        Actions.register();
-      } else {
-        await this.props.setUser(json.MemberSingleToken);
-        Actions.reset('root');
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-
+  state = {
+    phoneNumber: {
+      value: '',
+      error: '',
+    },
+  };
   async login() {
     const { phoneNumber } = await this.state;
     if (phoneNumber.value.length !== 11) {
@@ -78,7 +43,6 @@ export default class Login extends Component {
       await this.requestMemberLogin();
     }
   }
-
   async requestMemberLogin() {
     try {
       await this.props.setTokenapi({ tokenapi: 'selfit.member' });
@@ -100,7 +64,6 @@ export default class Login extends Component {
       console.log(error);
     }
   }
-
   async postMember() {
     try {
       const { phone, tokenapi } = await this.props.user;
@@ -111,7 +74,6 @@ export default class Login extends Component {
       console.log(err);
     }
   }
-
   putActivePhone() {
     try {
       Actions.authLightBox({ method: 'PutActivephone' });
@@ -119,7 +81,6 @@ export default class Login extends Component {
       console.log(error);
     }
   }
-
   putCheckLogin() {
     try {
       Actions.authLightBox({ method: 'PutCheckLogin' });
@@ -127,7 +88,6 @@ export default class Login extends Component {
       console.log(error);
     }
   }
-
   changeMobileNumber(text) {
     this.setState({
       phoneNumber: {
@@ -136,7 +96,6 @@ export default class Login extends Component {
       }
     });
   }
-
   render() {
     const phoneNumberError = this.state.phoneNumber.error;
     const {

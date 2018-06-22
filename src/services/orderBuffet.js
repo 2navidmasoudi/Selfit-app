@@ -83,7 +83,7 @@ export const checkOrderBuffet = async (buffetid, token, tokenapi) => {
     console.log(e);
   }
 };
-export const postFactor = async (buffetid, descfactor, methodpayed, token, tokenapi) => {
+export const postFactor = async (buffetid, descfactor, methodpayed, delivery, token, tokenapi) => {
   try {
     const response = await fetch(`${Selfit}${Orders}PostFactor`, {
       method: POST,
@@ -92,6 +92,7 @@ export const postFactor = async (buffetid, descfactor, methodpayed, token, token
         buffetid,
         descfactor,
         methodpayed,
+        delivery,
         token,
         tokenapi
       })

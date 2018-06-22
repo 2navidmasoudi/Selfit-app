@@ -10,7 +10,6 @@ import io.invertase.firebase.perf.RNFirebasePerformancePackage;
 import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
 import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 import com.brentvatne.react.ReactVideoPackage;
-import com.tanguyantoine.react.MusicControl;
 import com.rnfs.RNFSPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
@@ -52,7 +51,6 @@ public class MainApplication extends Application implements ReactApplication {
           new RNFirebaseMessagingPackage(),
           new RNFirebaseNotificationsPackage(),
           new ReactVideoPackage(),
-          new MusicControl(),
           new RNFSPackage(),
           new MapsPackage(),
           new LinearGradientPackage(),

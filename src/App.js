@@ -6,7 +6,6 @@ import firebase from 'react-native-firebase';
 import { Root, Spinner } from 'native-base';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { connect, Provider } from 'react-redux';
-import codePush from 'react-native-code-push';
 import { setEnabled } from './utils/analytics';
 import configureStore from './redux/store/configureStore';
 import Splash from './components/Splash';
@@ -60,6 +59,7 @@ import HtmlEditor from './components/root/htmlEditor';
 import { darkColor, mainColor } from './assets/variables/colors';
 import Federation from './components/root/federation';
 import FederationDetail from './components/root/federation/FederationDetail';
+import Waiting from "./components/Waiting";
 
 // Geocoder.setApiKey('AIzaSyBlgHjeMbqK3xEZfh6HK2o8RdjhhgTOh0s');
 const RouterWithRedux = connect()(Router);
@@ -71,11 +71,8 @@ EStyleSheet.build({
   $signBoxColor: mainColor,
   $IS: 'IRANSansMobile'
 });
-
 const activeBackGesture = (Platform.OS === 'android') ? null : undefined;
-const onBeforeLift = async () => {};
 
-@codePush
 export default class App extends Component {
   componentWillMount() {
     function handleFirstConnectivityChange(isConnected) {
@@ -172,13 +169,13 @@ export default class App extends Component {
         <Provider store={store}>
           <PersistGate
             loading={<Spinner color={mainColor} />}
-            onBeforeLift={onBeforeLift}
             persistor={persistor}
           >
             <RouterWithRedux hideNavBar>
               <Scene key="rootMain" hideNavbar>
                 <Scene key="splash" initial component={Splash} hideNavBar />
                 <Scene key="sign" component={Sign} hideNavBar />
+                <Scene key="waiting" component={Waiting} hideNavBar />
                 <Scene key="Music" hideNavBar component={Music} panHandlers={activeBackGesture} />
                 <Scene key="root" hideNavBar>
                   <Drawer

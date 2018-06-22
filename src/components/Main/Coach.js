@@ -26,15 +26,15 @@ export default () => (
     </TouchableOpacity>
     <Divider style={{ backgroundColor: darkColor, marginHorizontal: 10 }} />
     <TouchableOpacity
-      style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.2)' }}
+      style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.3)' }}
       onPress={() => Actions.federationRoot()}
     >
       <View style={styles.animationView}>
         <Text type="bold" style={styles.animationTitle}>
-          فدراسیون
+          فدراسیون ها
         </Text>
-        <Text style={styles.animationDetail}>
-          مشاهده فدراسیون، انجمن ها و ...
+        <Text type="bold" style={styles.animationDetail}>
+          انجمن ها و کمیته ها
         </Text>
       </View>
     </TouchableOpacity>

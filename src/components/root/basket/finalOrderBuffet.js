@@ -71,8 +71,9 @@ export default class finalOrderBuffet extends Component {
     try {
       const { tokenmember } = await this.props.user;
       const { tokenapi, buffetid } = await this.props;
-      const { descfactor } = await this.state;
-      const idfactor = await postFactor(buffetid, descfactor, 1, tokenmember, tokenapi);
+      const { descfactor, sendServicePrice } = await this.state;
+      const idfactor =
+        await postFactor(buffetid, descfactor, 1, sendServicePrice, tokenmember, tokenapi);
       console.log(idfactor);
       const result = await postAddressOrderBuffet(idfactor, tokenmember, tokenapi);
       if (result === 1) {
@@ -140,28 +141,29 @@ export default class finalOrderBuffet extends Component {
   );
   render() {
     const totalPrice =
-      (this.props.PriceAllBuffet + this.props.PriceAllMaterial + this.state.sendServicePrice*3/5)
+      (this.props.PriceAllBuffet + this.props.PriceAllMaterial + this.state.sendServicePrice * 3 / 5)
         .toLocaleString();
     const addressTitle = Base64.decode(this.props.address.titleaddressmember);
     const {
       item, formInputText
     } = SignStyle;
-    const FooterComponent = ((this.props.Count1 + this.props.Count2) === 0 || this.state.sendServicePrice === 0)  ? null :
-      (<Footer>
-        <FooterTab>
-          <Button
-            style={{ backgroundColor: '#0F9D7A' }}
-            onPress={this.sendOrderBuffet.bind(this)}
-          >
-            <Text style={{
+    const FooterComponent =
+      ((this.props.Count1 + this.props.Count2) === 0 || this.state.sendServicePrice === 0) ? null :
+        (<Footer>
+          <FooterTab>
+            <Button
+              style={{ backgroundColor: '#0F9D7A' }}
+              onPress={this.sendOrderBuffet.bind(this)}
+            >
+              <Text style={{
               color: 'white',
             }}
-            >
+              >
               صدور فاکتور
-            </Text>
-          </Button>
-        </FooterTab>
-      </Footer>);
+              </Text>
+            </Button>
+          </FooterTab>
+         </Footer>);
     return (
       <Container>
         <AppHeader rightTitle="صدور فاکتور بوفه" backButton="flex" />
