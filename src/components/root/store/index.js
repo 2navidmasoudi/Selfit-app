@@ -36,7 +36,7 @@ import {mainColor, white} from "../../../assets/variables/colors";
 export default class Store extends Component {
   state = {
     productCategory: [],
-    max: 30,
+    max: 150,
     min: 0,
     ssort: false,
     fsort: 0,

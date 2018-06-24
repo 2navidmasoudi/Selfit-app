@@ -1,7 +1,8 @@
-import { Linking } from 'react-native';
+import { Linking, Platform } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { GET, headers, Payment, Selfit } from './type';
 
+const isIOS = Platform.OS === 'ios';
 export const getPayment = async (type, token, delivery = 0, tokenapi) => {
   try {
     const results = await fetch(`${Selfit}${Payment}Get?type=${type}&delivery=${delivery}&token=${token}&tokenapi=${tokenapi}`, {
@@ -25,8 +26,10 @@ export const getRequestPayment = async (type, token, delivery = 0, tokenapi = 's
       .then(url => Linking.canOpenURL(url).then((supported) => {
         if (!supported) {
           console.log(`Can't handle url: ${url}`);
-        } else {
+        } else if (isIOS) {
           return Actions.paymentWebView({ url });
+        } else {
+          Linking.openURL(url);
         }
       }).catch(err => console.error('An error occurred', err)));
   } catch (e) {

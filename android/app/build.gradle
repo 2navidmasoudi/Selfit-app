@@ -104,8 +104,8 @@ android {
         applicationId "com.selfit.universal"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 2
-        versionName "1.1"
+        versionCode 3
+        versionName "1.12"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -129,7 +129,11 @@ android {
         }
     }
     buildTypes {
+        debug {
+            manifestPlaceholders = [excludeSystemAlertWindowPermission: "false"]
+        }
         release {
+            manifestPlaceholders = [excludeSystemAlertWindowPermission: "true"]
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.release

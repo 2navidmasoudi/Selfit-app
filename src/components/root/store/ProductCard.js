@@ -30,9 +30,9 @@ export default class ProductCard extends Component {
       const { tokenmember } = await this.props.user;
       console.log(tokenapi, 'tokenapi??');
       let deletedOrder;
-      const ProductOrdered = await getBasketProduct(true, tokenmember, tokenapi, 30, 0, false, 0);
+      const ProductOrdered = await getBasketProduct(true, tokenmember, tokenapi, 50, 0, false, 0);
       console.log(ProductOrdered);
-      for (i = 0; i < ProductOrdered.length; i++) {
+      for (let i = 0; i < ProductOrdered.length; i++) {
         if (product.idproduct === ProductOrdered[i].idproduct) {
           deletedOrder =
             await deleteBasketProduct(ProductOrdered[i].idbasket, tokenmember, tokenapi);
@@ -40,7 +40,7 @@ export default class ProductCard extends Component {
           break;
         }
       }
-      const Basket = await getBasketProduct(true, tokenmember, tokenapi, 30, 0, false, 0);
+      const Basket = await getBasketProduct(true, tokenmember, tokenapi, 50, 0, false, 0);
       this.props.reBasketProduct(Basket, Basket.length);
     } catch (error) {
       console.log(error);
@@ -72,11 +72,12 @@ export default class ProductCard extends Component {
     const ImgYear = m.jYear();
     const ImgMonth = m.jMonth() + 1;
     const ImgSrc = `${product.httpserver}${product.pathserver}${ImgYear}/${ImgMonth}/${product.picproduct}`;
+    const display = (product.stateproductid === 1 && product.numberproduct) ? 'flex' : 'none';
     return (
       <TouchableOpacity
         // disabled={!product.numberproduct}
         onPress={() => this.addButtonHandle()}
-        style={{ display: product.numberproduct ? 'flex' : 'none' }}
+        style={{ display }}
       >
         <Card style={{ flex: 0 }}>
           <CardItem>

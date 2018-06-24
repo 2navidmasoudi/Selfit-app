@@ -37,7 +37,7 @@ export default class CategoryChildren extends Component {
   state = {
     productCategory: [],
     Product: [],
-    max: 30,
+    max: 150,
     min: 0,
     ssort: false,
     fsort: 0,
