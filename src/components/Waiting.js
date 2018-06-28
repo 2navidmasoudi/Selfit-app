@@ -8,6 +8,7 @@ import Status from './status';
 import { darkColor, mainColor, white } from '../assets/variables/colors';
 import { Text } from './Kit';
 import { setUser } from '../redux/actions';
+import {logError} from "../services/log";
 
 @connect(state => ({ user: state.user }), { setUser })
 export default class Waiting extends Component {
@@ -18,16 +19,23 @@ export default class Waiting extends Component {
     try {
       const { tokenmember, tokenapi } = await this.props.user;
       const json = await getSingleToken(tokenmember, tokenapi);
-      const { typememberid } = await json.MemberSingleToken;
-      if (!typememberid) {
-        Actions.register();
-      } else {
+      console.log(json);
+      console.log('this is getSingleToken');
+      if (!json && !json.MemberSingleToken) {
+        Actions.pop();
+        return;
+      }
+      const TYPE = await json.MemberSingleToken.typememberid;
+      if (TYPE) {
         await this.props.setUser(json.MemberSingleToken);
         Actions.reset('root');
+      } else {
+        Actions.register();
       }
     } catch (error) {
       console.log(error);
-      Actions.pop();
+      logError(error, 'checkNullParams', 'Waiting', 'checkNullParams');
+      this.checkNullParams();
     }
   }
   render() {

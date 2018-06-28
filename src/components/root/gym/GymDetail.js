@@ -147,26 +147,24 @@ export default class GymDetail extends Component {
       cancelText: 'انصراف',
     });
   }
-
-  renderItem({ item, index }) {
-    return (
-      <View key={index} style={styles.slide}>
-        <Image style={{ flex: 1, width: null }} resizeMode="cover" source={{ uri: item.url }} />
-      </View>
-    );
-  }
+  renderItem = ({ item, index }) => (
+    <View key={index} style={styles.slide}>
+      <Image style={{ flex: 1, width: null }} resizeMode="cover" source={{ uri: item.url }} />
+    </View>
+  );
   render() {
     const {
       datesave, httpserver, pathserver, picgym,
-      descgym, namegym, addressgym,
-      RateNumber, visitgym, telgym
+      descgym, namegym, addressgym, activegym, numbertuitiongym,
+      RateNumber, visitgym, telgym, tuitiongym
     } = this.props;
-    const m = moment(`${datesave}`, 'YYYY/MM/DDTHH:mm:ss');
+    const m = datesave ? moment(`${datesave}`, 'YYYY/MM/DDTHH:mm:ss') : moment();
     const jM = m.format('jYYYY/jMM');
     const ImgYear = m.jYear();
     const ImgMonth = m.jMonth() + 1;
     const ImgSrc = `${httpserver}${pathserver}${ImgYear}/${ImgMonth}/${picgym}`;
     const htmlContent = descgym ? persianNumber(descgym.replace(/(\r\n|\n|\r)/gm, '')) : '<p>فاقد توضیحات.</p>';
+    const tuitionGym = tuitiongym ? tuitiongym.toLocaleString() : '؟';
     const slide = this.state.slideready ?
       (<Carousel
         data={this.state.dataSource}
@@ -194,7 +192,7 @@ export default class GymDetail extends Component {
     return (
       <Container>
         <AppHeader rightTitle="باشگاه یاب" />
-        <Content>
+        <Content padder>
           <Card style={{ flex: 0 }}>
             <CardItem>
               <Left style={{ flex: 1 }}>
@@ -233,6 +231,9 @@ export default class GymDetail extends Component {
                   <Text>{persianNumber(telgym)}</Text>
                   <Text>تلفن: </Text>
                 </View>
+                <Text>شهریه باشگاه: {persianNumber(tuitionGym)} تومان</Text>
+                <Text>فعالیت باشگاه: {activegym ? 'فعال' : 'غیر فعال'}</Text>
+                <Text>ظرفیت باشگاه: {persianNumber(numbertuitiongym)}</Text>
               </ScrollView>
             </CardItem>
             <CardItem>
@@ -262,15 +263,13 @@ export default class GymDetail extends Component {
             </CardItem>
           </Card>
         </Content>
-        <View style={{ flexDirection: 'column', justifyContent: 'flex-end' }}>
-          <Button
-            block
-            style={[form.submitButton, { margin: 10, marginBottom: 20 }]}
-            onPress={this.handleMapClick.bind(this)}
-          >
-            <Text style={{ color: '#FFF' }}>نمایش در نقشه</Text>
-          </Button>
-        </View>
+        <Button
+          block
+          style={[form.submitButton, { margin: 10, marginBottom: 20 }]}
+          onPress={this.handleMapClick.bind(this)}
+        >
+          <Text style={{ color: '#FFF' }}>نمایش در نقشه</Text>
+        </Button>
       </Container>
     );
   }

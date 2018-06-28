@@ -63,7 +63,6 @@ export const SignStyle = EStyleSheet.create({
     borderWidth: 2,
   },
   authInput: {
-    textAlign: 'center',
     borderColor: 'rgba(0,0,0,0.4)',
     borderWidth: 2,
     borderRadius: 5,

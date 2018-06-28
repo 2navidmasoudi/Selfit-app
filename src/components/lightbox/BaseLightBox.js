@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Animated, Dimensions, Platform } from 'react-native';
 import { View, Button, Icon } from 'native-base';
 import { Actions } from 'react-native-router-flux';
@@ -7,7 +7,7 @@ import { LightBoxStyle } from '../../assets/styles/sign';
 
 const isIOS = Platform.OS === 'ios';
 const { width: deviceWidth } = Dimensions.get('window');
-export default class BaseLightBox extends React.Component {
+export default class BaseLightBox extends Component {
   state = {
     opacity: new Animated.Value(0),
   };

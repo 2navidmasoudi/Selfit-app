@@ -6,23 +6,32 @@ import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
 import { Icon, Item, Badge, Left, Content } from 'native-base';
 import { drawer } from '../../assets/styles/index';
-import { putUserLogout } from '../../services';
+import {getSingleToken, putUserLogout} from '../../services';
 import { Text } from '../Kit';
 import { persianNumber } from '../../utils/persian';
+import {setUser} from "../../redux/actions";
 
 @connect(state => ({
   user: state.user,
   buffetBasketCount: state.basket.buffetBasketCount,
   materialBasketCount: state.basket.materialBasketCount,
   productBasketCount: state.basket.productBasketCount,
-}))
+}), {
+  setUser
+})
 export default class DrawerLayout extends Component {
-  // state = {
-  //   special
-  // }
-  // componentDidMount() {
-  //
-  // }
+  componentDidMount() {
+    this.getSingleMember();
+  }
+  async getSingleMember() {
+    try {
+      const { tokenmember, tokenapi } = await this.props.user;
+      const json = await getSingleToken(tokenmember, tokenapi);
+      await this.props.setUser(json.MemberSingleToken);
+    } catch (e) {
+      console.log(e);
+    }
+  }
   getRequestLogout() {
     Alert.alert(
       'اجازه خروج',

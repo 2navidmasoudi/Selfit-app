@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { Button, Container, Content } from 'native-base';
+import { Container, Content, Thumbnail, Button as FullButton } from 'native-base';
+import { Image, TouchableWithoutFeedback, View } from 'react-native';
+import { Button as UploadButton } from 'react-native-elements';
+import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import HTMLView from 'react-native-htmlview';
@@ -9,9 +12,12 @@ import { receiveGym, tokenGym } from '../../../redux/actions';
 import { getSingleGym, putGym } from '../../../services/gym';
 import { Text } from '../../Kit';
 import InputText from '../../Kit/TextInput/TextInput';
-import { mainColor, white } from '../../../assets/variables/colors';
+import { darkColor, mainColor, white } from '../../../assets/variables/colors';
 import { latinNumber, persianNumber } from '../../../utils/persian';
 import { htmlStyle } from '../../../assets/styles/html';
+import { Gym } from '../../../services/type';
+import { picker } from '../profile/imagePicker';
+import { uploader } from '../../../services/UploadImage';
 
 @connect(state => ({
   user: state.user,
@@ -35,6 +41,11 @@ export default class EditGym extends Component {
       longgym: props.gym.longgym.toString(),
       active: props.gym.active,
       telgym: props.gym.telgym,
+      loading: false,
+      Pic: null,
+      PicJson: null,
+      data: null,
+      type: null,
     };
   }
   componentWillMount() {
@@ -49,7 +60,7 @@ export default class EditGym extends Component {
       const { idgym, descgym } = await this.props.gym;
       const {
         namegym,
-        picgym,
+        PicJson,
         tuitiongym,
         addressgym,
         numbertuitiongym,
@@ -59,7 +70,7 @@ export default class EditGym extends Component {
         telgym
       } = await this.state;
       const json = await putGym(
-        idgym, namegym, descgym, picgym, Number(tuitiongym), Number(numbertuitiongym),
+        idgym, namegym, descgym, PicJson, Number(tuitiongym), Number(numbertuitiongym),
         Number(latgym), Number(longgym), active, telgym, addressgym, tokenmember, tokenapi
       );
       console.log('result: ', json);
@@ -71,9 +82,41 @@ export default class EditGym extends Component {
       console.log(e);
     }
   }
+
   async getInfo() {
     await this.props.tokenGym('selfit.gym');
     // await this._getSingLeGym();
+  }
+  async UploadSelected() {
+    await picker(async (source, data, type) => {
+      await this.setState({ Pic: source, data, type }, () => {
+        console.log(this.state);
+      });
+      try {
+        this.setState({ loading: true });
+        if (type === 'image/jpeg' || type === 'image/jpg' || type === 'image/png' || type === 'image/bmp') {
+          const { tokenmember } = await this.props.user;
+          const m = await moment();
+          const MM = await m.jMonth() + 1;
+          const YYYY = await m.jYear();
+          const json = await uploader([{
+            name: 'avatar',
+            filename: 'avatar.png',
+            data
+          }], Gym, YYYY, MM, tokenmember, 'selfit.public');
+          await this.setState({ PicJson: json });
+          console.log(this.state);
+          alert('آپلود عکس با موفقیت انجام شد');
+        } else {
+          alert('لطفا اول عکس مورد نظر را انتخاب کنید!');
+        }
+        this.setState({ loading: false });
+      } catch (err) {
+        console.log(err);
+        alert('خطا در آپلود عکس');
+        this.setState({ loading: false });
+      }
+    });
   }
   async _getSingLeGym() {
     try {
@@ -88,12 +131,59 @@ export default class EditGym extends Component {
   }
   render() {
     const { gym } = this.props;
+    const m = gym.datesave ? moment(`${gym.datesave}`, 'YYYY/MM/DDTHH:mm:ss') : moment();
+    const ImgYear = m.jYear();
+    const ImgMonth = m.jMonth() + 1;
+    const ImgSrc = `${gym.httpserver}${gym.pathserver}${ImgYear}/${ImgMonth}/${gym.picgym}`;
     const htmlContent = gym.descgym ? persianNumber(gym.descgym.replace(/(\r\n|\n|\r)/gm, '')) : '<p>فاقد توضیحات.</p>';
     return (
       <Container>
         <AppHeader rightTitle="باشگاه من" backButton="flex" />
         <Content padder>
           <Text style={{ textAlign: 'center', fontSize: 20, margin: 10 }}>ویرایش باشگاه</Text>
+          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <TouchableWithoutFeedback
+              onPress={this.UploadSelected.bind(this)}
+            >
+              {this.state.Pic ? <Image
+                style={{
+                  flex: 1,
+                  height: 200,
+                  width: 200,
+                  borderWidth: 2,
+                  borderColor: mainColor
+                }}
+                resizeMode="cover"
+                source={this.state.Pic}
+              /> : <Image
+                style={{
+                  flex: 1,
+                  height: 200,
+                  width: 200,
+                  borderWidth: 2,
+                  borderColor: mainColor
+                }}
+                resizeMode="cover"
+                source={{ uri: ImgSrc }}
+              />}
+            </TouchableWithoutFeedback>
+            <UploadButton
+              title={this.state.loading ? 'لطفا صبر کنید' : 'آپلود عکس شاخص'}
+              loading={this.state.loading}
+              loadingProps={{ size: 'large', color: darkColor }}
+              titleStyle={{ fontFamily: 'IRANSANSMobile' }}
+              buttonStyle={{
+                backgroundColor: mainColor,
+                width: 200,
+                borderColor: 'transparent',
+                borderWidth: 0,
+                borderBottomLeftRadius: 5,
+                borderBottomRightRadius: 5
+              }}
+              containerStyle={{ marginTop: 100 }}
+              onPress={this.UploadSelected.bind(this)}
+            />
+          </View>
           <InputText
             label="اسم"
             value={this.state.namegym}
@@ -110,7 +200,7 @@ export default class EditGym extends Component {
             value={htmlContent}
             stylesheet={htmlStyle}
           />
-          <Button
+          <FullButton
             block
             style={{ backgroundColor: mainColor }}
             onPress={() => Actions.htmlEditor({ gym: { ...this.state, descgym: gym.descgym, idgym: gym.idgym } })}
@@ -118,7 +208,7 @@ export default class EditGym extends Component {
             <Text style={{ color: white }}>
               ویرایش توضیحات
             </Text>
-          </Button>
+          </FullButton>
           <InputText
             label="تلفن"
             value={persianNumber(this.state.telgym)}
@@ -137,13 +227,13 @@ export default class EditGym extends Component {
             }
           />
         </Content>
-        <Button
+        <FullButton
           full
           style={{ backgroundColor: mainColor }}
           onPress={this.onPressHandler.bind(this)}
         >
           <Text style={{ color: white }}>ثبت و تائید</Text>
-        </Button>
+        </FullButton>
       </Container>
     );
   }

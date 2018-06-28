@@ -16,7 +16,7 @@
     <permission android:name="com.selfit.universal.permission.C2D_MESSAGE"
                 android:protectionLevel="signature"/>
     <uses-sdk
-            android:minSdkVersion="16"q
+            android:minSdkVersion="16"
             android:targetSdkVersion="27"/>
 
     <application

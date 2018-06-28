@@ -12,7 +12,7 @@ export default class GymCard extends Component {
   }
   render() {
     const { gym } = this.props;
-    const m = moment(`${gym.datesave}`, 'YYYY/MM/DDTHH:mm:ss');
+    const m = gym.datesave ? moment(`${gym.datesave}`, 'YYYY/MM/DDTHH:mm:ss') : moment();
     const ImgYear = m.jYear();
     const ImgMonth = m.jMonth() + 1;
     const ImgSrc = `${gym.httpserver}${gym.pathserver}${ImgYear}/${ImgMonth}/${gym.picgym}`;
@@ -24,7 +24,7 @@ export default class GymCard extends Component {
               <Thumbnail square large source={{ uri: ImgSrc }} />
             </Left>
             <Right style={{ flex: 2 }}>
-              <Text style={{marginRight: 10 }}>
+              <Text style={{ marginRight: 10 }}>
                 باشگاه {gym.namegym}
               </Text>
               <Text

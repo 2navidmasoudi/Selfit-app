@@ -140,7 +140,6 @@ export default class List extends Component {
             height: 50,
             width: 120,
             right: 5,
-            bottom: 5,
             borderRadius: 10,
             backgroundColor: '#0F9D7A'
           }}

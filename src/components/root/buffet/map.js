@@ -84,7 +84,7 @@ export default class MapComponent extends Component {
       const { latitude, longitude } = await this.state.region;
       const { tokenapi } = this.props;
       // let BuffetList = await getAllBuffet(35.76254800640313,51.38223538175225,tokenmember,tokenapi,10,0,true,0);
-      const BuffetList = await getAllBuffets(tokenmember, tokenapi, 10, 0, true, 0);
+      const BuffetList = await getAllBuffets(tokenmember, tokenapi, 100, 0, true, 0);
       console.log('buffetList:', BuffetList);
       this.props.receiveBuffet(BuffetList, 0);
     } catch (error) {

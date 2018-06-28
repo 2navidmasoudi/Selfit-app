@@ -63,7 +63,7 @@ export default class EditProfile extends React.Component {
         mailmember,
         birthdaymember,
         sexmember,
-        typememberid,
+        4,
         phone,
         tokenmember,
         tokenapi,

@@ -57,33 +57,61 @@ export const getSingleGym = async (idgym, token, tokenapi) => {
     console.log(e);
   }
 };
-export const putGym = async (idgym, namegym, descgym, picgym, tuitiongym, numbertuitiongym, latgym, longgym, active, tel, addressgym, token, tokenapi) => {
-  try {
-    const response = await fetch(`${Selfit}${Gym}Put`, {
-      method: PUT,
-      headers,
-      body: JSON.stringify({
-        idgym,
-        namegym,
-        descgym,
-        picgym,
-        tuitiongym,
-        numbertuitiongym,
-        latgym,
-        longgym,
-        active,
-        tel,
-        addressgym,
-        token,
-        tokenapi,
-      })
-    });
-    const json = await response.json();
-    return json;
-  } catch (e) {
-    console.log(e);
-  }
-};
+export const putGym =
+  async (idgym, namegym, descgym, picgym, tuitiongym, numbertuitiongym, latgym, longgym, active, tel, addressgym, token, tokenapi) => {
+    if (picgym) {
+      try {
+        const response = await fetch(`${Selfit}${Gym}Put`, {
+          method: PUT,
+          headers,
+          body: JSON.stringify({
+            idgym,
+            namegym,
+            descgym,
+            picgym,
+            tuitiongym,
+            numbertuitiongym,
+            latgym,
+            longgym,
+            active,
+            tel,
+            addressgym,
+            token,
+            tokenapi,
+          })
+        });
+        const json = await response.json();
+        return json;
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      try {
+        const response = await fetch(`${Selfit}${Gym}Put`, {
+          method: PUT,
+          headers,
+          body: JSON.stringify({
+            idgym,
+            namegym,
+            descgym,
+            tuitiongym,
+            numbertuitiongym,
+            latgym,
+            longgym,
+            active,
+            tel,
+            addressgym,
+            token,
+            tokenapi,
+          })
+        });
+        const json = await response.json();
+        return json;
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
 
 export const postRateGym = async (gymid, rate, token, tokenapi) => {
   try {

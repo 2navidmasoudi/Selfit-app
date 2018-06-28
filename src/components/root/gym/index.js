@@ -103,7 +103,6 @@ export default class Gym extends Component {
           >
             <Text style={{ fontSize: 18 }}>{this.state.tabTitle === 'لیست' ? 'نقشه' : 'لیست'}</Text>
           </Fab>
-
         </View>
       </Container>
     );

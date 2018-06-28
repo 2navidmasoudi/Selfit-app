@@ -10,6 +10,7 @@ import { putCodeLogin } from '../../services';
 import { Text, TextInput } from '../Kit';
 import { darkColor, white } from '../../assets/variables/colors';
 import { persianNumber } from '../../utils/persian';
+import { logError } from '../../services/log';
 
 @connect(state => ({ user: state.user }), { setTokenmember })
 export default class AuthLightBox extends Component {
@@ -38,16 +39,20 @@ export default class AuthLightBox extends Component {
         const { method } = await this.props;
         console.log(method);
         const json = await putCodeLogin(method, phone, tokenPhoneInput, tokenapi);
-        if (json) {
+        if (json === -15) {
+          Alert.alert('خطا', 'کد نامعتبر است! لطفا مجدد تلاش کنید', [{ text: 'باشه' }]);
+          console.log('error in code');
+          return;
+        }
+        if (json.tokenmember) {
           await this.props.setTokenmember(json);
           console.log('Token for this member added as:', this.props.user.tokenmember);
           Actions.waiting();
-        } else {
-          console.log('error in code');
         }
       }
     } catch (err) {
-      Alert('کد نامعتبر است! لطفا مجدد تلاش کنید');
+      console.log(err);
+      logError(err, 'checkTokenPhone', 'authBox', 'checkTokenPhone');
     }
   }
   render() {

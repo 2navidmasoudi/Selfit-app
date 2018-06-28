@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { FlatList, View } from 'react-native';
-import { Spinner } from 'native-base';
+import { Fab, Spinner } from 'native-base';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 import { SearchBar } from 'react-native-elements';
 import BuffetCard from './BuffetCard';
 import { decrementMin, incrementMin, receiveBuffet, refreshBuffet, tokenBuffet } from '../../../redux/actions';
-import { getAllBuffet, getSearchBuffet } from '../../../services/buffet';
+import { getAllBuffet, getAllBuffets, getSearchBuffet } from '../../../services/buffet';
+import { Text } from '../../Kit';
 
 @connect(state => ({
   buffet: state.buffet.BuffetList,
@@ -38,7 +40,8 @@ export default class List extends Component {
       const { max, ssort, fsort } = await this.state;
       const { tokenmember, latval, longval } = await this.props.user;
       const { min, tokenapi } = await this.props;
-      const json = await getAllBuffet(latval, longval, tokenmember, tokenapi, max, min, ssort, fsort);
+      const json = await getAllBuffets(tokenmember, tokenapi, max, min, ssort, fsort);
+      // const json = await getAllBuffet(latval, longval, tokenmember, tokenapi, max, min, ssort, fsort);
       console.log(json);
       const BuffetList = await json.BuffetMapList.$values;
       await this.props.receiveBuffet(BuffetList, min);
@@ -81,7 +84,7 @@ export default class List extends Component {
     }
   }
   async handleLoadMore() {
-    if (this.props.buffet.length >= 10 && !this.state.loading) {
+    if (this.props.buffet.length >= 70 && !this.state.loading) {
       console.log('Request Load More');
       this.props.incrementMin();
       this.setState({ loading: true });
@@ -128,6 +131,23 @@ export default class List extends Component {
           onEndReachedThreshold={0.5}
           ListFooterComponent={this.renderFooter.bind(this)}
         />
+        { this.props.user.typememberid === 1 && <Fab
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: 50,
+            width: 120,
+            right: 5,
+            bottom: 5,
+            borderRadius: 10,
+            backgroundColor: '#0F9D7A'
+          }}
+          position="bottomRight"
+          onPress={() => Actions.fullMap()}
+        >
+          <Text style={{ fontSize: 18 }}>کل بوفه ها</Text>
+        </Fab>}
       </View>
     );
   }
