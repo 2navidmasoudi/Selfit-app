@@ -104,8 +104,8 @@ android {
         applicationId "com.selfit.universal"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 3
-        versionName "1.12"
+        versionCode 5
+        versionName "1.2.1"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
