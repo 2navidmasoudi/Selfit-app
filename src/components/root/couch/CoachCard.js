@@ -3,17 +3,14 @@ import { TouchableWithoutFeedback } from 'react-native';
 import { Card, CardItem, Left, Right, Thumbnail } from 'native-base';
 import moment from 'moment-jalaali';
 import { Rating } from 'react-native-elements';
-import HTMLView from 'react-native-htmlview';
 import { Actions } from 'react-native-router-flux';
 import { Text } from '../../Kit';
 
 export default class CoachCard extends Component {
   onPressHandle(coach) {
-    // TODO: create a detail page for couch
     Actions.coachDetail({ coach });
     console.log(coach);
   }
-
   render() {
     const { coach } = this.props;
     const m = moment(`${coach.datesave}`, 'YYYY/MM/DDTHH:mm:ss');
@@ -21,7 +18,6 @@ export default class CoachCard extends Component {
     const ImgYear = m.jYear();
     const ImgMonth = m.jMonth() + 1;
     const ImgSrc = `${coach.httpserver}${coach.pathserver}${ImgYear}/${ImgMonth}/${coach.piccoach}`;
-    const htmlContent = `...${coach.desccoach}`;
     return (
       <TouchableWithoutFeedback onPress={() => this.onPressHandle(coach)}>
         <Card style={{ flex: 0 }}>

@@ -57,7 +57,7 @@ export default class FoodCard extends Component {
   async _deleteMenuFood(food) {
     try {
       const { tokenapi, buffetid, tokenmember } = this.props;
-      const MenuFoodList = await getMenuFood(buffetid, 0, tokenmember, tokenapi, 30, 0, false, 0);
+      const MenuFoodList = await getMenuFood(buffetid, 0, tokenmember, tokenapi, 50, 0, false, 0);
       console.log(MenuFoodList);
       for (let i = 0; i < MenuFoodList.length; i++) {
         if (food.idmenufood === MenuFoodList[i].idmenufood) {

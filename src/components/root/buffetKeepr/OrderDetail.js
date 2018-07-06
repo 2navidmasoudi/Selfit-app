@@ -38,7 +38,7 @@ export default class OrderDetail extends Component {
       const { tokenmember } = await this.props.user;
       const { tokenapi, order } = await this.props;
       const active = await order.statepayedid === 2;
-      const json = await getOrderBuffet(order.idfactorbuffet, active, tokenmember, tokenapi, 30, 0, true);
+      const json = await getOrderBuffet(order.idfactorbuffet, active, tokenmember, tokenapi, 50, 0, true);
       const buffetOrder = await json.Buffet_BasketBuffetOrderList.$values;
       const basketMaterial = await json.Buffet_BasketMaterialOrderList.$values;
       let materialOrder = [];

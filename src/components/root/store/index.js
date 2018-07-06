@@ -74,7 +74,8 @@ export default class Store extends Component {
       const { tokenapi } = await this.props;
       const { tokenmember } = await this.props.user;
       const { max, min, ssort, fsort } = await this.state;
-      const productCategory = await getAllCategoryProduct(tokenmember, tokenapi, max, min, ssort, fsort);
+      const productCategory =
+        await getAllCategoryProduct(tokenmember, tokenapi, max, min, ssort, fsort);
       console.log(productCategory);
       this.setState({
         productCategory
@@ -84,7 +85,6 @@ export default class Store extends Component {
       console.log(error);
     }
   }
-
   render() {
     const FooterComponent = this.props.Count === 0 ? null :
       (<Footer>

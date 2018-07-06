@@ -15,7 +15,8 @@ import Buffet from '../../Main/Buffet';
 
 @connect(state => ({
   user: state.user,
-  gymid: state.gym.gymid
+  gymid: state.gym.gymid,
+  tokenapi: state.gym.tokenapi,
 }), {
   tokenGym,
   selectGym
@@ -39,7 +40,6 @@ export default class GymGrid extends Component {
           cancelable: false,
         }
       );
-      console.log('gym for this user:', gymInfo.namegym, 'gymid from props:', this.props.gymid);
     }
   }
   async getSingleIDMember() {
@@ -47,10 +47,14 @@ export default class GymGrid extends Component {
       const { tokenapi } = await this.props;
       const { tokenmember } = await this.props.user;
       const gymInfo = await getSingleIDMemberGym(tokenmember, tokenapi);
+      console.log(gymInfo);
+      console.log('gymInfo');
       await this.props.selectGym(gymInfo.idgym);
+      console.log('gym for this user:', gymInfo.namegym, 'gymid from props:', this.props.gymid);
+
     } catch (error) {
       console.log(error);
-      logError(error, '_getSingleIDMember', 'BuffetMenu/index', 'getSingleIDMember');
+      logError(error, '_getSingleIDMember', 'GymGrid', 'getSingleIDMember');
     }
   }
   render() {

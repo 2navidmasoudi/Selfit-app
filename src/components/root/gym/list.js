@@ -23,7 +23,7 @@ import { Text } from '../../Kit';
 })
 export default class List extends Component {
   state = {
-    max: 10,
+    max: 120,
     ssort: false,
     fsort: 0,
     loading: 0,
@@ -44,7 +44,7 @@ export default class List extends Component {
       const { tokenmember, latval, longval } = await this.props.user;
       const { min, tokenapi } = await this.props;
       const GymList = await getAllGym(
-        latval, longval, tokenmember, tokenapi, 70, min, ssort, fsort
+        latval, longval, tokenmember, tokenapi, 120, min, ssort, fsort
       );
       console.log(GymList);
       await this.props.receiveGym(GymList, min);
@@ -85,7 +85,7 @@ export default class List extends Component {
     }
   }
   async handleLoadMore() {
-    if (this.props.gym.length >= 70 && !this.state.loading) {
+    if (this.props.gym.length >= 120 && !this.state.loading) {
       console.log('Request Load More');
       await this.props.incrementMin();
       await this.setState({ loading: true });

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Fab, Icon } from 'native-base';
+import { Fab, Icon, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import MapView, { Marker } from 'react-native-maps';
 import { Actions } from 'react-native-router-flux';
 import { mapStyle } from '../../../assets/styles/map';
 import { receiveBuffet, tokenBuffet } from '../../../redux/actions/index';
 import { getAllBuffets } from '../../../services/buffet';
+import { mainColor } from '../../../assets/variables/colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -47,7 +48,7 @@ const initialRegion = {
   receiveBuffet,
   tokenBuffet,
 })
-export default class MapComponent extends Component {
+export default class FullMapBuffet extends Component {
   state = {
     region: {
       // latitude: 35.7247434,
@@ -56,7 +57,8 @@ export default class MapComponent extends Component {
       // longitudeDelta: 0.5,
     },
     map: null,
-    Markers: []
+    Markers: [],
+    MarkerReady: false,
   };
   componentWillMount() {
     this.setInfo();
@@ -83,10 +85,11 @@ export default class MapComponent extends Component {
       const { tokenmember, latval, longval } = await this.props.user;
       const { latitude, longitude } = await this.state.region;
       const { tokenapi } = this.props;
-      // let BuffetList = await getAllBuffet(35.76254800640313,51.38223538175225,tokenmember,tokenapi,10,0,true,0);
-      const BuffetList = await getAllBuffets(tokenmember, tokenapi, 120, 0, true, 0);
+      // let BuffetList = await getAllBuffet(latval,longval,tokenmember,tokenapi,10,0,true,0);
+      const BuffetList = await getAllBuffets(tokenmember, tokenapi, 1000, 0, true, 0);
       console.log('buffetList:', BuffetList);
       this.props.receiveBuffet(BuffetList, 0);
+      this.setState({ MarkerReady: true });
     } catch (error) {
       console.log(error);
     }
@@ -142,12 +145,13 @@ export default class MapComponent extends Component {
           ))}
         </MapView>
         <Fab
-          style={{ backgroundColor: '#0F9D7A' }}
-          position="bottomRight"
-          onPress={this.getCurrentPosition.bind(this)}
+          style={{ backgroundColor: mainColor }}
+          position="topLeft"
+          onPress={() => Actions.pop()}
         >
-          <Icon name="md-locate" />
+          <Icon name="arrow-round-back" />
         </Fab>
+        {this.state.MarkerReady === false ? <Spinner /> : null}
       </View>
     );
   }

@@ -25,7 +25,7 @@ export default class FoodCard extends Component {
     try {
       const { tokenapi } = await this.props;
       const { tokenmember } = this.props.user;
-      const { Basket, PriceAll } = await getAllOrder(true, tokenmember, tokenapi, 30, 0);
+      const { Basket, PriceAll } = await getAllOrder(true, tokenmember, tokenapi, 50, 0);
       this.props.reBasketBuffet(Basket, Basket.length, PriceAll);
     } catch (error) {
       console.log(error);
@@ -39,7 +39,7 @@ export default class FoodCard extends Component {
       const { MenuFood, tokenapi } = await this.props;
       const { tokenmember } = this.props.user;
       let deletedOrder;
-      const { Basket, PriceAll } = await getAllOrder(true, tokenmember, tokenapi, 30, 0);
+      const { Basket, PriceAll } = await getAllOrder(true, tokenmember, tokenapi, 50, 0);
       console.log(Basket, 'asdasdasd');
       for (let i = 0; i < Basket.length; i++) {
         if (MenuFood.menufoodid == Basket[i].menufoodid) {

@@ -3,7 +3,6 @@ import { Alert, ImageBackground, View } from 'react-native';
 import { Container } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import PropTypes from 'prop-types';
 import { styles } from './style';
 import Store from '../../Main/Store';
 import Music from '../../Main/Music';
@@ -23,12 +22,6 @@ import { logError } from '../../../services/log';
   selectBuffet,
 })
 export default class BuffetGrid extends Component {
-  // static propTypes = {
-  //   user: PropTypes.node.isRequired,
-  //   buffetid: PropTypes.node.isRequired,
-  //   tokenBuffet: PropTypes.func.isRequired,
-  //   selectBuffet: PropTypes.func.isRequired,
-  // };
   componentDidMount() {
     this.setInfo();
   }

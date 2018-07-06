@@ -60,6 +60,7 @@ import { darkColor, mainColor } from './assets/variables/colors';
 import Federation from './components/root/federation';
 import FederationDetail from './components/root/federation/FederationDetail';
 import Waiting from './components/Waiting';
+import FullMapBuffet from "./components/root/buffet/fullMapBuffet";
 
 // Geocoder.setApiKey('AIzaSyBlgHjeMbqK3xEZfh6HK2o8RdjhhgTOh0s');
 const RouterWithRedux = connect()(Router);
@@ -189,6 +190,7 @@ export default class App extends Component {
                       <Scene key="support" component={Support} hideNavBar />
                       <Scene key="gym" component={Gym} hideNavBar />
                       <Scene key="fullMap" component={FullMap} hideNavBar />
+                      <Scene key="fullMapBuffet" component={FullMapBuffet} hideNavBar />
                       <Scene key="gymDetail" component={GymDetail} hideNavBar />
                       <Scene key="buffet" component={Buffet} hideNavBar />
                       <Scene key="buffetMenu" component={BuffetMenu} hideNavBar />

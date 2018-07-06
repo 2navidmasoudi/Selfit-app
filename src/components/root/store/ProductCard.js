@@ -18,9 +18,13 @@ import { persianNumber } from '../../../utils/persian';
 
 })
 export default class ProductCard extends Component {
-  state = {
-    numberProduct: 0,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      numberProduct: 0,
+      stateproductid: props.product.stateproductid,
+    };
+  }
   async removeButtonHandle() {
     try {
       this.setState({
@@ -72,7 +76,7 @@ export default class ProductCard extends Component {
     const ImgYear = m.jYear();
     const ImgMonth = m.jMonth() + 1;
     const ImgSrc = `${product.httpserver}${product.pathserver}${ImgYear}/${ImgMonth}/${product.picproduct}`;
-    const display = (product.stateproductid === 1 && product.numberproduct) ? 'flex' : 'none';
+    const display = (this.state.stateproductid !== 2 && product.numberproduct) ? 'flex' : 'none';
     return (
       <TouchableOpacity
         // disabled={!product.numberproduct}

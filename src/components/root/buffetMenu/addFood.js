@@ -20,7 +20,7 @@ import { putCheckToken } from '../../../services';
 })
 export default class AddFood extends Component {
   state = {
-    max: 10,
+    max: 120,
     ssort: true,
     fsort: 0,
     loading: false,
@@ -100,7 +100,7 @@ export default class AddFood extends Component {
       const { search, max, ssort, fsort } = await this.state;
       const { tokenmember } = await this.props.user;
       const { tokenapi } = await this.props;
-      const MenuFoodList = await getSearchMenuFood(search, tokenmember, tokenapi, 30, 0, ssort, fsort);
+      const MenuFoodList = await getSearchMenuFood(search, tokenmember, tokenapi, 50, 0, ssort, fsort);
       await this.props.receiveMenuFood(MenuFoodList);
       this.setState({ loading: false, refreshing: false });
     } catch (error) {
@@ -115,7 +115,7 @@ export default class AddFood extends Component {
       const { max, ssort, fsort } = await this.state;
       const { tokenmember } = await this.props.user;
       const { tokenapi } = await this.props;
-      const MenuFoodList = await getAllMenuFood(catid, tokenmember, tokenapi, 30, 0, ssort, fsort);
+      const MenuFoodList = await getAllMenuFood(catid, tokenmember, tokenapi, 50, 0, ssort, fsort);
       console.log(MenuFoodList, 'catid:', catid);
       await this.props.receiveMenuFood(MenuFoodList);
       this.setState({ loading: false, refreshing: false });
@@ -157,81 +157,6 @@ export default class AddFood extends Component {
   }
 
   render() {
-    // const ShowWhichButton = this.state.SelectedBarName === 'search' ?
-    //   (<Header searchBar rounded style={{ backgroundColor: 'white' }}>
-    //     <Item style={{ flex: 4 }}>
-    //       <Icon name="search" />
-    //       <Input placeholder="نام غذا..." onChangeText={text => this.searchText(text)} />
-    //       <Icon name="people" />
-    //     </Item>
-    //     <TouchableWithoutFeedback
-    //       style={{ flex: 1, justifyContent: 'center', alignItems: 'center', height: 20, width: 30 }}
-    //       onPress={() => this.cancleSearch()}
-    //     >
-    //       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    //         <Icon name="close" />
-    //       </View>
-    //     </TouchableWithoutFeedback>
-    //    </Header>)
-    //   :
-    //   (<Header rounded style={{ backgroundColor: 'white' }}>
-    //     <View style={{ flex: 5, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-    //       <Picker
-    //         iosHeader="انتخاب دسته بندی"
-    //         mode="dropdown"
-    //         placeholder="همه"
-    //         style={{ flex: 1, width: undefined }}
-    //         selectedValue={this.state.FoodCategory}
-    //         onValueChange={this.FoodCategoryChanged.bind(this)}
-    //       >
-    //         <Picker.Item label="همه غذاها" value={null} key={100} />
-    //         {this.state.CategoryList.map(category => (
-    //           <Picker.Item
-    //             label={category.namecategoryfood}
-    //             value={category.idcategoryfood}
-    //             key={category.idcategoryfood}
-    //           />
-    //         ))}
-    //       </Picker>
-    //       <Text>
-    //         دسته بندی بر اساس:
-    //       </Text>
-    //     </View>
-    //     <TouchableWithoutFeedback
-    //       style={{ flex: 1, justifyContent: 'center', alignItems: 'center', height: 20, width: 30 }}
-    //       onPress={() => this.cancleCategory()}
-    //     >
-    //       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    //         <Icon name="close" />
-    //       </View>
-    //     </TouchableWithoutFeedback>
-    //    </Header>);
-    // const searchOrCategory = this.state.SelectedBar ? ShowWhichButton :
-    //   (<Header rounded style={{ backgroundColor: 'white' }} androidStatusBarColor="#313131" iosBarStyle="light-content">
-    //     <View style={{ flex: 1, flexDirection: 'row' }}>
-    //       <Button
-    //         iconLeft
-    //         bordered
-    //         success
-    //         style={{ flex: 1, marginHorizontal: 6 }}
-    //         onPress={this.categoryButton.bind(this)}
-    //       >
-    //         <Icon name="clipboard" />
-    //         <Text style={{ flex: 1, textAlign: 'center' }}>دسته بندی</Text>
-    //       </Button>
-    //       <Button
-    //         iconLeft
-    //         bordered
-    //         success
-    //         style={{ flex: 1, marginHorizontal: 6 }}
-    //         onPress={this.searchButton.bind(this)}
-    //       >
-    //         <Icon name="search" />
-    //         <Text style={{ flex: 1, textAlign: 'center' }}>جستجو</Text>
-    //       </Button>
-    //
-    //     </View>
-    //   </Header>);
     return (
       <Container>
         <AppHeader rightTitle="منو آماده" backButton="flex" />

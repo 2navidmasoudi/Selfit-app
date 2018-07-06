@@ -90,7 +90,7 @@ export default class BuffetMenu extends Component {
     CountReady: false,
     totalPrice: 0,
     iddish: 1,
-    max: 30,
+    max: 120,
     min: 0,
     ssort: true,
     fsort: 0,
@@ -127,7 +127,7 @@ export default class BuffetMenu extends Component {
     try {
       const { buffetid, tokenapi } = await this.props;
       const { tokenmember } = await this.props.user;
-      const MaterialList = await getAllBuffetMaterial(buffetid, false, tokenmember, tokenapi, 20, 0, false, 0);
+      const MaterialList = await getAllBuffetMaterial(buffetid, false, tokenmember, tokenapi, 120, 0, false, 0);
       console.log(MaterialList);
       this.props.receiveMaterial(MaterialList);
     } catch (err) {
@@ -139,7 +139,7 @@ export default class BuffetMenu extends Component {
     try {
       const { buffetid, tokenapi } = await this.props;
       const { tokenmember } = await this.props.user;
-      const MenuFood = await getMenuFood(buffetid, 0, tokenmember, tokenapi, 30, 0, true, 0);
+      const MenuFood = await getMenuFood(buffetid, 0, tokenmember, tokenapi, 120, 0, true, 0);
       await this.props.receiveMenuFood(MenuFood);
       this.setState({ MenuFood });
       this.setState({ CountReady: true });

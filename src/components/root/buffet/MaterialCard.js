@@ -22,7 +22,7 @@ export default class MaterialCard extends Component {
   state = {
     ssort: false,
     fsort: 0,
-    max: 30,
+    max: 50,
     min: 0,
     state: false,
     numberbuffet: 0,

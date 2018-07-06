@@ -23,7 +23,7 @@ import { mainColor } from '../../../assets/variables/colors';
 })
 export default class List2 extends Component {
   state = {
-    max: 30,
+    max: 50,
     min: 0,
     ssort: false,
     fsort: 0,

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import {TouchableWithoutFeedback, View} from 'react-native';
-import { Button, Card, CardItem, Grid, Left, Right, Row, Thumbnail, Toast } from 'native-base';
+import { TouchableWithoutFeedback, View } from 'react-native';
+import { Button, Card, CardItem, Left, Right, Thumbnail, Toast } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { logError } from '../../../services/log';
 import { deleteBuffetMaterial, getAllBuffetMaterial, postBuffetMaterial } from '../../../services/orderMaterial';
-import {Text} from "../../Kit";
+import { Text } from '../../Kit';
 
 @connect(state => ({
   user: state.user,
@@ -19,6 +19,7 @@ export default class MaterialCard extends Component {
     disableRemoveButton: false,
 
   };
+
   async RemoveButton() {
     const { food } = this.props;
     const result = await this._deleteBuffetMaterial(food);
@@ -30,6 +31,7 @@ export default class MaterialCard extends Component {
       Toast.show({ text: `${food.namematerial} قبلا از لیست حذف شده.` });
     }
   }
+
   async AddButton() {
     const { food } = this.props;
     const result = await this._postBuffetMaterial(food);
@@ -41,6 +43,7 @@ export default class MaterialCard extends Component {
       Toast.show({ text: `${food.namematerial} قبلا به لیست اضافه شده.` });
     }
   }
+
   async _postBuffetMaterial(food) {
     try {
       const { tokenapi, buffetid, tokenmember } = this.props;
@@ -51,12 +54,13 @@ export default class MaterialCard extends Component {
       logError(error, '_postBuffetMaterial', 'BuffetMenu/MaterialCard', 'PostBuffetMaterial');
     }
   }
+
   async _deleteBuffetMaterial(food) {
     const { tokenapi, buffetid, tokenmember } = this.props;
     let result = null;
     try {
       const MaterialList =
-        await getAllBuffetMaterial(buffetid, false, tokenmember, tokenapi, 30, 0, false, 0);
+        await getAllBuffetMaterial(buffetid, false, tokenmember, tokenapi, 120, 0, false, 0);
       for (let i = 0; i < MaterialList.length; i++) {
         if (food.idmaterial === MaterialList[i].idmaterial) {
           console.log('this is it:', MaterialList);
@@ -70,6 +74,7 @@ export default class MaterialCard extends Component {
     }
     return -6;
   }
+
   render() {
     const { food } = this.props;
     const ImgSrc = `http://selfit.ir/Resource/Material/${food.picmaterial}`;

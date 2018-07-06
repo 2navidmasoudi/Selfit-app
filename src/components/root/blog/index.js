@@ -26,7 +26,7 @@ import BlogCard from './blogCard';
 })
 export default class Blog extends Component {
   state = {
-    max: 10,
+    max: 70,
     ssort: false,
     fsort: 0,
     loading: false,
@@ -93,7 +93,7 @@ export default class Blog extends Component {
     }
   }
   async handleLoadMore() {
-    if (this.props.BlogList.length >= 10 && !this.state.loading) {
+    if (this.props.BlogList.length >= 70 && !this.state.loading) {
       console.log('Request Load More');
       this.props.incrementMin();
       this.setState({ loading: true });

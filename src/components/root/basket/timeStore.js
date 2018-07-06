@@ -9,7 +9,7 @@ import { SignStyle } from '../../../assets/styles/sign';
 import { getTimeAccessStore } from '../../../services/orderProduct';
 import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
-import {mainColor, white} from "../../../assets/variables/colors";
+import { mainColor, white } from '../../../assets/variables/colors';
 
 @connect(state => ({
   user: state.user,
@@ -89,7 +89,7 @@ export default class TimeStore extends Component {
         <AppHeader rightTitle="سبد محصول" backButton="flex" />
         <Content padder>
           <View style={{ flex: 1 }}>
-            <Text style={{ textAlign: 'center' }}>انتخاب زمان ارسال</Text>
+            <Text style={{ textAlign: 'center' }}>انتخاب زمان ارسال فردا</Text>
             <View style={{
               flex: 1,
               flexDirection: 'row',
@@ -106,16 +106,16 @@ export default class TimeStore extends Component {
                   disabled={!c.activetimefactor}
                   onPress={() => {
                     this._putTimeFactor(c.idtimefactor);
-                    this.setState({selectedTime:c.idtimefactor})}
-                  }
+                    this.setState({ selectedTime: c.idtimefactor });
+                  }}
                   style={{
-                    margin:5,
+                    margin: 5,
                     backgroundColor: c.idtimefactor === this.state.selectedTime ? mainColor : white,
                   }}
                 >
                   <Text
                     style={{
-                      paddingHorizontal:5,
+                      paddingHorizontal: 5,
                       color: c.idtimefactor === this.state.selectedTime ? white : '#000',
                     }}
                   >

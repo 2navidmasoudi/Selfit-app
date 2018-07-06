@@ -25,7 +25,7 @@ import { TabsStyle } from '../../../assets/styles/gym';
 })
 export default class MenuList extends Component {
   state = {
-    max: 100,
+    max: 120,
     ssort: false,
     fsort: 0,
     loading: false,

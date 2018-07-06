@@ -23,7 +23,7 @@ const mapDispatchToProps = dispatch => ({
 }), mapDispatchToProps)
 export default class List extends Component {
   state = {
-    max: 70,
+    max: 120,
     ssort: false,
     fsort: 0,
     loading: 0,
@@ -86,7 +86,7 @@ export default class List extends Component {
     }
   }
   async handleLoadMore() {
-    if (this.props.FED.length >= 70 && !this.state.loading) {
+    if (this.props.FED.length >= 120 && !this.state.loading) {
       console.log('Request Load More');
       await this.props.incrementMin();
       await this.setState({ loading: true });

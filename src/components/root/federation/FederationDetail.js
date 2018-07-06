@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
-import { Image, View, TouchableWithoutFeedback, ScrollView } from 'react-native';
-import {
-  Container,
-  Content,
-  Card,
-  CardItem,
-  Thumbnail,
-  Button,
-  Left,
-  Body,
-} from 'native-base';
+import { Image, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import { Body, Card, CardItem, Container, Content, Left, Thumbnail, } from 'native-base';
 import moment from 'moment-jalaali';
 import HTMLView from 'react-native-htmlview';
 import { connect } from 'react-redux';
@@ -65,14 +56,6 @@ export default class FederationDetail extends Component {
             </CardItem>
           </Card>
         </Content>
-        {/* <View style={{ flexDirection: 'column', justifyContent: 'flex-end' }}> */}
-        {/* <Button */}
-        {/* block */}
-        {/* style={[form.submitButton, { margin: 10, marginBottom: 20 }]} */}
-        {/* > */}
-        {/* <Text style={{ color: '#FFF' }}>تماس با مربی</Text> */}
-        {/* </Button> */}
-        {/* </View> */}
       </Container>
     );
   }

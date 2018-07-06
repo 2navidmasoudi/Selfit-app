@@ -19,7 +19,7 @@ import { getAllMaterial } from '../../../services/orderMaterial';
 })
 export default class AddMaterial extends Component {
   state = {
-    max: 100,
+    max: 120,
     ssort: true,
     fsort: 0,
     loading: false,

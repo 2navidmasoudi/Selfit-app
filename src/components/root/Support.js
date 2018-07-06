@@ -8,7 +8,7 @@ import { Text } from '../Kit';
 import { mainColor, white } from '../../assets/variables/colors';
 
 const args = {
-  number: '02188058522', // String value with the number to call
+  number: '02188058525', // String value with the number to call
   prompt: false,
 };
 
@@ -35,7 +35,7 @@ export default () => (
       <Button
         block
         style={[form.submitButton, { margin: 10 }]}
-        onPress={() => Linking.openURL('mailto:support@selfit.ir?subject=abcdefg&body=body')}
+        onPress={() => Linking.openURL('mailto:support@selfit.ir?subject=selfit&body=support')}
       >
         <Text style={{ color: white }}>ایمیل به پشتیبانی</Text>
       </Button>
@@ -44,7 +44,7 @@ export default () => (
       <Button
         block
         style={[form.submitButton, { margin: 10, marginTop: 0 }]}
-        onPress={() => Linking.openURL('mailto:job@selfit.ir?subject=abcdefg&body=body')}
+        onPress={() => Linking.openURL('mailto:job@selfit.ir?subject=selfit&body=support')}
       >
         <Text style={{ color: white }}>استخدام در سلفیت</Text>
       </Button>

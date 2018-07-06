@@ -23,7 +23,7 @@ import { Text } from '../../Kit';
 })
 export default class List extends Component {
   state = {
-    max: 70,
+    max: 120,
     ssort: false,
     fsort: 0,
     loading: false,
@@ -31,8 +31,8 @@ export default class List extends Component {
     search: null,
     searchMode: false,
   };
-  componentWillMount() {
-    this.props.tokenBuffet('selfit.buffet');
+  async componentWillMount() {
+    await this.props.tokenBuffet('selfit.buffet');
     this.getBuffetList();
   }
   async getBuffetList() {
@@ -144,7 +144,7 @@ export default class List extends Component {
             backgroundColor: '#0F9D7A'
           }}
           position="bottomRight"
-          onPress={() => Actions.fullMap()}
+          onPress={() => Actions.fullMapBuffet()}
         >
           <Text style={{ fontSize: 18 }}>کل بوفه ها</Text>
         </Fab>}

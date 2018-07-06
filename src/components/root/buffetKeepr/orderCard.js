@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
-import {Body, Card, CardItem, Left, Right} from 'native-base';
+import { Body, Card, CardItem, Right } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import moment from 'moment-jalaali';
 import { Text } from '../../Kit';
