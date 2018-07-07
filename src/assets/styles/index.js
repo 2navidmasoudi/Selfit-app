@@ -148,7 +148,10 @@ export const index = EStyleSheet.create({
 });
 
 export const EditProfileStyle = EStyleSheet.create({
-  imageStyle: { width: 150, height: 150, borderRadius: 10 },
+  imageStyle: { width: 200,
+    height: 200,
+    borderWidth: 2,
+    borderColor: mainColor },
   textStyle: { fontFamily: '$IS' },
   uploadView: { justifyContent: 'center', alignItems: 'center', flex: 1 },
   uploadViewButton: { flexDirection: 'row', marginTop: 10, marginBottom: 10 },

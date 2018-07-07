@@ -225,7 +225,16 @@ export default class BuffetMenu extends Component {
       rate = await Number(rate);
       const result = await postRateBuffet(buffetid, rate, tokenmember, tokenapi);
       console.log(result, 'postRateGym');
-      this.setState({ disableRate: true });
+      if (result === 1) {
+        this.setState({ disableRate: true });
+        Alert.alert(
+          'ثبت امتیاز',
+          'امتیاز شما ثبت شد. با تشکر!',
+          [
+            { text: 'بازگشت' },
+          ]
+        );
+      }
     } catch (e) {
       console.log(e);
     }

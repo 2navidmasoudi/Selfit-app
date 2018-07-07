@@ -7,6 +7,7 @@ import Video from 'react-native-video';
 import { putCheckToken } from '../services';
 import Status from './status';
 import SplashVideo from '../assets/1.mp4';
+import {darkColor} from '../assets/variables/colors';
 
 @connect(state => ({ user: state.user }))
 export default class Splash extends Component {
@@ -46,10 +47,12 @@ export default class Splash extends Component {
   }
   render() {
     return (
-      <Container style={{ backgroundColor: 'white' }}>
+      <Container style={{ backgroundColor: darkColor }}>
         <Status />
         <Video
           resizeMode="cover"
+          playInBackground
+          playWhenInactive
           source={SplashVideo}
           onEnd={this.leadToScreen.bind(this)}
           style={styles2.backgroundVideo}

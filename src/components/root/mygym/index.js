@@ -240,6 +240,16 @@ export default class MyGym extends Component {
                 />}
               </Right>
             </CardItem>
+            <CardItem style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <Button
+                style={{ backgroundColor: mainColor }}
+                onPress={() => Actions.gym()}
+              >
+                <Text style={{ color: '#FFF', paddingHorizontal: 5 }}>
+                  نمایش باشگاه های اطراف
+                </Text>
+              </Button>
+            </CardItem>
           </Card>
         </Content>
         <Button

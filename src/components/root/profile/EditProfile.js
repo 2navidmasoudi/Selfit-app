@@ -1,8 +1,9 @@
 import React from 'react';
 import { Button, Container, Content, Form, Icon, Input, Item, View } from 'native-base';
 import { Actions } from 'react-native-router-flux';
-import { Image } from 'react-native';
+import { Image, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
+import { Button as UploadButton } from 'react-native-elements';
 import moment from 'moment-jalaali';
 import AppHeader from '../../header';
 import { EditProfileStyle, form } from '../../../assets/styles/index';
@@ -12,7 +13,7 @@ import { picker } from './imagePicker';
 import { uploader } from '../../../services/UploadImage';
 import { Member } from '../../../services/type';
 import { Text } from '../../Kit';
-import { mainColor, white } from '../../../assets/variables/colors';
+import { darkColor, mainColor, white } from '../../../assets/variables/colors';
 
 @connect(state => ({
   user: state.user,
@@ -30,6 +31,7 @@ export default class EditProfile extends React.Component {
     picmember: null,
     UploadButtonDisable: false,
     birthdaymember: null,
+    loading: false,
   };
   componentWillMount() {
     const { namefamilymember, mailmember, picmember, birthdaymember } = this.props.user;
@@ -63,7 +65,7 @@ export default class EditProfile extends React.Component {
         mailmember,
         birthdaymember,
         sexmember,
-        4,
+        typememberid,
         phone,
         tokenmember,
         tokenapi,
@@ -86,36 +88,36 @@ export default class EditProfile extends React.Component {
     const json = await getSingleToken(tokenmember, tokenapi);
     await this.props.setUser(json.MemberSingleToken);
   }
-  showImagePicker() {
-    picker((source, data, type) => {
+  async UploadSelected() {
+    picker(async (source, data, type) => {
       this.setState({ avatarSource: source, data, type }, () => {
         console.log(this.state);
       });
-    });
-  }
-  async uploadImage() {
-    try {
-      const { type } = await this.state;
-      if (type === 'image/jpeg' || type === 'image/jpg' || type === 'image/png' || type === 'image/bmp') {
-        const { tokenmember } = await this.props.user;
-        const m = await moment();
-        const MM = await m.jMonth() + 1;
-        const YYYY = await m.jYear();
-        const json = await uploader([{
-          name: 'avatar',
-          filename: 'avatar.png',
-          data: this.state.data
-        }], Member, YYYY, MM, tokenmember, 'selfit.public');
-        await this.setState({ picmember: json, UploadButtonDisable: true });
-        console.log(this.state);
-        alert('آپلود عکس با موفقیت انجام شد');
-      } else {
-        alert('لطفا اول عکس مورد نظر را انتخاب کنید!');
+      try {
+        this.setState({ loading: true });
+        if (type === 'image/jpeg' || type === 'image/jpg' || type === 'image/png' || type === 'image/bmp') {
+          const { tokenmember } = await this.props.user;
+          const m = await moment();
+          const MM = await m.jMonth() + 1;
+          const YYYY = await m.jYear();
+          const json = await uploader([{
+            name: 'avatar',
+            filename: 'avatar.png',
+            data: this.state.data
+          }], Member, YYYY, MM, tokenmember, 'selfit.public');
+          await this.setState({ picmember: json, UploadButtonDisable: true });
+          console.log(this.state);
+          alert('آپلود عکس با موفقیت انجام شد');
+        } else {
+          alert('لطفا اول عکس مورد نظر را انتخاب کنید!');
+        }
+        this.setState({ loading: false });
+      } catch (err) {
+        console.log(err);
+        alert('خطا در آپلود عکس');
+        this.setState({ loading: false });
       }
-    } catch (err) {
-      console.log(err);
-      alert('خطا در آپلود عکس');
-    }
+    });
   }
   async changeAge(age) {
     const date = await moment().subtract(age, 'years');
@@ -151,25 +153,29 @@ export default class EditProfile extends React.Component {
         <AppHeader rightTitle="پروفایل" />
         <Content padder>
           <View style={EditProfileStyle.uploadView}>
-            <Text style={EditProfileStyle.textStyle}>عکس خود را انتخاب سپس آپلود کنید!</Text>
-            <View style={EditProfileStyle.uploadViewButton}>
-              <Button
-                block
-                style={EditProfileStyle.uploadButton}
-                onPress={this.showImagePicker.bind(this)}
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <TouchableWithoutFeedback
+                onPress={this.UploadSelected.bind(this)}
               >
-                <Text style={{ color: white, padding: 5 }}>انتخاب تصویر</Text>
-              </Button>
-              <Button
-                block
-                disabled={this.state.UploadButtonDisable}
-                style={{ backgroundColor: mainColor }}
-                onPress={this.uploadImage.bind(this)}
-              >
-                <Text style={{color: white, padding: 5 }}>آپلود تصویر</Text>
-              </Button>
+                {image}
+              </TouchableWithoutFeedback>
+              <UploadButton
+                title={this.state.loading ? 'لطفا صبر کنید' : 'آپلود عکس پروفایل'}
+                loading={this.state.loading}
+                loadingProps={{ size: 'large', color: darkColor }}
+                titleStyle={{ fontFamily: 'IRANSANSMobile' }}
+                buttonStyle={{
+                  backgroundColor: mainColor,
+                  width: 200,
+                  borderColor: 'transparent',
+                  borderWidth: 0,
+                  borderBottomLeftRadius: 5,
+                  borderBottomRightRadius: 5
+                }}
+                containerStyle={{ marginTop: 100 }}
+                onPress={this.UploadSelected.bind(this)}
+              />
             </View>
-            {image}
           </View>
           <Form style={form.StyleForm}>
             <Item rounded style={form.item}>
@@ -204,10 +210,10 @@ export default class EditProfile extends React.Component {
             </Item>
             <Button
               full
-              style={{backgroundColor: mainColor}}
+              style={{ backgroundColor: mainColor }}
               onPress={() => this.handleSubmitButton()}
             >
-              <Text style={{color: white}}>ثبت تغییرات</Text>
+              <Text style={{ color: white }}>ثبت تغییرات</Text>
             </Button>
           </Form>
         </Content>

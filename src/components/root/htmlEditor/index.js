@@ -60,7 +60,7 @@ export default class HtmlEditor extends Component {
           // initialTitleHTML="Title!!"
           initialContentHTML={htmlContent}
           editorInitializedCallback={() => this.onEditorInitialized()}
-          customCSS={'#zss_editor_content{ width: 100%; height: 100%; -webkit-overflow-scrolling: touch; overflow:auto; }'}
+          // customCSS={'#zss_editor_content{ width: 100%; height: 100%; -webkit-overflow-scrolling: touch; overflow:auto; }'}
         />
         <RichTextToolbar
           getEditor={() => this.richtext}

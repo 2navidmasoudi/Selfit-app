@@ -22,7 +22,7 @@ import { reBasketBuffet, reBasketMaterial, setRoad, tokenBuffet } from '../../..
 import { SignStyle } from '../../../assets/styles/sign';
 import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
-import { FlatList } from 'react-native';
+import { Alert, FlatList } from 'react-native';
 import { sendPrice } from '../../../services/Alopeyk';
 import { getSingleBuffet } from '../../../services/buffet';
 
@@ -56,6 +56,7 @@ export default class finalOrderBuffet extends Component {
     sendServicePrice: 0,
     lat: null,
     long: null,
+    disableSendFactor: false,
   };
   componentWillMount() {
     this.getInfo();
@@ -69,6 +70,7 @@ export default class finalOrderBuffet extends Component {
   }
   async sendOrderBuffet() {
     try {
+      this.setState({ disableSendFactor: true });
       const { tokenmember } = await this.props.user;
       const { tokenapi, buffetid } = await this.props;
       const { descfactor, sendServicePrice } = await this.state;
@@ -77,11 +79,21 @@ export default class finalOrderBuffet extends Component {
       console.log(idfactor);
       const result = await postAddressOrderBuffet(idfactor, tokenmember, tokenapi);
       if (result === 1) {
-        alert('سفارش شما با موفقیت ثبت شد.');
+        Alert.alert(
+          'صدور فاکتور',
+          'سفارش شما ثبت شد و به بوفه دار ارسال شد. لطفا منتظر تایید توسط بوفه دار باشید.',
+          [
+            { text: 'پیگیری سفارش', onPress: () => Actions.follow() },
+            { text: 'بازگشت' },
+          ]
+        );
         Actions.reset('root');
+      } else {
+        this.setState({ disableSendFactor: false });
       }
       console.log(result);
     } catch (e) {
+      this.setState({ disableSendFactor: false });
       console.log(e);
     }
   }
@@ -153,6 +165,7 @@ export default class finalOrderBuffet extends Component {
           <FooterTab>
             <Button
               style={{ backgroundColor: '#0F9D7A' }}
+              disabled={this.state.disableSendFactor}
               onPress={this.sendOrderBuffet.bind(this)}
             >
               <Text style={{

@@ -5,7 +5,7 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   View,
-  Dimensions,
+  Dimensions, Alert,
 } from 'react-native';
 import { Body, Button, Card, CardItem, Container, Content, Left, Right, Thumbnail } from 'native-base';
 import moment from 'moment-jalaali';
@@ -15,6 +15,7 @@ import Carousel from 'react-native-snap-carousel';
 import { openMap } from 'react-native-open-map';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
+import call from 'react-native-phone-call';
 import AppHeader from '../../header';
 import { getAllPicGym, postRateGym, putVisit } from '../../../services/gym';
 import { form } from '../../../assets/styles/index';
@@ -133,6 +134,16 @@ export default class GymDetail extends Component {
       rate = await Number(rate);
       const result = await postRateGym(gymid, rate, tokenmember, tokenapi);
       console.log(result, 'postRateGym');
+      if (result) {
+        this.setState({ disableRate: true });
+        Alert.alert(
+          'ثبت امتیاز',
+          'امتیاز شما ثبت شد. با تشکر!',
+          [
+            { text: 'بازگشت' },
+          ]
+        );
+      }
       this.setState({ disableRate: true });
     } catch (e) {
       console.log(e);
@@ -227,13 +238,26 @@ export default class GymDetail extends Component {
                   value={htmlContent}
                   stylesheet={htmlStyle}
                 />
-                <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                {telgym && <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
                   <Text>{persianNumber(telgym)}</Text>
                   <Text>تلفن: </Text>
-                </View>
+                </View>}
+                <CardItem>
+                  <Left style={{ flex: 1 }} />
+                  <Right style={{ flex: 1 }}>
+                    {telgym && <Button
+                      style={{ backgroundColor: mainColor, marginHorizontal: 5 }}
+                      onPress={() => call({ number: telgym }).catch(console.error)}
+                    >
+                      <Text style={{ color: '#FFF', paddingHorizontal: 5 }}>
+                        تماس با باشگاه
+                      </Text>
+                    </Button>}
+                  </Right>
+                </CardItem>
                 <Text>شهریه باشگاه: {persianNumber(tuitionGym)} تومان</Text>
-                <Text>فعالیت باشگاه: {activegym ? 'فعال' : 'غیر فعال'}</Text>
-                <Text>ظرفیت باشگاه: {persianNumber(numbertuitiongym)}</Text>
+                {/* <Text>فعالیت باشگاه: {activegym ? 'فعال' : 'غیر فعال'}</Text> */}
+                <Text>ظرفیت باشگاه: {numbertuitiongym ? persianNumber(numbertuitiongym) : 'نامشخص'}</Text>
               </ScrollView>
             </CardItem>
             <CardItem>

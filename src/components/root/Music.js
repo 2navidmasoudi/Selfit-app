@@ -30,6 +30,7 @@ export default class Music extends Component {
       muted: false,
       shuffle: false,
       sliding: false,
+      loading: false,
       currentTime: 0,
       // songIndex: props.songIndex,
       songIndex: 0,
@@ -69,7 +70,10 @@ export default class Music extends Component {
     }
   }
   onLoad(params) {
-    this.setState({ songDuration: params.duration });
+    this.setState({ songDuration: params.duration, loading: false });
+  }
+  onBuffer() {
+    this.setState({ loading: true });
   }
   onSlidingStart() {
     this.setState({ sliding: true });
@@ -209,6 +213,7 @@ export default class Music extends Component {
         />);
     }
     // let image = null;
+    const loading = this.state.loading ? <Spinner color={mainColor} /> : null;
     return (
       <Container style={{ flex: 1, width: window.width }}>
         <AppHeader rightTitle="موزیک" noPop />
@@ -218,12 +223,14 @@ export default class Music extends Component {
               source={{ uri }}
               // source={{uri: '../../assets/StartUp.mp3' }}
               ref="audio"
+              audioOnly
               volume={this.state.muted ? 0 : 1.0}
               muted={false}
               playInBackground
               playWhenInactive
               ignoreSilentSwitch="ignore"
               paused={!this.state.playing}
+              onBuffer={this.onBuffer.bind(this)}
               onLoad={this.onLoad.bind(this)}
               onProgress={this.setTime.bind(this)}
               onEnd={this.onEnd.bind(this)}
@@ -284,6 +291,9 @@ export default class Music extends Component {
               {forwardButton}
               {volumeButton}
             </View>
+          </View>
+          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            {loading}
           </View>
           <FlatList
             data={this.state.songs}

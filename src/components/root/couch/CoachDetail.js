@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, View, TouchableWithoutFeedback, ScrollView, Share } from 'react-native';
+import {Image, View, TouchableWithoutFeedback, ScrollView, Share, Alert} from 'react-native';
 import {
   Container,
   Content,
@@ -44,6 +44,16 @@ export default class CoachDetail extends Component {
       rate = await Number(rate);
       const result = await postRateCoach(coach.idcoach, rate, tokenmember, tokenapi);
       console.log(result, 'postRateGym');
+      if (result === 1) {
+        this.setState({ disableRate: true });
+        Alert.alert(
+          'ثبت امتیاز',
+          'امتیاز شما ثبت شد. با تشکر!',
+          [
+            { text: 'بازگشت' },
+          ]
+        );
+      }
       this.setState({ disableRate: true });
     } catch (e) {
       console.log(e);
@@ -114,14 +124,6 @@ export default class CoachDetail extends Component {
             </CardItem>
           </Card>
         </Content>
-        <View style={{ flexDirection: 'column', justifyContent: 'flex-end' }}>
-          <Button
-            block
-            style={[form.submitButton, { margin: 10, marginBottom: 20 }]}
-          >
-            <Text style={{ color: '#FFF' }}>تماس با مربی</Text>
-          </Button>
-        </View>
       </Container>
     );
   }
