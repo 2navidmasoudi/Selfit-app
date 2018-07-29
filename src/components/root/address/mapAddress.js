@@ -20,8 +20,6 @@ const initialRegion = {
 const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = 0.01;
 
-// TODO: Map Scroll do not work on IOS
-
 @connect(state => ({
   user: state.user,
   tokenapi: state.buffet.tokenapi,

@@ -6,8 +6,9 @@ export const getAllMusic = async (token, tokenapi, max, min, ssort, fsort) => {
       method: GET,
       headers
     });
-    if (response.status == 204) return [];
+    if (response.status === 204) return [];
     const json = await response.json();
+    console.log('Music/GetAll');
     console.log(json);
     return json.MusicList.$values;
   } catch (e) {

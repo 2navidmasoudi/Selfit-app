@@ -143,7 +143,6 @@ export default class BuffetBasket extends Component {
     );
   }
 }
-// // TODO : DO THIS FOR ALL PROJECT
 // BuffetBasket.propTypes = {
 //   user: PropTypes.node.isRequired,
 //   buffetBasket: PropTypes.node.isRequired,

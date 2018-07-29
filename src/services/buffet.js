@@ -6,6 +6,8 @@ export const getAllBuffets = async (token, tokenapi, max, min, ssort, fsort) => 
     headers
   });
   const json = await response.json();
+  console.log('buffet/GetAll');
+  console.log(json);
   return json.BuffetList.$values;
 };
 export const getAllBuffet = async (latval, longval, token, tokenapi, max, min, ssort, fsort) => {
@@ -14,6 +16,8 @@ export const getAllBuffet = async (latval, longval, token, tokenapi, max, min, s
     headers
   });
   const json = await response.json();
+  console.log('buffet/GetAllMap');
+  console.log(json);
   return json.BuffetMapList.$values;
 };
 export const getSearchBuffet = async (search, token, tokenapi, max, min, ssort, fsort) => {
@@ -22,6 +26,8 @@ export const getSearchBuffet = async (search, token, tokenapi, max, min, ssort, 
     headers
   });
   const json = await response.json();
+  console.log('buffet/GetSearch');
+  console.log(json);
   return json;
 };
 export const getMenuFood = async (id, catid, token, tokenapi, max, min, ssort, fsort) => {
@@ -30,6 +36,8 @@ export const getMenuFood = async (id, catid, token, tokenapi, max, min, ssort, f
     headers
   });
   const json = await response.json();
+  console.log('buffet/GetMenufoodAll');
+  console.log(json);
   return json.MenufoodBuffet.$values;
 };
 
@@ -45,6 +53,8 @@ export const putActiveBuffet = async (idbuffet, active, token, tokenapi) => {
     })
   });
   const json = await response.json();
+  console.log('buffet/PutActiveBuffet');
+  console.log(json);
   return json;
 };
 export const postMenuFoodBuffet = async (idbuffet, menufoodidval, active, token, tokenapi) => {
@@ -60,6 +70,8 @@ export const postMenuFoodBuffet = async (idbuffet, menufoodidval, active, token,
     })
   });
   const json = await response.json();
+  console.log('buffet/PostMenufoodBuffet');
+  console.log(json);
   return json;
 };
 export const postRateBuffet = async (idbuffet, rate, token, tokenapi) => {
@@ -75,6 +87,8 @@ export const postRateBuffet = async (idbuffet, rate, token, tokenapi) => {
       })
     });
     const json = await response.json();
+    console.log('Buffet/PostRate');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -93,6 +107,8 @@ export const putActiveMenuFood = async (idbuffet, idmenufood_buffet, active, tok
     })
   });
   const json = await response.json();
+  console.log('buffet/PutActiveMenufood');
+  console.log(json);
   return json;
 };
 export const deleteMenuFood = async (id, token, tokenapi) => {
@@ -101,6 +117,8 @@ export const deleteMenuFood = async (id, token, tokenapi) => {
     headers
   });
   const json = await response.json();
+  console.log('buffet/DeleteMenufoodBuffet');
+  console.log(json);
   return json;
 };
 export const getSingleBuffet = async (id, token, tokenapi) => {
@@ -109,6 +127,8 @@ export const getSingleBuffet = async (id, token, tokenapi) => {
     headers
   });
   const json = await response.json();
+  console.log('buffet/GetSingle');
+  console.log(json);
   return json;
 };
 export const getSingleIDMemberBuffet = async (token, tokenapi) => {
@@ -117,5 +137,7 @@ export const getSingleIDMemberBuffet = async (token, tokenapi) => {
     headers
   });
   const json = await response.json();
+  console.log('buffet/GetSingleIDMember');
+  console.log(json);
   return json;
 };

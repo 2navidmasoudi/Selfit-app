@@ -6,8 +6,10 @@ export const getAllOrder = async (active, token, tokenapi, max, min) => {
       method: GET,
       headers
     });
-    if (response.status == 204) return { Basket: [], PriceAll: 0 };
+    if (response.status === 204) return { Basket: [], PriceAll: 0 };
     const json = await response.json();
+    console.log('BasketBuffet/GetAll');
+    console.log(json);
     return { Basket: json.BasketBuffet.$values, PriceAll: json.PriceAll };
   } catch (e) {
     console.log(e);
@@ -27,6 +29,8 @@ export const postOrderBuffet = async (buffetid, menufoodid, numbermenufood, toke
       })
     });
     const json = await response.json();
+    console.log('BasketBuffet/Post');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -39,6 +43,8 @@ export const deleteOrderBuffet = async (id, token, tokenapi) => {
       headers,
     });
     const json = await response.json();
+    console.log('BasketBuffet/Delete');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -53,7 +59,8 @@ export const getOrderBuffetAll = async (id, methodpayed, statepayed, buffetid, t
     });
     // if (response.status == 204) return [];
     const json = await response.json();
-    console.log(json, 'getBasketOrderBuffet');
+    console.log('Orders/GetFactorBuffet');
+    console.log(json);
     return json.OrderBuffetList.$values;
   } catch (e) {
     console.log(e);
@@ -66,6 +73,8 @@ export const getFactorBuffet = async (methodpayed, statepayed, token, tokenapi, 
       headers
     });
     const json = await response.json();
+    console.log('Orders/GetFactorMember');
+    console.log(json);
     return json.FactorBuffetList.$values;
   } catch (e) {
     console.log(e);
@@ -78,6 +87,8 @@ export const checkOrderBuffet = async (buffetid, token, tokenapi) => {
       headers
     });
     const json = await response.json();
+    console.log('Orders/CheckOrder');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -98,6 +109,8 @@ export const postFactor = async (buffetid, descfactor, methodpayed, delivery, to
       })
     });
     const json = await response.json();
+    console.log('Orders/PostFactor');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -115,6 +128,8 @@ export const postAddressOrderBuffet = async (idfactor, token, tokenapi) => {
       })
     });
     const json = await response.json();
+    console.log('Orders/PostAddress');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -127,6 +142,8 @@ export const deleteOrderAll = async (token, tokenapi) => {
       headers,
     });
     const json = await response.json();
+    console.log('Orders/Delete');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);

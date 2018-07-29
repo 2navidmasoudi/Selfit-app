@@ -3,14 +3,15 @@ import { Actions } from 'react-native-router-flux';
 import { GET, headers, Payment, Selfit } from './type';
 
 const isIOS = Platform.OS === 'ios';
-export const getPayment = async (type, token, delivery = 0, tokenapi) => {
+export const getPayment = async (type, token, delivery = 0, tokenapi = 'selfit.member') => {
   try {
     const results = await fetch(`${Selfit}${Payment}Get?type=${type}&delivery=${delivery}&token=${token}&tokenapi=${tokenapi}`, {
       method: GET,
       headers,
     });
     const json = await results.json();
-    console.log('Get Payment:', json);
+    console.log('Payment/Get');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);

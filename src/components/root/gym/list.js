@@ -43,9 +43,8 @@ export default class List extends Component {
       const { max, ssort, fsort } = await this.state;
       const { tokenmember, latval, longval } = await this.props.user;
       const { min, tokenapi } = await this.props;
-      const GymList = await getAllGym(
-        latval, longval, tokenmember, tokenapi, 120, min, ssort, fsort
-      );
+      const GymList =
+        await getAllGym(latval, longval, tokenmember, tokenapi, 120, min, ssort, fsort);
       console.log(GymList);
       await this.props.receiveGym(GymList, min);
       this.setState({ loading: false, refreshing: false });

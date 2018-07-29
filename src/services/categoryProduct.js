@@ -6,5 +6,7 @@ export const getAllCategoryProduct = async (token, tokenapi, max, min, ssort, fs
     headers
   });
   const json = await response.json();
+  console.log('CategoryProduct/GetAll');
+  console.log(json);
   return json.CategoryProductList.$values;
 };

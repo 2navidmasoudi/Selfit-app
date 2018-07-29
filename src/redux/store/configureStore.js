@@ -7,11 +7,13 @@ import reducers from '../reducers';
 const config = {
   key: 'root',
   storage,
-  whitelist: ['user']
+  whitelist: ['user', 'help']
 };
 const middleware = [];
 
-if (__DEV__) { middleware.push(createLogger()); }
+if (__DEV__) {
+  middleware.push(createLogger());
+}
 
 const persistedReducer = persistCombineReducers(config, reducers);
 const enhancers = [applyMiddleware(...middleware)];

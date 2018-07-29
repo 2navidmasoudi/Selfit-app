@@ -6,6 +6,8 @@ export const getAllFED = async (token, tokenapi, max, min, ssort, fsort) => {
     headers
   });
   const json = await response.json();
+  console.log('Doctor/GetAll');
+  console.log(json);
   return json.DoctorList.$values;
 };
 export const getSearchFED = async (search, token, tokenapi, max, min, ssort, fsort) => {
@@ -14,5 +16,7 @@ export const getSearchFED = async (search, token, tokenapi, max, min, ssort, fso
     headers
   });
   const json = await response.json();
+  console.log('Doctor/GetSearchAll');
+  console.log(json);
   return json.DoctorSearch.$values;
 };

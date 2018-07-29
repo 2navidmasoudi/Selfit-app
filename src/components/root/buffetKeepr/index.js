@@ -79,7 +79,6 @@ export default class BuffetKeeper extends Component {
       logError(err, 'putActiveBuffet', 'root/buffetKeeper/index', '_putActiveBuffet77');
     }
   }
-  // TODO: BUFFET IS NOT ACTIVATED IN FIRST TIME!
   async _putActiveBuffet(Active) {
     try {
       const { tokenapi, buffetid } = await this.props;

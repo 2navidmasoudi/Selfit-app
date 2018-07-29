@@ -6,6 +6,8 @@ export const getAllCoach = async (token, tokenapi, max, min, ssort, fsort) => {
     headers
   });
   const json = await response.json();
+  console.log('Coach/GetAll');
+  console.log(json);
   return json.CoachList.$values;
 };
 export const getSearchCoach = async (search, token, tokenapi, max, min, ssort, fsort) => {
@@ -14,6 +16,8 @@ export const getSearchCoach = async (search, token, tokenapi, max, min, ssort, f
     headers
   });
   const json = await response.json();
+  console.log('Coach/GetSearchAll');
+  console.log(json);
   return json.CoachSearchList.$values;
 };
 export const postRateCoach = async (idcoach, numberrate, token, tokenapi) => {
@@ -29,6 +33,8 @@ export const postRateCoach = async (idcoach, numberrate, token, tokenapi) => {
       })
     });
     const json = await response.json();
+    console.log('Coach/PostRate');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);

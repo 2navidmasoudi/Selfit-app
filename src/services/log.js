@@ -13,6 +13,7 @@ export const logError = async (messagelogerrorui, typelogerrorui, urllogerrorui,
     })
   });
   const json = await response.json();
-  console.log('log Saved in Server?=', json);
+  console.log('LOG/Post');
+  console.log(json);
   return json;
 };

@@ -6,6 +6,8 @@ export const getAllMenuFood = async (catid, token, tokenapi, max, min, ssort, fs
     headers
   });
   const json = await response.json();
+  console.log('Menufood/GetAll');
+  console.log(json);
   return json.MenufoodAll.$values;
 };
 export const getSearchMenuFood = async (search, token, tokenapi, max, min, ssort, fsort) => {
@@ -14,6 +16,8 @@ export const getSearchMenuFood = async (search, token, tokenapi, max, min, ssort
     headers
   });
   const json = await response.json();
+  console.log('Menufood/GetSearchAll');
+  console.log(json);
   return json.SearchMenufoodAll.$values;
 };
 export const getFoodCategory = async (token, tokenapi) => {
@@ -22,6 +26,8 @@ export const getFoodCategory = async (token, tokenapi) => {
     headers
   });
   const json = await response.json();
+  console.log('Menufood/GetCategoryAll');
+  console.log(json);
   return json.$values;
 };
 export const getSingleMenuFood = async (id, token, tokenapi) => {

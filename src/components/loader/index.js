@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   StyleSheet,
@@ -6,7 +5,7 @@ import {
   Modal,
   ActivityIndicator
 } from 'react-native';
-// TODO: delete this file after check.
+
 const Loader = (props) => {
   const {
     loading,

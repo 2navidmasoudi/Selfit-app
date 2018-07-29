@@ -6,6 +6,8 @@ export const getAllBlog = async (token, tokenapi, max, min, ssort, fsort) => {
     headers
   });
   const json = await response.json();
+  console.log('blog/getAllBlog');
+  console.log(json);
   return json.BlogList.$values;
 };
 
@@ -15,5 +17,7 @@ export const getSearchBlog = async (search, token, tokenapi, max, min, ssort, fs
     headers
   });
   const json = await response.json();
+  console.log('blog/getSearchBlog');
+  console.log(json);
   return json.BlogSearch.$values;
 };

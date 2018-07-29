@@ -43,7 +43,6 @@
 // }
 //
 // export function getSongUrl(id) {
-//   // TODO : songs list?
 //   return `${Config.API_URL}`;
 // }
 //

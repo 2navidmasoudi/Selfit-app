@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { FlatList } from 'react-native';
-import {Body, Button, Card, CardItem, Container, Content, Left, ListItem, Right} from 'native-base';
+import { Body, Card, CardItem, Container, Content, Left, ListItem, Right } from 'native-base';
 import { connect } from 'react-redux';
 import moment from 'moment-jalaali';
 import AppHeader from '../../header';
-import { errorColor, mainColor, white } from '../../../assets/variables/colors';
+import { errorColor, mainColor } from '../../../assets/variables/colors';
 import { persianNumber } from '../../../utils/persian';
 import { Text } from '../../Kit';
 import { tokenBuffet } from '../../../redux/actions';
@@ -36,7 +36,8 @@ export default class FactorBuffetDetail extends Component {
       const { tokenmember } = await this.props.user;
       const { tokenapi, item } = await this.props;
       const active = await item.statepayedid === 2;
-      const json = await getOrderBuffet(item.idfactorbuffet, active, tokenmember, tokenapi, 50, 0, true);
+      const json =
+        await getOrderBuffet(item.idfactorbuffet, active, tokenmember, tokenapi, 50, 0, true);
       const buffetOrder = await json.Buffet_BasketBuffetOrderList.$values;
       const basketMaterial = await json.Buffet_BasketMaterialOrderList.$values;
       let materialOrder = [];

@@ -11,7 +11,8 @@ export const putCheckToken = async (token, tokenapi) => {
       })
     });
     const json = await response.json();
-    console.log('Token Extended: ', json);
+    console.log('SecurityMember/PutCheckToken');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -29,6 +30,8 @@ export const putMemberLogin = async (phone, tokenapi) => {
       })
     });
     const json = await response.json();
+    console.log('SecurityMember/PutMemberLogin');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -42,6 +45,8 @@ export const getSingleToken = async (token, tokenapi) => {
       headers
     });
     const json = await response.json();
+    console.log('Member/GetSingleToken');
+    console.log(json);
     return json;
   } catch (e) {
 
@@ -59,7 +64,8 @@ export const putUserLogout = async (token, tokenapi) => {
       })
     });
     const json = await response.json();
-    console.log('Log out status:', json);
+    console.log('SecurityMember/PutLogout');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -78,6 +84,8 @@ export const putCodeLogin = async (Method, phone, code, tokenapi) => {
       })
     });
     const json = await response.json();
+    console.log(`SecurityMember/${Method}`);
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -95,6 +103,8 @@ export const postMember = async (phone, tokenapi) => {
       })
     });
     const json = await response.json();
+    console.log('Member/Post');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -119,6 +129,8 @@ export const putMember = async (namefamilymember, mailmember, birthdaymember, se
       })
     });
     const json = await response.json();
+    console.log('Member/Put');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -132,6 +144,8 @@ export const getAddress = async (id, token, tokenapi, max, min, ssort, fsort) =>
       headers
     });
     const json = await response.json();
+    console.log('AddressMember/GetAll');
+    console.log(json);
     return json.AddressList.$values;
   } catch (e) {
     console.log(e);
@@ -156,6 +170,8 @@ export const postAddress = async (titleaddress, desc, plaque, floor, latval, lon
       })
     });
     const json = await response.json();
+    console.log('AddressMember/Post');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -174,6 +190,8 @@ export const activeAddress = async (idaddress, token, tokenapi) => {
       })
     });
     const json = await response.json();
+    console.log('AddressMember/PutActive');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -187,6 +205,8 @@ export const deleteAddress = async (id, token, tokenapi) => {
       headers
     });
     const json = await response.json();
+    console.log('AddressMember/Delete');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);

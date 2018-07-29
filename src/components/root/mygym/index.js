@@ -89,7 +89,6 @@ export default class MyGym extends Component {
   }
   async _getSingLeGym() {
     try {
-      // TODO: gymID
       const { tokenapi, gymid } = await this.props;
       const { tokenmember } = await this.props.user;
       const gymInfo = await getSingleGym(gymid, tokenmember, tokenapi);

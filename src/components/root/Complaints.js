@@ -5,12 +5,11 @@ import { connect } from 'react-redux';
 import call from 'react-native-phone-call';
 import AppHeader from '../header';
 import { setUser } from '../../redux/actions';
-import { form } from '../../assets/styles';
 import { Text } from '../Kit';
 import { mainColor, white } from '../../assets/variables/colors';
 
 const args = {
-  number: '02188058522', // String value with the number to call
+  number: '02188058525', // String value with the number to call
   prompt: false,
 };
 

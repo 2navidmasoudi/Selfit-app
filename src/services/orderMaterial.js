@@ -6,10 +6,11 @@ export const getAllBasketMaterial = async (active, token, tokenapi, max, min, ss
       method: GET,
       headers
     });
-    if (response.status == 204) return { Basket: [], PriceAll: 0 };
+    if (response.status === 204) return { Basket: [], PriceAll: 0 };
     const json = await response.json();
+    console.log('BasketMaterial/GetAll');
+    console.log(json);
     const basketMaterial = await json.BasketMaterialList.$values;
-    console.log(basketMaterial);
     let materialOrder = [];
     for (let i = 0; i < basketMaterial.length; i++) {
       for (let j = 0; j < basketMaterial[i].MixMaterialList.$values.length; j++) {
@@ -34,6 +35,8 @@ export const postBasketMaterial = async (iddish, buffetid, token, tokenapi) => {
       })
     });
     const json = await response.json();
+    console.log('BasketMaterial/Post');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -53,6 +56,8 @@ export const postMixMaterial = async (idbasketmaterail, idmaterial, numbermateri
       })
     });
     const json = await response.json();
+    console.log('BasketMaterial/PostMixMaterial');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -65,6 +70,8 @@ export const deleteMixMaterial = async (id, token, tokenapi) => {
       headers,
     });
     const json = await response.json();
+    console.log('BasketMaterial/DeleteMixMaterial');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -78,6 +85,8 @@ export const getAllMaterial = async (token, tokenapi, max, min, ssort, fsort) =>
       headers
     });
     const json = await response.json();
+    console.log('Material/GetAll');
+    console.log(json);
     return json.MaterialList.$values;
   } catch (e) {
     console.log(e);
@@ -90,6 +99,8 @@ export const getAllBuffetMaterial = async (id, state, token, tokenapi, max, min,
       headers
     });
     const json = await response.json();
+    console.log('Material/GetAllBuffetMaterial');
+    console.log(json);
     return json.Buffet_MaterialList.$values;
   } catch (e) {
     console.log(e);
@@ -110,7 +121,7 @@ export const postBuffetMaterial = async (idmaterial, buffetid, active, percent, 
       })
     });
     const json = await response.json();
-    console.log('postBuffetMaterial');
+    console.log('Material/PostBuffetMaterial');
     console.log(json);
     return json;
   } catch (e) {
@@ -131,6 +142,8 @@ export const putActiveBuffetMaterial = async (buffetid, idbuffet_material, activ
       })
     });
     const json = await response.json();
+    console.log('Material/PutActiveBuffetMaterial');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -143,6 +156,8 @@ export const deleteBuffetMaterial = async (id, token, tokenapi) => {
       headers,
     });
     const json = await response.json();
+    console.log('Material/DeleteBuffetMaterial');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);

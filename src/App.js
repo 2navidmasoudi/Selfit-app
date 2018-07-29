@@ -60,7 +60,7 @@ import { darkColor, mainColor } from './assets/variables/colors';
 import Federation from './components/root/federation';
 import FederationDetail from './components/root/federation/FederationDetail';
 import Waiting from './components/Waiting';
-import FullMapBuffet from "./components/root/buffet/fullMapBuffet";
+import FullMapBuffet from './components/root/buffet/fullMapBuffet';
 
 // Geocoder.setApiKey('AIzaSyBlgHjeMbqK3xEZfh6HK2o8RdjhhgTOh0s');
 const RouterWithRedux = connect()(Router);

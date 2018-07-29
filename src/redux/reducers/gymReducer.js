@@ -23,37 +23,31 @@ export default (state = initialState, action = {}) => {
         GymList: min === 0 ? gym : [...state.GymList, ...gym],
         min
       };
-      break;
     case INCREMENT_MIN:
       return {
         ...state,
         min: state.min + 10
       };
-      break;
     case DECREMENT_MIN:
       return {
         ...state,
         min: state.min - 10
       };
-      break;
     case REFRESH_GYM:
       return {
         ...state,
         min: 0,
       };
-      break;
     case TOKEN_GYM:
       return {
         ...state,
         tokenapi: action.tokenapi,
       };
-      break;
     case SELECT_GYM:
       return {
         ...state,
         gymid: action.gymid,
       };
-      break;
     default:
       return state;
   }

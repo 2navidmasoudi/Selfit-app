@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Button, Fab, Icon, Spinner } from 'native-base';
 import { connect } from 'react-redux';
-import MapView, { Marker } from 'react-native-maps';
+import MapView from 'react-native-maps';
+import PropTypes from 'prop-types';
 import { Actions } from 'react-native-router-flux';
 import { mapStyle } from '../../../assets/styles/map';
 import { getAllGym } from '../../../services/gym';
 import { receiveGym, tokenGym } from '../../../redux/actions/index';
 import { mainColor } from '../../../assets/variables/colors';
+import { Text } from '../../Kit';
 
 const styles = StyleSheet.create({
   container: {
@@ -39,6 +41,20 @@ const initialRegion = {
   longitudeDelta: 0.5,
 };
 
+const GymCallOut = ({ gym }) => (
+  <View>
+    <Text style={{ textAlign: 'center' }} type="bold">{gym.namegym}</Text>
+    <Text style={{ fontSize: 12 }} ellipsizeMode="tail">{gym.addressgym}</Text>
+    <Text style={{ textAlign: 'center', fontSize: 10 }} type="light">
+      برای مشاهده جزئیات کلیک کنید!
+    </Text>
+  </View>
+);
+
+GymCallOut.propTypes = {
+  gym: PropTypes.node.isRequired,
+};
+
 @connect(state => ({
   gym: state.gym.GymList,
   min: state.gym.min,
@@ -63,12 +79,10 @@ export default class GymMap extends Component {
     min: 0,
     firstTime: true,
   };
-  componentWillMount() {
-    this.props.tokenGym('selfit.gym');
-    this.getCurrentPosition();
-  }
-  componentDidMount() {
-    this.getGym();
+  async componentWillMount() {
+    await this.props.tokenGym('selfit.gym');
+    await this.getCurrentPosition();
+    await this.getGym();
   }
   async onRegionChangeComplete(region) {
     await this.setState({ region });
@@ -83,13 +97,14 @@ export default class GymMap extends Component {
       let GymMapList;
       await this.setState({ min: 0 });
       if (this.state.firstTime) {
-        GymMapList = await getAllGym(latval, longval, tokenmember, tokenapi, 200, this.state.min, false, 0);
+        GymMapList =
+          await getAllGym(latval, longval, tokenmember, tokenapi, 200, this.state.min, 'addressgym%20asc');
         console.log(GymMapList);
         await this.props.receiveGym(GymMapList, this.state.min);
         this.setState({ MarkerReady: true, firstTime: false });
         return;
       }
-      GymMapList = await getAllGym(latitude, longitude, tokenmember, tokenapi, 200, min, false, 0);
+      GymMapList = await getAllGym(latitude, longitude, tokenmember, tokenapi, 200, min, 'addressgym%20asc');
       console.log(GymMapList);
       await this.props.receiveGym(GymMapList, min);
       this.setState({ MarkerReady: true });
@@ -104,7 +119,8 @@ export default class GymMap extends Component {
     await this.getGym();
   }
   setRegion(region) {
-    this.state.map.animateToRegion(region, 1000);
+    // this.state.map.animateToRegion(region, 1000);
+    this.setState(region);
   }
   getCurrentPosition() {
     try {
@@ -134,9 +150,7 @@ export default class GymMap extends Component {
       <View style={styles.container}>
         <MapView
           style={styles.map}
-          ref={(map) => {
-                   this.state.map = map;
-                 }}
+          ref={(map) => { this.state.map = map; }}
           initialRegion={initialRegion}
           showsUserLocation
           loadingEnabled
@@ -145,20 +159,28 @@ export default class GymMap extends Component {
           onMapReady={() => this.getCurrentPosition()}
         >
           {this.state.MarkerReady === false ? null : this.props.gym.map(gym => (
-            <Marker
+            <MapView.Marker
               key={gym.idgym}
+              animation="pulse"
+              easing="ease-out"
+              iterationCount="infinite"
               coordinate={{ latitude: gym.latgym, longitude: gym.longgym }}
               // image={gym.activegym === true ? require('../../../assets/gym_marker_2.png'):null}
               onPress={(e => console.log(e.nativeEvent.coordinate))}
               pinColor={gym.activegym === true ? 'blue' : 'red'}
-              title={gym.namegym}
               description={gym.addressgym}
               onCalloutPress={() => this._gymDetail(gym)}
-            />
+            >
+              <MapView.Callout style={{ width: 220 }}>
+                <GymCallOut
+                  gym={gym}
+                />
+              </MapView.Callout>
+            </MapView.Marker>
           ))}
         </MapView>
         <Fab
-          style={{ backgroundColor: '#0F9D7A' }}
+          style={{ backgroundColor: mainColor }}
           position="bottomRight"
           onPress={this.getCurrentPosition.bind(this)}
         >
@@ -175,10 +197,11 @@ export default class GymMap extends Component {
           }}
           onPress={() => this.getNewGym()}
         >
-          <Text style={{ color: 'white' }}>گرفتن باشکاه ها در این مکان</Text>
+          <Text style={{ color: 'white', textAlign: 'center' }}>اینجا باشگاه بگیر</Text>
         </Button>}
       </View>
 
     );
   }
 }
+

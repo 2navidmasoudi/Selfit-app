@@ -42,7 +42,6 @@ export default class CategoryChildren extends Component {
     ssort: false,
     fsort: 0,
   };
-  // TODO: LIST FOR PRODUCT
   componentWillMount() {
     const { tokenmember, tokenapi } = this.props.user;
     putCheckToken(tokenmember, tokenapi);

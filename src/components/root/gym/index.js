@@ -10,9 +10,6 @@ import GymMap from './GymMap';
 import { mainColor } from '../../../assets/variables/colors';
 import { locateUser, tokenGym } from '../../../redux/actions';
 
-const LATITUDE_DELTA = 0.05;
-const LONGITUDE_DELTA = 0.05;
-
 @connect(state => ({
   user: state.user,
 }), {
@@ -21,46 +18,21 @@ const LONGITUDE_DELTA = 0.05;
 })
 export default class Gym extends Component {
   state = {
-    viewComponent: <List />,
+    viewComponent: <GymMap />,
     tabTitle: 'لیست',
-    region: {
-      // latitude: 35.7247434,
-      // longitude: 51.3338664,
-      // latitudeDelta: 0.5,
-      // longitudeDelta: 0.5,
-    },
-    active: 'true'
-
   };
 
   componentWillMount() {
     this.props.tokenGym('selfit.gym');
     const { tokenmember, tokenapi } = this.props.user;
     putCheckToken(tokenmember, tokenapi);
-    this.getCurrentPosition();
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.props.locateUser(position.coords.latitude, position.coords.longitude);
+      },
+      error => console.log(error.message)
+    );
   }
-
-  async getCurrentPosition() {
-    try {
-      await navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const region = {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA,
-          };
-          this.setState({ region });
-          this.props.locateUser(this.state.region.latitude, this.state.region.longitude);
-        },
-        error => alert(error.message),
-        // {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 , distanceFilter: 2000}
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   toggleComponent() {
     if (this.state.tabTitle === 'لیست') {
       this.setState({
@@ -94,7 +66,6 @@ export default class Gym extends Component {
             {this.state.viewComponent}
           </Tab>
         </Tabs>
-
         <View style={{ flex: 0 }}>
           <Fab
             style={{ backgroundColor: mainColor }}

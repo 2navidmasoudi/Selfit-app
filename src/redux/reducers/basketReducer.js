@@ -31,7 +31,6 @@ const initialState = {
   descProduct: null,
   idtimefactor: null,
 };
-// TODO: Erase Break
 export default (state = initialState, action = {}) => {
   switch (action.type) {
     case GET_BUFFET_BASKET:

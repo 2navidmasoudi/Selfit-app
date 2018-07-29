@@ -6,7 +6,6 @@ import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
 import { Text } from '../../Kit';
 
-// TODO : RATE FOR BUFFET
 export default class BuffetCard extends Component {
   onPressHandle(buffet) {
     Actions.buffetMenu(buffet);

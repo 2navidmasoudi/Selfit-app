@@ -4,13 +4,11 @@ import { connect } from 'react-redux';
 import { Body, Button, Card, CardItem, Container, Content, Footer, FooterTab, Left, ListItem, Right } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import AppHeader from '../../header';
-import {setProductPriceAll, setRoad, tokenStore} from '../../../redux/actions';
-import {getPayment, getRequestPayment} from '../../../services/payment';
+import { setProductPriceAll, setRoad, tokenStore } from '../../../redux/actions';
+import { getPayment, getRequestPayment } from '../../../services/payment';
 import { postAddressProduct, postFactorProduct, putTimeFactor } from '../../../services/orderProduct';
 import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
-
-// todo: add list for final order
 
 @connect(state => ({
   user: state.user,

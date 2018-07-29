@@ -7,7 +7,6 @@
 //   return async (dispatch) => {
 //     dispatch(setSearchResults([]));
 //     dispatch(setLoading(true));
-//     // TODO: search Song?
 //     let res = await fetch(`${Config.SEARCH_API_URL}`);
 //     res = await res.json();
 //     res = await setDownloadedSongs(Utils.filterSearchResults(res));

@@ -20,11 +20,9 @@ import { putCheckToken } from '../../../services/index';
 import { tokenStore } from '../../../redux/actions';
 import { logError } from '../../../services/log';
 import { getAllCategoryProduct } from '../../../services/categoryProduct';
-import {persianNumber} from "../../../utils/persian";
-import {Text} from "../../Kit";
-import {mainColor, white} from "../../../assets/variables/colors";
-
-// TODO: LIST FOR PRODUCT
+import { persianNumber } from '../../../utils/persian';
+import { Text } from '../../Kit';
+import { mainColor, white } from '../../../assets/variables/colors';
 
 @connect(state => ({
   user: state.user,

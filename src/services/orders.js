@@ -8,6 +8,8 @@ export const getOrderBuffet = async (id, active, token, tokenapi, max, min, ssor
     });
     if (response.status === 204) return null;
     const json = await response.json();
+    console.log('Orders/GetOrderBuffet');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -26,5 +28,7 @@ export const putAcceptBuffet = async (memberid, factorid, active, token, tokenap
     })
   });
   const json = await response.json();
+  console.log('Orders/PutAccept');
+  console.log(json);
   return json;
 };

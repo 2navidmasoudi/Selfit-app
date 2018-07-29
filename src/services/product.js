@@ -7,6 +7,8 @@ export const getAllAccessProduct = async (catid, token, tokenapi, max, min, ssor
       headers
     });
     const json = await response.json();
+    console.log('Product/GetAccessAll');
+    console.log(json);
     return json.ProductAccess.$values;
   } catch (e) {
     console.log(e);
@@ -19,6 +21,8 @@ export const getSearchProduct = async (search, token, tokenapi, max, min, ssort,
       headers
     });
     const json = await response.json();
+    console.log('Product/GetSearch');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -36,6 +40,8 @@ export const putVisitProduct = async (idproduct, token, tokenapi) => {
       })
     });
     const json = await response.json();
+    console.log('Product/PutVisit');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -48,6 +54,8 @@ export const getAllPicProduct = async (idproduct, token, tokenapi, max, min, sso
       headers
     });
     const json = await response.json();
+    console.log('PicProduct/GetAll');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);

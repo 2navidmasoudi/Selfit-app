@@ -10,6 +10,8 @@ export const uploader = async (data, path, year, month, token, tokenapi) => {
       }, data
     );
     const json = response.json();
+    console.log('Upload/UploadJsonFile');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);

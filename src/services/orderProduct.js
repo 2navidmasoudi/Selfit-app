@@ -6,8 +6,10 @@ export const getBasketProduct = async (active, token, tokenapi, max, min, ssort,
       method: GET,
       headers
     });
-    if (response.status == 204) return [];
+    if (response.status === 204) return [];
     const json = await response.json();
+    console.log('OrderProduct/GetAll');
+    console.log(json);
     return json.BasketList.$values;
   } catch (e) {
     console.log(e);
@@ -19,8 +21,10 @@ export const getFactorProduct = async (active, token, tokenapi, max, min, ssort,
       method: GET,
       headers
     });
-    if (response.status == 204) return [];
+    if (response.status === 204) return [];
     const json = await response.json();
+    console.log('OrderProduct/GetFactor');
+    console.log(json);
     return json.OrderList.$values;
   } catch (e) {
     console.log(e);
@@ -32,8 +36,10 @@ export const getFactorDetailProduct = async (id, token, tokenapi, max, min, ssor
       method: GET,
       headers
     });
-    if (response.status == 204) return [];
+    if (response.status === 204) return [];
     const json = await response.json();
+    console.log('OrderProduct/GetFactorDetail');
+    console.log(json);
     return json.BasketOrderList.$values;
   } catch (e) {
     console.log(e);
@@ -46,6 +52,8 @@ export const getTimeAccessStore = async (token, tokenapi, max, min, ssort) => {
       headers
     });
     const json = await response.json();
+    console.log('OrderProduct/GetTimeAccessStore');
+    console.log(json);
     return json.TimeAccessStore.$values;
   } catch (e) {
     console.log(e);
@@ -64,6 +72,8 @@ export const postOrderProduct = async (numberproduct, productid, token, tokenapi
       })
     });
     const json = await response.json();
+    console.log('OrderProduct/Post');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -83,6 +93,8 @@ export const postFactorProduct = async (timefactor, descfactor, methodpayed, tok
       })
     });
     const json = await response.json();
+    console.log('OrderProduct/PostFactor');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -101,6 +113,8 @@ export const postAddressProduct = async (factorid, Addressmemberid, token, token
       })
     });
     const json = await response.json();
+    console.log('OrderProduct/PostAddress');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
@@ -119,12 +133,13 @@ export const putTimeFactor = async (factorid, timefactor, token, tokenapi) => {
       })
     });
     const json = await response.json();
+    console.log('OrderProduct/PutTimeFactor');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);
   }
 };
-// TODO
 export const deleteBasketProduct = async (id, token, tokenapi) => {
   try {
     const response = await fetch(`${Selfit}${OrderProduct}Delete/${id}?token=${token}&tokenapi=${tokenapi}`, {
@@ -132,6 +147,8 @@ export const deleteBasketProduct = async (id, token, tokenapi) => {
       headers,
     });
     const json = await response.json();
+    console.log('OrderProduct/Delete');
+    console.log(json);
     return json;
   } catch (e) {
     console.log(e);

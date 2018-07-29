@@ -26,7 +26,6 @@ export default class MaterialCard extends Component {
     state: false,
     numberbuffet: 0,
   };
-  // TODO: ADD AND REMOVE NOT WORKING FOR MATERIAL
   async handleRemove() {
     try {
       const { tokenmember } = this.props.user;
