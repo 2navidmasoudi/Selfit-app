@@ -1,36 +1,38 @@
 import React, { Component } from 'react';
 import { ImageBackground, TouchableWithoutFeedback, View, Alert } from 'react-native';
+import { Icon, Item, Badge, Left, Content } from 'native-base';
+import PropTypes from 'prop-types';
 import { Base64 } from 'js-base64';
 import { connect } from 'react-redux';
 import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
-import { Icon, Item, Badge, Left, Content } from 'native-base';
 import { drawer } from '../../assets/styles/index';
-import {getSingleToken, putUserLogout} from '../../services';
+import { getSingleToken, putUserLogout } from '../../services';
 import { Text } from '../Kit';
 import { persianNumber } from '../../utils/persian';
-import {setUser} from "../../redux/actions";
+import { setUser } from '../../redux/actions';
 
 @connect(state => ({
   user: state.user,
   buffetBasketCount: state.basket.buffetBasketCount,
   materialBasketCount: state.basket.materialBasketCount,
   productBasketCount: state.basket.productBasketCount,
-}), {
-  setUser
-})
+}), { setUser })
 export default class DrawerLayout extends Component {
+  static propTypes = {
+    user: PropTypes.objectOf(PropTypes.node).isRequired,
+    setUser: PropTypes.func.isRequired,
+    buffetBasketCount: PropTypes.number.isRequired,
+    materialBasketCount: PropTypes.number.isRequired,
+    productBasketCount: PropTypes.number.isRequired,
+  }
   componentDidMount() {
     this.getSingleMember();
   }
   async getSingleMember() {
-    try {
-      const { tokenmember, tokenapi } = await this.props.user;
-      const json = await getSingleToken(tokenmember, tokenapi);
-      await this.props.setUser(json.MemberSingleToken);
-    } catch (e) {
-      console.log(e);
-    }
+    const { tokenmember, tokenapi } = await this.props.user;
+    const json = await getSingleToken(tokenmember, tokenapi);
+    await this.props.setUser(json.MemberSingleToken);
   }
   getRequestLogout() {
     Alert.alert(
@@ -38,29 +40,29 @@ export default class DrawerLayout extends Component {
       'آیا می خواهید از حساب کاربری خود خارج شوید؟',
       [
         { text: 'خیر' },
-        { text: 'بله', onPress: () => this._putUserLogout() },
+        { text: 'بله', onPress: () => this.putUserLogout() },
       ], {
         cancelable: false,
       }
     );
   }
-  async _putUserLogout() {
-    try {
-      const { tokenapi, tokenmember } = await this.props.user;
-      const json = await putUserLogout(tokenmember, tokenapi);
-      if (json === 1) {
-        Actions.reset('sign');
-      } else {
-        alert('خطا در خروج از حساب کاربری!');
-      }
-    } catch (error) {
-      console.log(error);
+  async putUserLogout() {
+    const { tokenapi, tokenmember } = await this.props.user;
+    const json = await putUserLogout(tokenmember, tokenapi);
+    if (json === 1) {
+      Actions.reset('sign');
+    } else {
+      Alert.alert(
+        'خطا',
+        'خطا در خروج از حساب کاربری!',
+        [{ text: 'باشه' }]
+      );
     }
   }
   render() {
     const {
       namefamilymember, phone,
-      datesave, httpserver, pathserver, picmember, typememberid
+      datesave, httpserver, pathserver, picmember
     } = this.props.user;
     const m = moment(`${datesave}`, 'YYYY-MM-DDTHH:mm:ss');
     const ImgYear = m.jYear();
@@ -68,7 +70,6 @@ export default class DrawerLayout extends Component {
     const ImgSrc = `${Base64.decode(httpserver)}${Base64.decode(pathserver)}${ImgYear}/${ImgMonth}/${picmember}`;
     const Name = Base64.decode(namefamilymember);
     const phoneNumber = Base64.decode(phone);
-
     return (
       <View style={drawer.container}>
         <TouchableWithoutFeedback onPress={() => Actions.profile()}>
@@ -145,7 +146,10 @@ export default class DrawerLayout extends Component {
             <Text>پشتیبانی</Text>
             <Icon name="call" style={drawer.itemIcon} />
           </Item>
-          <Item style={drawer.item} onPress={() => Actions.webView({ title: 'درباره ما', url: 'https://selfit.ir/#/Home/Index' })}>
+          <Item
+            style={drawer.item}
+            onPress={() => Actions.webView({ title: 'درباره ما', url: 'https://selfit.ir/#/Home/Index' })}
+          >
             <Text>درباره ما</Text>
             <Icon name="bookmarks" style={drawer.itemIcon} />
           </Item>
@@ -157,7 +161,10 @@ export default class DrawerLayout extends Component {
             <Text>راهنمای برنامه</Text>
             <Icon name="help" style={drawer.itemIcon} />
           </Item>
-          <Item style={drawer.item} onPress={() => Actions.webView({ title: 'قوانین و تعهدات', url: 'https://selfit.ir/#/Home/Law' })}>
+          <Item
+            style={drawer.item}
+            onPress={() => Actions.webView({ title: 'قوانین و تعهدات', url: 'https://selfit.ir/#/Home/Law' })}
+          >
             <Text>قوانین و تعهدات</Text>
             <Icon name="help" style={drawer.itemIcon} />
           </Item>

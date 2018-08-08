@@ -15,6 +15,7 @@ import {
   Label, Left,
   ListItem, Right
 } from 'native-base';
+import { Alert, FlatList } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { postAddressOrderBuffet, postFactor } from '../../../services/orderBuffet';
 import AppHeader from '../../header';
@@ -22,7 +23,6 @@ import { reBasketBuffet, reBasketMaterial, setRoad, tokenBuffet } from '../../..
 import { SignStyle } from '../../../assets/styles/sign';
 import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
-import { Alert, FlatList } from 'react-native';
 import { sendPrice } from '../../../services/Alopeyk';
 import { getSingleBuffet } from '../../../services/buffet';
 

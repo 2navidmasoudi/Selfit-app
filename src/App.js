@@ -39,7 +39,6 @@ import EditAddress from './components/root/address/editAddress';
 import BuffetOrder from './components/root/buffet/BuffetOrder';
 import AddFood from './components/root/buffetMenu/addFood';
 import AddMaterial from './components/root/buffetMenu/addMaterial';
-import MenuList from './components/root/buffetMenu/list';
 import BlogWeb from './components/root/blog/blogWeb';
 import Main from './components/root/Main';
 import DrawerLayout from './components/DrawerLayout';
@@ -61,6 +60,8 @@ import Federation from './components/root/federation';
 import FederationDetail from './components/root/federation/FederationDetail';
 import Waiting from './components/Waiting';
 import FullMapBuffet from './components/root/buffet/fullMapBuffet';
+import ListFood from './components/root/buffetMenu/listFood';
+import ListMaterial from './components/root/buffetMenu/listMaterial';
 
 // Geocoder.setApiKey('AIzaSyBlgHjeMbqK3xEZfh6HK2o8RdjhhgTOh0s');
 const RouterWithRedux = connect()(Router);
@@ -174,11 +175,11 @@ export default class App extends Component {
           >
             <RouterWithRedux hideNavBar>
               <Scene key="rootMain" hideNavbar>
-                <Scene key="splash" initial component={Splash} hideNavBar />
+                <Scene key="splash" component={Splash} hideNavBar />
                 <Scene key="sign" component={Sign} hideNavBar />
                 <Scene key="waiting" component={Waiting} hideNavBar />
                 <Scene key="Music" hideNavBar component={Music} panHandlers={activeBackGesture} />
-                <Scene key="root" hideNavBar>
+                <Scene key="root" initial hideNavBar>
                   <Drawer
                     key="drawer"
                     drawerPosition="right"
@@ -213,7 +214,8 @@ export default class App extends Component {
                         <Scene key="buffetMenu" component={FoodList} initial hideNavBar />
                         <Scene key="addFood" component={AddFood} hideNavBar />
                         <Scene key="addMaterial" component={AddMaterial} hideNavBar />
-                        <Scene key="menuList" component={MenuList} hideNavBar />
+                        <Scene key="listFood" component={ListFood} hideNavBar />
+                        <Scene key="listMaterial" component={ListMaterial} hideNavBar />
                       </Scene>
                       <Scene key="couchRoot" hideNavBar>
                         <Scene key="couch" component={Couch} initial hideNavBar />

@@ -9,11 +9,7 @@ export const SignStyle = EStyleSheet.create({
     flexDirection: 'row',
     paddingTop: 100
   },
-  SignBackground: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-  },
+
   headerColor: {
     backgroundColor: '$headerColor',
   },

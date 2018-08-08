@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-export const styles = EStyleSheet.create({
+export default EStyleSheet.create({
   markerImage: { width: 50, height: 50, resizeMode: 'contain' },
   btnMap: { flex: 1, justifyContent: 'flex-end' },
   viewImage: {

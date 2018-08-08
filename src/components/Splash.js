@@ -1,97 +1,106 @@
 import React, { Component } from 'react';
 import { StyleSheet, Modal, View, Platform, Linking } from 'react-native';
-import { Container, Button, Icon } from 'native-base';
+import { Container, Button, Icon, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import DeviceInfo from 'react-native-device-info';
 import Video from 'react-native-video';
+import PropTypes from 'prop-types';
 import { putCheckToken } from '../services';
 import Status from './status';
 import SplashVideo from '../assets/1.mp4';
 import { darkColor, mainColor, white } from '../assets/variables/colors';
 import { Text } from './Kit';
+import AppVersion from '../services/AppVersion';
 
 const urlAndroid = 'https://cafebazaar.ir/app/com.selfit.universal/';
 const urlIOS = 'https://sibapp.com/applications/selfit';
 const isIOS = Platform.OS === 'ios';
+let tokenChecked = false;
+let UpdateRequired = false;
 @connect(state => ({ user: state.user }))
 export default class Splash extends Component {
-  state = {
-    tokenChecked: false,
-    modalVisible: false,
-    UpdateRequired: false,
+  static propTypes = {
+    user: PropTypes.objectOf(PropTypes.node).isRequired,
   };
+  constructor() {
+    super();
+    this.state = {
+      dots: '...',
+      videoVisible: true,
+      modalVisible: false,
+    };
+    this.dots = () => {
+      const { dots } = this.state;
+      switch (dots) {
+        case '......':
+          this.setState({ dots: '.' });
+          break;
+        default:
+          this.setState({ dots: `${dots}.` });
+          break;
+      }
+    };
+    this.onEnd = () => {
+      this.setState({
+        videoVisible: false,
+      });
+      if (!UpdateRequired) {
+        if (tokenChecked === true) {
+          Actions.reset('root');
+        } else {
+          Actions.reset('sign');
+        }
+      }
+    };
+  }
   componentDidMount() {
-    setTimeout(() => this.checkToken(), 100);
-    // TODO: check the latest version from server <3
+    this.checkToken();
+    this.checkUpdate();
+    this.interval = setInterval(() => this.dots(), 500);
   }
-  async UpdateButton() {
-    await this.setState({
-      modalVisible: false,
-      UpdateRequired: false,
-    });
-    if (isIOS) {
-      Linking.openURL(urlIOS).catch(err => console.error('An error occurred', err));
-    } else {
-      Linking.openURL(urlAndroid).catch(err => console.error('An error occurred', err));
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+  async checkUpdate() {
+    const update = await AppVersion();
+    const version = await DeviceInfo.getVersion();
+    if (version !== update) {
+      this.setState({ modalVisible: true });
+      UpdateRequired = true;
     }
-    this.leadToScreen();
   }
-  async CancelButton() {
-    await this.setState({
-      modalVisible: false,
-      UpdateRequired: false,
-    });
-    this.leadToScreen();
+  CancelButton() {
+    this.setState({ modalVisible: false });
+    UpdateRequired = false;
+    this.onEnd();
   }
   async checkToken() {
-    try {
-      const version = await DeviceInfo.getVersion();
-      console.log('app_version');
-      console.log(version);
-      if (version === '1.3') {
-        this.setState({
-          UpdateRequired: true,
-          modalVisible: true
-        });
+    const { tokenmember, tokenapi } = await this.props.user;
+    const json = await putCheckToken(tokenmember, tokenapi);
+    if (json === 1) {
+      tokenChecked = true;
+      if (!this.state.videoVisible) {
+        this.onEnd();
       }
-      const { tokenmember, tokenapi } = await this.props.user;
-      const json = await putCheckToken(tokenmember, tokenapi);
-      console.log('json for login');
-      console.log(json);
-      if (json === 1) {
-        this.setState({ tokenChecked: true });
-      } else {
-        putCheckToken(tokenmember, tokenapi).then((result) => {
-          console.log('json for login');
-          console.log(result);
-          if (result === 1) {
-            this.setState({ tokenChecked: true });
-          }
-        });
-      }
-    } catch (e) {
-      console.log(e);
     }
   }
-  async leadToScreen() {
-    const { tokenChecked, UpdateRequired } = await this.state;
-    if (!UpdateRequired) {
-      if (tokenChecked === true) {
-        console.log('go to root');
-        Actions.reset('root');
-      } else {
-        console.log('go to sign');
-        Actions.reset('sign');
-      }
+  UpdateButton() {
+    this.setState({ modalVisible: false });
+    UpdateRequired = false;
+    if (isIOS) {
+      Linking.openURL(urlIOS);
+    } else {
+      Linking.openURL(urlAndroid);
     }
+    this.onEnd();
   }
   render() {
     return (
       <Container style={styles.MainContainer}>
         <Status />
         <Modal
-          animationType="slide"
+          animationType="fade"
           transparent
           visible={this.state.modalVisible}
           onRequestClose={() => console.log('requestCloseUpdate')}
@@ -106,7 +115,7 @@ export default class Splash extends Component {
                 در صورت بروز رسانی از مزایای بیشتر و
                 اشکالات درون برنامه ای کمتری برخوردار خواهید شد.
               </Text>
-              <View style={{ flexDirection: 'row' }}>
+              <View style={styles.modalView}>
                 <Button
                   iconRight
                   style={[styles.buttonStyle, { marginRight: 2 }]}
@@ -131,19 +140,42 @@ export default class Splash extends Component {
             </View>
           </View>
         </Modal>
+        <View style={styles.main}>
+          <Spinner color={mainColor} />
+          <Text style={styles.txt}>
+            درحال برقراری ارتباط با سرور
+          </Text>
+          <Text style={styles.txt}>
+            لطفا چند لحظه صبر کنید{this.state.dots}
+          </Text>
+        </View>
         <Video
           resizeMode="cover"
           playInBackground
           playWhenInactive
           source={SplashVideo}
-          onEnd={this.leadToScreen.bind(this)}
-          style={styles2.backgroundVideo}
+          onEnd={this.onEnd}
+          style={[styles.backgroundVideo, { display: this.state.videoVisible ? 'flex' : 'none' }]}
         />
       </Container>
     );
   }
 }
-const styles2 = StyleSheet.create({
+const styles = StyleSheet.create({
+  main: {
+    flex: 1,
+    backgroundColor: darkColor,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  txt: { color: white },
+  MainContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: darkColor,
+  },
+  modalView: { flexDirection: 'row' },
   backgroundVideo: {
     flex: 1,
     position: 'absolute',
@@ -151,15 +183,6 @@ const styles2 = StyleSheet.create({
     left: -50,
     bottom: -50,
     right: -50,
-  },
-});
-
-const styles = StyleSheet.create({
-  MainContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: darkColor,
   },
   modalBackground: {
     flex: 1,
@@ -194,14 +217,14 @@ const styles = StyleSheet.create({
   TextStyle: {
     fontSize: 18,
     marginBottom: 0,
-    color: '#fff',
+    color: white,
     padding: 2,
     textAlign: 'center'
   },
   TextStyle2: {
     fontSize: 14,
     marginBottom: 0,
-    color: '#fff',
+    color: white,
     padding: 2,
     marginHorizontal: 20,
     textAlign: 'center'

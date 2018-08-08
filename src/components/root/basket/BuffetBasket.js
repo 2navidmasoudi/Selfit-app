@@ -8,11 +8,15 @@ import { getAllOrder } from '../../../services/orderBuffet';
 import { getAllBasketMaterial } from '../../../services/orderMaterial';
 import AppHeader from '../../header';
 import { reBasketBuffet, reBasketMaterial, selectBuffet, setRoad, tokenBuffet } from '../../../redux/actions';
-import { logError } from '../../../services/log';
 import FoodCard from './FoodCard';
 import MaterialCard from './MaterialCard';
 import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
+
+const active = true;
+const max = 100;
+const min = 0;
+const ssort = 0;
 
 @connect(state => ({
   user: state.user,
@@ -30,67 +34,55 @@ import { persianNumber } from '../../../utils/persian';
   selectBuffet
 })
 export default class BuffetBasket extends Component {
-  state = {
-    active: true,
-    state: false,
-    min: 0,
-    max: 30,
-    fsort: 0,
-    ssort: false,
-    total: 0,
+  static propTypes = {
+    user: PropTypes.objectOf(PropTypes.node).isRequired,
+    buffetBasket: PropTypes.arrayOf(PropTypes.node),
+    materialBasket: PropTypes.arrayOf(PropTypes.node),
+    Count1: PropTypes.number,
+    Count2: PropTypes.number,
+    PriceAll: PropTypes.number,
+    tokenBuffet: PropTypes.func.isRequired,
+    reBasketBuffet: PropTypes.func.isRequired,
+    reBasketMaterial: PropTypes.func.isRequired,
+    setRoad: PropTypes.func.isRequired,
+    selectBuffet: PropTypes.func.isRequired,
   };
+  static defaultProps = {
+    buffetBasket: [],
+    materialBasket: [],
+    Count1: 0,
+    Count2: 0,
+    PriceAll: 0,
+  }
   componentWillMount() {
     this.getInfo();
   }
   async getInfo() {
     await this.props.tokenBuffet('selfit.buffet');
-    await this._getBasketBuffet();
-    await this._getBasketMaterial();
+    await this.getBasketBuffet();
+    await this.getBasketMaterial();
     this.props.setRoad('buffet');
   }
-  async _getBasketBuffet() {
-    try {
-      const { tokenmember } = await this.props.user;
-      const { tokenapi } = await this.props;
-      const { active, max, min } = await this.state;
-      const {
-        Basket,
-        PriceAll
-      } = await getAllOrder(active, tokenmember, tokenapi, max, min);
-      console.log(Basket, 'basket for Buffet!', PriceAll, 'priceAll');
-      this.props.reBasketBuffet(Basket, Basket.length, PriceAll);
-    } catch (e) {
-      console.log(e);
-      logError(e, '_getBasketBuffet', 'DrawerLayout/index', 'getAllOrder');
-    }
+  async getBasketBuffet() {
+    const { tokenmember } = await this.props.user;
+    const { tokenapi } = await this.props;
+    const { Basket, PriceAll } =
+        await getAllOrder(active, tokenmember, tokenapi, max, min);
+    this.props.reBasketBuffet(Basket, Basket.length, PriceAll);
   }
-  async _getBasketMaterial() {
-    try {
-      const { tokenmember } = await this.props.user;
-      const { tokenapi } = await this.props;
-      const { max, min, ssort } = await this.state;
-      const {
-        Basket,
-        PriceAll,
-        idbuffet
-      } = await getAllBasketMaterial(true, tokenmember, tokenapi, max, min, ssort);
-      console.log(Basket, 'basket for Material!', PriceAll, 'priceAll');
-      this.props.reBasketMaterial(Basket, Basket.length, PriceAll);
-      this.props.selectBuffet(idbuffet);
-    } catch (e) {
-      console.log(e);
-      logError(e, '_getBasketMaterial', 'DrawerLayout/index', 'getAllBasketMaterial');
-    }
+  async getBasketMaterial() {
+    const { tokenmember } = await this.props.user;
+    const { tokenapi } = await this.props;
+    const { Basket, PriceAll, idbuffet } =
+        await getAllBasketMaterial(active, tokenmember, tokenapi, max, min, ssort);
+    this.props.reBasketMaterial(Basket, Basket.length, PriceAll);
+    this.props.selectBuffet(idbuffet);
   }
-  returnBuffetItem({ item }) {
-    return <FoodCard food={item} />;
-  }
-  renderMaterialItem({ item }) {
-    return <MaterialCard food={item} />;
-  }
+  returnBuffetItem = ({ item }) => <FoodCard food={item} />
+  renderMaterialItem = ({ item }) => <MaterialCard food={item} />
   render() {
-    const FooterComponent = (this.props.Count1 + this.props.Count2) === 0 ? null :
-      (<Footer>
+    const FooterComponent = (this.props.Count1 + this.props.Count2) === 0 ? null : (
+      <Footer>
         <FooterTab>
           <Button
             style={{ backgroundColor: '#0F9D7A' }}
@@ -101,7 +93,9 @@ export default class BuffetBasket extends Component {
             </Text>
           </Button>
         </FooterTab>
-      </Footer>);
+      </Footer>
+    );
+    const { buffetBasket, materialBasket, PriceAll } = this.props;
     return (
       <Container>
         <AppHeader rightTitle="سبد غذا" backButton="flex" />
@@ -113,7 +107,7 @@ export default class BuffetBasket extends Component {
               </CardItem>
             </Card>
             <FlatList
-              data={this.props.buffetBasket}
+              data={buffetBasket}
               renderItem={item => this.returnBuffetItem(item)}
               ListEmptyComponent={<Text style={{ marginRight: 20 }}>هیچ سفارشی دریافت نشد...</Text>}
               keyExtractor={item => item.idbasketbuffet}
@@ -125,7 +119,7 @@ export default class BuffetBasket extends Component {
               </CardItem>
             </Card>
             <FlatList
-              data={this.props.materialBasket}
+              data={materialBasket}
               renderItem={item => this.renderMaterialItem(item)}
               ListEmptyComponent={<Text style={{ marginRight: 20 }}>هیچ سفارشی دریافت نشد...</Text>}
               keyExtractor={item => item.idmixmaterial}
@@ -133,7 +127,7 @@ export default class BuffetBasket extends Component {
             />
             <CardItem footer bordered>
               <Text type="bold" style={{ flex: 1 }}>
-                جمع کل: {persianNumber(this.props.PriceAll.toLocaleString())} تومان
+                جمع کل: {persianNumber(PriceAll.toLocaleString())} تومان
               </Text>
             </CardItem>
           </Card>
@@ -143,15 +137,3 @@ export default class BuffetBasket extends Component {
     );
   }
 }
-// BuffetBasket.propTypes = {
-//   user: PropTypes.node.isRequired,
-//   buffetBasket: PropTypes.node.isRequired,
-//   materialBasket: PropTypes.node.isRequired,
-//   Count1: PropTypes.number.isRequired,
-//   Count2: PropTypes.number.isRequired,
-//   PriceAll: PropTypes.string.isRequired,
-//   tokenBuffet: PropTypes.func.isRequired,
-//   reBasketBuffet: PropTypes.func.isRequired,
-//   reBasketMaterial: PropTypes.func.isRequired,
-//   setRoad: PropTypes.node.isRequired,
-// };

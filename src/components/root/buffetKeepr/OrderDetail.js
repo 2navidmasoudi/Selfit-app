@@ -38,19 +38,16 @@ export default class OrderDetail extends Component {
       const { tokenmember } = await this.props.user;
       const { tokenapi, order } = await this.props;
       const active = await order.statepayedid === 2;
-      const json = await getOrderBuffet(order.idfactorbuffet, active, tokenmember, tokenapi, 50, 0, true);
+      const json =
+        await getOrderBuffet(order.idfactorbuffet, active, tokenmember, tokenapi, 50, 0, true);
       const buffetOrder = await json.Buffet_BasketBuffetOrderList.$values;
       const basketMaterial = await json.Buffet_BasketMaterialOrderList.$values;
       let materialOrder = [];
-      for (let i = 0; i < basketMaterial.length; i++) {
-        for (let j = 0; j < basketMaterial[i].MixMaterialList.$values.length; j++) {
+      for (let i = 0; i < basketMaterial.length; i += 1) {
+        for (let j = 0; j < basketMaterial[i].MixMaterialList.$values.length; j += 1) {
           materialOrder = [...materialOrder, basketMaterial[i].MixMaterialList.$values[j]];
         }
       }
-      // console.log('buffetOrder');
-      // console.log(buffetOrder);
-      // console.log('materialOrder');
-      // console.log(materialOrder);
       this.setState({ buffetOrder, materialOrder });
     } catch (e) {
       console.log(e);

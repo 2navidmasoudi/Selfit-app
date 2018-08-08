@@ -1,2 +1,3 @@
-export const Text = require('./Text/Text').default;
-export const TextInput = require('./TextInput/TextInput').default;
+export { default as Text } from './Text/Text';
+export { default as TextInput } from './TextInput/TextInput';
+export { default as Modal } from './Modal/Modal';

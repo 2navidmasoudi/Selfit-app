@@ -5,6 +5,17 @@ import styles from './style';
 import Button from './Button';
 import { persianNumber } from '../../utils/persian';
 
+type Props = {
+  isFirstStep: Boolean | Object | Array,
+  isLastStep: Boolean | Object | Array,
+  handleNext: Function | Object | Array,
+  handlePrev: Function | Object | Array,
+  handleStop: Function | Object | Array,
+  currentStep: Object | Object | Array,
+};
+type Props2 = {
+  currentStepNumber: Number | Object | Array,
+};
 export const HelpView = walkthroughable(View);
 export const Tooltip = ({
   isFirstStep,
@@ -13,7 +24,7 @@ export const Tooltip = ({
   handlePrev,
   handleStop,
   currentStep,
-}) => (
+}: Props) => (
   <View>
     <View style={styles.tooltipContainer}>
       <Text testID="stepDescription" style={styles.tooltipText}>{currentStep.text}</Text>
@@ -46,11 +57,8 @@ export const Tooltip = ({
   </View>
 );
 export const TipNumber = ({
-  isFirstStep,
-  isLastStep,
-  currentStep,
   currentStepNumber,
-}) => (
+}: Props2) => (
   <View style={styles.stepNumber}>
     <Text style={[styles.stepNumberText]}>{persianNumber(currentStepNumber)}</Text>
   </View>

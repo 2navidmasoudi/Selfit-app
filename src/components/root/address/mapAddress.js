@@ -10,6 +10,8 @@ import markerImage from '../../../assets/markerImage.png';
 import { form } from '../../../assets/styles';
 import { styles } from './style';
 import { Text } from '../../Kit';
+import { logError } from '../../../services/log';
+import { mainColor, white } from '../../../assets/variables/colors';
 
 const initialRegion = {
   latitude: 35.7247434,
@@ -27,7 +29,9 @@ const LONGITUDE_DELTA = 0.01;
   Count: state.buffet.Count,
 }))
 export default class MapAddress extends Component {
-    state = {
+  constructor() {
+    super();
+    this.state = {
       map: null,
       region: {
         // latitude: 35.7247434,
@@ -36,71 +40,70 @@ export default class MapAddress extends Component {
         // longitudeDelta: 0.5,
       },
     };
-    onRegionChangeComplete(region) {
-      this.setState({
-        region,
-      });
-    }
-    setRegion(region) {
+    this.onRegionChangeComplete = this.onRegionChangeComplete.bind(this);
+    this.getCurrentPosition = this.getCurrentPosition.bind(this);
+  }
+  onRegionChangeComplete(region) {
+    this.setState({
+      region,
+    });
+  }
+  getCurrentPosition() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const region = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
+      };
+      this.setRegion(region);
+    });
+  }
+  setRegion(region) {
+    try {
       this.state.map.animateToRegion(region, 1000);
+    } catch (e) {
+      logError(e, 'mapAddress', 'setRegion', 'root/address');
     }
-    getCurrentPosition() {
-      try {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const region = {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-              latitudeDelta: LATITUDE_DELTA,
-              longitudeDelta: LONGITUDE_DELTA,
-            };
-            this.setRegion(region);
-          },
-          error => console.log(error.message),
-        // {enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 , distanceFilter: 2000}
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    render() {
-      return (
-        <Container>
-          <AppHeader rightTitle="آدرس" backButton="flex" />
-          <View style={styles.container}>
-            <MapView
-              style={styles.map}
-              ref={(map) => { this.state.map = map; }}
-              initialRegion={initialRegion}
-              showsUserLocation={true}
-              loadingEnabled={true}
-              onRegionChangeComplete={this.onRegionChangeComplete.bind(this)}
-              customMapStyle={mapStyle}
-              onMapReady={this.getCurrentPosition.bind(this)}
+  }
+  render() {
+    return (
+      <Container>
+        <AppHeader rightTitle="آدرس" backButton="flex" />
+        <View style={styles.container}>
+          <MapView
+            style={styles.map}
+            ref={(map) => { this.state.map = map; }}
+            initialRegion={initialRegion}
+            showsUserLocation
+            loadingEnabled
+            onRegionChangeComplete={this.onRegionChangeComplete}
+            customMapStyle={mapStyle}
+            onMapReady={this.onMapReady}
+          />
+          <View pointerEvents="none" style={styles.viewImage}>
+            <Image
+              pointerEvents="none"
+              style={styles.markerImage}
+              source={markerImage}
             />
-            <View pointerEvents="none" style={styles.viewImage}>
-              <Image
-                pointerEvents="none"
-                style={styles.markerImage}
-                source={markerImage}
-              />
-            </View>
-            <Button
-              full
-              style={form.submitButton}
-              onPress={() => Actions.addAddress({ region: this.state.region })}
-            >
-              <Text style={{ color: '#FFF' }}>ثبت در نقشه</Text>
-            </Button>
-            <Fab
-              style={{ backgroundColor: '#0F9D7A', bottom: 20, }}
-              position="bottomRight"
-              onPress={this.getCurrentPosition.bind(this)}
-            >
-              <Icon name="md-locate" />
-            </Fab>
           </View>
-        </Container>
-      );
-    }
+          <Button
+            full
+            style={form.submitButton}
+            onPress={() => Actions.addAddress({ region: this.state.region })}
+          >
+            <Text style={{ color: white }}>ثبت در نقشه</Text>
+          </Button>
+          <Fab
+            style={{ backgroundColor: mainColor, bottom: 20 }}
+            position="bottomRight"
+            onPress={this.getCurrentPosition}
+          >
+            <Icon name="md-locate" />
+          </Fab>
+        </View>
+      </Container>
+    );
+  }
 }

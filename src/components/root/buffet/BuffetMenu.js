@@ -106,7 +106,7 @@ export default class BuffetMenu extends Component {
   }
   async getInfo() {
     await this.props.tokenBuffet('selfit.buffet');
-    await this.props.selectBuffet(this.props.buffetid);
+    await this.props.selectBuffet(this.props.buffetid, this.props.namebuffet);
     await this._getFoodCategory();
     await this._getMenuFood();
     await this._getMaterial();

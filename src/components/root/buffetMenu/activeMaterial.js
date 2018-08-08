@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { logError } from '../../../services/log';
 import { putActiveBuffetMaterial } from '../../../services/orderMaterial';
 import { persianNumber } from '../../../utils/persian';
-import { errorColor } from '../../../assets/variables/colors';
+import {errorColor, mainColor} from '../../../assets/variables/colors';
 import { Text } from '../../Kit';
 
 @connect(state => ({
@@ -60,13 +60,14 @@ export default class ActiveMaterial extends Component {
               <Switch
                 value={Active}
                 onValueChange={value => this.handleSwitch(value)}
+                onTintColor={mainColor}
               />
               <Text style={{ color }}>{YesOrNo}</Text>
             </Left>
             <Right style={{ flex: 1 }}>
               <Text
                 style={{ marginRight: 10 }}
-              >{food.namematerial}
+              >{persianNumber(food.namematerial)}
               </Text>
               <Text
                 style={{ marginRight: 10 }}

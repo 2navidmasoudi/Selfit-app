@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 import { Button, Fab, Icon, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
-import PropTypes from 'prop-types';
 import { Actions } from 'react-native-router-flux';
 import { mapStyle } from '../../../assets/styles/map';
 import { getAllGym } from '../../../services/gym';
-import { receiveGym, tokenGym } from '../../../redux/actions/index';
+import { receiveGym, tokenGym, refreshGym } from '../../../redux/actions';
 import { mainColor } from '../../../assets/variables/colors';
-import { Text } from '../../Kit';
+import { Text, Modal } from '../../Kit';
+import Pic1 from '../../../assets/helpPics/GymMap/PinMapGym.png';
+import Pic2 from '../../../assets/helpPics/GymMap/DetailMapGym.png';
+import Pic3 from '../../../assets/helpPics/GymMap/BtnMapGym.png';
 
 const styles = StyleSheet.create({
   container: {
@@ -51,10 +53,6 @@ const GymCallOut = ({ gym }) => (
   </View>
 );
 
-GymCallOut.propTypes = {
-  gym: PropTypes.node.isRequired,
-};
-
 @connect(state => ({
   gym: state.gym.GymList,
   min: state.gym.min,
@@ -63,26 +61,38 @@ GymCallOut.propTypes = {
 }), {
   receiveGym,
   tokenGym,
+  refreshGym,
 })
 export default class GymMap extends Component {
-  state = {
-    region: {
-      // latitude: 35.7247434,
-      // longitude: 51.3338664,
-      // latitudeDelta: 0.5,
-      // longitudeDelta: 0.5,
-    },
-    map: null,
-    Markers: [],
-    MarkerReady: false,
-    LoadNew: false,
-    min: 0,
-    firstTime: true,
-  };
+  constructor() {
+    super();
+    this.state = {
+      region: {
+        // latitude: 35.7247434,
+        // longitude: 51.3338664,
+        // latitudeDelta: 0.5,
+        // longitudeDelta: 0.5,
+      },
+      map: null,
+      MarkerReady: false,
+      min: 0,
+      firstTime: true,
+      ModalNumber: 1,
+    };
+    this.onRegionChangeComplete = this.onRegionChangeComplete.bind(this);
+    this.getCurrentPosition = this.getCurrentPosition.bind(this);
+    this.gymDetail = (gym) => {
+      Actions.gymDetail(gym);
+      console.log(gym);
+    };
+  }
   async componentWillMount() {
     await this.props.tokenGym('selfit.gym');
     await this.getCurrentPosition();
     await this.getGym();
+  }
+  componentWillUnmount() {
+    this.props.refreshGym();
   }
   async onRegionChangeComplete(region) {
     await this.setState({ region });
@@ -119,8 +129,12 @@ export default class GymMap extends Component {
     await this.getGym();
   }
   setRegion(region) {
-    // this.state.map.animateToRegion(region, 1000);
-    this.setState(region);
+    try {
+      this.state.map.animateToRegion(region, 1000);
+    } catch (e) {
+      console.log(e);
+      this.setState(region);
+    }
   }
   getCurrentPosition() {
     try {
@@ -135,26 +149,77 @@ export default class GymMap extends Component {
           this.setRegion(region);
         },
         error => console.log(error.message),
-        // {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 , distanceFilter: 2000}
       );
     } catch (error) {
       console.log(error);
     }
   }
-  _gymDetail(gym) {
-    Actions.gymDetail(gym);
-    console.log(gym);
-  }
   render() {
     return (
       <View style={styles.container}>
+        <Modal
+          isVisible={this.state.ModalNumber === 1}
+          onModalHide={() => this.setState({ ModalNumber: 2 })}
+          exitText="ممنون"
+          onExit={() => this.setState({ ModalNumber: 0 })}
+        >
+          <Image
+            style={{
+              width: 250,
+              height: 200,
+            }}
+            source={Pic1}
+            resizeMode="contain"
+          />
+          <Text>
+            یکی از پین هارو انتخاب کن تا اسم و آدرس اون باشگاه رو ببینی
+          </Text>
+        </Modal>
+        <Modal
+          isVisible={this.state.ModalNumber === 2}
+          onModalHide={() => this.setState({ ModalNumber: 3 })}
+          exitText="خیلی خب"
+          onExit={() => this.setState({ ModalNumber: 0 })}
+        >
+          <Image
+            style={{
+              width: 250,
+              height: 200,
+            }}
+            source={Pic2}
+            resizeMode="contain"
+          />
+          <Text>
+            با زدن این باکس می تونی جزئیات باشگاه رو ببینی.
+          </Text>
+        </Modal>
+        <Modal
+          isVisible={this.state.ModalNumber === 3}
+          onModalHide={() => this.setState({ ModalNumber: 0 })}
+          exitText="تمام"
+          onExit={() => this.setState({ ModalNumber: 0 })}
+        >
+          <Image
+            style={{
+              width: 250,
+              height: 100,
+            }}
+            source={Pic3}
+            resizeMode="contain"
+          />
+          <Text>
+            با زدن دکمه لیست بر میگردی به لیست باشگاه های دور اطرافت،
+             با زدن دکمه وسط باشگاه ها رو تو محله مورد نظرت ببین،
+            با زدن دکمه آخر برگرد به محلی که هستی.
+          </Text>
+        </Modal>
         <MapView
           style={styles.map}
           ref={(map) => { this.state.map = map; }}
           initialRegion={initialRegion}
           showsUserLocation
           loadingEnabled
-          onRegionChangeComplete={this.onRegionChangeComplete.bind(this)}
+          onRegionChangeComplete={this.onRegionChangeComplete}
           customMapStyle={mapStyle}
           onMapReady={() => this.getCurrentPosition()}
         >
@@ -169,7 +234,7 @@ export default class GymMap extends Component {
               onPress={(e => console.log(e.nativeEvent.coordinate))}
               pinColor={gym.activegym === true ? 'blue' : 'red'}
               description={gym.addressgym}
-              onCalloutPress={() => this._gymDetail(gym)}
+              onCalloutPress={() => this.gymDetail(gym)}
             >
               <MapView.Callout style={{ width: 220 }}>
                 <GymCallOut
@@ -182,7 +247,7 @@ export default class GymMap extends Component {
         <Fab
           style={{ backgroundColor: mainColor }}
           position="bottomRight"
-          onPress={this.getCurrentPosition.bind(this)}
+          onPress={this.getCurrentPosition}
         >
           <Icon name="md-locate" />
         </Fab>

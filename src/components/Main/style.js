@@ -1,6 +1,15 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { darkColor } from '../../assets/variables/colors';
 
 const styles = EStyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: darkColor
+  },
+  background: {
+    width: '100%',
+    resizeMode: 'stretch'
+  },
   animationView: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.15)',

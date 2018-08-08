@@ -12,6 +12,7 @@ import Coach from '../../Main/Coach';
 import { HelpStyle, HelpView, TipNumber, Tooltip } from '../../ToolTip';
 import { helpDoneMember, helpReset } from '../../../redux/actions/help';
 import Federation from '../../Main/Federation';
+import CoachPic from '../../../assets/Coach.jpg';
 
 @connect(state => ({
   user: state.user,
@@ -42,11 +43,7 @@ export default class MemberGrid extends Component {
   render() {
     return (
       <Container>
-        <ImageBackground
-          source={require('../../../assets/MemberGrid.jpeg')}
-          imageStyle={styles.background}
-          style={styles.mainContainer}
-        >
+        <View style={styles.mainContainer}>
           <View style={styles.mainRowWrapper}>
             <View style={styles.wrapper}>
               <CopilotStep text="با زدن این دکمه میتونی هر چی برای رژیم نیاز داری سفارش بدی." order={2} name="Buffet">
@@ -64,7 +61,11 @@ export default class MemberGrid extends Component {
             </View>
           </View>
           <View style={styles.mainRowWrapper}>
-            <View style={styles.wrapper}>
+            <ImageBackground
+              source={CoachPic}
+              style={styles.wrapper}
+              imageStyle={styles.background}
+            >
               <View style={styles.wrapper}>
                 <CopilotStep
                   text="با زدن این دکمه میتونی مربی مناسب خودتو پیدا کنی و باهاش مستقیم در تماس باشی."
@@ -87,7 +88,7 @@ export default class MemberGrid extends Component {
                   </HelpView>
                 </CopilotStep>
               </View>
-            </View>
+            </ImageBackground>
             <View style={styles.wrapper}>
               <View style={styles.wrapper}>
                 <CopilotStep
@@ -109,7 +110,7 @@ export default class MemberGrid extends Component {
               </View>
             </View>
           </View>
-        </ImageBackground>
+        </View>
       </Container>
     );
   }

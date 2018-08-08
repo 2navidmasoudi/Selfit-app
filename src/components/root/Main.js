@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { Container } from 'native-base';
 import { connect } from 'react-redux';
+import * as Animatable from 'react-native-animatable';
+import PropTypes from 'prop-types';
 import { main } from '../../assets/styles/index';
 import AppHeader from '../header';
 import { putCheckToken } from '../../services';
@@ -9,18 +11,26 @@ import MemberGrid from './grids/MemberGrid';
 import GymGrid from './grids/GymGrid';
 import BuffetGrid from './grids/BuffetGrid';
 import { Text } from '../Kit';
+import Music from './Music';
+
+let MusicRef;
+export const bounce = () => MusicRef.bounce(800);
+export const musicUp = () => MusicRef.bounceInUp(1500);
+export const musicDown = () => MusicRef.bounceOutDown(1500);
 
 @connect(state => ({
   user: state.user,
+  music: state.music.music
 }))
 export default class Main extends Component {
+  static propTypes = {
+    user: PropTypes.objectOf(PropTypes.node).isRequired,
+  }
   state = {
     viewComponent: <MemberGrid />,
   };
-
   componentWillMount() {
-    const { typememberid } = this.props.user;
-    this._putCheckToken();
+    const { typememberid, tokenapi, tokenmember } = this.props.user;
     switch (typememberid) {
       case 6: // member
       case 1: // admin
@@ -37,16 +47,11 @@ export default class Main extends Component {
       default:
         break;
     }
+    putCheckToken(tokenmember, tokenapi);
   }
-
-  async _putCheckToken() {
-    const { tokenmember, tokenapi } = await this.props.user;
-    await putCheckToken(tokenmember, tokenapi);
-  }
-
   render() {
-    const pannel =
-      (<View>
+    const pannel = (
+      <View>
         <View style={main.pannelContainer}>
           <TouchableOpacity
             style={main.pannelBtn}
@@ -73,7 +78,22 @@ export default class Main extends Component {
         <AppHeader rightTitle="صفحه اصلی" hasBlog />
         {this.state.viewComponent}
         {this.props.user.typememberid === 1 && pannel}
+        <Animatable.View
+          ref={(music) => { MusicRef = music; }}
+          // animation="fadeOut"
+          style={{
+            flex: 1,
+            position: 'absolute',
+            bottom: 0,
+            display: this.props.music ? 'flex' : 'none',
+            height: 500,
+          }}
+          useNativeDriver
+        >
+          <Music />
+        </Animatable.View>
       </Container>
     );
   }
 }
+

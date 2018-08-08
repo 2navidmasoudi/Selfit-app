@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { logError } from '../../../services/log';
 import { deleteBuffetMaterial, getAllBuffetMaterial, postBuffetMaterial } from '../../../services/orderMaterial';
 import { Text } from '../../Kit';
+import {persianNumber} from "../../../utils/persian";
 
 @connect(state => ({
   user: state.user,
@@ -94,7 +95,7 @@ export default class MaterialCard extends Component {
           <Right style={{ flex: 1 }}>
             <Text
               style={{ marginRight: 10, textAlign: 'right', fontFamily: 'IRANSansMobile' }}
-            >{food.namematerial}
+            >{persianNumber(food.namematerial)}
             </Text>
             <Text
               style={{ marginRight: 10, textAlign: 'right', fontFamily: 'IRANSansMobile' }}

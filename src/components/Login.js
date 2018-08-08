@@ -1,27 +1,44 @@
 import React, { Component } from 'react';
-import { View, Platform } from 'react-native';
+import { View, Platform, StyleSheet } from 'react-native';
 import { Button, Container } from 'native-base';
 import LinearGradient from 'react-native-linear-gradient';
 import { Actions } from 'react-native-router-flux';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { SignStyle } from '../assets/styles/sign';
 import { setPhone, setTokenapi, setUser } from '../redux/actions';
 import { postMember, putMemberLogin } from '../services';
 import Status from './status';
 import { Text, TextInput } from './Kit';
-import { darkColor, mainColor, white } from '../assets/variables/colors';
+import { darkColor, errorColor, mainColor, white } from '../assets/variables/colors';
+import { logError } from '../services/log';
 
 const isIOS = Platform.OS === 'ios';
 @connect(state => ({ user: state.user }), { setUser, setPhone, setTokenapi })
 export default class Login extends Component {
-  state = {
-    phoneNumber: {
-      value: '',
-      error: '',
-    },
+  static propTypes = {
+    user: PropTypes.objectOf(PropTypes.node).isRequired,
+    setPhone: PropTypes.func.isRequired,
+    setTokenapi: PropTypes.func.isRequired,
   };
-  async login() {
+  constructor() {
+    super();
+    this.state = {
+      phoneNumber: {
+        value: '',
+        error: '',
+      },
+      disabled: false,
+    };
+    this.putActivePhone = () => {
+      Actions.authLightBox({ method: 'PutActivephone' });
+    };
+    this.putCheckLogin = () => {
+      Actions.authLightBox({ method: 'PutCheckLogin' });
+    };
+    this.onPress = this.onPress.bind(this);
+  }
+  async onPress() {
     const { phoneNumber } = await this.state;
     if (phoneNumber.value.length !== 11) {
       this.setState({
@@ -30,7 +47,6 @@ export default class Login extends Component {
           error: 'لطفا شماره تلفن خود را چک کنید'
         }
       });
-      console.log(this.state);
     } else if (phoneNumber.value.length === 11) {
       this.setState({
         phoneNumber: {
@@ -38,55 +54,38 @@ export default class Login extends Component {
           error: ''
         }
       });
-      console.log(this.state);
       await this.props.setPhone({ phone: phoneNumber.value });
       await this.requestMemberLogin();
     }
   }
   async requestMemberLogin() {
-    try {
-      await this.props.setTokenapi({ tokenapi: 'selfit.member' });
-      const { phone, tokenapi } = await this.props.user;
-      const json = await putMemberLogin(phone, tokenapi);
-      console.log(json, 'putMemberLogin');
-      if (json === -4 || json === -8) {
-        console.log('user not found, Error code:', json);
+    await this.props.setTokenapi({ tokenapi: 'selfit.member' });
+    const { phone, tokenapi } = await this.props.user;
+    const json = await putMemberLogin(phone, tokenapi);
+    switch (json) {
+      case -4:
+      case -8:
         this.postMember();
-        return;
-      } else if (json === -9) {
-        console.log('user should activate phone, Error code:', json);
+        break;
+      case -9:
         this.putActivePhone();
-        return;
-      } else if (json === 1) {
+        break;
+      case 1:
         this.putCheckLogin();
-      }
-    } catch (error) {
-      console.log(error);
+        break;
+      default:
+        logError('putMemberLogin', `json: ${json}`, 'Login', 'no match for this code');
+        break;
     }
+    this.setState(
+      { disabled: true },
+      () => setTimeout(() => this.setState({ disabled: false }), 3000)
+    );
   }
   async postMember() {
-    try {
-      const { phone, tokenapi } = await this.props.user;
-      const json = await postMember(phone, tokenapi);
-      console.log(json, 'postMember');
-      this.putActivePhone();
-    } catch (err) {
-      console.log(err);
-    }
-  }
-  putActivePhone() {
-    try {
-      Actions.authLightBox({ method: 'PutActivephone' });
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  putCheckLogin() {
-    try {
-      Actions.authLightBox({ method: 'PutCheckLogin' });
-    } catch (error) {
-      console.log(error);
-    }
+    const { phone, tokenapi } = await this.props.user;
+    await postMember(phone, tokenapi);
+    this.putActivePhone();
   }
   changeMobileNumber(text) {
     this.setState({
@@ -98,23 +97,19 @@ export default class Login extends Component {
   }
   render() {
     const phoneNumberError = this.state.phoneNumber.error;
-    const {
-      loginBox, inputGroup,
-      inputText, labelRedText
-    } = SignStyle;
     return (
       <Container>
         <Status />
         <LinearGradient
           colors={[darkColor, darkColor, mainColor]}
-          style={{ flex: 1, justifyContent: 'center' }}
+          style={styles.linear}
         >
-          <View style={loginBox}>
-            <Text style={{ color: white, textAlign: 'center' }}>ورود</Text>
-            <View style={inputGroup}>
-              <Text style={{ color: white }}>شماره موبایل :</Text>
+          <View style={styles.loginBox}>
+            <Text style={styles.loginText}>ورود</Text>
+            <View style={styles.inputGroup}>
+              <Text style={styles.txt}>شماره موبایل :</Text>
               <TextInput
-                style={inputText}
+                style={styles.inputText}
                 placeholder="09xxxxxxxxx"
                 underlineColorAndroid="transparent"
                 keyboardType="numeric"
@@ -124,18 +119,17 @@ export default class Login extends Component {
                 onChangeText={text => this.changeMobileNumber(text)}
               />
               <Text
-                style={[labelRedText, { display: phoneNumberError ? 'flex' : 'none' }]}
+                style={[styles.labelRedText, { display: phoneNumberError ? 'flex' : 'none' }]}
               >
                 {phoneNumberError}
               </Text>
               <Button
                 block
-                style={{ backgroundColor: darkColor }}
-                onPress={this.login.bind(this)}
+                disabled={this.state.disabled}
+                style={{ backgroundColor: this.state.disabled ? mainColor : darkColor }}
+                onPress={this.onPress}
               >
-                <Text style={{ color: white }}>
-                    تايید
-                </Text>
+                <Text style={styles.txt}>تايید</Text>
               </Button>
             </View>
           </View>
@@ -145,3 +139,29 @@ export default class Login extends Component {
     );
   }
 }
+const styles = StyleSheet.create({
+  linear: { flex: 1, justifyContent: 'center' },
+  loginBox: {
+    backgroundColor: mainColor,
+    marginLeft: 20,
+    marginRight: 20,
+    borderRadius: 5,
+    padding: 5,
+  },
+  loginText: { color: white, textAlign: 'center' },
+  inputGroup: {
+    margin: 5,
+    marginLeft: 20,
+    marginRight: 20,
+  },
+  txt: { color: white },
+  inputText: {
+    borderColor: 'rgba(0,0,0,0.2)',
+    borderWidth: 2,
+  },
+  labelRedText: {
+    textAlign: 'center',
+    marginVertical: 5,
+    color: errorColor,
+  },
+});

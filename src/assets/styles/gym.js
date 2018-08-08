@@ -1,5 +1,5 @@
 import EstyleSheet from 'react-native-extended-stylesheet';
-import {mainColor} from "../variables/colors";
+import { mainColor } from '../variables/colors';
 
 export const TabsStyle = EstyleSheet.create({
   activeTab: {

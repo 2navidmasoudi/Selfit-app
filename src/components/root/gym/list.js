@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, View, Platform, Image } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import { Actions } from 'react-native-router-flux';
 import { Fab, Spinner } from 'native-base';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getAllGym, getSearchGym } from '../../../services/gym';
 import GymCard from './GymCard';
 import { decrementMin, incrementMin, receiveGym, refreshGym, tokenGym } from '../../../redux/actions/index';
-import { Text } from '../../Kit';
+import { Text, Modal } from '../../Kit';
+import Loader from '../../loader';
+import Pic1 from '../../../assets/helpPics/GymList/SearchGym.png';
+import Pic2 from '../../../assets/helpPics/GymList/SelectGymList.png';
+import Pic3 from '../../../assets/helpPics/GymList/ShowMapGym.png';
 
 @connect(state => ({
   gym: state.gym.GymList,
@@ -22,54 +27,54 @@ import { Text } from '../../Kit';
   tokenGym,
 })
 export default class List extends Component {
-  state = {
-    max: 120,
-    ssort: false,
-    fsort: 0,
-    loading: 0,
-    refreshing: false,
-    search: null,
-    searchMode: false,
-  };
-  componentWillMount() {
-    this.setInfo();
+  // static propTypes = {
+  //   tokenGym: PropTypes.func.isRequired,
+  //   refreshGym: PropTypes.func.isRequired,
+  //   incrementMin: PropTypes.func.isRequired,
+  //   receiveGym: PropTypes.func.isRequired,
+  //   user: PropTypes.any.isRequired,
+  //   gym: PropTypes.node,
+  // };
+  // static defaultProps = {
+  //   gym: [],
+  // }
+  constructor() {
+    super();
+    this.state = {
+      loading: true,
+      refreshing: false,
+      search: null,
+      searchMode: false,
+      ModalNumber: 1,
+    };
+    this.onRefresh = this.onRefresh.bind(this);
+    this.onEndReached = this.onEndReached.bind(this);
+    this.onChangeText = this.onChangeText.bind(this);
   }
-  async setInfo() {
+  async componentWillMount() {
     await this.props.tokenGym('selfit.gym');
-    await this.getGymList();
+    this.getGymList();
   }
-  async getGymList() {
-    try {
-      const { max, ssort, fsort } = await this.state;
-      const { tokenmember, latval, longval } = await this.props.user;
-      const { min, tokenapi } = await this.props;
-      const GymList =
-        await getAllGym(latval, longval, tokenmember, tokenapi, 120, min, ssort, fsort);
-      console.log(GymList);
-      await this.props.receiveGym(GymList, min);
-      this.setState({ loading: false, refreshing: false });
-    } catch (error) {
-      console.log(error);
+  onRefresh() {
+    this.props.refreshGym();
+    this.setState({ refreshing: true });
+    if (!this.state.searchMode) {
+      this.getGymList();
+    } else {
+      this.searchGym();
     }
   }
-  async searchGym() {
-    try {
-      if (!this.state.search) this.refreshGym();
-      await this.setState({
-        searchMode: true
-      });
-      const { search, max, ssort, fsort } = await this.state;
-      const { tokenmember } = await this.props.user;
-      const { min, tokenapi } = await this.props;
-      const GymList = await getSearchGym(search, tokenmember, tokenapi, max, min, ssort, fsort);
-      await this.props.receiveGym(GymList, min);
-      this.setState({ loading: false, refreshing: false });
-    } catch (error) {
-      console.log(error);
-      this.setState({ loading: false });
+  async onEndReached() {
+    if (this.props.gym.length >= 120 && !this.state.loading) {
+      await this.props.incrementMin();
+      if (!this.state.searchMode) {
+        this.getGymList();
+      } else {
+        this.searchGym();
+      }
     }
   }
-  async searchText(text) {
+  async onChangeText(text) {
     if (text) {
       await this.setState({
         search: text
@@ -83,55 +88,119 @@ export default class List extends Component {
       await this.getGymList();
     }
   }
-  async handleLoadMore() {
-    if (this.props.gym.length >= 120 && !this.state.loading) {
-      console.log('Request Load More');
-      await this.props.incrementMin();
-      await this.setState({ loading: true });
-      if (!this.state.searchMode) {
-        this.getGymList();
-      } else {
-        this.searchGym();
-      }
+  async getGymList() {
+    this.setState({ loading: true });
+    const { tokenmember, latval, longval } = await this.props.user;
+    const { min, tokenapi } = await this.props;
+    const GymList =
+        await getAllGym(latval, longval, tokenmember, tokenapi, 120, min, false, 0);
+    console.log(GymList);
+    await this.props.receiveGym(GymList, min);
+    this.setState({ loading: false, refreshing: false });
+  }
+  async searchGym() {
+    try {
+      if (!this.state.search) this.refreshGym();
+      await this.setState({
+        searchMode: true,
+        loading: true,
+      });
+      const { search } = await this.state;
+      const { tokenmember } = await this.props.user;
+      const { min, tokenapi } = await this.props;
+      const GymList = await getSearchGym(search, tokenmember, tokenapi, 120, min, false, 0);
+      await this.props.receiveGym(GymList, min);
+      this.setState({ loading: false, refreshing: false });
+    } catch (error) {
+      console.log(error);
+      this.setState({ loading: false });
     }
   }
-  handleRefresh() {
-    this.props.refreshGym();
-    this.setState({ refreshing: true });
-    if (!this.state.searchMode) {
-      this.getGymList();
-    } else {
-      this.searchGym();
-    }
-  }
-  renderFooter() {
-    if (!this.state.loading) return null;
-    return <Spinner />;
-  }
+  ListFooterComponent = () => {
+    const { loading } = this.state;
+    return (
+      loading === true ?
+        <Spinner />
+        :
+        null
+    );
+  };
   render() {
     return (
-      <View style={{
-        flex: 1,
-        justifyContent: 'flex-end',
-      }}
-      >
+      <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+        <Modal
+          isVisible={this.state.ModalNumber === 1}
+          onModalHide={() => this.setState({ ModalNumber: 2 })}
+          exitText="ممنون"
+          onExit={() => this.setState({ ModalNumber: 0 })}
+        >
+          <Image
+            style={{
+              width: 250,
+              height: 100,
+            }}
+            source={Pic1}
+            resizeMode="contain"
+          />
+          <Text>
+            از اینجا میتونی اسم یا آدرس باشگاه مورد نظرتو جستجو کنی!
+          </Text>
+        </Modal>
+        <Modal
+          isVisible={this.state.ModalNumber === 2}
+          onModalHide={() => this.setState({ ModalNumber: 3 })}
+          exitText="خیلی خب"
+          onExit={() => this.setState({ ModalNumber: 0 })}
+        >
+          <Image
+            style={{
+              width: 250,
+              height: 150,
+            }}
+            source={Pic2}
+            resizeMode="contain"
+          />
+          <Text>
+            با زدن این باکس می تونی جزئیات باشگاه رو ببینی.
+          </Text>
+        </Modal>
+        <Modal
+          isVisible={this.state.ModalNumber === 3}
+          onModalHide={() => this.setState({ ModalNumber: 0 })}
+          exitText="تمام"
+          onExit={() => this.setState({ ModalNumber: 0 })}
+        >
+          <Image
+            style={{
+              width: 250,
+              height: 200,
+            }}
+            source={Pic3}
+            resizeMode="contain"
+          />
+          <Text>
+            با زدن دکمه نقشه میتونی باشگاه ها رو در نقشه پیدا کنی
+          </Text>
+        </Modal>
         <SearchBar
           showLoading
-          onChangeText={this.searchText.bind(this)}
+          onChangeText={this.onChangeText}
           placeholder="نام، آدرس..."
+          inputStyle={{ textAlign: Platform.OS === 'ios' ? 'right' : undefined, fontFamily: 'IRANSansMobile', fontSize: 12 }}
         />
         <FlatList
           data={this.props.gym}
           renderItem={({ item }) => <GymCard gym={item} />}
           keyExtractor={item => item.idgym}
-          ListEmptyComponent={() => <Spinner />}
-          onRefresh={this.handleRefresh.bind(this)}
+          ListFooterComponent={this.ListFooterComponent}
+          ListEmptyComponent={<Loader loading={this.state.loading} />}
+          onEndReached={this.onEndReached}
+          onRefresh={this.onRefresh}
           refreshing={this.state.refreshing}
-          onEndReached={this.handleLoadMore.bind(this)}
           onEndReachedThreshold={0.5}
-          ListFooterComponent={this.renderFooter.bind(this)}
         />
-        { this.props.user.typememberid === 1 && <Fab
+        {this.props.user.typememberid === 1 &&
+        <Fab
           style={{
             flex: 1,
             justifyContent: 'center',

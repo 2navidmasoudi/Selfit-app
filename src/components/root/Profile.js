@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import { Image, TouchableWithoutFeedback } from 'react-native';
+import { Alert, Image, TouchableWithoutFeedback } from 'react-native';
 import { Button, Container, Content, View } from 'native-base';
 import { connect } from 'react-redux';
+import { Base64 } from 'js-base64';
+import PropTypes from 'prop-types';
 import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
 import { form } from '../../assets/styles/index';
 import AppHeader from '../header';
-
 import { getSingleToken, putUserLogout } from '../../services';
 import { setUser } from '../../redux/actions';
-import { logError } from '../../services/log';
 import { persianNumber } from '../../utils/persian';
 import { Text } from '../Kit';
 import { mainColor, white } from '../../assets/variables/colors';
@@ -22,31 +22,29 @@ moment.loadPersian({ dialect: 'persian-modern' });
   setUser,
 })
 export default class Profile extends Component {
+  static propTypes = {
+    user: PropTypes.objectOf(PropTypes.node).isRequired,
+    setUser: PropTypes.func.isRequired,
+  }
   componentWillMount() {
-    this._getSingleToken();
+    this.getSingleToken();
   }
-  async _getSingleToken() {
-    try {
-      const { tokenmember, tokenapi } = this.props.user;
-      const json = await getSingleToken(tokenmember, tokenapi);
-      await this.props.setUser(json.MemberSingleToken);
-    } catch (error) {
-      console.log(error);
-      logError(error, '_getSingleToken', 'root/Profile', 'getSingleToken');
-    }
+  async getSingleToken() {
+    const { tokenmember, tokenapi } = this.props.user;
+    const json = await getSingleToken(tokenmember, tokenapi);
+    await this.props.setUser(json.MemberSingleToken);
   }
-  async _putUserLogout() {
-    try {
-      const { tokenapi, tokenmember } = await this.props.user;
-      const json = await putUserLogout(tokenmember, tokenapi);
-      if (json === 1) {
-        Actions.reset('sign');
-      } else {
-        alert('خطا در خروج از حساب کاربری!');
-      }
-    } catch (error) {
-      console.log(error);
-      logError(error, '_putUserLogout', 'root/Profile', 'putUserLogout');
+  async putUserLogout() {
+    const { tokenapi, tokenmember } = await this.props.user;
+    const json = await putUserLogout(tokenmember, tokenapi);
+    if (json === 1) {
+      Actions.reset('sign');
+    } else {
+      Alert.alert(
+        'خطا',
+        'خطا در خروج از حساب کاربری!',
+        [{ text: 'باشه' }]
+      );
     }
   }
   render() {
@@ -91,7 +89,7 @@ export default class Profile extends Component {
           </Button>
           <Button
             block
-            onPress={() => this._putUserLogout()}
+            onPress={() => this.putUserLogout()}
             style={{ marginTop: 5, backgroundColor: mainColor }}
           >
             <Text style={{ color: white }}>خروج از حساب کاربری</Text>

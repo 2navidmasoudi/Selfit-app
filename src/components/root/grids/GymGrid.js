@@ -15,6 +15,8 @@ import { getSingleIDMemberGym } from '../../../services/gym';
 import Buffet from '../../Main/Buffet';
 import { HelpStyle, HelpView, TipNumber, Tooltip } from '../../ToolTip';
 import { helpDoneGym } from '../../../redux/actions/help';
+import Federation from '../../Main/Federation';
+import CoachPic from '../../../assets/Coach.jpg';
 
 @connect(state => ({
   user: state.user,
@@ -78,21 +80,17 @@ export default class GymGrid extends Component {
   render() {
     return (
       <Container>
-        <ImageBackground
-          source={require('../../../assets/MemberGrid.jpeg')}
-          imageStyle={styles.background}
-          style={styles.mainContainer}
-        >
+        <View style={styles.mainContainer}>
           <View style={styles.mainRowWrapper}>
             <View style={styles.wrapper}>
-              <CopilotStep text="بوفه آنلاین خیلی خوبه" order={1} name="Buffet">
+              <CopilotStep text="با زدن این دکمه میتونی هر چی برای رژیم نیاز داری سفارش بدی." order={2} name="Buffet">
                 <HelpView style={HelpStyle.main}>
                   <Buffet />
                 </HelpView>
               </CopilotStep>
             </View>
             <View style={styles.wrapper}>
-              <CopilotStep text="دهه 60ایا زیادن" order={2} name="Gym">
+              <CopilotStep text="در این قسمت می تونید کلیه اطلاعات باشگاه خودتو ویرایش کنید." order={1} name="Gym">
                 <HelpView style={HelpStyle.main}>
                   <MyGym />
                 </HelpView>
@@ -100,31 +98,56 @@ export default class GymGrid extends Component {
             </View>
           </View>
           <View style={styles.mainRowWrapper}>
-            <View style={styles.wrapper}>
-              <CopilotStep text="مربی نمیخوایییی؟ خسته نشدیییی؟" order={3} name="Coach">
-                <HelpView style={HelpStyle.main}>
-                  <Coach />
-                </HelpView>
-              </CopilotStep>
-            </View>
+            <ImageBackground
+              source={CoachPic}
+              style={styles.wrapper}
+              imageStyle={styles.background}
+            >
+              <View style={styles.wrapper}>
+                <CopilotStep
+                  text="با زدن این دکمه میتونی مربی مناسب خودتو پیدا کنی و باهاش مستقیم در تماس باشی."
+                  order={4}
+                  name="Coach"
+                >
+                  <HelpView style={HelpStyle.main}>
+                    <Coach />
+                  </HelpView>
+                </CopilotStep>
+              </View>
+              <View style={styles.wrapper}>
+                <CopilotStep
+                  text="با زدن این دکمه می تونی با فدراسیون هر ورزش آشنا بشی و راه ارتباطی مستقیمش رو ببینی."
+                  order={6}
+                  name="Federation"
+                >
+                  <HelpView style={HelpStyle.main}>
+                    <Federation />
+                  </HelpView>
+                </CopilotStep>
+              </View>
+            </ImageBackground>
             <View style={styles.wrapper}>
               <View style={styles.wrapper}>
-                <CopilotStep text="بخر دیگه" order={4} name="Store">
+                <CopilotStep
+                  text="فروشگاه قراره بهترین هارو با بهترین قیمت و ارسال رایگان در اختیارت بذاره، با زدن این دکمه میتونی لوازم ورزشی و مواد غذایی رو با بهترین قیمت و کیفیت به همراه ارسال رایگان بخری."
+                  order={3}
+                  name="Store"
+                >
                   <HelpView style={HelpStyle.main}>
                     <Store />
                   </HelpView>
                 </CopilotStep>
               </View>
               <View style={styles.wrapper}>
-                <CopilotStep text="گوش بده ببین چی میگه" order={5} name="Music">
+                <CopilotStep text="با زدن این دکمه می تونی کلی موزیک جدید و تخصصی برای ورزش گوش کنی." order={5} name="Music">
                   <HelpView style={HelpStyle.main}>
                     <Music />
                   </HelpView>
                 </CopilotStep>
               </View>
             </View>
-          </View>
-        </ImageBackground>
+          </View >
+        </View>
       </Container>
     );
   }

@@ -6,6 +6,18 @@ import blog from './blogReducer';
 import basket from './basketReducer';
 import help from './helpReducer';
 
+const music = (state = { music: false }, action = {}) => {
+  switch (action.type) {
+    case 'MUSIC_ON':
+      return {
+        ...state,
+        music: true,
+      };
+    default:
+      return state;
+  }
+};
+
 export default {
   user,
   gym,
@@ -14,7 +26,5 @@ export default {
   blog,
   basket,
   help,
-  // ...api,
-  // ...player,
-  // ...routes,
+  music,
 };

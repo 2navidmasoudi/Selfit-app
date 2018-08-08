@@ -15,25 +15,28 @@ export default class OrderCard extends Component {
     const { order } = this.props;
     const m = moment(`${order.datesavefactorbuffet}`, 'YYYY/MM/DDTHH:mm:ss').format('jYYYY/jMM/jDD HH:mm');
     const statePayed = order.idstatepayed === 2 ?
-      (<Text>
-        <Text style={{ color: mainColor }}>
+      (
+        <Text>
+          <Text style={{ color: mainColor }}>
         تایید شده
-        </Text>
-        {' '}و{' '}
-        <Text style={{ color: errorColor }}>
+          </Text>
+          {' '}و{' '}
+          <Text style={{ color: errorColor }}>
         منتظر پرداخت
+          </Text>
         </Text>
-      </Text>)
-      :
-      (<Text>
-        <Text style={{ color: mainColor }}>
+      ) :
+      (
+        <Text>
+          <Text style={{ color: mainColor }}>
         تایید شده
-        </Text>
-        {' '}و{' '}
-        <Text style={{ color: mainColor }}>
+          </Text>
+          {' '}و{' '}
+          <Text style={{ color: mainColor }}>
         پرداخت شده، سفارش را آماده کنید!
+          </Text>
         </Text>
-      </Text>);
+      );
     const stateFactor = order.acceptfactor ? statePayed :
       (<Text style={{ color: errorColor }}>
         منتظر تایید.

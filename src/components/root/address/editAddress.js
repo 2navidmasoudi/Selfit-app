@@ -1,44 +1,44 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
   Container, View, Left, Right,
   Content, Button, Icon, ListItem, List
 } from 'native-base';
+import { Alert } from 'react-native';
+import { Base64 } from 'js-base64';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { form } from '../../../assets/styles/index';
 import AppHeader from '../../header';
 import { deleteAddress } from '../../../services';
 import { Text } from '../../Kit';
 
 @connect(state => ({ user: state.user }))
-export default class EditAddress extends React.Component {
+export default class EditAddress extends Component {
+  static propTypes = {
+    user: PropTypes.objectOf(PropTypes.node).isRequired,
+    address: PropTypes.objectOf(PropTypes.node).isRequired,
+  }
   constructor(props) {
     super(props);
     this.state = {
-      listViewData: this.props.address,
+      listViewData: props.address,
     };
-  }
-  componentWillMount() {
-    console.log(this.props);
   }
   async deleteRow(data, index, rowId) {
     const newData = [...this.state.listViewData];
-    console.log(newData);
     const deleted = newData.splice(rowId, 1);
-    const json = await this._deleteAddress(deleted);
-    console.log('deleted?', json);
+    const json = await this.deleteAddress(deleted);
     if (json === 1) {
       this.setState({ listViewData: newData });
     } else {
-      alert('خطا در حذف باشگاه!');
+      Alert.alert('خطا', 'خطا در حذف آدرس!', [{ text: 'باشه' }]);
     }
   }
   async _deleteAddress(deleted) {
-    console.log('deleted address:', deleted);
     const { tokenmember, tokenapi } = this.props.user;
     const id = deleted[0].idaddressmember;
     const result = await deleteAddress(id, tokenmember, tokenapi);
-    console.log('deleted?', result);
     return result;
   }
   render() {

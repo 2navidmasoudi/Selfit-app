@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Animated, Dimensions, Platform } from 'react-native';
 import { View, Button, Icon } from 'native-base';
+import PropTypes from 'prop-types';
 import { Actions } from 'react-native-router-flux';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { LightBoxStyle } from '../../assets/styles/sign';
@@ -8,6 +9,10 @@ import { LightBoxStyle } from '../../assets/styles/sign';
 const isIOS = Platform.OS === 'ios';
 const { width: deviceWidth } = Dimensions.get('window');
 export default class BaseLightBox extends Component {
+  static propTypes = {
+    children: PropTypes.node.isRequired,
+    verticalPercent: PropTypes.number.isRequired,
+  }
   state = {
     opacity: new Animated.Value(0),
   };
@@ -23,7 +28,7 @@ export default class BaseLightBox extends Component {
       duration: 200,
     }).start(Actions.pop);
   }
-  _renderLightBox() {
+  renderLightBox() {
     const { children, verticalPercent = 1 } = this.props;
     const width = verticalPercent ? deviceWidth * verticalPercent : deviceWidth;
     return (
@@ -38,7 +43,7 @@ export default class BaseLightBox extends Component {
   render() {
     return (
       <Animated.View style={[LightBoxStyle.container, { opacity: this.state.opacity }]}>
-        {this._renderLightBox()}
+        {this.renderLightBox()}
         {isIOS && <KeyboardSpacer />}
       </Animated.View>
     );

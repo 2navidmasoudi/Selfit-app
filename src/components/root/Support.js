@@ -8,7 +8,7 @@ import { Text } from '../Kit';
 import { mainColor, white } from '../../assets/variables/colors';
 
 const args = {
-  number: '02188058525', // String value with the number to call
+  number: '02188058525',
   prompt: false,
 };
 
@@ -27,7 +27,7 @@ export default () => (
     <View style={{ flexDirection: 'column', justifyContent: 'flex-end' }}>
       <Button
         block
-        onPress={() => call(args).catch(console.error)}
+        onPress={() => call(args)}
         style={{ marginHorizontal: 10, backgroundColor: mainColor }}
       >
         <Text style={{ color: white }}>تماس با پشتیبانی</Text>

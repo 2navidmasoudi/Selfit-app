@@ -31,7 +31,7 @@ export default class Complaints extends Component {
         </Content>
         <Button
           block
-          onPress={() => call(args).catch(console.error)}
+          onPress={() => call(args)}
           style={{ marginHorizontal: 10, backgroundColor: mainColor }}
         >
           <Text style={{ color: white }}>تماس با پشتیبانی</Text>

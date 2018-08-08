@@ -1,28 +1,31 @@
 import React, { Component } from 'react';
-import { Dimensions, Image, StyleSheet, View, BackHandler, Linking, TouchableOpacity, FlatList } from 'react-native';
-import { Actions } from 'react-native-router-flux';
+import { Dimensions, Image, StyleSheet, View, Linking, TouchableOpacity, FlatList } from 'react-native';
 import { Body, Card, CardItem, Container, Content, Icon, Left, Right, Spinner } from 'native-base';
 import Slider from 'react-native-slider';
 import Video from 'react-native-video';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import AppHeader from '../header';
 import { darkColor, mainColor, white } from '../../assets/variables/colors';
 import { persianNumber } from '../../utils/persian';
 import { Text } from '../Kit';
 import { tokenBlog } from '../../redux/actions';
 import { getAllMusic } from '../../services/music';
+import image from '../../assets/music.jpg';
+import { bounce } from './Main';
 
 const SelfitMusic = 'https://selfit.ir/Resource/music/';
 const window = Dimensions.get('window');
-const image = require('../../assets/music.jpg');
 
 @connect(state => ({
   user: state.user,
   tokenapi: state.blog.tokenapi,
-}), {
-  tokenBlog,
-})
+}), { tokenBlog })
 export default class Music extends Component {
+  static propTypes = {
+    user: PropTypes.objectOf(PropTypes.node).isRequired,
+    tokenBlog: PropTypes.func.isRequired,
+  }
   constructor() {
     super();
     this.state = {
@@ -32,42 +35,30 @@ export default class Music extends Component {
       sliding: false,
       loading: false,
       currentTime: 0,
-      // songIndex: props.songIndex,
       songIndex: 0,
       songNumbers: null,
       songs: [{
         title: 'Selfit',
         album: 'Start Up!',
         url: 'https://selfit.ir/Resource/music/BazamRaft.mp3',
+        idmusic: 0,
       }]
     };
-    this._pasEditUnmountFunction = this._pasEditUnmountFunction.bind(this);
+    this.togglePlay = this.togglePlay.bind(this);
+    this.goForward = this.goForward.bind(this);
+    this.toggleVolume = this.toggleVolume.bind(this);
+    this.toggleShuffle = this.toggleShuffle.bind(this);
+    this.onBuffer = this.onBuffer.bind(this);
+    this.onLoad = this.onLoad.bind(this);
+    this.setTime = this.setTime.bind(this);
+    this.onEnd = this.onEnd.bind(this);
+    this.onSlidingStart = this.onSlidingStart.bind(this);
+    this.onSlidingComplete = this.onSlidingComplete.bind(this);
+    this.onSlidingChange = this.onSlidingChange.bind(this);
+    this.goBackward = this.goBackward.bind(this);
   }
   componentWillMount() {
     this.getInfo();
-  }
-  componentDidMount() {
-    console.log(this.props);
-    this.backHandler = BackHandler.addEventListener('hardwareBackPress', this._pasEditUnmountFunction);
-  }
-  componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this._pasEditUnmountFunction);
-  }
-  async getInfo() {
-    await this.props.tokenBlog('selfit.public');
-    await this.getSongs();
-  }
-  async getSongs() {
-    try {
-      const { tokenmember } = await this.props.user;
-      const { tokenapi } = await this.props;
-      const songs = await getAllMusic(tokenmember, tokenapi, 50, 0, false, 0);
-      console.log('songs');
-      console.log(songs);
-      this.setState({ songs, songNumbers: songs.length - 1 });
-    } catch (e) {
-      console.log(e);
-    }
   }
   onLoad(params) {
     this.setState({ songDuration: params.duration, loading: false });
@@ -83,22 +74,36 @@ export default class Music extends Component {
     this.setState({ currentTime: newPosition });
   }
   onSlidingComplete() {
-    this.refs.audio.seek(this.state.currentTime);
+    this.audio.seek(this.state.currentTime);
     this.setState({ sliding: false });
   }
   onEnd() {
-    this.setState({ playing: false });
+    if (this.state.songNumbers !== this.state.songIndex) {
+      this.setState({
+        songIndex: this.state.songIndex + 1,
+        currentTime: 0,
+      });
+    } else {
+      this.setState({
+        songIndex: 0,
+        currentTime: 0,
+      });
+    }
+    this.audio.seek(0);
+  }
+  async getSongs() {
+    const { tokenmember } = await this.props.user;
+    const { tokenapi } = await this.props;
+    const songs = await getAllMusic(tokenmember, tokenapi, 50, 0, false, 0);
+    this.setState({ songs, songNumbers: songs.length - 1 });
+  }
+  async getInfo() {
+    await this.props.tokenBlog('selfit.public');
+    await this.getSongs();
   }
   setTime(params) {
     if (!this.state.sliding) {
       this.setState({ currentTime: params.currentTime });
-    }
-  }
-  _pasEditUnmountFunction() {
-    if (this.props.routeName === 'Music') {
-      Actions.Home();
-      this.backHandler.remove();
-      return true;
     }
   }
   goBackward() {
@@ -117,27 +122,33 @@ export default class Music extends Component {
         currentTime: 0,
       });
     }
-    this.refs.audio.seek(0);
+    this.audio.seek(0);
   }
   goForward() {
     if (this.state.songNumbers !== this.state.songIndex) {
-      this.setState({
-        songIndex: this.state.songIndex + 1,
-        currentTime: 0,
-      });
+      if (!this.state.shuffle) {
+        this.setState({
+          songIndex: this.state.songIndex + 1,
+          currentTime: 0,
+        });
+      } else {
+        const random = this.randomSongIndex();
+        this.setState({
+          songIndex: random,
+          currentTime: 0,
+        });
+      }
     } else {
       this.setState({
         songIndex: 0,
         currentTime: 0,
       });
     }
-    this.refs.audio.seek(0);
+    this.audio.seek(0);
   }
   randomSongIndex() {
-    // let maxIndex = this.props.songs.length - 1;
     const maxIndex = this.state.songs.length - 1;
-
-    return Math.floor(Math.random() * (maxIndex - 0 + 1)) + 0;
+    return Math.floor(Math.random() * ((maxIndex - 0) + 1)) + 0;
   }
   toggleShuffle() {
     this.setState({ shuffle: !this.state.shuffle });
@@ -146,18 +157,19 @@ export default class Music extends Component {
     this.setState({ muted: !this.state.muted });
   }
   togglePlay() {
-    this.setState({ playing: !this.state.playing });
+    this.setState(
+      { playing: !this.state.playing },
+      () => { if (this.state.playing) bounce(); }
+    );
   }
   selectMusic(index) {
-    console.log(index);
     this.setState({
       songIndex: index,
       currentTime: 0,
     });
-    this.refs.audio.seek(0);
+    this.audio.seek(0);
   }
   render() {
-    // let songPlaying = this.props.songs[this.state.songIndex];
     const songPlaying = this.state.songs[this.state.songIndex];
     const uri = `${SelfitMusic}${songPlaying.urlmusic}`;
     let songPercentage;
@@ -166,39 +178,21 @@ export default class Music extends Component {
     } else {
       songPercentage = 0;
     }
-    let playButton;
-    if (this.state.playing) {
-      playButton =
-        <Icon onPress={this.togglePlay.bind(this)} style={styles.play} name="ios-pause" size={70} color="#fff" />;
-    } else {
-      playButton = <Icon onPress={this.togglePlay.bind(this)} style={styles.play} name="ios-play" size={70} />;
-    }
-    // if( !this.state.shuffle && this.state.songIndex + 1 === this.props.songs.length ){
+    const playButton = this.state.playing ?
+      <Icon onPress={this.togglePlay} style={styles.play} name="ios-pause" size={70} color="#fff" /> :
+      <Icon onPress={this.togglePlay} style={styles.play} name="ios-play" size={70} color="#fff" />;
     const forwardButton = (<Icon
-      onPress={this.goForward.bind(this)}
+      onPress={this.goForward}
       style={styles.forward}
       name="ios-skip-forward"
       size={25}
       color="#fff"
     />);
-    let volumeButton;
-    if (this.state.muted) {
-      volumeButton = (<Icon
-        onPress={this.toggleVolume.bind(this)}
-        style={styles.volume}
-        name="volume-off"
-        size={18}
-        color="#fff"
-      />);
-    } else {
-      volumeButton =
-        <Icon onPress={this.toggleVolume.bind(this)} style={styles.volume} name="md-volume-up" size={18} color="#fff" />;
-    }
     let shuffleButton;
     if (this.state.shuffle) {
       shuffleButton =
         (<Icon
-          onPress={this.toggleShuffle.bind(this)}
+          onPress={this.toggleShuffle}
           style={[styles.shuffle, { color: '#0f9d7a' }]}
           name="shuffle"
           size={18}
@@ -206,7 +200,7 @@ export default class Music extends Component {
     } else {
       shuffleButton =
         (<Icon
-          onPress={this.toggleShuffle.bind(this)}
+          onPress={this.toggleShuffle}
           style={[styles.shuffle, { color: '#fff' }]}
           name="shuffle"
           size={18}
@@ -221,33 +215,21 @@ export default class Music extends Component {
           <View style={styles.container}>
             <Video
               source={{ uri }}
-              // source={{uri: '../../assets/StartUp.mp3' }}
-              ref="audio"
+              ref={(c) => { this.audio = c; }}
               audioOnly
-              volume={this.state.muted ? 0 : 1.0}
+              volume={1.0}
               muted={false}
               playInBackground
               playWhenInactive
               ignoreSilentSwitch="ignore"
               paused={!this.state.playing}
-              onBuffer={this.onBuffer.bind(this)}
-              onLoad={this.onLoad.bind(this)}
-              onProgress={this.setTime.bind(this)}
-              onEnd={this.onEnd.bind(this)}
+              onBuffer={this.onBuffer}
+              onLoad={this.onLoad}
+              onProgress={this.setTime}
+              onEnd={this.onEnd}
               resizeMode="cover"
               repeat={false}
             />
-            <TouchableOpacity
-              onPress={() => Linking.openURL(uri).catch(err => console.error('An error occurred', err))}
-              style={styles.headerClose}
-            >
-              <Icon
-                onPress={() => Linking.openURL(uri).catch(err => console.error('An error occurred', err))}
-                name="download"
-                size={15}
-                style={{ color: '#fff' }}
-              />
-            </TouchableOpacity>
             <Image
               style={styles.songImage}
               source={image}
@@ -260,9 +242,9 @@ export default class Music extends Component {
             {/* </Text> */}
             <View style={styles.sliderContainer}>
               <Slider
-                onSlidingStart={this.onSlidingStart.bind(this)}
-                onSlidingComplete={this.onSlidingComplete.bind(this)}
-                onValueChange={this.onSlidingChange.bind(this)}
+                onSlidingStart={this.onSlidingStart}
+                onSlidingComplete={this.onSlidingComplete}
+                onValueChange={this.onSlidingChange}
                 minimumTrackTintColor={mainColor}
                 style={styles.slider}
                 trackStyle={styles.sliderTrack}
@@ -281,7 +263,7 @@ export default class Music extends Component {
             <View style={styles.controls}>
               {shuffleButton}
               <Icon
-                onPress={this.goBackward.bind(this)}
+                onPress={this.goBackward}
                 style={styles.back}
                 name="ios-skip-backward"
                 size={25}
@@ -289,7 +271,13 @@ export default class Music extends Component {
               />
               {playButton}
               {forwardButton}
-              {volumeButton}
+              <Icon
+                onPress={() => Linking.openURL(uri)}
+                name="download"
+                size={18}
+                style={styles.volume}
+                color="#fff"
+              />
             </View>
           </View>
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -309,7 +297,7 @@ export default class Music extends Component {
                       <Text style={{ textAlign: 'center' }}>{item.namemusic}</Text>
                     </Body>
                     <Right>
-                      <Icon name="play" style={{ color: index === this.state.songIndex ? mainColor : darkColor }} />
+                      <Icon name="md-play" style={{ color: index === this.state.songIndex ? mainColor : darkColor }} />
                     </Right>
                   </CardItem>
                 </Card>
@@ -338,13 +326,6 @@ const styles = StyleSheet.create({
     marginBottom: 17,
     width: window.width,
   },
-  headerClose: {
-    position: 'absolute',
-    top: 10,
-    left: 0,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-  },
   headerText: {
     color: '#FFF',
     fontSize: 18,
@@ -368,29 +349,29 @@ const styles = StyleSheet.create({
   },
   controls: {
     flexDirection: 'row',
-    marginTop: 30,
+    marginTop: 15,
   },
   back: {
-    marginTop: 22,
-    marginLeft: 45,
+    paddingTop: 22,
+    paddingLeft: 45,
     color: '#fff'
   },
   play: {
-    marginTop: 22,
-    marginLeft: 50,
-    marginRight: 50,
+    paddingTop: 22,
+    paddingLeft: 50,
+    paddingRight: 50,
     color: '#fff'
   },
   forward: {
-    marginTop: 22,
-    marginRight: 45,
+    paddingTop: 22,
+    paddingRight: 45,
     color: '#fff'
   },
   shuffle: {
-    marginTop: 22,
+    paddingTop: 22,
   },
   volume: {
-    marginTop: 22,
+    paddingTop: 22,
     color: '#fff'
   },
   sliderContainer: {
@@ -438,8 +419,8 @@ function withLeadingZero(amount) {
 }
 function formattedTime(timeInSeconds) {
   const minutes = Math.floor(timeInSeconds / 60);
-  const seconds = timeInSeconds - minutes * 60;
-  if (isNaN(minutes) || isNaN(seconds)) {
+  const seconds = timeInSeconds - (minutes * 60);
+  if (Number.isNaN(minutes) || Number.isNaN(seconds)) {
     return '';
   }
   return (`${withLeadingZero(minutes)}:${withLeadingZero(seconds.toFixed(0))}`);

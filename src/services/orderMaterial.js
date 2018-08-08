@@ -42,27 +42,28 @@ export const postBasketMaterial = async (iddish, buffetid, token, tokenapi) => {
     console.log(e);
   }
 };
-export const postMixMaterial = async (idbasketmaterail, idmaterial, numbermaterial, token, tokenapi) => {
-  try {
-    const response = await fetch(`${Selfit}${BasketMaterial}PostMixMaterial`, {
-      method: POST,
-      headers,
-      body: JSON.stringify({
-        idbasketmaterail,
-        idmaterial,
-        numbermaterial,
-        token,
-        tokenapi
-      })
-    });
-    const json = await response.json();
-    console.log('BasketMaterial/PostMixMaterial');
-    console.log(json);
-    return json;
-  } catch (e) {
-    console.log(e);
-  }
-};
+export const postMixMaterial =
+  async (idbasketmaterail, idmaterial, numbermaterial, token, tokenapi) => {
+    try {
+      const response = await fetch(`${Selfit}${BasketMaterial}PostMixMaterial`, {
+        method: POST,
+        headers,
+        body: JSON.stringify({
+          idbasketmaterail,
+          idmaterial,
+          numbermaterial,
+          token,
+          tokenapi
+        })
+      });
+      const json = await response.json();
+      console.log('BasketMaterial/PostMixMaterial');
+      console.log(json);
+      return json;
+    } catch (e) {
+      console.log(e);
+    }
+  };
 export const deleteMixMaterial = async (id, token, tokenapi) => {
   try {
     const response = await fetch(`${Selfit}${BasketMaterial}DeleteMixMaterial/${id}?token=${token}&tokenapi=${tokenapi}`, {

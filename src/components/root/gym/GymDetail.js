@@ -163,12 +163,34 @@ export default class GymDetail extends Component {
       <Image style={{ flex: 1, width: null }} resizeMode="cover" source={{ uri: item.url }} />
     </View>
   );
+  renderDay = (day) => {
+    switch (day) {
+      case 1: return 'یک شنبه';
+      case 2: return 'دو شنبه';
+      case 3: return 'سه شنبه';
+      case 4: return 'چهار شنبه';
+      case 5: return 'پنج شنبه';
+      case 6: return 'جمعه';
+      default: return 'شنبه';
+    }
+  };
+  renderSex = (sex) => {
+    switch (sex) {
+      case 1: return '(مردانه)';
+      case 2: return '(زنانه)';
+      default: return '(مردانه و زنانه)';
+    }
+  };
   render() {
+    console.log('props of this gym');
+    console.log(this.props);
     const {
       datesave, httpserver, pathserver, picgym,
       descgym, namegym, addressgym, activegym, numbertuitiongym,
-      RateNumber, visitgym, telgym, tuitiongym
+      RateNumber, visitgym, telgym, tuitiongym, TimeWorkList,
     } = this.props;
+    const TimeWork = TimeWorkList ? TimeWorkList.$values : [];
+    const Times = TimeWork.length > 0 ? TimeWork : undefined;
     const m = datesave ? moment(`${datesave}`, 'YYYY/MM/DDTHH:mm:ss') : moment();
     const jM = m.format('jYYYY/jMM');
     const ImgYear = m.jYear();
@@ -188,18 +210,24 @@ export default class GymDetail extends Component {
         loop
       />)
       :
-      (<Image style={{ flex: 1, height: itemHeight, width: null }} resizeMode="contain" source={{ uri: ImgSrc }} />);
+      (<Image
+        style={{ flex: 1, height: itemHeight, width: null }}
+        resizeMode="contain"
+        source={{ uri: ImgSrc }}
+      />);
     const gallery =
-      (<CardItem style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <Button
-          style={{ backgroundColor: mainColor }}
-          onPress={() => Actions.showImage({ images: this.state.dataSource })}
-        >
-          <Text style={{ color: '#FFF', paddingHorizontal: 5 }}>
-            مشاهده گالری تصویر
-          </Text>
-        </Button>
-       </CardItem>);
+      (
+        <CardItem style={{ justifyContent: 'center', alignItems: 'center' }}>
+          <Button
+            style={{ backgroundColor: mainColor }}
+            onPress={() => Actions.showImage({ images: this.state.dataSource })}
+          >
+            <Text style={{ color: '#FFF', paddingHorizontal: 5 }}>
+              مشاهده گالری تصویر
+            </Text>
+          </Button>
+        </CardItem>
+      );
     return (
       <Container>
         <AppHeader rightTitle="باشگاه یاب" />
@@ -238,14 +266,16 @@ export default class GymDetail extends Component {
                   value={htmlContent}
                   stylesheet={htmlStyle}
                 />
-                {telgym && <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+                {telgym &&
+                <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
                   <Text>{persianNumber(telgym)}</Text>
                   <Text>تلفن: </Text>
                 </View>}
                 <CardItem>
                   <Left style={{ flex: 1 }} />
                   <Right style={{ flex: 1 }}>
-                    {telgym && <Button
+                    {telgym &&
+                    <Button
                       style={{ backgroundColor: mainColor, marginHorizontal: 5 }}
                       onPress={() => call({ number: telgym }).catch(console.error)}
                     >
@@ -260,6 +290,22 @@ export default class GymDetail extends Component {
                 <Text>ظرفیت باشگاه: {numbertuitiongym ? persianNumber(numbertuitiongym) : 'نامشخص'}</Text>
               </ScrollView>
             </CardItem>
+            {Times &&
+            <CardItem>
+              <Right style={{ flex: 1 }}>
+                <Text>ساعت کاری باشگاه: </Text>
+                {Times.map(t =>
+                  (
+                    <Text key={t.idtimeworkgym}>
+                      {this.renderDay(t.dateday)}{' ها ساعت '}
+                      {persianNumber(t.fromdatehourtimeworkgym)}
+                      {' '}الی{' '}
+                      {persianNumber(t.todatehourtimeworkgym)}{' '}
+                      {this.renderSex(t.sexgymid)}
+                    </Text>
+                  ))}
+              </Right>
+            </CardItem>}
             <CardItem>
               <Left style={{ flex: 1 }}>
                 <Text>تعداد بازدید: {persianNumber(visitgym)}</Text>

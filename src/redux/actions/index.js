@@ -98,9 +98,10 @@ export const tokenBuffet = tokenapi => ({
   tokenapi
 });
 // MenuFood
-export const selectBuffet = buffetid => ({
+export const selectBuffet = (buffetid, namebuffet) => ({
   type: SELECT_BUFFET,
-  buffetid
+  buffetid,
+  namebuffet,
 });
 export const selectGym = gymid => ({
   type: SELECT_GYM,
@@ -198,4 +199,7 @@ export const setProductPriceAll = PriceAllProduct => ({
 export const setProductIDAccess = idtimefactor => ({
   type: SET_PRODUCT_IDACCESS,
   idtimefactor,
+});
+export const musicOn = () => ({
+  type: 'MUSIC_ON'
 });

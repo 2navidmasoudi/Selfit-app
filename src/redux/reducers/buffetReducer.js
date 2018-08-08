@@ -14,6 +14,7 @@ const initialState = {
   min: 0,
   tokenapi: null,
   buffetid: null,
+  namebuffet: null,
   MenuFood: [],
   Material: [],
 };
@@ -27,49 +28,42 @@ export default (state = initialState, action = {}) => {
         BuffetList: min === 0 ? buffet : [...state.BuffetList, ...buffet],
         min
       };
-      break;
     case INCREMENT_MIN:
       return {
         ...state,
         min: state.min + 10
       };
-      break;
     case DECREMENT_MIN:
       return {
         ...state,
         min: state.min - 10
       };
-      break;
     case REFRESH_BUFFET:
       return {
         ...state,
         min: 0,
       };
-      break;
     case TOKEN_BUFFET:
       return {
         ...state,
         tokenapi: action.tokenapi,
       };
-      break;
     case SELECT_BUFFET:
       return {
         ...state,
         buffetid: action.buffetid,
+        namebuffet: action.namebuffet
       };
-      break;
     case RECIEVE_MENUFOOD:
       return {
         ...state,
         MenuFood: action.MenuFood,
       };
-      break;
     case RECIEVE_MATERIAL:
       return {
         ...state,
         Material: action.Material,
       };
-      break;
     default:
       return state;
   }

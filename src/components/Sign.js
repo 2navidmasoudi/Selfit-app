@@ -1,42 +1,38 @@
 import React, { Component } from 'react';
-import { ImageBackground, View } from 'react-native';
+import { ImageBackground, View, StyleSheet } from 'react-native';
 import { Button, Container } from 'native-base';
 import { Actions } from 'react-native-router-flux';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { SignStyle } from '../assets/styles/sign';
 import Status from './status';
 import { Text } from './Kit';
 import { darkColor, white } from '../assets/variables/colors';
 import { putCheckToken } from '../services';
+import pic from '../assets/morabie_man.jpg';
 
 @connect(state => ({
   user: state.user,
 }))
 export default class Sign extends Component {
+  static propTypes = {
+    user: PropTypes.objectOf(PropTypes.node).isRequired,
+  };
   componentWillMount() {
     this.checkToken();
   }
   async checkToken() {
-    try {
-      const { tokenmember, tokenapi } = await this.props.user;
-      if (tokenmember) {
-        const json = await putCheckToken(tokenmember, tokenapi);
-        console.log('json for login');
-        console.log(json);
-        if (json === 1) {
-          Actions.reset('root');
-        } else {
-          putCheckToken(tokenmember, tokenapi).then((result) => {
-            console.log('json for login');
-            console.log(result);
-            if (result === 1) {
-              Actions.reset('root');
-            }
-          });
-        }
+    const { tokenmember, tokenapi } = await this.props.user;
+    if (tokenmember) {
+      const json = await putCheckToken(tokenmember, tokenapi);
+      if (json === 1) {
+        Actions.reset('root');
+      } else {
+        putCheckToken(tokenmember, tokenapi).then((result) => {
+          if (result === 1) {
+            Actions.reset('root');
+          }
+        });
       }
-    } catch (e) {
-      console.log(e);
     }
   }
   render() {
@@ -44,23 +40,23 @@ export default class Sign extends Component {
       <Container>
         <Status />
         <ImageBackground
-          style={SignStyle.SignBackground}
-          source={require('../assets/morabie_man.jpg')}
+          style={styles.SignBackground}
+          source={pic}
         >
-          <View style={{ flex: 1, flexDirection: 'row' }}>
+          <View style={styles.row}>
             <Button
               block
-              style={{ flex: 1, margin: 5, backgroundColor: darkColor }}
+              style={styles.btn}
               onPress={() => Actions.signUp()}
             >
-              <Text style={{ color: white }}>ورود</Text>
+              <Text style={styles.txt}>ورود</Text>
             </Button>
             <Button
               block
-              style={{ flex: 1, margin: 5, backgroundColor: darkColor }}
+              style={styles.btn}
               onPress={() => Actions.signUp()}
             >
-              <Text style={{ color: white }}>ثبت نام</Text>
+              <Text style={styles.txt}>ثبت نام</Text>
             </Button>
           </View>
         </ImageBackground>
@@ -68,3 +64,14 @@ export default class Sign extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  SignBackground: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+  },
+  row: { flex: 1, flexDirection: 'row' },
+  btn: { flex: 1, margin: 5, backgroundColor: darkColor },
+  txt: { color: white }
+});

@@ -14,6 +14,7 @@ export const getAllOrder = async (active, token, tokenapi, max, min) => {
   } catch (e) {
     console.log(e);
   }
+  return { Basket: [], PriceAll: 0 };
 };
 export const postOrderBuffet = async (buffetid, menufoodid, numbermenufood, token, tokenapi) => {
   try {
@@ -35,6 +36,7 @@ export const postOrderBuffet = async (buffetid, menufoodid, numbermenufood, toke
   } catch (e) {
     console.log(e);
   }
+  return 0;
 };
 export const deleteOrderBuffet = async (id, token, tokenapi) => {
   try {
@@ -49,37 +51,42 @@ export const deleteOrderBuffet = async (id, token, tokenapi) => {
   } catch (e) {
     console.log(e);
   }
+  return 0;
 };
 // Orders
-export const getOrderBuffetAll = async (id, methodpayed, statepayed, buffetid, token, tokenapi, max, min, ssort, fsort) => {
-  try {
-    const response = await fetch(`${Selfit}${Orders}GetFactorBuffet/${id}?methodpayed=${methodpayed}&statepayed=${statepayed}&buffetid=${buffetid}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
-      method: GET,
-      headers
-    });
-    // if (response.status == 204) return [];
-    const json = await response.json();
-    console.log('Orders/GetFactorBuffet');
-    console.log(json);
-    return json.OrderBuffetList.$values;
-  } catch (e) {
-    console.log(e);
-  }
-};
-export const getFactorBuffet = async (methodpayed, statepayed, token, tokenapi, max, min, ssort, fsort) => {
-  try {
-    const response = await fetch(`${Selfit}${Orders}GetFactorMember?methodpayed=${methodpayed}&statepayed=${statepayed}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
-      method: GET,
-      headers
-    });
-    const json = await response.json();
-    console.log('Orders/GetFactorMember');
-    console.log(json);
-    return json.FactorBuffetList.$values;
-  } catch (e) {
-    console.log(e);
-  }
-};
+export const getOrderBuffetAll =
+  async (id, methodpayed, statepayed, buffetid, token, tokenapi, max, min, ssort, fsort) => {
+    try {
+      const response = await fetch(`${Selfit}${Orders}GetFactorBuffet/${id}?methodpayed=${methodpayed}&statepayed=${statepayed}&buffetid=${buffetid}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
+        method: GET,
+        headers
+      });
+      if (response.status == 204) return [];
+      const json = await response.json();
+      console.log('Orders/GetFactorBuffet');
+      console.log(json);
+      return json.OrderBuffetList.$values;
+    } catch (e) {
+      console.log(e);
+    }
+    return [];
+  };
+export const getFactorBuffet =
+  async (methodpayed, statepayed, token, tokenapi, max, min, ssort, fsort) => {
+    try {
+      const response = await fetch(`${Selfit}${Orders}GetFactorMember?methodpayed=${methodpayed}&statepayed=${statepayed}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
+        method: GET,
+        headers
+      });
+      const json = await response.json();
+      console.log('Orders/GetFactorMember');
+      console.log(json);
+      return json.FactorBuffetList.$values;
+    } catch (e) {
+      console.log(e);
+    }
+    return [];
+  };
 export const checkOrderBuffet = async (buffetid, token, tokenapi) => {
   try {
     const response = await fetch(`${Selfit}${Orders}CheckOrder?buffetid=${buffetid}&token=${token}&tokenapi=${tokenapi}`, {
@@ -93,6 +100,7 @@ export const checkOrderBuffet = async (buffetid, token, tokenapi) => {
   } catch (e) {
     console.log(e);
   }
+  return 0;
 };
 export const postFactor = async (buffetid, descfactor, methodpayed, delivery, token, tokenapi) => {
   try {
@@ -115,6 +123,7 @@ export const postFactor = async (buffetid, descfactor, methodpayed, delivery, to
   } catch (e) {
     console.log(e);
   }
+  return 0;
 };
 export const postAddressOrderBuffet = async (idfactor, token, tokenapi) => {
   try {
@@ -134,6 +143,7 @@ export const postAddressOrderBuffet = async (idfactor, token, tokenapi) => {
   } catch (e) {
     console.log(e);
   }
+  return 0;
 };
 export const deleteOrderAll = async (token, tokenapi) => {
   try {
@@ -148,4 +158,5 @@ export const deleteOrderAll = async (token, tokenapi) => {
   } catch (e) {
     console.log(e);
   }
+  return 0;
 };

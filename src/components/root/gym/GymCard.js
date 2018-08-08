@@ -24,7 +24,7 @@ export default class GymCard extends Component {
               <Thumbnail square large source={{ uri: ImgSrc }} />
             </Left>
             <Right style={{ flex: 2 }}>
-              <Text style={{ marginRight: 10 }}>
+              <Text style={{ marginRight: 10, fontSize: 16 }} type="bold">
                 باشگاه {gym.namegym}
               </Text>
               <Text

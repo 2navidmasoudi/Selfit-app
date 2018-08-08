@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Alert, Platform } from 'react-native';
+import { View, Alert, Platform, StyleSheet } from 'react-native';
 import {
   Button,
   Container,
@@ -9,6 +9,7 @@ import {
   Picker,
 } from 'native-base';
 import moment from 'moment';
+import PropTypes from 'prop-types';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
@@ -21,17 +22,30 @@ import { TextInput, Text } from './Kit';
 import { darkColor, mainColor, white } from '../assets/variables/colors';
 
 const isIOS = Platform.OS === 'ios';
+let name = null;
+let mail = null;
+let birth = null;
 @connect(state => ({ user: state.user }), { setUser })
 export default class Register extends Component {
-  state = {
-    namefamilymember: null,
-    typememberid: null,
-    city: 'تهران',
-    sexmember: 1,
-    mailmember: null,
-    birthdaymember: null,
-  };
-
+  static propTypes = {
+    user: PropTypes.objectOf(PropTypes.node.isRequired).isRequired,
+    setUser: PropTypes.func.isRequired,
+  }
+  constructor() {
+    super();
+    this.state = {
+      typememberid: null,
+      city: 'تهران',
+      sexmember: 1,
+    };
+    this.onSexChange = this.onSexChange.bind(this);
+    this.onCityChange = this.onCityChange.bind(this);
+    this.submitButtonPress = this.submitButtonPress.bind(this);
+    this.changeAge = (age) => {
+      const m = moment().subtract(age, 'years');
+      birth = m.format('YYYY-MM-DDTHH:mm:ss');
+    };
+  }
   onSexChange(value) {
     this.setState({
       sexmember: value
@@ -42,82 +56,64 @@ export default class Register extends Component {
       city: value
     });
   }
-  async changeAge(age) {
-    const date = await moment().subtract(age, 'years');
-    const birthdaymember = await date.format('YYYY-MM-DDTHH:mm:ss');
-    await this.setState({ birthdaymember });
-  }
   async submitButtonPress() {
-    const {
-      namefamilymember, mailmember,
-      typememberid, sexmember, birthdaymember
-    } = await this.state;
-    if (namefamilymember && typememberid && birthdaymember) {
-      try {
-        const { phone, tokenapi, tokenmember } = await this.props.user;
-        const json = await putMember(
-          namefamilymember,
-          mailmember,
-          birthdaymember,
-          sexmember,
-          typememberid,
-          phone,
-          tokenmember,
-          tokenapi
-        );
-        if (json === 1) {
-          const jsonInfo = await getSingleToken(tokenmember, tokenapi);
-          console.log(jsonInfo, 'JsonInfo');
-          await this.props.setUser(jsonInfo.MemberSingleToken);
-          Actions.reset('root');
-        } else {
-          console.log('PUT member response:', json);
-        }
-      } catch (err) {
-        console.log(err);
+    const { typememberid, sexmember } = await this.state;
+    if (name && typememberid && birth) {
+      const { phone, tokenapi, tokenmember } = await this.props.user;
+      const json = await putMember(
+        name,
+        mail,
+        birth,
+        sexmember,
+        typememberid,
+        phone,
+        tokenmember,
+        tokenapi
+      );
+      if (json === 1) {
+        const jsonInfo = await getSingleToken(tokenmember, tokenapi);
+        await this.props.setUser(jsonInfo.MemberSingleToken);
+        Actions.reset('root');
       }
     } else {
       Alert.alert(
         'خطا',
         'نام، سن و نوع کاربری نباید خالی باشند.',
-        [
-          { text: 'باشه' }
-        ]
+        [{ text: 'باشه' }]
       );
     }
   }
-
   render() {
     return (
       <Container>
         <Status />
         <LinearGradient
           colors={[darkColor, darkColor, mainColor]}
-          style={{ flex: 1, padding: 20 }}
+          style={styles.linearG}
         >
           <Content>
-            <Text style={{ textAlign: 'center', fontSize: 20, margin: 10, color: white }}>
+            <Text style={styles.titleStyle}>
               ثبت نام
             </Text>
             <TextInput
               placeholder="نام و نام خانوادگی"
               placeholderTextColor="#000"
               iconName="contacts"
-              onChangeText={text => this.setState({ namefamilymember: text })}
+              onChangeText={(text) => { name = text; }}
             />
             <TextInput
               placeholder="ایمیل (اختیاری)"
               placeholderTextColor="#000"
               keyboardType="email-address"
               iconName="mail"
-              onChangeText={text => this.setState({ mailmember: text })}
+              onChangeText={(text) => { mail = text; }}
             />
             <TextInput
               placeholder="سن"
               placeholderTextColor="#000"
               iconName="calendar"
               keyboardType="numeric"
-              onChangeText={text => this.changeAge(text)}
+              onChangeText={this.changeAge}
             />
             <Divider style={{ backgroundColor: darkColor }} />
             <Text style={{ color: white, marginTop: 5 }}>نوع حساب کاربری</Text>
@@ -126,6 +122,11 @@ export default class Register extends Component {
               iconRight
               title="ورزشکار"
               fontFamily="IRANSansMobile"
+              textStyle={{
+                fontFamily: 'IRANSansMobile',
+                fontSize: 14,
+                fontWeight: 'normal',
+              }}
               checkedIcon="dot-circle-o"
               uncheckedIcon="circle-o"
               checkedColor={mainColor}
@@ -137,6 +138,11 @@ export default class Register extends Component {
               iconRight
               title="بوفه دار"
               fontFamily="IRANSansMobile"
+              textStyle={{
+                fontFamily: 'IRANSansMobile',
+                fontSize: 14,
+                fontWeight: 'normal',
+              }}
               checkedIcon="dot-circle-o"
               uncheckedIcon="circle-o"
               checkedColor={mainColor}
@@ -148,6 +154,11 @@ export default class Register extends Component {
               iconRight
               title="باشگاه دار"
               fontFamily="IRANSansMobile"
+              textStyle={{
+                fontFamily: 'IRANSansMobile',
+                fontSize: 14,
+                fontWeight: 'normal',
+              }}
               checkedIcon="dot-circle-o"
               uncheckedIcon="circle-o"
               checkedColor={mainColor}
@@ -161,21 +172,39 @@ export default class Register extends Component {
                 headerBackButtonText="بازگشت"
                 mode="dropdown"
                 selectedValue={this.state.sexmember}
-                onValueChange={this.onSexChange.bind(this)}
-                textStyle={{ fontFamily: 'IRANSansMobile', color: white }}
-                itemTextStyle={{ fontFamily: 'IRANSansMobile' }}
+                onValueChange={this.onSexChange}
+                textStyle={{
+                  fontFamily: 'IRANSansMobile',
+                  fontSize: 14,
+                  fontWeight: 'normal',
+                  color: white,
+                }}
+                itemTextStyle={{
+                  fontFamily: 'IRANSansMobile',
+                  fontSize: 14,
+                  fontWeight: 'normal',
+                  color: white,
+                }}
               >
                 <Picker.Item label="مرد" value={1} />
                 <Picker.Item label="زن" value={2} />
               </Picker>
-              <Text style={{ color: white }}>جنسیت:</Text>
+              <Text style={styles.txt}>جنسیت:</Text>
               <Picker
                 placeholder="استان"
                 iosHeader="استان"
                 selectedValue={this.state.city}
-                onValueChange={this.onCityChange.bind(this)}
-                textStyle={{ fontFamily: 'IRANSansMobile', color: white }}
-                itemTextStyle={{ fontFamily: 'IRANSansMobile' }}
+                onValueChange={this.onCityChange}
+                textStyle={{
+                  fontFamily: 'IRANSansMobile',
+                  fontSize: 14,
+                  fontWeight: 'normal',
+                }}
+                itemTextStyle={{
+                fontFamily: 'IRANSansMobile',
+                fontSize: 14,
+                fontWeight: 'normal',
+              }}
               >
                 <Picker.Item label="آذربایجان شرقی" value="آذربایجان شرقی" />
                 <Picker.Item label="آذربایجان غربی" value="آذربایجان غربی" />
@@ -206,7 +235,7 @@ export default class Register extends Component {
                 <Picker.Item label="همدان" value="همدان" />
                 <Picker.Item label="یزد" value="یزد" />
               </Picker>
-              <Text style={{ color: white }}>استان:</Text>
+              <Text style={styles.txt}>استان:</Text>
             </View>
           </Content>
         </LinearGradient>
@@ -214,10 +243,10 @@ export default class Register extends Component {
           <FooterTab>
             <Button
               full
-              onPress={this.submitButtonPress.bind(this)}
+              onPress={this.submitButtonPress}
               style={{ backgroundColor: mainColor }}
             >
-              <Text style={{ color: white }}>ثبت نام</Text>
+              <Text style={styles.txt}>ثبت نام</Text>
             </Button>
           </FooterTab>
         </Footer>
@@ -226,3 +255,10 @@ export default class Register extends Component {
     );
   }
 }
+const styles = StyleSheet.create({
+  txt: { color: white },
+  linearG: { flex: 1, padding: 20 },
+  titleStyle: { textAlign: 'center', fontSize: 20, margin: 10, color: white },
+  pickerTxt: { fontFamily: 'IRANSansMobile', color: white },
+  PickerItem: { fontFamily: 'IRANSansMobile' },
+});

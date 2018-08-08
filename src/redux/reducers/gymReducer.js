@@ -36,6 +36,7 @@ export default (state = initialState, action = {}) => {
     case REFRESH_GYM:
       return {
         ...state,
+        GymList: [],
         min: 0,
       };
     case TOKEN_GYM:

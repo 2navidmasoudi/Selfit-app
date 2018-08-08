@@ -1,53 +1,34 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Modal,
-  ActivityIndicator
-} from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Spinner } from 'native-base';
+import PropTypes from 'prop-types';
+import { Text } from '../Kit';
+import { mainColor } from '../../assets/variables/colors';
 
-const Loader = (props) => {
-  const {
-    loading,
-    ...attributes
-  } = props;
-
+export default function Loader({ loading }) {
   return (
-    <Modal
-      transparent
-      animationType="none"
-      visible={loading}
-      onRequestClose={() => { console.log('close modal'); }}
-    >
-      <View style={styles.modalBackground}>
-        <View style={styles.activityIndicatorWrapper}>
-          <ActivityIndicator
-            size="large"
-            animating={loading}
-          />
+    loading
+      ?
+        <View style={styles.view}>
+          <Spinner color={mainColor} />
+          <Text>درحال دریافت اطلاعات</Text>
+          <Text>لطفا چند لحظه صبر کنید...</Text>
         </View>
-      </View>
-    </Modal>
+      :
+        <View style={styles.view}>
+          <Text>اطلاعاتی دریافت نشد.</Text>
+        </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  modalBackground: {
+  view: {
     flex: 1,
-    alignItems: 'center',
-    flexDirection: 'column',
-    justifyContent: 'space-around',
-    backgroundColor: '#00000040'
-  },
-  activityIndicatorWrapper: {
-    backgroundColor: 'rgba(52, 52, 52, 0.8)',
-    height: 100,
-    width: 100,
-    borderRadius: 10,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-around'
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 
-export default Loader;
+Loader.propTypes = {
+  loading: PropTypes.bool.isRequired,
+};

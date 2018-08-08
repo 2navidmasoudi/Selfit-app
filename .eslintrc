@@ -10,5 +10,9 @@
     "jsx-a11y/href-no-hash": "off",
     "jsx-a11y/anchor-is-valid": "off",
     "linebreak-style":"off"
+  },
+  "globals": {
+    "navigator": true,
+    "fetch": true,
   }
 }

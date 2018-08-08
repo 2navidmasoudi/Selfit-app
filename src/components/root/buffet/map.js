@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Fab, Icon } from 'native-base';
 import { connect } from 'react-redux';
-import MapView, { Marker } from 'react-native-maps';
+import MapView from 'react-native-maps';
 import { Actions } from 'react-native-router-flux';
 import { mapStyle } from '../../../assets/styles/map';
 import { receiveBuffet, tokenBuffet } from '../../../redux/actions/index';
 import { getAllBuffets } from '../../../services/buffet';
+import { Text } from '../../Kit';
 
 const styles = StyleSheet.create({
   container: {
@@ -38,6 +39,16 @@ const initialRegion = {
   longitudeDelta: 0.5,
 };
 
+const BuffetCallOut = ({ buffet }) => (
+  <View>
+    <Text style={{ textAlign: 'center' }} type="bold">{buffet.namebuffet}</Text>
+    <Text style={{ fontSize: 12 }} ellipsizeMode="tail">{buffet.addressgym}</Text>
+    <Text style={{ textAlign: 'center', fontSize: 10 }} type="light">
+      برای مشاهده جزئیات کلیک کنید!
+    </Text>
+  </View>
+);
+
 @connect(state => ({
   buffet: state.buffet.BuffetList,
   min: state.buffet.min,
@@ -48,16 +59,18 @@ const initialRegion = {
   tokenBuffet,
 })
 export default class MapComponent extends Component {
-  state = {
-    region: {
-      // latitude: 35.7247434,
-      // longitude: 51.3338664,
-      // latitudeDelta: 0.5,
-      // longitudeDelta: 0.5,
-    },
-    map: null,
-    Markers: []
-  };
+  constructor() {
+    super();
+    this.state = {
+      region: {
+        // latitude: 35.7247434,
+        // longitude: 51.3338664,
+        // latitudeDelta: 0.5,
+        // longitudeDelta: 0.5,
+      },
+      map: null,
+    };
+  }
   componentWillMount() {
     this.setInfo();
   }
@@ -109,7 +122,7 @@ export default class MapComponent extends Component {
       console.log(error);
     }
   }
-  _buffetMenu(buffet) {
+  buffetMenu(buffet) {
     Actions.buffetMenu(buffet);
     console.log(buffet);
   }
@@ -126,7 +139,7 @@ export default class MapComponent extends Component {
           customMapStyle={mapStyle}
         >
           {this.props.buffet.map((buffet, index) => (
-            <Marker
+            <MapView.Marker
               key={index}
               coordinate={{ latitude: buffet.latgym, longitude: buffet.longgym }}
               // image={BuffetPin}
@@ -135,10 +148,15 @@ export default class MapComponent extends Component {
               // style={{maxWidth:20,maxHeight:20}}
               title={buffet.namebuffet}
               description={buffet.addressgym}
-              onCalloutPress={() => this._buffetMenu(buffet)}
+              onCalloutPress={() => this.buffetMenu(buffet)}
             >
-              {/* <View><Text>{gym.namegym}</Text></View> */}
-            </Marker>
+              <MapView.Callout style={{ width: 220 }}>
+                <BuffetCallOut
+                  buffet={buffet}
+                />
+                {/* <View><Text>{gym.namegym}</Text></View> */}
+              </MapView.Callout>
+            </MapView.Marker>
           ))}
         </MapView>
         <Fab

@@ -15,6 +15,8 @@ import { getSingleIDMemberBuffet } from '../../../services/buffet';
 import { logError } from '../../../services/log';
 import { HelpStyle, HelpView, TipNumber, Tooltip } from '../../ToolTip';
 import { helpDoneBuffet } from '../../../redux/actions/help';
+import Federation from '../../Main/Federation';
+import CoachPic from '../../../assets/Coach.jpg';
 
 @connect(state => ({
   user: state.user,
@@ -56,7 +58,7 @@ export default class BuffetGrid extends Component {
       const { tokenapi } = await this.props;
       const { tokenmember } = await this.props.user;
       const buffetInfo = await getSingleIDMemberBuffet(tokenmember, tokenapi);
-      await this.props.selectBuffet(buffetInfo.idbuffet);
+      await this.props.selectBuffet(buffetInfo.idbuffet, buffetInfo.namebuffet);
       console.log('buffet for this user:', buffetInfo.namebuffet, 'buffetid from props:', this.props.buffetid);
     } catch (error) {
       console.log(error);
@@ -76,21 +78,17 @@ export default class BuffetGrid extends Component {
   render() {
     return (
       <Container>
-        <ImageBackground
-          source={require('../../../assets/BuffetGrid.jpeg')}
-          imageStyle={styles.background}
-          style={styles.mainContainer}
-        >
+        <View style={styles.mainContainer}>
           <View style={styles.mainRowWrapper}>
             <View style={styles.wrapper}>
-              <CopilotStep text="بوفه آنلاین خیلی خوبه" order={1} name="BuffetKeeper">
+              <CopilotStep text="در این قسمت می توانید سفارش های خود را مدیریت کنید." order={2} name="BuffetKeeper">
                 <HelpView style={HelpStyle.main}>
                   <BuffetKeeper />
                 </HelpView>
               </CopilotStep>
             </View>
             <View style={styles.wrapper}>
-              <CopilotStep text="بوفه آنلاین خیلی خوبه" order={2} name="BuffetMenu">
+              <CopilotStep text="در این قسمت منو خود رو ویرایش کنید با غذاهای خود را روشن یا خاموش کنید." order={1} name="BuffetMenu">
                 <HelpView style={HelpStyle.main}>
                   <BuffetMenu />
                 </HelpView>
@@ -98,23 +96,48 @@ export default class BuffetGrid extends Component {
             </View>
           </View>
           <View style={styles.mainRowWrapper}>
-            <View style={styles.wrapper}>
-              <CopilotStep text="مربی نمیخوایییی؟ خسته نشدیییی؟" order={3} name="Coach">
-                <HelpView style={HelpStyle.main}>
-                  <Coach />
-                </HelpView>
-              </CopilotStep>
-            </View>
+            <ImageBackground
+              source={CoachPic}
+              style={styles.wrapper}
+              imageStyle={styles.background}
+            >
+              <View style={styles.wrapper}>
+                <CopilotStep
+                  text="با زدن این دکمه میتونی مربی مناسب خودتو پیدا کنی و باهاش مستقیم در تماس باشی."
+                  order={4}
+                  name="Coach"
+                >
+                  <HelpView style={HelpStyle.main}>
+                    <Coach />
+                  </HelpView>
+                </CopilotStep>
+              </View>
+              <View style={styles.wrapper}>
+                <CopilotStep
+                  text="با زدن این دکمه می تونی با فدراسیون هر ورزش آشنا بشی و راه ارتباطی مستقیمش رو ببینی."
+                  order={6}
+                  name="Federation"
+                >
+                  <HelpView style={HelpStyle.main}>
+                    <Federation />
+                  </HelpView>
+                </CopilotStep>
+              </View>
+            </ImageBackground>
             <View style={styles.wrapper}>
               <View style={styles.wrapper}>
-                <CopilotStep text="بخر دیگه" order={4} name="Store">
+                <CopilotStep
+                  text="فروشگاه قراره بهترین هارو با بهترین قیمت و ارسال رایگان در اختیارت بذاره، با زدن این دکمه میتونی لوازم ورزشی و مواد غذایی رو با بهترین قیمت و کیفیت به همراه ارسال رایگان بخری."
+                  order={3}
+                  name="Store"
+                >
                   <HelpView style={HelpStyle.main}>
                     <Store />
                   </HelpView>
                 </CopilotStep>
               </View>
               <View style={styles.wrapper}>
-                <CopilotStep text="گوش بده ببین چی میگه" order={5} name="Music">
+                <CopilotStep text="با زدن این دکمه می تونی کلی موزیک جدید و تخصصی برای ورزش گوش کنی." order={5} name="Music">
                   <HelpView style={HelpStyle.main}>
                     <Music />
                   </HelpView>
@@ -122,7 +145,7 @@ export default class BuffetGrid extends Component {
               </View>
             </View>
           </View>
-        </ImageBackground>
+        </View>
       </Container>
     );
   }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, Platform, View, Image } from 'react-native';
 import { Fab, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
@@ -7,7 +7,10 @@ import { SearchBar } from 'react-native-elements';
 import BuffetCard from './BuffetCard';
 import { decrementMin, incrementMin, receiveBuffet, refreshBuffet, tokenBuffet } from '../../../redux/actions';
 import { getAllBuffet, getAllBuffets, getSearchBuffet } from '../../../services/buffet';
-import { Text } from '../../Kit';
+import { Text, Modal } from '../../Kit';
+import Loader from '../../loader';
+import Pic1 from '../../../assets/helpPics/BuffetList/BuffetSearch.png';
+import Pic2 from '../../../assets/helpPics/BuffetList/BuffetDetailList.png';
 
 @connect(state => ({
   buffet: state.buffet.BuffetList,
@@ -22,25 +25,31 @@ import { Text } from '../../Kit';
   tokenBuffet,
 })
 export default class List extends Component {
-  state = {
-    max: 120,
-    ssort: false,
-    fsort: 0,
-    loading: false,
-    refreshing: false,
-    search: null,
-    searchMode: false,
-  };
+  constructor() {
+    super();
+    this.state = {
+      loading: true,
+      refreshing: false,
+      search: null,
+      searchMode: false,
+      ModalNumber: 1,
+    };
+    this.searchText = this.searchText.bind(this);
+    this.handleRefresh = this.handleRefresh.bind(this);
+    this.handleLoadMore = this.handleLoadMore.bind(this);
+    this.renderFooter = this.renderFooter.bind(this);
+  }
   async componentWillMount() {
     await this.props.tokenBuffet('selfit.buffet');
     this.getBuffetList();
+    console.log('componentMountedNow');
   }
   async getBuffetList() {
     try {
-      const { max, ssort, fsort } = await this.state;
+      this.setState({ loading: true });
       const { tokenmember, latval, longval } = await this.props.user;
       const { min, tokenapi } = await this.props;
-      const json = await getAllBuffets(tokenmember, tokenapi, max, min, ssort, fsort);
+      const json = await getAllBuffets(tokenmember, tokenapi, 120, min, false, 0);
       // const json = await getAllBuffet(latval, longval, tokenmember, tokenapi, max, min, ssort, fsort);
       console.log(json);
       const BuffetList = await json.BuffetMapList.$values;
@@ -55,12 +64,13 @@ export default class List extends Component {
     try {
       if (!this.state.search) this.refreshBuffet();
       await this.setState({
-        searchMode: true
+        searchMode: true,
+        loading: true,
       });
-      const { search, max, ssort, fsort } = await this.state;
+      const { search } = await this.state;
       const { tokenmember } = await this.props.user;
       const { min, tokenapi } = await this.props;
-      const json = await getSearchBuffet(search, tokenmember, tokenapi, max, min, ssort, fsort);
+      const json = await getSearchBuffet(search, tokenmember, tokenapi, 120, min, false, 0);
       const BuffetList = await json.BuffetSearch.$values;
       await this.props.receiveBuffet(BuffetList, min);
       this.setState({ loading: false, refreshing: false });
@@ -115,23 +125,62 @@ export default class List extends Component {
         justifyContent: 'flex-end',
       }}
       >
+        <Modal
+          isVisible={this.state.ModalNumber === 1}
+          onModalHide={() => this.setState({ ModalNumber: 2 })}
+          exitText="ممنون"
+          onExit={() => this.setState({ ModalNumber: 0 })}
+        >
+          <Image
+            style={{
+              width: 250,
+              height: 100,
+            }}
+            source={Pic1}
+            resizeMode="contain"
+          />
+          <Text>
+            از اینجا میتونی بوفه مورد نظر خودت رو بر اساس اسم یا آدرس
+            اون جستجو کنی.
+          </Text>
+        </Modal>
+        <Modal
+          isVisible={this.state.ModalNumber === 2}
+          onModalHide={() => this.setState({ ModalNumber: 0 })}
+          exitText="تمام"
+          onExit={() => this.setState({ ModalNumber: 0 })}
+        >
+          <Image
+            style={{
+              width: 250,
+              height: 140,
+            }}
+            source={Pic2}
+            resizeMode="contain"
+          />
+          <Text>
+            با زدن این باکس می تونی جزئیات و منو بوفه رو ببینی و سفارش غذای رژیمی بدی!
+          </Text>
+        </Modal>
         <SearchBar
           showLoading
-          onChangeText={this.searchText.bind(this)}
+          onChangeText={this.searchText}
           placeholder="نام، آدرس..."
+          inputStyle={{ textAlign: Platform.OS === 'ios' ? 'right' : undefined, fontFamily: 'IRANSansMobile', fontSize: 12 }}
         />
         <FlatList
           data={this.props.buffet}
           renderItem={({ item }) => <BuffetCard buffet={item} />}
           keyExtractor={item => item.buffetid}
-          ListEmptyComponent={() => <Spinner />}
-          onRefresh={this.handleRefresh.bind(this)}
+          ListEmptyComponent={<Loader loading={this.state.loading} />}
+          onRefresh={this.handleRefresh}
           refreshing={this.state.refreshing}
-          onEndReached={this.handleLoadMore.bind(this)}
+          onEndReached={this.handleLoadMore}
           onEndReachedThreshold={0.5}
-          ListFooterComponent={this.renderFooter.bind(this)}
+          ListFooterComponent={this.renderFooter}
         />
-        { this.props.user.typememberid === 1 && <Fab
+        { this.props.user.typememberid === 1 &&
+        <Fab
           style={{
             flex: 1,
             justifyContent: 'center',
