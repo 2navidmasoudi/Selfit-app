@@ -150,10 +150,11 @@ export default class App extends Component {
                     // @TODO: user doesn't have a device token yet
                   }
                 });
-              this.notificationListener = firebase.notifications().onNotification((notification) => {
-                console.log('notification');
-                console.log(notification);
-              });
+              this.notificationListener =
+                firebase.notifications().onNotification((notification) => {
+                  console.log('notification');
+                  console.log(notification);
+                });
             })
             .catch((error) => {
               // @TODO: User has rejected permissions
@@ -175,10 +176,10 @@ export default class App extends Component {
           >
             <RouterWithRedux hideNavBar>
               <Scene key="rootMain" hideNavbar>
-                <Scene key="splash" component={Splash} hideNavBar />
+                <Scene key="splash" initial component={Splash} hideNavBar />
                 <Scene key="sign" component={Sign} hideNavBar />
                 <Scene key="waiting" component={Waiting} hideNavBar />
-                <Scene key="Music" hideNavBar component={Music} panHandlers={activeBackGesture} />
+                {/* <Scene key="Music" hideNavBar component={Music} /> */}
                 <Scene key="root" initial hideNavBar>
                   <Drawer
                     key="drawer"

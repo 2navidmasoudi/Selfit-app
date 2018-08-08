@@ -16,7 +16,7 @@ import {
   REFRESH_BLOG,
   REFRESH_BUFFET,
   REFRESH_GYM,
-  REFRESH_PRODUCT,
+  REFRESH_PRODUCT, RESET_FOOD,
   SELECT_BUFFET, SELECT_GYM,
   SET_DESC_PRODUCT,
   SET_ID_BASKET,
@@ -102,6 +102,9 @@ export const selectBuffet = (buffetid, namebuffet) => ({
   type: SELECT_BUFFET,
   buffetid,
   namebuffet,
+});
+export const resetFood = () => ({
+  type: RESET_FOOD,
 });
 export const selectGym = gymid => ({
   type: SELECT_GYM,

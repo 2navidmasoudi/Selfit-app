@@ -12,6 +12,7 @@ import { Text, Modal } from '../../Kit';
 import Pic1 from '../../../assets/helpPics/GymMap/PinMapGym.png';
 import Pic2 from '../../../assets/helpPics/GymMap/DetailMapGym.png';
 import Pic3 from '../../../assets/helpPics/GymMap/BtnMapGym.png';
+import { helpDoneGymMap } from '../../../redux/actions/help';
 
 const styles = StyleSheet.create({
   container: {
@@ -58,10 +59,12 @@ const GymCallOut = ({ gym }) => (
   min: state.gym.min,
   user: state.user,
   tokenapi: state.gym.tokenapi,
+  help: state.help.gymMap,
 }), {
   receiveGym,
   tokenGym,
   refreshGym,
+  helpDoneGymMap,
 })
 export default class GymMap extends Component {
   constructor() {
@@ -77,7 +80,7 @@ export default class GymMap extends Component {
       MarkerReady: false,
       min: 0,
       firstTime: true,
-      ModalNumber: 1,
+      ModalNumber: 0,
     };
     this.onRegionChangeComplete = this.onRegionChangeComplete.bind(this);
     this.getCurrentPosition = this.getCurrentPosition.bind(this);
@@ -87,6 +90,9 @@ export default class GymMap extends Component {
     };
   }
   async componentWillMount() {
+    if (!this.props.help) {
+      this.setState({ ModalNumber: 1 });
+    }
     await this.props.tokenGym('selfit.gym');
     await this.getCurrentPosition();
     await this.getGym();
@@ -154,6 +160,7 @@ export default class GymMap extends Component {
       console.log(error);
     }
   }
+  helpDone = () => this.props.helpDoneGymMap();
   render() {
     return (
       <View style={styles.container}>
@@ -195,7 +202,7 @@ export default class GymMap extends Component {
         </Modal>
         <Modal
           isVisible={this.state.ModalNumber === 3}
-          onModalHide={() => this.setState({ ModalNumber: 0 })}
+          onModalHide={this.helpDone}
           exitText="تمام"
           onExit={() => this.setState({ ModalNumber: 0 })}
         >

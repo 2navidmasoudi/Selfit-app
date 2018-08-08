@@ -15,6 +15,7 @@ import {
 import { connect } from 'react-redux';
 import listToTree from 'list-to-tree-lite';
 import { Actions } from 'react-native-router-flux';
+import { View } from 'react-native';
 import AppHeader from '../../header';
 import { putCheckToken } from '../../../services/index';
 import { tokenStore } from '../../../redux/actions';
@@ -23,6 +24,7 @@ import { getAllCategoryProduct } from '../../../services/categoryProduct';
 import { persianNumber } from '../../../utils/persian';
 import { Text } from '../../Kit';
 import { mainColor, white } from '../../../assets/variables/colors';
+import Loader from '../../loader';
 
 @connect(state => ({
   user: state.user,
@@ -38,6 +40,7 @@ export default class Store extends Component {
     min: 0,
     ssort: false,
     fsort: 0,
+    loading: true,
   };
   componentWillMount() {
     this.setInfo();
@@ -65,10 +68,11 @@ export default class Store extends Component {
       // childrenKey: childrenKey,
     });
     console.log(productCategory, 'productCategory');
-    this.setState({ productCategory: Tree });
+    this.setState({ productCategory: Tree, loading: false });
   }
   async _getCategoryProduct() {
     try {
+      this.setState({ loading: true });
       const { tokenapi } = await this.props;
       const { tokenmember } = await this.props.user;
       const { max, min, ssort, fsort } = await this.state;
@@ -79,6 +83,7 @@ export default class Store extends Component {
         productCategory
       });
     } catch (error) {
+      this.setState({ loading: false });
       logError(error, 'getAllCategoryProduct', 'root/store', '_getCategoryProduct');
       console.log(error);
     }
@@ -137,6 +142,30 @@ export default class Store extends Component {
               </CardItem>
             ))}
           </Card>
+          {this.state.loading &&
+          <Loader loading={this.state.loading} />}
+          <View style={{ margin: 20 }}>
+            <Text>
+              {'\u25c0 '}به فروشگاه سلفیت خوش آمدید.
+              در کادر بالا دسته بندی هایی وجود دارد که با زدن هر کدوم از اونها محصول
+              مورد نظر خودت رو میتونی فیلتر کنی.
+            </Text>
+            <Text>
+              {'\n'}
+            </Text>
+            <Text>
+              {'\u25c0 '}بطور مثال بر روی دسته بندی مواد غذایی کلیک کن تا فیلتر های بیشتری
+              بهت نمایش داده بشه.
+            </Text>
+            <Text>
+              {'\n'}
+            </Text>
+            <Text>
+              {'\u25c0 '}فروشگاه سلفیت در سراسر تهران ظرف مدت یک روز با پیک رایگان
+              سفارشت رو بهت تحویل میده.
+              ضمانت کیفیت و سلامت سفارش بدون قید و شرط!
+            </Text>
+          </View>
         </Content>
         {FooterComponent}
       </Container>

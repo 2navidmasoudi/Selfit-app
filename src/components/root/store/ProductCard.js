@@ -96,7 +96,7 @@ export default class ProductCard extends Component {
             </Left>
             <Right style={{ flex: 2 }}>
               <Text>
-                {product.titleproduct}
+                {persianNumber(product.titleproduct)}
               </Text>
               <Text type="light">
                 {persianNumber(product.priceproduct.toLocaleString())} تومان

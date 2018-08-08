@@ -1,12 +1,12 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Dimensions } from 'react-native';
-import { darkColor, mainColor } from '../variables/colors';
+import { darkColor, mainColor, white } from '../variables/colors';
 
 const window = Dimensions.get('window');
 
 export const drawer = EStyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   imageHeader: {
     height: 180,
@@ -17,13 +17,15 @@ export const drawer = EStyleSheet.create({
   infoText: { color: 'white' },
   item: {
     justifyContent: 'flex-end',
-    padding: 10
+    padding: 10,
+    backgroundColor: darkColor
   },
   itemTitle: {
-    fontFamily: '$IS'
+    color: white,
   },
   itemIcon: {
-    marginLeft: 10
+    marginLeft: 10,
+    color: white
   }
 });
 export const main = EStyleSheet.create({

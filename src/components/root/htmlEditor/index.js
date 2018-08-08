@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
-  Platform
+  Platform,
+  Dimensions
 } from 'react-native';
 import { RichTextEditor, RichTextToolbar } from 'react-native-zss-rich-text-editor';
 import { Button, Container } from 'native-base';
@@ -12,6 +13,8 @@ import AppHeader from '../../header';
 import { Text } from '../../Kit';
 import { mainColor, white } from '../../../assets/variables/colors';
 import { receiveGym } from '../../../redux/actions';
+
+const { height } = Dimensions.get('window');
 
 @connect(null, {
   receiveGym,
@@ -54,13 +57,12 @@ export default class HtmlEditor extends Component {
       <Container>
         <AppHeader rightTitle="ویرایش توضیح" />
         <RichTextEditor
-          ref={r => this.richtext = r}
+          ref={(r) => { this.richtext = r; }}
           style={styles.richText}
           hiddenTitle
-          // initialTitleHTML="Title!!"
+          footerHeight={height * 0.2}
           initialContentHTML={htmlContent}
           editorInitializedCallback={() => this.onEditorInitialized()}
-          // customCSS={'#zss_editor_content{ width: 100%; height: 100%; -webkit-overflow-scrolling: touch; overflow:auto; }'}
         />
         <RichTextToolbar
           getEditor={() => this.richtext}

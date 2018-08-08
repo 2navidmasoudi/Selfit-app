@@ -4,7 +4,7 @@ import {
   RECEIVE_BUFFET,
   RECIEVE_MATERIAL,
   RECIEVE_MENUFOOD,
-  REFRESH_BUFFET,
+  REFRESH_BUFFET, RESET_FOOD,
   SELECT_BUFFET,
   TOKEN_BUFFET
 } from '../actions/type';
@@ -63,6 +63,12 @@ export default (state = initialState, action = {}) => {
       return {
         ...state,
         Material: action.Material,
+      };
+    case RESET_FOOD:
+      return {
+        ...state,
+        Material: [],
+        MenuFood: [],
       };
     default:
       return state;

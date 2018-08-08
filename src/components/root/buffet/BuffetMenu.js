@@ -25,7 +25,14 @@ import { getMenuFood, postRateBuffet } from '../../../services/buffet';
 import { logError } from '../../../services/log';
 import { getFoodCategory } from '../../../services/MenuFood';
 import { getAllBuffetMaterial, postBasketMaterial } from '../../../services/orderMaterial';
-import { receiveMaterial, receiveMenuFood, selectBuffet, setIDBasket, tokenBuffet } from '../../../redux/actions';
+import {
+  receiveMaterial,
+  receiveMenuFood,
+  resetFood,
+  selectBuffet,
+  setIDBasket,
+  tokenBuffet
+} from '../../../redux/actions';
 import FoodCard from './FoodCard';
 import MaterialCard from './MaterialCard';
 import { TabsStyle } from '../../../assets/styles/gym';
@@ -82,6 +89,7 @@ const styles = StyleSheet.create({
   receiveMaterial,
   tokenBuffet,
   setIDBasket,
+  resetFood
 })
 export default class BuffetMenu extends Component {
   state = {
@@ -98,6 +106,7 @@ export default class BuffetMenu extends Component {
     disableRate: false,
   };
   componentWillMount() {
+    this.props.resetFood();
     this.getInfo();
   }
   componentDidMount() {
@@ -106,7 +115,9 @@ export default class BuffetMenu extends Component {
   }
   async getInfo() {
     await this.props.tokenBuffet('selfit.buffet');
-    await this.props.selectBuffet(this.props.buffetid, this.props.namebuffet);
+    if (this.props.user.typememberid !== 5) {
+      await this.props.selectBuffet(this.props.buffetid, this.props.namebuffet);
+    }
     await this._getFoodCategory();
     await this._getMenuFood();
     await this._getMaterial();

@@ -80,6 +80,7 @@ export default class FoodCard extends Component {
     const ImgYear = m.jYear();
     const ImgMonth = m.jMonth() + 1;
     const ImgSrc = `${MenuFood.httpserver}${MenuFood.pathserver}${ImgYear}/${ImgMonth}/${MenuFood.picmenufood}`;
+    const Description = MenuFood.descmenufoodbuffet ? persianNumber(MenuFood.descmenufoodbuffet) : '';
     return (
       <TouchableOpacity
         disabled={!MenuFood.active}
@@ -98,8 +99,11 @@ export default class FoodCard extends Component {
               </TouchableWithoutFeedback>
             </Left>
             <Right style={{ flex: 2 }}>
-              <Text>
+              <Text type="bold">
                 {MenuFood.namemenufood}
+              </Text>
+              <Text>
+                {Description}
               </Text>
               <Text type="light">
                 {persianNumber(MenuFood.pricemenufood.toLocaleString())} تومان

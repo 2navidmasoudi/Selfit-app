@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Content, Thumbnail, Button as FullButton } from 'native-base';
+import { Container, Content, Button as FullButton } from 'native-base';
 import { Image, TouchableWithoutFeedback, View } from 'react-native';
 import { Button as UploadButton } from 'react-native-elements';
 import moment from 'moment-jalaali';
@@ -10,7 +10,7 @@ import AppHeader from '../../header';
 import { putCheckToken } from '../../../services/index';
 import { receiveGym, tokenGym } from '../../../redux/actions';
 import { getSingleGym, putGym } from '../../../services/gym';
-import { Text } from '../../Kit';
+import {Modal, Text} from '../../Kit';
 import InputText from '../../Kit/TextInput/TextInput';
 import { darkColor, mainColor, white } from '../../../assets/variables/colors';
 import { latinNumber, persianNumber } from '../../../utils/persian';
@@ -18,15 +18,20 @@ import { htmlStyle } from '../../../assets/styles/html';
 import { Gym } from '../../../services/type';
 import { picker } from '../profile/imagePicker';
 import { uploader } from '../../../services/UploadImage';
+import { helpDoneEditGym } from '../../../redux/actions/help';
+import Pic1 from '../../../assets/helpPics/MyGym/GymEditDetail.png';
+import Pic2 from '../../../assets/helpPics/MyGym/EditGymDone.png';
 
 @connect(state => ({
   user: state.user,
   tokenapi: state.gym.tokenapi,
   gym: state.gym.GymList,
   gymid: state.gym.gymid,
+  help: state.help.editGym,
 }), {
   tokenGym,
   receiveGym,
+  helpDoneEditGym
 })
 export default class EditGym extends Component {
   constructor(props) {
@@ -46,9 +51,13 @@ export default class EditGym extends Component {
       PicJson: null,
       data: null,
       type: null,
+      ModalNumber: 0,
     };
   }
   componentWillMount() {
+    if (!this.props.help) {
+      this.setState({ ModalNumber: 1 });
+    }
     const { tokenmember, tokenapi } = this.props.user;
     putCheckToken(tokenmember, tokenapi);
     this.getInfo();
@@ -129,6 +138,7 @@ export default class EditGym extends Component {
       console.log(e);
     }
   }
+  helpDone = () => this.props.helpDoneEditGym();
   render() {
     const { gym } = this.props;
     const m = gym.datesave ? moment(`${gym.datesave}`, 'YYYY/MM/DDTHH:mm:ss') : moment();
@@ -138,6 +148,44 @@ export default class EditGym extends Component {
     const htmlContent = gym.descgym ? persianNumber(gym.descgym.replace(/(\r\n|\n|\r)/gm, '')) : '<p>فاقد توضیحات.</p>';
     return (
       <Container>
+        <Modal
+          isVisible={this.state.ModalNumber === 1}
+          onModalHide={() => this.setState({ ModalNumber: 2 })}
+          exitText="خیلی خب"
+          onExit={() => this.setState({ ModalNumber: 0 })}
+        >
+          <Image
+            style={{
+              width: 250,
+              height: 80,
+            }}
+            source={Pic1}
+            resizeMode="contain"
+          />
+          <Text>
+            با زدن این دکمه میتونی توضیحات باشگاه خودت رو ویرایش کنی.
+          </Text>
+        </Modal>
+        <Modal
+          isVisible={this.state.ModalNumber === 2}
+          onModalHide={this.helpDone}
+          exitText="تمام"
+          onExit={() => this.setState({ ModalNumber: 0 })}
+        >
+          <Image
+            style={{
+              width: 250,
+              height: 100,
+            }}
+            source={Pic2}
+            resizeMode="contain"
+          />
+          <Text>
+            در آخر برای اعمال ویرایش های انجام شده بر روی
+            ثبت و تائید کلیک کن،
+            تا ویرایش ها بر روی سرور قرار بگیره.
+          </Text>
+        </Modal>
         <AppHeader rightTitle="باشگاه من" backButton="flex" />
         <Content padder>
           <Text style={{ textAlign: 'center', fontSize: 20, margin: 10 }}>ویرایش باشگاه</Text>

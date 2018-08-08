@@ -13,18 +13,21 @@ import Loader from '../../loader';
 import Pic1 from '../../../assets/helpPics/GymList/SearchGym.png';
 import Pic2 from '../../../assets/helpPics/GymList/SelectGymList.png';
 import Pic3 from '../../../assets/helpPics/GymList/ShowMapGym.png';
+import { helpDoneGymList } from '../../../redux/actions/help';
 
 @connect(state => ({
   gym: state.gym.GymList,
   min: state.gym.min,
   user: state.user,
   tokenapi: state.gym.tokenapi,
+  help: state.help.GymList,
 }), {
   receiveGym,
   incrementMin,
   decrementMin,
   refreshGym,
   tokenGym,
+  helpDoneGymList
 })
 export default class List extends Component {
   // static propTypes = {
@@ -45,7 +48,7 @@ export default class List extends Component {
       refreshing: false,
       search: null,
       searchMode: false,
-      ModalNumber: 1,
+      ModalNumber: 0,
     };
     this.onRefresh = this.onRefresh.bind(this);
     this.onEndReached = this.onEndReached.bind(this);
@@ -54,6 +57,9 @@ export default class List extends Component {
   async componentWillMount() {
     await this.props.tokenGym('selfit.gym');
     this.getGymList();
+    if (!this.props.help) {
+      this.setState({ ModalNumber: 1 });
+    }
   }
   onRefresh() {
     this.props.refreshGym();
@@ -116,15 +122,7 @@ export default class List extends Component {
       this.setState({ loading: false });
     }
   }
-  ListFooterComponent = () => {
-    const { loading } = this.state;
-    return (
-      loading === true ?
-        <Spinner />
-        :
-        null
-    );
-  };
+  helpDone = () => this.props.helpDoneGymList();
   render() {
     return (
       <View style={{ flex: 1, justifyContent: 'flex-end' }}>
@@ -166,7 +164,7 @@ export default class List extends Component {
         </Modal>
         <Modal
           isVisible={this.state.ModalNumber === 3}
-          onModalHide={() => this.setState({ ModalNumber: 0 })}
+          onModalHide={this.helpDone}
           exitText="تمام"
           onExit={() => this.setState({ ModalNumber: 0 })}
         >
@@ -192,7 +190,6 @@ export default class List extends Component {
           data={this.props.gym}
           renderItem={({ item }) => <GymCard gym={item} />}
           keyExtractor={item => item.idgym}
-          ListFooterComponent={this.ListFooterComponent}
           ListEmptyComponent={<Loader loading={this.state.loading} />}
           onEndReached={this.onEndReached}
           onRefresh={this.onRefresh}

@@ -12,11 +12,16 @@ import AppHeader from '../../header';
 import { putCheckToken } from '../../../services/index';
 import { receiveGym, tokenGym } from '../../../redux/actions';
 import { getAllPicGym, getSingleGym } from '../../../services/gym';
-import { Text } from '../../Kit';
+import { Modal, Text } from '../../Kit';
 import { mainColor } from '../../../assets/variables/colors';
 import { persianNumber } from '../../../utils/persian';
 import { htmlStyle } from '../../../assets/styles/html';
 import { form } from '../../../assets/styles';
+import { helpDoneMyGym } from '../../../redux/actions/help';
+import Pic1 from '../../../assets/helpPics/MyGym/GymOther.png';
+import Pic2 from '../../../assets/helpPics/MyGym/GymWaze.png';
+import Pic3 from '../../../assets/helpPics/MyGym/GymEdit.png';
+
 
 moment.loadPersian({ dialect: 'persian-modern' });
 const horizontalMargin = 30;
@@ -59,9 +64,11 @@ const styles = StyleSheet.create({
   tokenapi: state.gym.tokenapi,
   gym: state.gym.GymList,
   gymid: state.gym.gymid,
+  help: state.help.myGym,
 }), {
   tokenGym,
   receiveGym,
+  helpDoneMyGym
 })
 export default class MyGym extends Component {
   state = {
@@ -73,8 +80,12 @@ export default class MyGym extends Component {
     isVisible: false,
     rate: null,
     disableRate: false,
+    ModalNumber: 0,
   };
   componentWillMount() {
+    if (!this.props.help) {
+      this.setState({ ModalNumber: 1 });
+    }
     const { tokenmember, tokenapi } = this.props.user;
     putCheckToken(tokenmember, tokenapi);
     this.getInfo();
@@ -132,6 +143,7 @@ export default class MyGym extends Component {
       cancelText: 'انصراف',
     });
   }
+  helpDone = () => this.props.helpDoneMyGym();
   renderItem = ({ item, index }) => (
     <View key={index} style={styles.slide}>
       <Image style={{ flex: 1, width: null }} resizeMode="cover" source={{ uri: item.url }} />
@@ -180,6 +192,63 @@ export default class MyGym extends Component {
     const VISIT = visitgym ? persianNumber(`${visitgym}`) : '؟';
     return (
       <Container>
+        <Modal
+          isVisible={this.state.ModalNumber === 1}
+          onModalHide={() => this.setState({ ModalNumber: 2 })}
+          exitText="ممنون"
+          onExit={() => this.setState({ ModalNumber: 0 })}
+        >
+          <Image
+            style={{
+              width: 250,
+              height: 100,
+            }}
+            source={Pic1}
+            resizeMode="contain"
+          />
+          <Text>
+            با زدن این دکمه میتونی باشگاه های دور اطراف خودت
+            رو ببینی و بررسی کنی.
+          </Text>
+        </Modal>
+        <Modal
+          isVisible={this.state.ModalNumber === 2}
+          onModalHide={() => this.setState({ ModalNumber: 3 })}
+          exitText="خیلی خب"
+          onExit={() => this.setState({ ModalNumber: 0 })}
+        >
+          <Image
+            style={{
+              width: 250,
+              height: 100,
+            }}
+            source={Pic2}
+            resizeMode="contain"
+          />
+          <Text>
+            با زدن این دکمه مسیریاب هایی بهت نمایش داده میشه،
+            با زدن هر کدوم به باشگاهت برو!
+          </Text>
+        </Modal>
+        <Modal
+          isVisible={this.state.ModalNumber === 3}
+          onModalHide={this.helpDone}
+          exitText="تمام"
+          onExit={() => this.setState({ ModalNumber: 0 })}
+        >
+          <Image
+            style={{
+              width: 250,
+              height: 100,
+            }}
+            source={Pic3}
+            resizeMode="contain"
+          />
+          <Text>
+            با زدن این دکمه میتونی باشگاه خودت رو ویرایش کنی،
+            عکس شاخص و جزئیات باشگاه رو عوض کنی و ...
+          </Text>
+        </Modal>
         <AppHeader rightTitle="باشگاه من" />
         <Content padder>
           <Card style={{ flex: 0 }}>

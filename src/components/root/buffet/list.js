@@ -11,18 +11,21 @@ import { Text, Modal } from '../../Kit';
 import Loader from '../../loader';
 import Pic1 from '../../../assets/helpPics/BuffetList/BuffetSearch.png';
 import Pic2 from '../../../assets/helpPics/BuffetList/BuffetDetailList.png';
+import { helpDoneBuffetList } from '../../../redux/actions/help';
 
 @connect(state => ({
   buffet: state.buffet.BuffetList,
   min: state.buffet.min,
   user: state.user,
   tokenapi: state.buffet.tokenapi,
+  help: state.help.BuffetList,
 }), {
   receiveBuffet,
   incrementMin,
   decrementMin,
   refreshBuffet,
   tokenBuffet,
+  helpDoneBuffetList
 })
 export default class List extends Component {
   constructor() {
@@ -32,14 +35,16 @@ export default class List extends Component {
       refreshing: false,
       search: null,
       searchMode: false,
-      ModalNumber: 1,
+      ModalNumber: 0,
     };
     this.searchText = this.searchText.bind(this);
     this.handleRefresh = this.handleRefresh.bind(this);
     this.handleLoadMore = this.handleLoadMore.bind(this);
-    this.renderFooter = this.renderFooter.bind(this);
   }
   async componentWillMount() {
+    if (!this.props.help) {
+      this.setState({ ModalNumber: 1 });
+    }
     await this.props.tokenBuffet('selfit.buffet');
     this.getBuffetList();
     console.log('componentMountedNow');
@@ -114,10 +119,7 @@ export default class List extends Component {
       this.searchBuffet();
     }
   }
-  renderFooter() {
-    if (!this.state.loading) return null;
-    return <Spinner />;
-  }
+  helpDone = () => this.props.helpDoneBuffetList();
   render() {
     return (
       <View style={{
@@ -146,7 +148,7 @@ export default class List extends Component {
         </Modal>
         <Modal
           isVisible={this.state.ModalNumber === 2}
-          onModalHide={() => this.setState({ ModalNumber: 0 })}
+          onModalHide={this.helpDone}
           exitText="تمام"
           onExit={() => this.setState({ ModalNumber: 0 })}
         >
@@ -177,7 +179,6 @@ export default class List extends Component {
           refreshing={this.state.refreshing}
           onEndReached={this.handleLoadMore}
           onEndReachedThreshold={0.5}
-          ListFooterComponent={this.renderFooter}
         />
         { this.props.user.typememberid === 1 &&
         <Fab

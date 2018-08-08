@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList } from 'react-native';
+import {FlatList, Image} from 'react-native';
 import {
   Badge,
   Button,
@@ -12,7 +12,6 @@ import {
   Icon,
   Left,
   Right,
-  Spinner,
 } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
@@ -21,17 +20,23 @@ import AppHeader from '../../header';
 import { putCheckToken } from '../../../services/index';
 import { receiveProduct, tokenStore } from '../../../redux/actions';
 import { getAllAccessProduct } from '../../../services/product';
-import { Text } from '../../Kit';
+import {Modal, Text} from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
 import { mainColor, white } from '../../../assets/variables/colors';
+import Loader from '../../loader';
+import { helpDoneStore } from '../../../redux/actions/help';
+import Pic1 from '../../../assets/helpPics/Store/StoreCard.png';
+import Pic2 from '../../../assets/helpPics/Store/StoreBasket.png';
 
 @connect(state => ({
   user: state.user,
   tokenapi: state.store.tokenapi,
   Count: state.basket.productBasketCount,
+  help: state.help.Store,
 }), {
   tokenStore,
   receiveProduct,
+  helpDoneStore
 })
 export default class CategoryChildren extends Component {
   state = {
@@ -41,8 +46,13 @@ export default class CategoryChildren extends Component {
     min: 0,
     ssort: false,
     fsort: 0,
+    loading: true,
+    ModalNumber: 0,
   };
   componentWillMount() {
+    if (!this.props.help) {
+      this.setState({ ModalNumber: 1 });
+    }
     const { tokenmember, tokenapi } = this.props.user;
     putCheckToken(tokenmember, tokenapi);
     this._getAllAccessProduct();
@@ -57,6 +67,7 @@ export default class CategoryChildren extends Component {
   }
   async _getAllAccessProduct() {
     try {
+      this.setState({ loading: true });
       const { tokenmember } = await this.props.user;
       const { tokenapi, idcategory } = await this.props;
       const { max, min, fsort, ssort } = await this.state;
@@ -64,13 +75,14 @@ export default class CategoryChildren extends Component {
       console.log(Product, 'Product');
       // this.props.receiveProduct(Product,min);
       this.setState({ Product });
+      this.setState({ loading: false });
     } catch (e) {
       console.log(e);
+      this.setState({ loading: false });
     }
   }
-  renderProduct({ item }) {
-    return <ProductCard product={item} />;
-  }
+  helpDone = () => this.props.helpDoneStore();
+  renderProduct = ({ item }) => <ProductCard product={item} />
   render() {
     const FooterComponent = this.props.Count === 0 ? null :
       (<Footer>
@@ -98,6 +110,43 @@ export default class CategoryChildren extends Component {
       </Footer>);
     return (
       <Container>
+        <Modal
+          isVisible={this.state.ModalNumber === 1}
+          onModalHide={() => this.setState({ ModalNumber: 2 })}
+          exitText="ممنون"
+          onExit={() => this.setState({ ModalNumber: 0 })}
+        >
+          <Image
+            style={{
+              width: 250,
+              height: 150,
+            }}
+            source={Pic1}
+            resizeMode="contain"
+          />
+          <Text>
+            با زدن بر روی این باکس ها میتونی کالا یا محصول مورد نظرت
+            رو به سبد خرید فروشگاهت اضافه یا کم کنی.
+          </Text>
+        </Modal>
+        <Modal
+          isVisible={this.state.ModalNumber === 2}
+          onModalHide={this.helpDone}
+          exitText="خیلی خب"
+          onExit={() => this.setState({ ModalNumber: 0 })}
+        >
+          <Image
+            style={{
+              width: 250,
+              height: 100,
+            }}
+            source={Pic2}
+            resizeMode="contain"
+          />
+          <Text>
+            با زدن دکمه سبد سفارش، سبد خریدت رو ببین و سفارشت رو نهایی کن.
+          </Text>
+        </Modal>
         <AppHeader rightTitle="فروشگاه" backButton="flex" />
         <Content>
           <Card style={{ flex: 0 }}>
@@ -130,7 +179,7 @@ export default class CategoryChildren extends Component {
             data={this.state.Product}
             renderItem={item => this.renderProduct(item)}
             keyExtractor={item => item.idproduct}
-            ListEmptyComponent={<Text style={{ textAlign: 'center' }}>هیچ آیتمی یافت نشد.</Text>}
+            ListEmptyComponent={<Loader loading={this.state.loading} />}
             scrollEnabled={false}
           />
         </Content>

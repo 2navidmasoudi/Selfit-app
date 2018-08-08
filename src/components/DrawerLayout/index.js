@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ImageBackground, TouchableWithoutFeedback, View, Alert } from 'react-native';
-import { Icon, Item, Badge, Left, Content } from 'native-base';
+import { Icon, Item, Badge, Left, Content, Switch } from 'native-base';
 import PropTypes from 'prop-types';
 import { Base64 } from 'js-base64';
 import { connect } from 'react-redux';
@@ -11,13 +11,15 @@ import { getSingleToken, putUserLogout } from '../../services';
 import { Text } from '../Kit';
 import { persianNumber } from '../../utils/persian';
 import { setUser } from '../../redux/actions';
+import {darkColor, mainColor, white} from '../../assets/variables/colors';
+import { helpOff, helpReset } from '../../redux/actions/help';
 
 @connect(state => ({
   user: state.user,
   buffetBasketCount: state.basket.buffetBasketCount,
   materialBasketCount: state.basket.materialBasketCount,
   productBasketCount: state.basket.productBasketCount,
-}), { setUser })
+}), { setUser, helpReset, helpOff })
 export default class DrawerLayout extends Component {
   static propTypes = {
     user: PropTypes.objectOf(PropTypes.node).isRequired,
@@ -25,6 +27,16 @@ export default class DrawerLayout extends Component {
     buffetBasketCount: PropTypes.number.isRequired,
     materialBasketCount: PropTypes.number.isRequired,
     productBasketCount: PropTypes.number.isRequired,
+  }
+  constructor() {
+    super();
+    this.state = {
+      Active: true
+    };
+    this.toggleHelp = this.toggleHelp.bind(this);
+  }
+  state = {
+    Active: true,
   }
   componentDidMount() {
     this.getSingleMember();
@@ -45,6 +57,14 @@ export default class DrawerLayout extends Component {
         cancelable: false,
       }
     );
+  }
+  toggleHelp(Active) {
+    if (Active) {
+      this.props.helpReset();
+    } else {
+      this.props.helpOff();
+    }
+    this.setState({ Active });
   }
   async putUserLogout() {
     const { tokenapi, tokenmember } = await this.props.user;
@@ -80,15 +100,15 @@ export default class DrawerLayout extends Component {
             </View>
           </ImageBackground>
         </TouchableWithoutFeedback>
-        <Content>
+        <Content style={{ backgroundColor: darkColor }}>
           <Item
             style={drawer.item}
             onPress={() => {
             Actions.profile();
           }}
           >
-            <Text>پروفایل</Text>
-            <Icon name="person" style={drawer.itemIcon} />
+            <Text style={drawer.itemTitle}>پروفایل</Text>
+            <Icon name="person" color={mainColor} style={drawer.itemIcon} />
           </Item>
           <Item
             style={drawer.item}
@@ -111,7 +131,7 @@ export default class DrawerLayout extends Component {
                 </Text>
               </Badge>
             </Left>
-            <Text>سبد خرید غذا</Text>
+            <Text style={drawer.itemTitle}>سبد خرید غذا</Text>
             <Icon name="basket" style={drawer.itemIcon} />
           </Item>
           <Item
@@ -135,41 +155,43 @@ export default class DrawerLayout extends Component {
                 </Text>
               </Badge>
             </Left>
-            <Text>سبد خرید فروشگاه</Text>
+            <Text style={drawer.itemTitle}>سبد خرید فروشگاه</Text>
             <Icon name="basket" style={drawer.itemIcon} />
           </Item>
           <Item style={drawer.item} onPress={() => Actions.follow()}>
-            <Text>پیگیری سفارش</Text>
-            <Icon name="call" style={drawer.itemIcon} />
-          </Item>
-          <Item style={drawer.item} onPress={() => Actions.support()}>
-            <Text>پشتیبانی</Text>
-            <Icon name="call" style={drawer.itemIcon} />
-          </Item>
-          <Item
-            style={drawer.item}
-            onPress={() => Actions.webView({ title: 'درباره ما', url: 'https://selfit.ir/#/Home/Index' })}
-          >
-            <Text>درباره ما</Text>
-            <Icon name="bookmarks" style={drawer.itemIcon} />
-          </Item>
-          <Item style={drawer.item} onPress={() => Actions.complaints()}>
-            <Text>شکایات و پیشنهادات</Text>
-            <Icon name="bookmarks" style={drawer.itemIcon} />
+            <Text style={drawer.itemTitle}>پیگیری سفارش</Text>
+            <Icon name="card" style={drawer.itemIcon} />
           </Item>
           <Item style={drawer.item}>
-            <Text>راهنمای برنامه</Text>
-            <Icon name="help" style={drawer.itemIcon} />
+            <Left style={{ justifyContent: 'center' }}>
+              <Switch
+                onTintColor={white}
+                thumbTintColor={this.state.Active ? mainColor : undefined}
+                value={this.state.Active}
+                onValueChange={this.toggleHelp}
+
+              />
+            </Left>
+            <Text style={drawer.itemTitle}>راهنمای برنامه</Text>
+            <Icon name="help" style={[drawer.itemIcon, { marginHorizontal: 5 }]} />
+          </Item>
+          <Item style={drawer.item} onPress={() => Actions.support()}>
+            <Text style={drawer.itemTitle}>پشتیبانی</Text>
+            <Icon name="call" style={drawer.itemIcon} />
           </Item>
           <Item
             style={drawer.item}
-            onPress={() => Actions.webView({ title: 'قوانین و تعهدات', url: 'https://selfit.ir/#/Home/Law' })}
+            onPress={() => Actions.webView({ title: 'سایت سلفیت', url: 'https://selfit.ir/' })}
           >
-            <Text>قوانین و تعهدات</Text>
-            <Icon name="help" style={drawer.itemIcon} />
+            <Text style={drawer.itemTitle}>سایت سلفیت</Text>
+            <Icon name="globe" style={drawer.itemIcon} />
+          </Item>
+          <Item style={drawer.item} onPress={() => Actions.complaints()}>
+            <Text style={drawer.itemTitle}>شکایات و پیشنهادات</Text>
+            <Icon name="bookmarks" style={drawer.itemIcon} />
           </Item>
           <Item style={drawer.item} onPress={() => this.getRequestLogout()}>
-            <Text>خروج از حساب</Text>
+            <Text style={drawer.itemTitle}>خروج از حساب</Text>
             <Icon name="backspace" style={drawer.itemIcon} />
           </Item>
         </Content>

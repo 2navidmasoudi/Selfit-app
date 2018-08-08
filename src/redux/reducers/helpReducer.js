@@ -7,7 +7,13 @@ import {
   HELP_DONE_BUFFET_INDEX,
   HELP_DONE_BUFFET_LIST,
   HELP_DONE_GYM_LIST,
-  HELP_DONE_GYM_MAP
+  HELP_DONE_GYM_MAP,
+  HELP_DONE_STORE,
+  HELP_DONE_STORE_TIME,
+  HELP_DONE_MY_GYM,
+  HELP_DONE_EDIT_GYM,
+  HELP_DONE_COACH_LIST,
+  HELP_DONE_BUFFET_MENU
 } from '../actions/type';
 
 const HelpReset = {
@@ -17,7 +23,13 @@ const HelpReset = {
   BuffetIndex: false,
   BuffetList: false,
   GymList: false,
-  GymMap: false,
+  gymMap: false,
+  Store: false,
+  StoreTime: false,
+  myGym: false,
+  editGym: false,
+  CoachList: false,
+  BuffetMenuList: false,
 };
 const HelpOff = {
   mainMember: true,
@@ -26,7 +38,13 @@ const HelpOff = {
   BuffetIndex: true,
   BuffetList: true,
   GymList: true,
-  GymMap: true,
+  gymMap: true,
+  Store: true,
+  StoreTime: true,
+  myGym: true,
+  editGym: true,
+  CoachList: true,
+  BuffetMenuList: true,
 };
 export default (state = HelpReset, action = {}) => {
   switch (action.type) {
@@ -67,7 +85,37 @@ export default (state = HelpReset, action = {}) => {
     case HELP_DONE_GYM_MAP:
       return {
         ...state,
-        GymMap: true,
+        gymMap: true,
+      };
+    case HELP_DONE_STORE:
+      return {
+        ...state,
+        Store: true,
+      };
+    case HELP_DONE_STORE_TIME:
+      return {
+        ...state,
+        StoreTime: true,
+      };
+    case HELP_DONE_MY_GYM:
+      return {
+        ...state,
+        myGym: true,
+      };
+    case HELP_DONE_EDIT_GYM:
+      return {
+        ...state,
+        editGym: true,
+      };
+    case HELP_DONE_COACH_LIST:
+      return {
+        ...state,
+        CoachList: true,
+      };
+    case HELP_DONE_BUFFET_MENU:
+      return {
+        ...state,
+        BuffetMenuList: true,
       };
     default:
       return state;

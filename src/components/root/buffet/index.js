@@ -27,11 +27,14 @@ export default class Buffet extends Component {
   constructor() {
     super();
     this.state = {
-      ModalNumber: 1,
+      ModalNumber: 0,
     };
     this.getCurrentPosition = this.getCurrentPosition.bind(this);
   }
   componentWillMount() {
+    if (!this.props.help) {
+      this.setState({ ModalNumber: 1 });
+    }
     const { tokenmember, tokenapi } = this.props.user;
     putCheckToken(tokenmember, tokenapi);
     this.getCurrentPosition();
@@ -45,6 +48,7 @@ export default class Buffet extends Component {
       console.log(error);
     }
   }
+  helpDone = () => this.props.helpDoneBuffetIndex();
   render() {
     return (
       <Container>
@@ -105,7 +109,7 @@ export default class Buffet extends Component {
         </Modal>
         <Modal
           isVisible={this.state.ModalNumber === 4}
-          onModalHide={() => this.setState({ ModalNumber: 0 })}
+          onModalHide={this.helpDone}
           exitText="تمام"
           onExit={() => this.setState({ ModalNumber: 0 })}
         >
