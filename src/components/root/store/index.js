@@ -77,7 +77,7 @@ export default class Store extends Component {
       const { tokenmember } = await this.props.user;
       const { max, min, ssort, fsort } = await this.state;
       const productCategory =
-        await getAllCategoryProduct(tokenmember, tokenapi, max, min, ssort, fsort);
+        await getAllCategoryProduct(tokenmember, tokenapi, max, min, null);
       console.log(productCategory);
       this.setState({
         productCategory

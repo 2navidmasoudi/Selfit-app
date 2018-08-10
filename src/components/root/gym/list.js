@@ -99,7 +99,7 @@ export default class List extends Component {
     const { tokenmember, latval, longval } = await this.props.user;
     const { min, tokenapi } = await this.props;
     const GymList =
-        await getAllGym(latval, longval, tokenmember, tokenapi, 120, min, false, 0);
+        await getAllGym(latval, longval, tokenmember, tokenapi, 120, min, 'addressgym%20asc');
     console.log(GymList);
     await this.props.receiveGym(GymList, min);
     this.setState({ loading: false, refreshing: false });
@@ -114,7 +114,7 @@ export default class List extends Component {
       const { search } = await this.state;
       const { tokenmember } = await this.props.user;
       const { min, tokenapi } = await this.props;
-      const GymList = await getSearchGym(search, tokenmember, tokenapi, 120, min, false, 0);
+      const GymList = await getSearchGym(search, tokenmember, tokenapi, 120, min, 'addressgym%20asc');
       await this.props.receiveGym(GymList, min);
       this.setState({ loading: false, refreshing: false });
     } catch (error) {

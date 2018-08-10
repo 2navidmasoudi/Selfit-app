@@ -71,8 +71,8 @@ export default class Register extends Component {
         tokenapi
       );
       if (json === 1) {
-        const jsonInfo = await getSingleToken(tokenmember, tokenapi);
-        await this.props.setUser(jsonInfo.MemberSingleToken);
+        const MemberSingleToken = await getSingleToken(tokenmember, tokenapi);
+        await this.props.setUser(MemberSingleToken);
         Actions.reset('root');
       }
     } else {

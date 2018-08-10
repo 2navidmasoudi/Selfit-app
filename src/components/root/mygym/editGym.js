@@ -112,7 +112,9 @@ export default class EditGym extends Component {
           filename: 'avatar.png',
           data
         }], Gym, YYYY, MM, tokenmember, 'selfit.public');
-        await this.setState({ PicJson: json });
+        if (json) {
+          await this.setState({ PicJson: json });
+        }
         console.log(this.state);
         Alert.alert('موفقیت', 'آپلود عکس با موفقیت انجام شد', [{ text: 'باشه' }]);
         this.setState({ loading: false });

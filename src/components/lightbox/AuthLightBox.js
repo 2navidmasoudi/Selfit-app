@@ -39,7 +39,7 @@ export default class AuthLightBox extends Component {
       const { phone, tokenapi } = await this.props.user;
       const { method } = await this.props;
       const json = await putCodeLogin(method, phone, tokenPhoneInput, tokenapi);
-      if (json === -15) {
+      if (!json) {
         Alert.alert('خطا', 'کد نامعتبر است! لطفا مجدد تلاش کنید', [{ text: 'باشه' }]);
         return;
       }

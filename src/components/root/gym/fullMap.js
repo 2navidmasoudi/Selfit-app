@@ -78,9 +78,8 @@ export default class FullMap extends Component {
     try {
       const { tokenmember } = await this.props.user;
       const { tokenapi } = await this.props;
-      let json;
       await this.setState({ min: 0 });
-      json = await getAllGyms(tokenmember, tokenapi, 1000, this.state.min, false, 0);
+      const json = await getAllGyms(tokenmember, tokenapi, 1000, this.state.min, null);
       console.log(json);
       await this.props.receiveGym(json.GymList.$values, this.state.min);
       this.setState({ MarkerReady: true });

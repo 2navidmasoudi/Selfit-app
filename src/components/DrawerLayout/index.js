@@ -50,8 +50,8 @@ export default class DrawerLayout extends Component {
       phone,
       mailmember,
     } = await this.props.user;
-    const json = await getSingleToken(tokenmember, tokenapi);
-    await this.props.setUser(json.MemberSingleToken);
+    const MemberSingleToken = await getSingleToken(tokenmember, tokenapi);
+    await this.props.setUser(MemberSingleToken);
     const name_family = await Base64.decode(namefamilymember);
     const mobile = await Base64.decode(phone);
     const email = await Base64.decode(mailmember);

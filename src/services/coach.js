@@ -1,28 +1,28 @@
-import {Coach, GET, headers, POST, Selfit} from './type';
+import { Coach, GET, headers, POST, SAPI, Selfit } from './type';
 
-export const getAllCoach = async (token, tokenapi, max, min, ssort, fsort) => {
-  const response = await fetch(`${Selfit}${Coach}GetAll?token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
+export const getAllCoach = async (token, tokenapi, max, min, sort) => {
+  const response = await fetch(`${SAPI}${Coach}GetAll?t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`, {
     method: GET,
     headers
   });
   const json = await response.json();
   console.log('Coach/GetAll');
   console.log(json);
-  return json.CoachList.$values;
+  return json.Data.$values;
 };
-export const getSearchCoach = async (search, token, tokenapi, max, min, ssort, fsort) => {
-  const response = await fetch(`${Selfit}${Coach}GetSearchAll?search=${search}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
+export const getSearchCoach = async (search, token, tokenapi, max, min, sort) => {
+  const response = await fetch(`${SAPI}${Coach}GetSearchAll?search=${search}&t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`, {
     method: GET,
     headers
   });
   const json = await response.json();
   console.log('Coach/GetSearchAll');
   console.log(json);
-  return json.CoachSearchList.$values;
+  return json.Data.$values;
 };
 export const postRateCoach = async (idcoach, numberrate, token, tokenapi) => {
   try {
-    const response = await fetch(`${Selfit}${Coach}PostRate`, {
+    const response = await fetch(`${SAPI}${Coach}PostRate`, {
       method: POST,
       headers,
       body: JSON.stringify({
@@ -35,7 +35,7 @@ export const postRateCoach = async (idcoach, numberrate, token, tokenapi) => {
     const json = await response.json();
     console.log('Coach/PostRate');
     console.log(json);
-    return json;
+    return json.ResponseCode;
   } catch (e) {
     console.log(e);
   }

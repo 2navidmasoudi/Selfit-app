@@ -114,8 +114,8 @@ export default class MyGym extends Component {
       await this.setState({ dataSource: [] });
       const { gymid, tokenapi } = await this.props;
       const { tokenmember } = await this.props.user;
-      const allPicGym = await getAllPicGym(gymid, tokenmember, tokenapi, 20, 0, true);
-      const PicArray = await allPicGym.PicGymList.$values;
+      const PicArray = await getAllPicGym(gymid, tokenmember, tokenapi, 50, 0, null);
+      if (!PicArray) return;
       let dataSource = [];
       console.log('pics', PicArray);
       for (let i = 0; i < PicArray.length; i++) {

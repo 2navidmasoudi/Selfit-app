@@ -13,11 +13,6 @@ import { Text } from '../../Kit';
   roadTo: state.basket.roadTo,
 }))
 export default class AddressCard extends Component {
-  static propTypes = {
-    user: PropTypes.objectOf(PropTypes.node).isRequired,
-    roadTo: PropTypes.string.isRequired,
-    address: PropTypes.objectOf(PropTypes.node).isRequired,
-  }
   async onPressHandle(address) {
     const { tokenmember, tokenapi } = await this.props.user;
     const result = await activeAddress(address.idaddressmember, tokenmember, tokenapi);

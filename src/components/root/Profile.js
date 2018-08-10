@@ -31,8 +31,8 @@ export default class Profile extends Component {
   }
   async getSingleToken() {
     const { tokenmember, tokenapi } = this.props.user;
-    const json = await getSingleToken(tokenmember, tokenapi);
-    await this.props.setUser(json.MemberSingleToken);
+    const MemberSingleToken = await getSingleToken(tokenmember, tokenapi);
+    await this.props.setUser(MemberSingleToken);
   }
   async putUserLogout() {
     const { tokenapi, tokenmember } = await this.props.user;

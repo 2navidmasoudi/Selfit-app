@@ -62,7 +62,7 @@ export default class List extends Component {
       const { tokenmember } = await this.props.user;
       const { min, tokenapi } = await this.props;
       const FEDListList =
-        await getSearchFED(search, tokenmember, tokenapi, max, min, ssort, fsort);
+        await getSearchFED(search, tokenmember, tokenapi, max, min, null);
       await this.props.receiveFED(FEDListList, min);
       this.setState({ loading: false, refreshing: false });
     } catch (error) {
@@ -76,7 +76,7 @@ export default class List extends Component {
       const { max, ssort, fsort } = await this.state;
       const { tokenmember } = await this.props.user;
       const { min, tokenapi } = await this.props;
-      const FEDList = await getAllFED(tokenmember, tokenapi, max, min, ssort, fsort);
+      const FEDList = await getAllFED(tokenmember, tokenapi, max, min, null);
       console.log(FEDList);
       await this.props.receiveFED(FEDList, min);
       this.setState({ loading: false, refreshing: false });

@@ -85,8 +85,8 @@ export default class EditProfile extends React.Component {
   }
   async _getSingleToken() {
     const { tokenmember, tokenapi } = this.props.user;
-    const json = await getSingleToken(tokenmember, tokenapi);
-    await this.props.setUser(json.MemberSingleToken);
+    const MemberSingleToken = await getSingleToken(tokenmember, tokenapi);
+    await this.props.setUser(MemberSingleToken);
   }
   async UploadSelected() {
     picker(async (source, data, type) => {

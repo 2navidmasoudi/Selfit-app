@@ -31,7 +31,7 @@ export default class Address extends Component {
   async getAddress() {
     try {
       const { tokenapi, tokenmember } = await this.props.user;
-      const AllAddress = await getAddress(0, tokenmember, tokenapi, 30, 0, true, 0);
+      const AllAddress = await getAddress(0, tokenmember, tokenapi, 30, 0, null);
       // let address1= await nameLocatate(35.7248623,51.3333226,null,5);
       // console.log(address1);
       this.setState({ address: AllAddress });

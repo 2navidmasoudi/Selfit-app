@@ -8,7 +8,7 @@ import AppHeader from '../../header';
 import { mapStyle } from '../../../assets/styles/map';
 import markerImage from '../../../assets/markerImage.png';
 import { form } from '../../../assets/styles';
-import { styles } from './style';
+import styles from './style';
 import { Text } from '../../Kit';
 import { logError } from '../../../services/log';
 import { mainColor, white } from '../../../assets/variables/colors';

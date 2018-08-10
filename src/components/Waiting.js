@@ -26,13 +26,13 @@ export default class Waiting extends Component {
       const json = await getSingleToken(tokenmember, tokenapi);
       console.log(json);
       console.log('this is getSingleToken');
-      if (!json && !json.MemberSingleToken) {
+      if (!json) {
         Actions.pop();
         return;
       }
-      const TYPE = await json.MemberSingleToken.typememberid;
+      const TYPE = await json.typememberid;
       if (TYPE) {
-        await this.props.setUser(json.MemberSingleToken);
+        await this.props.setUser(json);
         Actions.reset('root');
       } else {
         Actions.register();

@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { form } from '../../../assets/styles/index';
 import AppHeader from '../../header';
 import { postAddress } from '../../../services';
-import { styles } from './style';
+import styles from './style';
 import { Text } from '../../Kit';
 import { latinNumber } from '../../../utils/persian';
 

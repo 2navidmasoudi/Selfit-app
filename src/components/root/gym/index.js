@@ -63,7 +63,7 @@ export default class Gym extends Component {
           const GymList =
             await getAllGym(
               position.coords.latitude, position.coords.longitude,
-              tokenmember, 'selfit.gym', 120, 0, false, 0
+              tokenmember, 'selfit.gym', 120, 0, 'addressgym%20asc'
             );
           console.log(GymList);
           this.props.receiveGym(GymList, 0);
