@@ -2,7 +2,7 @@ import {
   HELP_DONE_BUFFET,
   HELP_DONE_BUFFET_INDEX,
   HELP_DONE_BUFFET_LIST, HELP_DONE_BUFFET_MENU, HELP_DONE_COACH_LIST, HELP_DONE_EDIT_GYM,
-  HELP_DONE_GYM,
+  HELP_DONE_GYM, HELP_DONE_GYM_DETAIL,
   HELP_DONE_GYM_LIST,
   HELP_DONE_GYM_MAP,
   HELP_DONE_MEMBER, HELP_DONE_MY_GYM, HELP_DONE_STORE, HELP_DONE_STORE_TIME,
@@ -54,4 +54,7 @@ export const helpDoneCoachList = () => ({
 });
 export const helpDoneBuffetMenu = () => ({
   type: HELP_DONE_BUFFET_MENU
+});
+export const helpDoneGymDetail = () => ({
+  type: HELP_DONE_GYM_DETAIL,
 });

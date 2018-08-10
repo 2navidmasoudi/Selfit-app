@@ -30,12 +30,14 @@ export default class ActiveMaterial extends Component {
     try {
       const { tokenapi, buffetid, tokenmember } = await this.props;
       const { idmaterial_buffet } = await this.props.food;
-      const result = await putActiveBuffetMaterial(buffetid, idmaterial_buffet, active, tokenmember, tokenapi);
+      const result =
+        await putActiveBuffetMaterial(buffetid, idmaterial_buffet, active, tokenmember, tokenapi);
       if (result === 1) return 1;
     } catch (error) {
       console.log(error);
       logError(error, 'putActiveBuffetMaterial', 'BuffetMenu/activeMaterial', '_activeBuffetMaterial');
     }
+    return 0;
   }
 
   render() {

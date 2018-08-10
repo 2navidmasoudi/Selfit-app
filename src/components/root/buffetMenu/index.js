@@ -47,7 +47,6 @@ export default class FoodList extends Component {
       <Container>
         <AppHeader rightTitle="منو بوفه" backButton="flex" />
         <View style={{ flex: 1 }}>
-          <View style={{ flex: 1, margin: 10, display: this.props.user.typememberid !== 1 ? 'flex' : 'none' }} />
           <Card style={{ flex: 1 }}>
             <CardItem>
               <Right style={{ flex: 1 }}>

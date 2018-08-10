@@ -20,10 +20,12 @@ import AppHeader from '../../header';
 import { getAllPicGym, postRateGym, putVisit } from '../../../services/gym';
 import { form } from '../../../assets/styles/index';
 import { mainColor, white } from '../../../assets/variables/colors';
-import { Text } from '../../Kit';
+import {Modal, Text} from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
 import { htmlStyle } from '../../../assets/styles/html';
 import { selectGym } from '../../../redux/actions';
+import { helpDoneGymDetail } from '../../../redux/actions/help';
+import Pic1 from '../../../assets/helpPics/MyGym/GymWaze.png';
 
 moment.loadPersian({ dialect: 'persian-modern' });
 const horizontalMargin = 30;
@@ -65,21 +67,23 @@ const styles = StyleSheet.create({
 @connect(state => ({
   user: state.user,
   tokenapi: state.gym.tokenapi,
+  help: state.help.gymDetail,
 }), {
   selectGym,
+  helpDoneGymDetail
 })
 export default class GymDetail extends Component {
   state = {
-    ImgSrc: null,
     slideready: false,
-    position: 1,
-    interval: null,
     dataSource: [],
-    isVisible: false,
     rate: null,
     disableRate: false,
+    ModalNumber: 0,
   };
   componentWillMount() {
+    if (!this.props.help) {
+      this.setState({ ModalNumber: 1 });
+    }
     this.getInfo();
   }
   async getInfo() {
@@ -160,6 +164,7 @@ export default class GymDetail extends Component {
       cancelText: 'انصراف',
     });
   }
+  helpDone = () => this.props.helpDoneGymDetail();
   renderItem = ({ item, index }) => (
     <View key={index} style={styles.slide}>
       <Image style={{ flex: 1, width: null }} resizeMode="cover" source={{ uri: item.url }} />
@@ -199,7 +204,7 @@ export default class GymDetail extends Component {
     const ImgMonth = m.jMonth() + 1;
     const ImgSrc = `${httpserver}${pathserver}${ImgYear}/${ImgMonth}/${picgym}`;
     const htmlContent = descgym ? persianNumber(descgym.replace(/(\r\n|\n|\r)/gm, '')) : '<p>فاقد توضیحات.</p>';
-    const tuitionGym = tuitiongym ? tuitiongym.toLocaleString() : '؟';
+    const tuitionGym = tuitiongym ? `${tuitiongym.toLocaleString()}` : '؟';
     const slide = this.state.slideready ?
       (<Carousel
         data={this.state.dataSource}
@@ -232,6 +237,25 @@ export default class GymDetail extends Component {
       );
     return (
       <Container>
+        <Modal
+          isVisible={this.state.ModalNumber === 1}
+          onModalHide={this.helpDone}
+          exitText="ممنون"
+          onExit={() => this.setState({ ModalNumber: 0 })}
+        >
+          <Image
+            style={{
+              width: 250,
+              height: 100,
+            }}
+            source={Pic1}
+            resizeMode="contain"
+          />
+          <Text>
+            از اینجا میتونی مربی مورد نظر خودت رو
+            از طریق اسم، مشخصات و جزئیات جستجو کنی.
+          </Text>
+        </Modal>
         <AppHeader rightTitle="باشگاه یاب" />
         <Content padder>
           <Card style={{ flex: 0 }}>
@@ -335,13 +359,13 @@ export default class GymDetail extends Component {
             </CardItem>
           </Card>
         </Content>
-        <Button
-          block
-          style={[form.submitButton, { margin: 10, marginBottom: 20 }]}
-          onPress={this.handleMapClick.bind(this)}
-        >
-          <Text style={{ color: '#FFF' }}>نمایش در نقشه</Text>
-        </Button>
+          <Button
+            block
+            style={{ backgroundColor: mainColor }}
+            onPress={this.handleMapClick.bind(this)}
+          >
+            <Text style={{ color: '#FFF' }}>نمایش در نقشه</Text>
+          </Button>
       </Container>
     );
   }

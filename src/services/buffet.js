@@ -11,14 +11,19 @@ export const getAllBuffets = async (token, tokenapi, max, min, ssort, fsort) => 
   return json.BuffetList.$values;
 };
 export const getAllBuffet = async (latval, longval, token, tokenapi, max, min, ssort, fsort) => {
-  const response = await fetch(`${Selfit}${Buffet}GetAllMap?latval=${latval}&longval=${longval}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
-    method: GET,
-    headers
-  });
-  const json = await response.json();
-  console.log('buffet/GetAllMap');
-  console.log(json);
-  return json.BuffetMapList.$values;
+  try {
+    const response = await fetch(`${Selfit}${Buffet}GetAllMap?latval=${latval}&longval=${longval}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
+      method: GET,
+      headers
+    });
+    const json = await response.json();
+    console.log('buffet/GetAllMap');
+    console.log(json);
+    return json.BuffetMapList.$values;
+  } catch (e) {
+    console.log(e);
+  }
+  return [];
 };
 export const getSearchBuffet = async (search, token, tokenapi, max, min, ssort, fsort) => {
   const response = await fetch(`${Selfit}${Buffet}GetSearch?search=${search}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {

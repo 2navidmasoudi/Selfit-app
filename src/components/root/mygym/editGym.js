@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Content, Button as FullButton } from 'native-base';
-import { Image, TouchableWithoutFeedback, View } from 'react-native';
+import { Image, TouchableWithoutFeedback, View, Alert } from 'react-native';
 import { Button as UploadButton } from 'react-native-elements';
 import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
@@ -10,13 +10,13 @@ import AppHeader from '../../header';
 import { putCheckToken } from '../../../services/index';
 import { receiveGym, tokenGym } from '../../../redux/actions';
 import { getSingleGym, putGym } from '../../../services/gym';
-import {Modal, Text} from '../../Kit';
+import { Modal, Text } from '../../Kit';
 import InputText from '../../Kit/TextInput/TextInput';
 import { darkColor, mainColor, white } from '../../../assets/variables/colors';
 import { latinNumber, persianNumber } from '../../../utils/persian';
 import { htmlStyle } from '../../../assets/styles/html';
 import { Gym } from '../../../services/type';
-import { picker } from '../profile/imagePicker';
+import picker from '../profile/imagePicker';
 import { uploader } from '../../../services/UploadImage';
 import { helpDoneEditGym } from '../../../redux/actions/help';
 import Pic1 from '../../../assets/helpPics/MyGym/GymEditDetail.png';
@@ -103,26 +103,22 @@ export default class EditGym extends Component {
       });
       try {
         this.setState({ loading: true });
-        if (type === 'image/jpeg' || type === 'image/jpg' || type === 'image/png' || type === 'image/bmp') {
-          const { tokenmember } = await this.props.user;
-          const m = await moment();
-          const MM = await m.jMonth() + 1;
-          const YYYY = await m.jYear();
-          const json = await uploader([{
-            name: 'avatar',
-            filename: 'avatar.png',
-            data
-          }], Gym, YYYY, MM, tokenmember, 'selfit.public');
-          await this.setState({ PicJson: json });
-          console.log(this.state);
-          alert('آپلود عکس با موفقیت انجام شد');
-        } else {
-          alert('لطفا اول عکس مورد نظر را انتخاب کنید!');
-        }
+        const { tokenmember } = await this.props.user;
+        const m = await moment();
+        const MM = await m.jMonth() + 1;
+        const YYYY = await m.jYear();
+        const json = await uploader([{
+          name: 'avatar',
+          filename: 'avatar.png',
+          data
+        }], Gym, YYYY, MM, tokenmember, 'selfit.public');
+        await this.setState({ PicJson: json });
+        console.log(this.state);
+        Alert.alert('موفقیت', 'آپلود عکس با موفقیت انجام شد', [{ text: 'باشه' }]);
         this.setState({ loading: false });
       } catch (err) {
         console.log(err);
-        alert('خطا در آپلود عکس');
+        Alert.alert('خطا', 'خطا در آپلود عکس', [{ text: 'باشه' }]);
         this.setState({ loading: false });
       }
     });

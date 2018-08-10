@@ -9,11 +9,12 @@ import { TabsStyle } from '../../../assets/styles/gym';
 import { putCheckToken } from '../../../services/index';
 import GymMap from './GymMap';
 import { mainColor } from '../../../assets/variables/colors';
-import { locateUser, tokenGym } from '../../../redux/actions';
+import { locateUser, receiveGym, tokenGym } from '../../../redux/actions';
+import { getAllGym } from '../../../services/gym';
 
 @connect(state => ({
   user: state.user,
-}), { locateUser, tokenGym })
+}), { locateUser, tokenGym, receiveGym })
 export default class Gym extends Component {
   static propTypes = {
     tokenGym: PropTypes.func.isRequired,
@@ -28,17 +29,13 @@ export default class Gym extends Component {
       display: 'flex',
     };
     this.onPress = this.onPress.bind(this);
+    this.getCurrentPosition = this.getCurrentPosition.bind(this);
   }
   componentWillMount() {
     this.props.tokenGym('selfit.gym');
     const { tokenmember, tokenapi } = this.props.user;
     putCheckToken(tokenmember, tokenapi);
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        this.props.locateUser(position.coords.latitude, position.coords.longitude);
-      },
-      error => console.log(error.message)
-    );
+    this.getCurrentPosition();
   }
   onPress() {
     this.setState(
@@ -55,6 +52,26 @@ export default class Gym extends Component {
         viewComponent: <List />,
         heading: 'لیست',
       });
+    }
+  }
+  getCurrentPosition() {
+    const { tokenmember } = this.props.user;
+    try {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          await this.props.locateUser(position.coords.latitude, position.coords.longitude);
+          const GymList =
+            await getAllGym(
+              position.coords.latitude, position.coords.longitude,
+              tokenmember, 'selfit.gym', 120, 0, false, 0
+            );
+          console.log(GymList);
+          this.props.receiveGym(GymList, 0);
+        },
+        error => console.log(error.message)
+      );
+    } catch (e) {
+      console.log(e);
     }
   }
   render() {

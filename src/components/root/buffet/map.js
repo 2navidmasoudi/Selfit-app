@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Fab, Icon } from 'native-base';
+import { StyleSheet, View, Alert } from 'react-native';
+import { Button, Fab, Icon, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
 import { Actions } from 'react-native-router-flux';
 import { mapStyle } from '../../../assets/styles/map';
 import { receiveBuffet, tokenBuffet } from '../../../redux/actions/index';
-import { getAllBuffets } from '../../../services/buffet';
+import { getAllBuffet, getAllBuffets } from '../../../services/buffet';
 import { Text } from '../../Kit';
+import { mainColor, white } from '../../../assets/variables/colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -69,40 +70,53 @@ export default class MapComponent extends Component {
         // longitudeDelta: 0.5,
       },
       map: null,
+      MarkerReady: false,
     };
+    this.onRegionChangeComplete = this.onRegionChangeComplete.bind(this);
+    this.getCurrentPosition = this.getCurrentPosition.bind(this);
   }
-  componentWillMount() {
-    this.setInfo();
+  async componentWillMount() {
+    await this.props.tokenBuffet('selfit.buffet');
+    this.getCurrentPosition();
+    this.getBuffet();
+  }
+  componentDidMount() {
+    this.getCurrentPosition();
   }
   async onRegionChangeComplete(region) {
     await this.setState({
       region
     });
-    console.log('onRegionChangeComplete', region, 'new region:', this.state.region);
-    await this.getBuffet();
   }
   setRegion(region) {
-    this.state.map.animateToRegion(region, 1000);
-    // this.setState({ region });
+    try {
+      this.state.map.animateToRegion(region, 1000);
+    } catch (e) {
+      this.setState({ region });
+    }
   }
-  async setInfo() {
-    await this.props.tokenBuffet('selfit.buffet');
-    this.getCurrentPosition();
-    this.getBuffet();
-  }
+
   async getBuffet() {
     try {
-      // TODO: LAT AND LONG.
-      const { tokenmember, latval, longval } = await this.props.user;
+      const { tokenmember } = await this.props.user;
       const { latitude, longitude } = await this.state.region;
       const { tokenapi } = this.props;
-      // let BuffetList = await getAllBuffet(35.76254800640313,51.38223538175225,tokenmember,tokenapi,10,0,true,0);
-      const BuffetList = await getAllBuffets(tokenmember, tokenapi, 120, 0, true, 0);
+      const BuffetList =
+        await getAllBuffet(latitude, longitude, tokenmember, tokenapi, 120, 0, true, 0);
+      // const BuffetList = await getAllBuffets(tokenmember, tokenapi, 120, 0, true, 0);
       console.log('buffetList:', BuffetList);
       this.props.receiveBuffet(BuffetList, 0);
+      this.setState({ MarkerReady: true });
     } catch (error) {
+      this.setState({ MarkerReady: true });
       console.log(error);
     }
+  }
+  async getNewBuffet() {
+    await this.setState({
+      MarkerReady: false
+    });
+    this.getBuffet();
   }
   getCurrentPosition() {
     try {
@@ -116,7 +130,10 @@ export default class MapComponent extends Component {
           };
           this.setRegion(region);
         },
-        error => alert(error.message)
+        () => Alert.alert(
+          'خطا', 'لطفا مکان یاب گوشی خود را بررسی کنید',
+          [{ text: 'باشه' }]
+        )
       );
     } catch (error) {
       console.log(error);
@@ -135,12 +152,13 @@ export default class MapComponent extends Component {
           initialRegion={initialRegion}
           showsUserLocation
           loadingEnabled
-          onRegionChangeComplete={this.onRegionChangeComplete.bind(this)}
+          onRegionChangeComplete={this.onRegionChangeComplete}
           customMapStyle={mapStyle}
+          onMapReady={() => this.getCurrentPosition()}
         >
-          {this.props.buffet.map((buffet, index) => (
+          {this.props.buffet.map(buffet => (
             <MapView.Marker
-              key={index}
+              key={buffet.buffetid}
               coordinate={{ latitude: buffet.latgym, longitude: buffet.longgym }}
               // image={BuffetPin}
               // centerOffset={(-100,-100)}
@@ -158,14 +176,28 @@ export default class MapComponent extends Component {
               </MapView.Callout>
             </MapView.Marker>
           ))}
+
         </MapView>
         <Fab
           style={{ backgroundColor: '#0F9D7A' }}
           position="bottomRight"
-          onPress={this.getCurrentPosition.bind(this)}
+          onPress={this.getCurrentPosition}
         >
           <Icon name="md-locate" />
         </Fab>
+        {this.state.MarkerReady === false ? <Spinner /> :
+        <Button
+          block
+          style={{
+            margin: 25,
+            marginHorizontal: 150,
+            borderRadius: 5,
+            backgroundColor: mainColor,
+          }}
+          onPress={() => this.getNewBuffet()}
+        >
+          <Icon name="pin" color={white} style={{ alignItems: 'center' }} />
+        </Button>}
       </View>
     );
   }

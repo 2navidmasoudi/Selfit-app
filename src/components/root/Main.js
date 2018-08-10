@@ -12,6 +12,7 @@ import GymGrid from './grids/GymGrid';
 import BuffetGrid from './grids/BuffetGrid';
 import { Text } from '../Kit';
 import Music from './Music';
+import {setUserProperty} from "../../utils/analytics";
 
 let MusicRef;
 export const bounce = () => MusicRef.bounce(800);
@@ -29,8 +30,12 @@ export default class Main extends Component {
   state = {
     viewComponent: <MemberGrid />,
   };
-  componentWillMount() {
-    const { typememberid, tokenapi, tokenmember } = this.props.user;
+  async componentWillMount() {
+    const {
+      typememberid,
+      tokenapi,
+      tokenmember,
+    } = await this.props.user;
     switch (typememberid) {
       case 6: // member
       case 1: // admin

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image } from 'react-native';
+import {StyleSheet, View, Image, Alert} from 'react-native';
 import { Button, Fab, Icon, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
@@ -154,7 +154,10 @@ export default class GymMap extends Component {
           };
           this.setRegion(region);
         },
-        error => console.log(error.message),
+        () => Alert.alert(
+          'خطا', 'لطفا مکان یاب گوشی خود را بررسی کنید',
+          [{ text: 'باشه' }]
+        )
       );
     } catch (error) {
       console.log(error);
@@ -233,12 +236,8 @@ export default class GymMap extends Component {
           {this.state.MarkerReady === false ? null : this.props.gym.map(gym => (
             <MapView.Marker
               key={gym.idgym}
-              animation="pulse"
-              easing="ease-out"
-              iterationCount="infinite"
               coordinate={{ latitude: gym.latgym, longitude: gym.longgym }}
               // image={gym.activegym === true ? require('../../../assets/gym_marker_2.png'):null}
-              onPress={(e => console.log(e.nativeEvent.coordinate))}
               pinColor={gym.activegym === true ? 'blue' : 'red'}
               description={gym.addressgym}
               onCalloutPress={() => this.gymDetail(gym)}

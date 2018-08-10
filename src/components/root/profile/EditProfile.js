@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Container, Content, Form, Icon, Input, Item, View } from 'native-base';
 import { Actions } from 'react-native-router-flux';
-import { Image, TouchableWithoutFeedback } from 'react-native';
+import { Alert, Image, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import { Button as UploadButton } from 'react-native-elements';
 import moment from 'moment-jalaali';
@@ -9,7 +9,7 @@ import AppHeader from '../../header';
 import { EditProfileStyle, form } from '../../../assets/styles/index';
 import { getSingleToken, putMember } from '../../../services/index';
 import { setUser } from '../../../redux/actions/index';
-import { picker } from './imagePicker';
+import picker from './imagePicker';
 import { uploader } from '../../../services/UploadImage';
 import { Member } from '../../../services/type';
 import { Text } from '../../Kit';
@@ -73,7 +73,7 @@ export default class EditProfile extends React.Component {
       );
       if (json === 1) {
         await this._getSingleToken();
-        alert('پروفایل شما با موفقیت ویرایش یافت!');
+        Alert.alert('موفقیت', 'پروفایل شما با موفقیت ویرایش یافت!', [{ text: 'باشه' }]);
         Actions.pop();
         Actions.refresh();
       } else {
@@ -95,26 +95,22 @@ export default class EditProfile extends React.Component {
       });
       try {
         this.setState({ loading: true });
-        if (type === 'image/jpeg' || type === 'image/jpg' || type === 'image/png' || type === 'image/bmp') {
-          const { tokenmember } = await this.props.user;
-          const m = await moment();
-          const MM = await m.jMonth() + 1;
-          const YYYY = await m.jYear();
-          const json = await uploader([{
-            name: 'avatar',
-            filename: 'avatar.png',
-            data: this.state.data
-          }], Member, YYYY, MM, tokenmember, 'selfit.public');
-          await this.setState({ picmember: json, UploadButtonDisable: true });
-          console.log(this.state);
-          alert('آپلود عکس با موفقیت انجام شد');
-        } else {
-          alert('لطفا اول عکس مورد نظر را انتخاب کنید!');
-        }
+        const { tokenmember } = await this.props.user;
+        const m = await moment();
+        const MM = await m.jMonth() + 1;
+        const YYYY = await m.jYear();
+        const json = await uploader([{
+          name: 'avatar',
+          filename: 'avatar.png',
+          data: this.state.data
+        }], Member, YYYY, MM, tokenmember, 'selfit.public');
+        await this.setState({ picmember: json, UploadButtonDisable: true });
+        console.log(this.state);
+        Alert.alert('موفقیت', 'آپلود عکس با موفقیت انجام شد', [{ text: 'باشه' }]);
         this.setState({ loading: false });
       } catch (err) {
         console.log(err);
-        alert('خطا در آپلود عکس');
+        Alert.alert('خطا', 'خطا در آپلود عکس', [{ text: 'باشه' }]);
         this.setState({ loading: false });
       }
     });

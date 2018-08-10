@@ -25,7 +25,6 @@ import EditGym from './components/root/mygym/editGym';
 import FullMap from './components/root/gym/fullMap';
 import FoodList from './components/root/buffetMenu';
 import AuthLightBox from './components/lightbox/AuthLightBox';
-import Music from './components/root/Music';
 import Profile from './components/root/Profile';
 import Support from './components/root/Support';
 import GymDetail from './components/root/gym/GymDetail';
@@ -180,7 +179,7 @@ export default class App extends Component {
                 <Scene key="sign" component={Sign} hideNavBar />
                 <Scene key="waiting" component={Waiting} hideNavBar />
                 {/* <Scene key="Music" hideNavBar component={Music} /> */}
-                <Scene key="root" initial hideNavBar>
+                <Scene key="root" hideNavBar>
                   <Drawer
                     key="drawer"
                     drawerPosition="right"

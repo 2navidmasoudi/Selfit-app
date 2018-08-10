@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { FlatList, View } from 'react-native';
-import { Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import { SearchBar } from 'react-native-elements';
 import CoachCard from './CoachCard';
 import { decrementMin, incrementMin, receiveGym, refreshGym, tokenGym } from '../../../redux/actions/index';
 import { getAllCoach, getSearchCoach } from '../../../services/coach';
 import { logError } from '../../../services/log';
+import Loader from '../../loader';
 
 const mapDispatchToProps = dispatch => ({
   receiveCoach: (gym, min) => dispatch(receiveGym(gym, min)),
@@ -26,7 +26,7 @@ export default class List1 extends Component {
     max: 120,
     ssort: false,
     fsort: 0,
-    loading: 0,
+    loading: true,
     refreshing: false,
     search: null,
     searchMode: false,
@@ -71,6 +71,7 @@ export default class List1 extends Component {
   }
   async _getAllCoach() {
     try {
+      this.setState({ loading: true });
       const { max, ssort, fsort } = await this.state;
       const { tokenmember } = await this.props.user;
       const { min, tokenapi } = await this.props;
@@ -106,13 +107,7 @@ export default class List1 extends Component {
     }
     this.setState({ refreshing: false });
   }
-  renderItem({ item }) {
-    return <CoachCard coach={item} />;
-  }
-  renderFooter() {
-    if (!this.state.loading) return null;
-    return <Spinner />;
-  }
+  renderItem = ({ item }) => <CoachCard coach={item} />
   render() {
     return (
       <View style={{
@@ -129,12 +124,11 @@ export default class List1 extends Component {
           data={this.props.coach}
           renderItem={item => this.renderItem(item)}
           keyExtractor={item => item.idcoach}
-          ListEmptyComponent={() => <Spinner />}
+          ListEmptyComponent={<Loader loading={this.state.loading} />}
           onRefresh={this.handleRefresh.bind(this)}
           refreshing={this.state.refreshing}
           onEndReached={this.handleLoadMore.bind(this)}
           onEndReachedThreshold={0.5}
-          ListFooterComponent={this.renderFooter.bind(this)}
         />
       </View>
     );

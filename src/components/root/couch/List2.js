@@ -32,7 +32,7 @@ export default class List2 extends Component {
     max: 120,
     ssort: true,
     fsort: 1,
-    loading: 0,
+    loading: true,
     refreshing: false,
     search: null,
     searchMode: false,
@@ -112,13 +112,7 @@ export default class List2 extends Component {
     }
     this.setState({ refreshing: false });
   }
-  renderItem({ item }) {
-    return <CoachCard coach={item} />;
-  }
-  renderFooter() {
-    if (!this.state.loading) return null;
-    return <Spinner />;
-  }
+  renderItem = ({ item }) => <CoachCard coach={item} />
   render() {
     return (
       <View style={{
@@ -140,7 +134,6 @@ export default class List2 extends Component {
           refreshing={this.state.refreshing}
           onEndReached={this.handleLoadMore.bind(this)}
           onEndReachedThreshold={0.5}
-          ListFooterComponent={this.renderFooter.bind(this)}
         />
       </View>
     );

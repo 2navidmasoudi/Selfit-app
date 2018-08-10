@@ -7,7 +7,7 @@ import AppHeader from '../../header';
 import MapComponent from './map';
 import List from './list';
 import { TabsStyle } from '../../../assets/styles/gym';
-import { locateUser } from '../../../redux/actions/index';
+import { locateUser, receiveBuffet } from '../../../redux/actions/index';
 import { putCheckToken } from '../../../services/index';
 import { Text, Modal } from '../../Kit';
 import { helpDoneBuffetIndex } from '../../../redux/actions/help';
@@ -15,11 +15,13 @@ import Pic1 from '../../../assets/helpPics/BuffetIndex/BuffetTabs.png';
 import Pic2 from '../../../assets/helpPics/BuffetIndex/BuffetPin.png';
 import Pic3 from '../../../assets/helpPics/BuffetIndex/BuffetDetailMap.png';
 import Pic4 from '../../../assets/helpPics/BuffetIndex/BuffetFollow.png';
+import { getAllBuffet } from '../../../services/buffet';
 
 @connect(state => ({
   user: state.user,
   help: state.help.BuffetIndex,
 }), {
+  receiveBuffet,
   locateUser,
   helpDoneBuffetIndex
 })
@@ -40,9 +42,16 @@ export default class Buffet extends Component {
     this.getCurrentPosition();
   }
   getCurrentPosition() {
+    const { tokenmember } = this.props.user;
     try {
-      navigator.geolocation.getCurrentPosition((position) => {
-        this.props.locateUser(position.coords.latitude, position.coords.longitude);
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        await this.props.locateUser(position.coords.latitude, position.coords.longitude);
+        const json = await getAllBuffet(
+          position.coords.latitude,
+          position.coords.longitude,
+          tokenmember, 'selfit.buffet', 120, 0, false, 0
+        );
+        await this.props.receiveBuffet(json, 0);
       });
     } catch (error) {
       console.log(error);

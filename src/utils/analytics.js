@@ -20,11 +20,8 @@ export const setUserId = (id) => {
 
 export const setUserProperty = (data) => {
   if (data) {
-    if (data.first_name) {
-      analytics.setUserProperty('first_name', data.first_name);
-    }
-    if (data.last_name) {
-      analytics.setUserProperty('last_name', data.last_name);
+    if (data.name_family) {
+      analytics.setUserProperty('name_family', data.name_family);
     }
     if (data.email) {
       analytics.setUserProperty('email', data.email);

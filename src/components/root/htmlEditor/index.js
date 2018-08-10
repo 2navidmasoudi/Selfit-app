@@ -24,6 +24,7 @@ export default class HtmlEditor extends Component {
     super(props);
     this.getHTML = this.getHTML.bind(this);
     this.setFocusHandlers = this.setFocusHandlers.bind(this);
+    this.submitHandler = this.submitHandler.bind(this);
   }
   onEditorInitialized() {
     this.setFocusHandlers();
@@ -60,7 +61,7 @@ export default class HtmlEditor extends Component {
           ref={(r) => { this.richtext = r; }}
           style={styles.richText}
           hiddenTitle
-          footerHeight={height * 0.2}
+          footerHeight={height * 0.4}
           initialContentHTML={htmlContent}
           editorInitializedCallback={() => this.onEditorInitialized()}
         />
@@ -70,7 +71,7 @@ export default class HtmlEditor extends Component {
         <Button
           full
           style={{ backgroundColor: mainColor }}
-          onPress={this.submitHandler.bind(this)}
+          onPress={this.submitHandler}
         >
           <Text style={{ color: white }}>
             ثبت تغیرات

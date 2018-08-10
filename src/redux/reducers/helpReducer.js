@@ -13,7 +13,7 @@ import {
   HELP_DONE_MY_GYM,
   HELP_DONE_EDIT_GYM,
   HELP_DONE_COACH_LIST,
-  HELP_DONE_BUFFET_MENU
+  HELP_DONE_BUFFET_MENU, HELP_DONE_GYM_DETAIL
 } from '../actions/type';
 
 const HelpReset = {
@@ -30,6 +30,7 @@ const HelpReset = {
   editGym: false,
   CoachList: false,
   BuffetMenuList: false,
+  gymDetail: false,
 };
 const HelpOff = {
   mainMember: true,
@@ -45,6 +46,7 @@ const HelpOff = {
   editGym: true,
   CoachList: true,
   BuffetMenuList: true,
+  gymDetail: true,
 };
 export default (state = HelpReset, action = {}) => {
   switch (action.type) {
@@ -116,6 +118,11 @@ export default (state = HelpReset, action = {}) => {
       return {
         ...state,
         BuffetMenuList: true,
+      };
+    case HELP_DONE_GYM_DETAIL:
+      return {
+        ...state,
+        gymDetail: true,
       };
     default:
       return state;

@@ -12,7 +12,6 @@ import {
   Icon,
   Left,
   Right,
-  Spinner,
   Tab,
   Tabs,
 } from 'native-base';
@@ -38,8 +37,9 @@ import MaterialCard from './MaterialCard';
 import { TabsStyle } from '../../../assets/styles/gym';
 import { checkOrderBuffet, deleteOrderAll } from '../../../services/orderBuffet';
 import { Text } from '../../Kit';
-import { persianNumber, latinNumber } from '../../../utils/persian';
+import { persianNumber } from '../../../utils/persian';
 import { errorColor, mainColor, white } from '../../../assets/variables/colors';
+import Loader from '../../loader';
 
 moment.loadPersian({ dialect: 'persian-modern' });
 const styles = StyleSheet.create({
@@ -104,6 +104,8 @@ export default class BuffetMenu extends Component {
     fsort: 0,
     rate: null,
     disableRate: false,
+    loadingFood: true,
+    loadingMaterial: true,
   };
   componentWillMount() {
     this.props.resetFood();
@@ -136,25 +138,30 @@ export default class BuffetMenu extends Component {
   }
   async _getMaterial() {
     try {
+      this.setState({ loadingMaterial: true });
       const { buffetid, tokenapi } = await this.props;
       const { tokenmember } = await this.props.user;
       const MaterialList = await getAllBuffetMaterial(buffetid, false, tokenmember, tokenapi, 120, 0, false, 0);
       console.log(MaterialList);
       this.props.receiveMaterial(MaterialList);
+      this.setState({ loadingMaterial: false });
     } catch (err) {
+      this.setState({ loadingMaterial: false });
       logError(err, 'getAllBuffetMaterial', 'Buffet/BuffetMenu', '_getMaterial');
       console.log(err);
     }
   }
   async _getMenuFood() {
     try {
+      this.setState({ loadingFood: true });
       const { buffetid, tokenapi } = await this.props;
       const { tokenmember } = await this.props.user;
       const MenuFood = await getMenuFood(buffetid, 0, tokenmember, tokenapi, 120, 0, true, 0);
       await this.props.receiveMenuFood(MenuFood);
       this.setState({ MenuFood });
-      this.setState({ CountReady: true });
+      this.setState({ CountReady: true, loadingFood: false });
     } catch (err) {
+      this.setState({ loadingFood: false });
       logError(err, '_getMenufood', 'Buffet/BuffetMenu', 'getMenuFood');
       console.log(err);
     }
@@ -316,7 +323,7 @@ export default class BuffetMenu extends Component {
           <Tabs
             initialPage={1}
             locked
-            ref={c => this._tabs = c}
+            ref={(c) => { this._tabs = c; }}
             tabBarUnderlineStyle={TabsStyle.underLine}
           >
             <Tab
@@ -366,7 +373,8 @@ export default class BuffetMenu extends Component {
             >
               <Tabs
                 initialPage={1}
-                ref={c => this._tabs2 = c}
+                locked
+                ref={(c) => { this._tabs2 = c; }}
                 tabBarUnderlineStyle={TabsStyle.underLine}
               >
                 <Tab
@@ -378,14 +386,11 @@ export default class BuffetMenu extends Component {
                 >
                   {this.props.idbasket && <FlatList
                     data={this.props.Material}
-                    renderItem={({ item }) => <MaterialCard Material={item} active={activebuffet} />}
+                    renderItem={({ item }) =>
+                      <MaterialCard Material={item} active={activebuffet} />}
                     keyExtractor={item => item.idmaterial}
-                    ListEmptyComponent={() => <Spinner />}
+                    ListEmptyComponent={<Loader loading={this.state.loadingMaterial} />}
                     scrollEnabled={false}
-                    // onRefresh={this.handleRefresh.bind(this)}
-                    // refreshing={this.state.refreshing}
-                    // onEndReachedThreshold={0.5}
-                    // ListFooterComponent={this.renderFooter.bind(this)}
                   />}
                 </Tab>
                 <Tab
@@ -399,12 +404,8 @@ export default class BuffetMenu extends Component {
                     data={this.props.MenuFood}
                     renderItem={({ item }) => <FoodCard MenuFood={item} active={activebuffet} />}
                     keyExtractor={item => item.idmenufood}
-                    ListEmptyComponent={() => <Spinner />}
+                    ListEmptyComponent={<Loader loading={this.state.loadingFood} />}
                     scrollEnabled={false}
-                    // onRefresh={this.handleRefresh.bind(this)}
-                    // refreshing={this.state.refreshing}
-                    // onEndReachedThreshold={0.5}
-                    // ListFooterComponent={this.renderFooter.bind(this)}
                   />
                 </Tab>
               </Tabs>

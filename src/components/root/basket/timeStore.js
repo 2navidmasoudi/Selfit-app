@@ -76,6 +76,7 @@ export default class TimeStore extends Component {
     this.props.setRoad('Store');
     Actions.addressRoot({ LeadFrom: 'Store' });
   }
+  helpDone = () => this.props.helpDoneStoreTime();
   render() {
     const {
       item, formInputText

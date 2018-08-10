@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FlatList, Platform, View, Image } from 'react-native';
-import { Fab, Spinner } from 'native-base';
+import { Fab } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { SearchBar } from 'react-native-elements';
@@ -54,8 +54,8 @@ export default class List extends Component {
       this.setState({ loading: true });
       const { tokenmember, latval, longval } = await this.props.user;
       const { min, tokenapi } = await this.props;
-      const json = await getAllBuffets(tokenmember, tokenapi, 120, min, false, 0);
-      // const json = await getAllBuffet(latval, longval, tokenmember, tokenapi, max, min, ssort, fsort);
+      // const json = await getAllBuffets(tokenmember, tokenapi, 120, min, false, 0);
+      const json = await getAllBuffet(latval, longval, tokenmember, tokenapi, 120, min, false, 0);
       console.log(json);
       const BuffetList = await json.BuffetMapList.$values;
       await this.props.receiveBuffet(BuffetList, min);
@@ -99,7 +99,7 @@ export default class List extends Component {
     }
   }
   async handleLoadMore() {
-    if (this.props.buffet.length >= 70 && !this.state.loading) {
+    if (this.props.buffet.length >= 120 && !this.state.loading) {
       console.log('Request Load More');
       this.props.incrementMin();
       this.setState({ loading: true });

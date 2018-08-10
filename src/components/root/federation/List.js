@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { FlatList, View } from 'react-native';
-import { Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import { SearchBar } from 'react-native-elements';
 import FederationCard from './FederationCard';
 import { decrementMin, incrementMin, receiveGym, refreshGym, tokenGym } from '../../../redux/actions/index';
 import { logError } from '../../../services/log';
 import { getAllFED, getSearchFED } from '../../../services/doctor';
+import Loader from '../../loader';
 
 const mapDispatchToProps = dispatch => ({
   receiveFED: (gym, min) => dispatch(receiveGym(gym, min)),
@@ -26,7 +26,7 @@ export default class List extends Component {
     max: 120,
     ssort: false,
     fsort: 0,
-    loading: 0,
+    loading: true,
     refreshing: false,
     search: null,
     searchMode: false,
@@ -72,6 +72,7 @@ export default class List extends Component {
   }
   async _getAllFED() {
     try {
+      this.setState({ loading: true });
       const { max, ssort, fsort } = await this.state;
       const { tokenmember } = await this.props.user;
       const { min, tokenapi } = await this.props;
@@ -107,10 +108,6 @@ export default class List extends Component {
     }
     this.setState({ refreshing: false });
   }
-  renderFooter() {
-    if (!this.state.loading) return null;
-    return <Spinner />;
-  }
   render() {
     return (
       <View style={{
@@ -127,12 +124,11 @@ export default class List extends Component {
           data={this.props.FED}
           renderItem={({ item }) => <FederationCard FED={item} />}
           keyExtractor={item => item.doctorid}
-          ListEmptyComponent={() => <Spinner />}
+          ListEmptyComponent={<Loader loading={this.state.loading} />}
           onRefresh={this.handleRefresh.bind(this)}
           refreshing={this.state.refreshing}
           onEndReached={this.handleLoadMore.bind(this)}
           onEndReachedThreshold={0.5}
-          ListFooterComponent={this.renderFooter.bind(this)}
         />
       </View>
     );

@@ -7,12 +7,13 @@ import { connect } from 'react-redux';
 import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
 import { drawer } from '../../assets/styles/index';
-import { getSingleToken, putUserLogout } from '../../services';
+import {getSingleToken, putCheckToken, putUserLogout} from '../../services';
 import { Text } from '../Kit';
 import { persianNumber } from '../../utils/persian';
 import { setUser } from '../../redux/actions';
 import {darkColor, mainColor, white} from '../../assets/variables/colors';
 import { helpOff, helpReset } from '../../redux/actions/help';
+import {setUserProperty} from "../../utils/analytics";
 
 @connect(state => ({
   user: state.user,
@@ -38,13 +39,27 @@ export default class DrawerLayout extends Component {
   state = {
     Active: true,
   }
-  componentDidMount() {
-    this.getSingleMember();
+  async componentDidMount() {
+    await this.getSingleMember();
   }
   async getSingleMember() {
-    const { tokenmember, tokenapi } = await this.props.user;
+    const {
+      tokenmember,
+      tokenapi,
+      namefamilymember,
+      phone,
+      mailmember,
+    } = await this.props.user;
     const json = await getSingleToken(tokenmember, tokenapi);
     await this.props.setUser(json.MemberSingleToken);
+    const name_family = await Base64.decode(namefamilymember);
+    const mobile = await Base64.decode(phone);
+    const email = await Base64.decode(mailmember);
+    setUserProperty({
+      name_family,
+      mobile,
+      email
+    });
   }
   getRequestLogout() {
     Alert.alert(
