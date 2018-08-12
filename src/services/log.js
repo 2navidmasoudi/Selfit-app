@@ -1,8 +1,8 @@
-import { headers, LOG, POST, Selfit } from './type';
+import {headers, LOG, POST, SAPI, Selfit} from './type';
 
 export const logError =
   async (messagelogerrorui, typelogerrorui, urllogerrorui, iplogerrorui, tokenapi = 'selfit.public') => {
-    const response = await fetch(`${Selfit}${LOG}Post`, {
+    const response = await fetch(`${SAPI}${LOG}Post`, {
       method: POST,
       headers,
       body: JSON.stringify({
@@ -16,5 +16,5 @@ export const logError =
     const json = await response.json();
     console.log('LOG/Post');
     console.log(json);
-    return json;
+    return json.ResponseCode;
   };

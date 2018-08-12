@@ -1,8 +1,8 @@
-import { BasketBuffet, DELETE, GET, headers, Orders, POST, Selfit } from './type';
+import {BasketBuffet, DELETE, GET, headers, Orders, POST, SAPI, Selfit} from './type';
 // Basket Buffet
-export const getAllOrder = async (active, token, tokenapi, max, min) => {
+export const getAllOrder = async (active, token, tokenapi, max, min, sort = null) => {
   try {
-    const response = await fetch(`${Selfit}${BasketBuffet}GetAll?active=${active}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}`, {
+    const response = await fetch(`${SAPI}${BasketBuffet}GetAll?active=${active}&t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`, {
       method: GET,
       headers
     });
@@ -10,7 +10,7 @@ export const getAllOrder = async (active, token, tokenapi, max, min) => {
     const json = await response.json();
     console.log('BasketBuffet/GetAll');
     console.log(json);
-    return { Basket: json.BasketBuffet.$values, PriceAll: json.PriceAll };
+    return { Basket: json.Data.$values, PriceAll: json.Price };
   } catch (e) {
     console.log(e);
   }
@@ -18,7 +18,7 @@ export const getAllOrder = async (active, token, tokenapi, max, min) => {
 };
 export const postOrderBuffet = async (buffetid, menufoodid, numbermenufood, token, tokenapi) => {
   try {
-    const response = await fetch(`${Selfit}${BasketBuffet}Post`, {
+    const response = await fetch(`${SAPI}${BasketBuffet}Post`, {
       method: POST,
       headers,
       body: JSON.stringify({
@@ -32,7 +32,7 @@ export const postOrderBuffet = async (buffetid, menufoodid, numbermenufood, toke
     const json = await response.json();
     console.log('BasketBuffet/Post');
     console.log(json);
-    return json;
+    return json.ResponseCode;
   } catch (e) {
     console.log(e);
   }
@@ -40,14 +40,14 @@ export const postOrderBuffet = async (buffetid, menufoodid, numbermenufood, toke
 };
 export const deleteOrderBuffet = async (id, token, tokenapi) => {
   try {
-    const response = await fetch(`${Selfit}${BasketBuffet}Delete/${id}?token=${token}&tokenapi=${tokenapi}`, {
+    const response = await fetch(`${SAPI}${BasketBuffet}Delete/${id}?t.token=${token}&t.tokenapi=${tokenapi}`, {
       method: DELETE,
       headers,
     });
     const json = await response.json();
     console.log('BasketBuffet/Delete');
     console.log(json);
-    return json;
+    return json.ResponseCode;
   } catch (e) {
     console.log(e);
   }
@@ -55,33 +55,32 @@ export const deleteOrderBuffet = async (id, token, tokenapi) => {
 };
 // Orders
 export const getOrderBuffetAll =
-  async (id, methodpayed, statepayed, buffetid, token, tokenapi, max, min, ssort, fsort) => {
+  async (id, methodpayed, statepayed, buffetid, token, tokenapi, max, min, sort) => {
     try {
-      const response = await fetch(`${Selfit}${Orders}GetFactorBuffet/${id}?methodpayed=${methodpayed}&statepayed=${statepayed}&buffetid=${buffetid}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
+      const response = await fetch(`${SAPI}${Orders}GetFactorBuffet/${id}?methodpayed=${methodpayed}&statepayed=${statepayed}&buffetid=${buffetid}&t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`, {
         method: GET,
         headers
       });
-      if (response.status == 204) return [];
       const json = await response.json();
       console.log('Orders/GetFactorBuffet');
       console.log(json);
-      return json.OrderBuffetList.$values;
+      return json.Data.$values;
     } catch (e) {
       console.log(e);
     }
     return [];
   };
 export const getFactorBuffet =
-  async (methodpayed, statepayed, token, tokenapi, max, min, ssort, fsort) => {
+  async (methodpayed, statepayed, token, tokenapi, max, min, sort) => {
     try {
-      const response = await fetch(`${Selfit}${Orders}GetFactorMember?methodpayed=${methodpayed}&statepayed=${statepayed}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
+      const response = await fetch(`${SAPI}${Orders}GetFactorMember?methodpayed=${methodpayed}&statepayed=${statepayed}&t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`, {
         method: GET,
         headers
       });
       const json = await response.json();
       console.log('Orders/GetFactorMember');
       console.log(json);
-      return json.FactorBuffetList.$values;
+      return json.Data.$values;
     } catch (e) {
       console.log(e);
     }
@@ -89,14 +88,14 @@ export const getFactorBuffet =
   };
 export const checkOrderBuffet = async (buffetid, token, tokenapi) => {
   try {
-    const response = await fetch(`${Selfit}${Orders}CheckOrder?buffetid=${buffetid}&token=${token}&tokenapi=${tokenapi}`, {
+    const response = await fetch(`${SAPI}${Orders}CheckOrder?buffetid=${buffetid}&t.token=${token}&t.tokenapi=${tokenapi}`, {
       method: GET,
       headers
     });
     const json = await response.json();
     console.log('Orders/CheckOrder');
     console.log(json);
-    return json;
+    return json.Data;
   } catch (e) {
     console.log(e);
   }
@@ -104,7 +103,7 @@ export const checkOrderBuffet = async (buffetid, token, tokenapi) => {
 };
 export const postFactor = async (buffetid, descfactor, methodpayed, delivery, token, tokenapi) => {
   try {
-    const response = await fetch(`${Selfit}${Orders}PostFactor`, {
+    const response = await fetch(`${SAPI}${Orders}PostFactor`, {
       method: POST,
       headers,
       body: JSON.stringify({
@@ -119,7 +118,7 @@ export const postFactor = async (buffetid, descfactor, methodpayed, delivery, to
     const json = await response.json();
     console.log('Orders/PostFactor');
     console.log(json);
-    return json;
+    return json.Data;
   } catch (e) {
     console.log(e);
   }
@@ -127,7 +126,7 @@ export const postFactor = async (buffetid, descfactor, methodpayed, delivery, to
 };
 export const postAddressOrderBuffet = async (idfactor, token, tokenapi) => {
   try {
-    const response = await fetch(`${Selfit}${Orders}PostAddress`, {
+    const response = await fetch(`${SAPI}${Orders}PostAddress`, {
       method: POST,
       headers,
       body: JSON.stringify({
@@ -139,7 +138,7 @@ export const postAddressOrderBuffet = async (idfactor, token, tokenapi) => {
     const json = await response.json();
     console.log('Orders/PostAddress');
     console.log(json);
-    return json;
+    return json.ResponseCode;
   } catch (e) {
     console.log(e);
   }
@@ -147,14 +146,14 @@ export const postAddressOrderBuffet = async (idfactor, token, tokenapi) => {
 };
 export const deleteOrderAll = async (token, tokenapi) => {
   try {
-    const response = await fetch(`${Selfit}${Orders}Delete?token=${token}&tokenapi=${tokenapi}`, {
+    const response = await fetch(`${SAPI}${Orders}Delete?t.token=${token}&t.tokenapi=${tokenapi}`, {
       method: DELETE,
       headers,
     });
     const json = await response.json();
     console.log('Orders/Delete');
     console.log(json);
-    return json;
+    return json.ResponseCode;
   } catch (e) {
     console.log(e);
   }

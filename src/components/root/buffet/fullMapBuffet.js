@@ -1,13 +1,26 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { ImageBackground, StyleSheet, View } from 'react-native';
 import { Fab, Icon, Spinner } from 'native-base';
 import { connect } from 'react-redux';
-import MapView, { Marker } from 'react-native-maps';
+import MapView from 'react-native-maps';
 import { Actions } from 'react-native-router-flux';
 import { mapStyle } from '../../../assets/styles/map';
 import { receiveBuffet, tokenBuffet } from '../../../redux/actions/index';
 import { getAllBuffets } from '../../../services/buffet';
 import { mainColor } from '../../../assets/variables/colors';
+import Pin1 from '../../../assets/pinPics/Buffet1.png';
+import Pin2 from '../../../assets/pinPics/Buffet2.png';
+import { Text } from '../../Kit';
+
+const BuffetCallOut = ({ buffet }) => (
+  <View>
+    <Text style={{ textAlign: 'center' }} type="bold">{buffet.namebuffet}</Text>
+    <Text style={{ fontSize: 12 }} ellipsizeMode="tail">{buffet.addressgym}</Text>
+    <Text style={{ textAlign: 'center', fontSize: 10 }} type="light">
+      برای مشاهده جزئیات کلیک کنید!
+    </Text>
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -57,7 +70,6 @@ export default class FullMapBuffet extends Component {
       // longitudeDelta: 0.5,
     },
     map: null,
-    Markers: [],
     MarkerReady: false,
   };
   componentWillMount() {
@@ -85,7 +97,7 @@ export default class FullMapBuffet extends Component {
       const { latitude, longitude } = await this.state.region;
       const { tokenapi } = this.props;
       // let BuffetList = await getAllBuffet(latval,longval,tokenmember,tokenapi,10,0,true,0);
-      const BuffetList = await getAllBuffets(tokenmember, tokenapi, 1000, 0, true, 0);
+      const BuffetList = await getAllBuffets(tokenmember, tokenapi, 1000, 0, null);
       console.log('buffetList:', BuffetList);
       this.props.receiveBuffet(BuffetList, 0);
       this.setState({ MarkerReady: true });
@@ -115,6 +127,12 @@ export default class FullMapBuffet extends Component {
     Actions.buffetMenu(buffet);
     console.log(buffet);
   }
+  renderPin = (sex) => {
+    switch (sex) {
+      case true: return Pin2;
+      default: return Pin1;
+    }
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -127,20 +145,24 @@ export default class FullMapBuffet extends Component {
           onRegionChangeComplete={this.onRegionChangeComplete.bind(this)}
           customMapStyle={mapStyle}
         >
-          {this.props.buffet.map((buffet, index) => (
-            <Marker
-              key={index}
+          {this.props.buffet.map(buffet => (
+            <MapView.Marker
+              key={buffet.buffetid}
               coordinate={{ latitude: buffet.latgym, longitude: buffet.longgym }}
-              // image={BuffetPin}
-              // centerOffset={(-100,-100)}
-              // pinColor="blue"
-              // style={{maxWidth:20,maxHeight:20}}
               title={buffet.namebuffet}
               description={buffet.addressgym}
-              onCalloutPress={() => this._buffetMenu(buffet)}
+              onCalloutPress={() => this.buffetMenu(buffet)}
             >
-              {/* <View><Text>{gym.namegym}</Text></View> */}
-            </Marker>
+              <ImageBackground
+                {...buffet}
+                source={this.renderPin(buffet.activebuffet)}
+                style={{ width: 40, height: 45 }}
+              >
+                <MapView.Callout style={{ width: 220 }}>
+                  <BuffetCallOut buffet={buffet} />
+                </MapView.Callout>
+              </ImageBackground>
+            </MapView.Marker>
           ))}
         </MapView>
         <Fab

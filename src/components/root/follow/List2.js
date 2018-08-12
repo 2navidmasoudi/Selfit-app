@@ -68,7 +68,7 @@ export default class List2 extends Component {
       const payedFactorProduct = await getFactorProduct(
         false,
         tokenmember, 'selfit.store',
-        max, min, ssort, fsort
+        max, min, null
       );
       console.log('payedFactorProduct');
       console.log(payedFactorProduct);

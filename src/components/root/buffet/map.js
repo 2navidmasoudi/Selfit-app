@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Alert } from 'react-native';
+import {StyleSheet, View, Alert, ImageBackground} from 'react-native';
 import { Button, Fab, Icon, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
@@ -9,6 +9,8 @@ import { receiveBuffet, tokenBuffet } from '../../../redux/actions/index';
 import { getAllBuffet, getAllBuffets } from '../../../services/buffet';
 import { Text } from '../../Kit';
 import { mainColor, white } from '../../../assets/variables/colors';
+import Pin1 from '../../../assets/pinPics/Buffet1.png';
+import Pin2 from '../../../assets/pinPics/Buffet2.png';
 
 const styles = StyleSheet.create({
   container: {
@@ -102,7 +104,7 @@ export default class MapComponent extends Component {
       const { latitude, longitude } = await this.state.region;
       const { tokenapi } = this.props;
       const BuffetList =
-        await getAllBuffet(latitude, longitude, tokenmember, tokenapi, 120, 0, true, 0);
+        await getAllBuffet(latitude, longitude, tokenmember, tokenapi, 120, 0, null);
       // const BuffetList = await getAllBuffets(tokenmember, tokenapi, 120, 0, true, 0);
       console.log('buffetList:', BuffetList);
       this.props.receiveBuffet(BuffetList, 0);
@@ -143,6 +145,12 @@ export default class MapComponent extends Component {
     Actions.buffetMenu(buffet);
     console.log(buffet);
   }
+  renderPin = (sex) => {
+    switch (sex) {
+      case true: return Pin2;
+      default: return Pin1;
+    }
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -160,20 +168,19 @@ export default class MapComponent extends Component {
             <MapView.Marker
               key={buffet.buffetid}
               coordinate={{ latitude: buffet.latgym, longitude: buffet.longgym }}
-              // image={BuffetPin}
-              // centerOffset={(-100,-100)}
-              // pinColor="blue"
-              // style={{maxWidth:20,maxHeight:20}}
               title={buffet.namebuffet}
               description={buffet.addressgym}
               onCalloutPress={() => this.buffetMenu(buffet)}
             >
-              <MapView.Callout style={{ width: 220 }}>
-                <BuffetCallOut
-                  buffet={buffet}
-                />
-                {/* <View><Text>{gym.namegym}</Text></View> */}
-              </MapView.Callout>
+              <ImageBackground
+                {...buffet}
+                source={this.renderPin(buffet.activebuffet)}
+                style={{ width: 40, height: 45 }}
+              >
+                <MapView.Callout style={{ width: 220 }}>
+                  <BuffetCallOut buffet={buffet} />
+                </MapView.Callout>
+              </ImageBackground>
             </MapView.Marker>
           ))}
 

@@ -11,6 +11,7 @@ import { tokenBlog, incrementMin, decrementMin, refreshBlog, receiveBlog } from 
 import { logError } from '../../../services/log';
 import { getAllBlog, getSearchBlog } from '../../../services/blog';
 import BlogCard from './blogCard';
+import Loader from "../../loader";
 
 @connect(state => ({
   user: state.user,
@@ -63,7 +64,7 @@ export default class Blog extends Component {
       const { max, ssort, fsort } = await this.state;
       const { tokenmember } = await this.props.user;
       const { min, tokenapi } = await this.props;
-      const BlogList = await getAllBlog(tokenmember, tokenapi, max, min, ssort, fsort);
+      const BlogList = await getAllBlog(tokenmember, tokenapi, max, min, null);
       console.log(BlogList);
       await this.props.receiveBlog(BlogList, min);
       this.setState({ loading: false });
@@ -82,7 +83,7 @@ export default class Blog extends Component {
       const { search, max, ssort, fsort } = await this.state;
       const { tokenmember } = await this.props.user;
       const { min, tokenapi } = await this.props;
-      const BlogList = await getSearchBlog(search, tokenmember, tokenapi, max, min, ssort, fsort);
+      const BlogList = await getSearchBlog(search, tokenmember, tokenapi, max, min, null);
       console.log(BlogList);
       await this.props.receiveBlog(BlogList, min);
       this.setState({ loading: false, refreshing: false });
@@ -117,10 +118,6 @@ export default class Blog extends Component {
   renderItem({ item }) {
     return <BlogCard blog={item} />;
   }
-  renderFooter() {
-    if (!this.state.loading) return null;
-    return <Spinner />;
-  }
   render() {
     return (
       <Container>
@@ -134,11 +131,11 @@ export default class Blog extends Component {
           data={this.props.BlogList}
           renderItem={item => this.renderItem(item)}
           keyExtractor={item => item.blogid}
+          ListEmptyComponent={<Loader loading={this.state.loading} />}
           onRefresh={this.handleRefresh.bind(this)}
           refreshing={this.state.refreshing}
           onEndReached={this.handleLoadMore.bind(this)}
           onEndReachedThreshold={0.5}
-          ListFooterComponent={this.renderFooter.bind(this)}
         />
       </Container>
     );

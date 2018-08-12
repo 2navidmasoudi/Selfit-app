@@ -36,8 +36,6 @@ const ssort = 0;
 export default class BuffetBasket extends Component {
   static propTypes = {
     user: PropTypes.objectOf(PropTypes.node).isRequired,
-    buffetBasket: PropTypes.arrayOf(PropTypes.node),
-    materialBasket: PropTypes.arrayOf(PropTypes.node),
     Count1: PropTypes.number,
     Count2: PropTypes.number,
     PriceAll: PropTypes.number,
@@ -48,8 +46,6 @@ export default class BuffetBasket extends Component {
     selectBuffet: PropTypes.func.isRequired,
   };
   static defaultProps = {
-    buffetBasket: [],
-    materialBasket: [],
     Count1: 0,
     Count2: 0,
     PriceAll: 0,
@@ -67,14 +63,14 @@ export default class BuffetBasket extends Component {
     const { tokenmember } = await this.props.user;
     const { tokenapi } = await this.props;
     const { Basket, PriceAll } =
-        await getAllOrder(active, tokenmember, tokenapi, max, min);
+        await getAllOrder(active, tokenmember, tokenapi, max, min, null);
     this.props.reBasketBuffet(Basket, Basket.length, PriceAll);
   }
   async getBasketMaterial() {
     const { tokenmember } = await this.props.user;
     const { tokenapi } = await this.props;
     const { Basket, PriceAll, idbuffet } =
-        await getAllBasketMaterial(active, tokenmember, tokenapi, max, min, ssort);
+        await getAllBasketMaterial(active, tokenmember, tokenapi, max, min);
     this.props.reBasketMaterial(Basket, Basket.length, PriceAll);
     this.props.selectBuffet(idbuffet);
   }

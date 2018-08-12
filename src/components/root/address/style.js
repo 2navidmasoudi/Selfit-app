@@ -1,4 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { Platform } from 'react-native';
 
 export default EStyleSheet.create({
   markerImage: { width: 50, height: 50, resizeMode: 'contain' },
@@ -6,7 +7,7 @@ export default EStyleSheet.create({
   viewImage: {
     position: 'absolute',
     top: 0,
-    bottom: 45,
+    bottom: Platform.OS === 'ios' ? 0 : 45,
     left: 0,
     right: 0,
     alignItems: 'center',

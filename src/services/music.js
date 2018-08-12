@@ -1,8 +1,8 @@
-import { headers, Music, Selfit, GET } from './type';
+import {headers, Music, Selfit, GET, SAPI} from './type';
 
-export const getAllMusic = async (token, tokenapi, max, min, ssort, fsort) => {
+export const getAllMusic = async (token, tokenapi, max, min, sort) => {
   try {
-    const response = await fetch(`${Selfit}${Music}GetAll?token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
+    const response = await fetch(`${SAPI}${Music}GetAll?t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`, {
       method: GET,
       headers
     });
@@ -10,7 +10,7 @@ export const getAllMusic = async (token, tokenapi, max, min, ssort, fsort) => {
     const json = await response.json();
     console.log('Music/GetAll');
     console.log(json);
-    return json.MusicList.$values;
+    return json.Data.$values;
   } catch (e) {
     console.log(e);
   }

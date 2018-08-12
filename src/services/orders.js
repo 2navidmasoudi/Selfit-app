@@ -1,12 +1,11 @@
-import { GET, headers, Orders, PUT, Selfit } from './type';
+import {GET, headers, Orders, PUT, SAPI, Selfit} from './type';
 
-export const getOrderBuffet = async (id, active, token, tokenapi, max, min, ssort) => {
+export const getOrderBuffet = async (id, active, token, tokenapi, max, min, sort = null) => {
   try {
-    const response = await fetch(`${Selfit}${Orders}GetOrderBuffet/${id}?active=${active}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}`, {
+    const response = await fetch(`${SAPI}${Orders}GetOrderBuffet/${id}?active=${active}&t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`, {
       method: GET,
       headers
     });
-    if (response.status === 204) return null;
     const json = await response.json();
     console.log('Orders/GetOrderBuffet');
     console.log(json);
@@ -16,7 +15,7 @@ export const getOrderBuffet = async (id, active, token, tokenapi, max, min, ssor
   }
 };
 export const putAcceptBuffet = async (memberid, factorid, active, token, tokenapi) => {
-  const response = await fetch(`${Selfit}${Orders}PutAccept`, {
+  const response = await fetch(`${SAPI}${Orders}PutAccept`, {
     method: PUT,
     headers,
     body: JSON.stringify({
@@ -30,5 +29,5 @@ export const putAcceptBuffet = async (memberid, factorid, active, token, tokenap
   const json = await response.json();
   console.log('Orders/PutAccept');
   console.log(json);
-  return json;
+  return json.ResponseCode;
 };

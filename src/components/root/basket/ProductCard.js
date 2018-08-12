@@ -27,7 +27,7 @@ export default class ProductCard extends Component {
       const { tokenmember } = await this.props.user;
       const deletedOrder = await deleteBasketProduct(product.idbasket, tokenmember, tokenapi);
       console.log(deletedOrder, 'deleted?');
-      const Basket = await getBasketProduct(true, tokenmember, tokenapi, 30, 0, false, 0);
+      const Basket = await getBasketProduct(true, tokenmember, tokenapi, 30, 0);
       this.props.reBasketProduct(Basket, Basket.length);
       this._getPayment();
     } catch (error) {
@@ -37,10 +37,11 @@ export default class ProductCard extends Component {
   }
   render() {
     const { product } = this.props;
+    const totalPrice = (product.priceproduct * product.numberbasket).toLocaleString();
     return (
       <Card>
         <CardItem>
-          <Text style={{ flex: 1, textAlign: 'center' }}>{product.titleproduct}</Text>
+          <Text style={{ flex: 1, textAlign: 'center' }}>{persianNumber(product.titleproduct)}</Text>
         </CardItem>
         <CardItem>
           <Left style={{ flex: 1 }}>
@@ -49,11 +50,11 @@ export default class ProductCard extends Component {
             </Button>
           </Left>
           <Text style={{ flex: 1, textAlign: 'center' }}>
-            تعداد: {persianNumber(product.numberbasket)}
+            تعداد:{' '}{persianNumber(product.numberbasket)}
           </Text>
           <Right style={{ flex: 1 }}>
             <Text>
-              قیمت کل:{persianNumber(product.priceproduct * product.numberbasket.toLocaleString())}
+              قیمت کل:{' '}{persianNumber(totalPrice)}
             </Text>
           </Right>
         </CardItem>

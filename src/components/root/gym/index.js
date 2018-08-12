@@ -24,7 +24,7 @@ export default class Gym extends Component {
   constructor() {
     super();
     this.state = {
-      viewComponent: <List />,
+      viewComponent: <GymMap />,
       heading: 'لیست',
       display: 'flex',
     };

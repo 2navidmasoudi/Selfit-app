@@ -42,7 +42,7 @@ export default class List1 extends Component {
       const unpayedFactors = await getFactorBuffet(
         1, 2,
         tokenmember, tokenapi,
-        max, min, ssort, fsort
+        max, min, 'idfactorbuffet%20desc'
       );
       this.setState({ unpayedFactors });
       this.setState({ refreshing: false });
