@@ -100,7 +100,8 @@ export default class AddFood extends Component {
       const { search, max, ssort, fsort } = await this.state;
       const { tokenmember } = await this.props.user;
       const { tokenapi } = await this.props;
-      const MenuFoodList = await getSearchMenuFood(search, tokenmember, tokenapi, 50, 0, ssort, fsort);
+      const MenuFoodList =
+        await getSearchMenuFood(search, tokenmember, tokenapi, 50, 0, null);
       await this.props.receiveMenuFood(MenuFoodList);
       this.setState({ loading: false, refreshing: false });
     } catch (error) {
@@ -115,7 +116,7 @@ export default class AddFood extends Component {
       const { max, ssort, fsort } = await this.state;
       const { tokenmember } = await this.props.user;
       const { tokenapi } = await this.props;
-      const MenuFoodList = await getAllMenuFood(catid, tokenmember, tokenapi, 50, 0, ssort, fsort);
+      const MenuFoodList = await getAllMenuFood(catid, tokenmember, tokenapi, 50, 0, null);
       console.log(MenuFoodList, 'catid:', catid);
       await this.props.receiveMenuFood(MenuFoodList);
       this.setState({ loading: false, refreshing: false });

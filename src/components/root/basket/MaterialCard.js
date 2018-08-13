@@ -37,7 +37,7 @@ export default class MaterialCard extends Component {
       const {
         Basket,
         PriceAll
-      } = await getAllBasketMaterial(true, tokenmember, tokenapi, max, min, ssort);
+      } = await getAllBasketMaterial(true, tokenmember, tokenapi, max, min);
       this.props.reBasketMaterial(Basket, Basket.length, PriceAll);
     } catch (e) {
       console.log(e);

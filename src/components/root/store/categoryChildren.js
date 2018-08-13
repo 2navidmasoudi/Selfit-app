@@ -71,7 +71,7 @@ export default class CategoryChildren extends Component {
       const { tokenmember } = await this.props.user;
       const { tokenapi, idcategory } = await this.props;
       const { max, min, fsort, ssort } = await this.state;
-      const Product = await getAllAccessProduct(idcategory, tokenmember, tokenapi, max, min, ssort, fsort);
+      const Product = await getAllAccessProduct(idcategory, tokenmember, tokenapi, max, min, null);
       console.log(Product, 'Product');
       // this.props.receiveProduct(Product,min);
       this.setState({ Product });

@@ -1,53 +1,53 @@
-import { Buffet, DELETE, GET, headers, POST, PUT, Selfit } from './type';
+import {Buffet, DELETE, GET, headers, POST, PUT, SAPI, Selfit} from './type';
 
-export const getAllBuffets = async (token, tokenapi, max, min, ssort, fsort) => {
-  const response = await fetch(`${Selfit}${Buffet}GetAll?token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
+export const getAllBuffets = async (token, tokenapi, max, min, sort) => {
+  const response = await fetch(`${SAPI}${Buffet}GetAll?t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`, {
     method: GET,
     headers
   });
   const json = await response.json();
   console.log('buffet/GetAll');
   console.log(json);
-  return json.BuffetList.$values;
+  return json.Data.$values;
 };
-export const getAllBuffet = async (latval, longval, token, tokenapi, max, min, ssort, fsort) => {
+export const getAllBuffet = async (latval, longval, token, tokenapi, max, min, sort) => {
   try {
-    const response = await fetch(`${Selfit}${Buffet}GetAllMap?latval=${latval}&longval=${longval}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
+    const response = await fetch(`${SAPI}${Buffet}GetAllMap?latval=${latval}&longval=${longval}&t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`, {
       method: GET,
       headers
     });
     const json = await response.json();
     console.log('buffet/GetAllMap');
     console.log(json);
-    return json.BuffetMapList.$values;
+    return json.Data.$values;
   } catch (e) {
     console.log(e);
   }
   return [];
 };
-export const getSearchBuffet = async (search, token, tokenapi, max, min, ssort, fsort) => {
-  const response = await fetch(`${Selfit}${Buffet}GetSearch?search=${search}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
+export const getSearchBuffet = async (search, token, tokenapi, max, min, sort) => {
+  const response = await fetch(`${SAPI}${Buffet}GetSearch?search=${search}&t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`, {
     method: GET,
     headers
   });
   const json = await response.json();
   console.log('buffet/GetSearch');
   console.log(json);
-  return json;
+  return json.Data.$values;
 };
-export const getMenuFood = async (id, catid, token, tokenapi, max, min, ssort, fsort) => {
-  const response = await fetch(`${Selfit}${Buffet}GetMenufoodAll/${id}?catid=${catid}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
+export const getMenuFood = async (id, catid, token, tokenapi, max, min, sort) => {
+  const response = await fetch(`${SAPI}${Buffet}GetMenufoodAll/${id}?catid=${catid}&t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`, {
     method: GET,
     headers
   });
   const json = await response.json();
   console.log('buffet/GetMenufoodAll');
   console.log(json);
-  return json.MenufoodBuffet.$values;
+  return json.Data.$values;
 };
 
 export const putActiveBuffet = async (idbuffet, active, token, tokenapi) => {
-  const response = await fetch(`${Selfit}${Buffet}PutActiveBuffet`, {
+  const response = await fetch(`${SAPI}${Buffet}PutActiveBuffet`, {
     method: PUT,
     headers,
     body: JSON.stringify({
@@ -60,10 +60,10 @@ export const putActiveBuffet = async (idbuffet, active, token, tokenapi) => {
   const json = await response.json();
   console.log('buffet/PutActiveBuffet');
   console.log(json);
-  return json;
+  return json.ResponseCode;
 };
 export const postMenuFoodBuffet = async (idbuffet, menufoodidval, active, token, tokenapi) => {
-  const response = await fetch(`${Selfit}${Buffet}PostMenufoodBuffet`, {
+  const response = await fetch(`${SAPI}${Buffet}PostMenufoodBuffet`, {
     method: POST,
     headers,
     body: JSON.stringify({
@@ -77,11 +77,11 @@ export const postMenuFoodBuffet = async (idbuffet, menufoodidval, active, token,
   const json = await response.json();
   console.log('buffet/PostMenufoodBuffet');
   console.log(json);
-  return json;
+  return json.ResponseCode;
 };
 export const postRateBuffet = async (idbuffet, rate, token, tokenapi) => {
   try {
-    const response = await fetch(`${Selfit}${Buffet}PostRate`, {
+    const response = await fetch(`${SAPI}${Buffet}PostRate`, {
       method: POST,
       headers,
       body: JSON.stringify({
@@ -94,13 +94,13 @@ export const postRateBuffet = async (idbuffet, rate, token, tokenapi) => {
     const json = await response.json();
     console.log('Buffet/PostRate');
     console.log(json);
-    return json;
+    return json.ResponseCode;
   } catch (e) {
     console.log(e);
   }
 };
 export const putActiveMenuFood = async (idbuffet, idmenufood_buffet, active, token, tokenapi) => {
-  const response = await fetch(`${Selfit}${Buffet}PutActiveMenufood`, {
+  const response = await fetch(`${SAPI}${Buffet}PutActiveMenufood`, {
     method: PUT,
     headers,
     body: JSON.stringify({
@@ -114,35 +114,35 @@ export const putActiveMenuFood = async (idbuffet, idmenufood_buffet, active, tok
   const json = await response.json();
   console.log('buffet/PutActiveMenufood');
   console.log(json);
-  return json;
+  return json.ResponseCode;
 };
 export const deleteMenuFood = async (id, token, tokenapi) => {
-  const response = await fetch(`${Selfit}${Buffet}DeleteMenufoodBuffet/${id}?token=${token}&tokenapi=${tokenapi}`, {
+  const response = await fetch(`${SAPI}${Buffet}DeleteMenufoodBuffet/${id}?t.token=${token}&t.tokenapi=${tokenapi}`, {
     method: DELETE,
     headers
   });
   const json = await response.json();
   console.log('buffet/DeleteMenufoodBuffet');
   console.log(json);
-  return json;
+  return json.ResponseCode;
 };
 export const getSingleBuffet = async (id, token, tokenapi) => {
-  const response = await fetch(`${Selfit}${Buffet}GetSingle/${id}?token=${token}&tokenapi=${tokenapi}`, {
+  const response = await fetch(`${SAPI}${Buffet}GetSingle/${id}?t.token=${token}&t.tokenapi=${tokenapi}`, {
     method: GET,
     headers
   });
   const json = await response.json();
   console.log('buffet/GetSingle');
   console.log(json);
-  return json;
+  return json.Data.Data;
 };
 export const getSingleIDMemberBuffet = async (token, tokenapi) => {
-  const response = await fetch(`${Selfit}${Buffet}GetSingleIDMember?token=${token}&tokenapi=${tokenapi}`, {
+  const response = await fetch(`${SAPI}${Buffet}GetSingleIDMember?t.token=${token}&t.tokenapi=${tokenapi}`, {
     method: GET,
     headers
   });
   const json = await response.json();
   console.log('buffet/GetSingleIDMember');
   console.log(json);
-  return json;
+  return json.Data;
 };

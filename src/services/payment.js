@@ -1,11 +1,11 @@
 import { Linking, Platform } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import { GET, headers, Payment, Selfit } from './type';
+import {GET, headers, Payment, SAPI, Selfit} from './type';
 
 const isIOS = Platform.OS === 'ios';
 export const getPayment = async (type, token, delivery = 0, tokenapi = 'selfit.member') => {
   try {
-    const results = await fetch(`${Selfit}${Payment}Get?type=${type}&delivery=${delivery}&token=${token}&tokenapi=${tokenapi}`, {
+    const results = await fetch(`${SAPI}${Payment}Get?type=${type}&delivery=${delivery}&t.token=${token}&t.tokenapi=${tokenapi}`, {
       method: GET,
       headers,
     });
@@ -19,7 +19,7 @@ export const getPayment = async (type, token, delivery = 0, tokenapi = 'selfit.m
 };
 export const getRequestPayment = async (type, token, delivery = 0, tokenapi = 'selfit.member') => {
   try {
-    fetch(`${Selfit}${Payment}GetRequest?type=${type}&delivery=${delivery}&token=${token}&tokenapi=${tokenapi}`, {
+    fetch(`${SAPI}${Payment}GetRequest?type=${type}&delivery=${delivery}&t.token=${token}&t.tokenapi=${tokenapi}`, {
       method: GET,
       // headers,
       redirect: 'follow'

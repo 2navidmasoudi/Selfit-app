@@ -40,7 +40,7 @@ export default class AddMaterial extends Component {
       const { max, ssort, fsort } = await this.state;
       const { tokenmember } = await this.props.user;
       const { tokenapi } = await this.props;
-      const MaterialList = await getAllMaterial(tokenmember, tokenapi, max, 0, ssort, fsort);
+      const MaterialList = await getAllMaterial(tokenmember, tokenapi, max, 0);
       console.log(MaterialList);
       await this.props.receiveMaterial(MaterialList);
       this.setState({ loading: false, refreshing: false });

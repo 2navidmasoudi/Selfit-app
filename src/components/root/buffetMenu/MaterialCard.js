@@ -61,7 +61,7 @@ export default class MaterialCard extends Component {
     let result = null;
     try {
       const MaterialList =
-        await getAllBuffetMaterial(buffetid, false, tokenmember, tokenapi, 120, 0, false, 0);
+        await getAllBuffetMaterial(buffetid, false, tokenmember, tokenapi, 120, 0);
       for (let i = 0; i < MaterialList.length; i++) {
         if (food.idmaterial === MaterialList[i].idmaterial) {
           console.log('this is it:', MaterialList);

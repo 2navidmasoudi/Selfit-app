@@ -71,7 +71,7 @@ export default class AddAddress extends Component {
           <Form>
             <Item floatingLabel style={styles.itemAddress} error={!this.state.desc}>
               <Label style={styles.labelAddress}>آدرس کامل:</Label>
-              <Input mul onChangeText={text => this.changeAddressLocation(text)} />
+              <Input onChangeText={text => this.changeAddressLocation(text)} />
             </Item>
             <Item floatingLabel error={!this.state.titleaddress}>
               <Label style={styles.labelAddress}>نام آدرس (مثلا خانه، محل کار ...)</Label>
@@ -80,11 +80,11 @@ export default class AddAddress extends Component {
             <View style={{ flexDirection: 'row' }} >
               <Item style={{ flex: 1 }} error={!this.state.floor}>
                 <Label style={styles.labelAddress}>واحد</Label>
-                <Input onChangeText={text => this.changeFloor(text)} />
+                <Input onChangeText={text => this.changeFloor(text)} keyboardType="numeric" />
               </Item >
               <Item style={{ flex: 1, marginLeft: 20 }} error={!this.state.plaque}>
                 <Label style={styles.labelAddress}>پلاک</Label>
-                <Input onChangeText={text => this.changePlaque(text)} />
+                <Input onChangeText={text => this.changePlaque(text)} keyboardType="numeric" />
               </Item>
             </View>
           </Form>

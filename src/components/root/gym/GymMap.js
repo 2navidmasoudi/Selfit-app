@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet, View, Image, Alert} from 'react-native';
+import {StyleSheet, View, Image, Alert, ImageBackground} from 'react-native';
 import { Button, Fab, Icon, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
@@ -13,6 +13,9 @@ import Pic1 from '../../../assets/helpPics/GymMap/PinMapGym.png';
 import Pic2 from '../../../assets/helpPics/GymMap/DetailMapGym.png';
 import Pic3 from '../../../assets/helpPics/GymMap/BtnMapGym.png';
 import { helpDoneGymMap } from '../../../redux/actions/help';
+import Pin1 from '../../../assets/pinPics/Gym1.png';
+import Pin2 from '../../../assets/pinPics/Gym2.png';
+import Pin3 from '../../../assets/pinPics/Gym3.png';
 
 const styles = StyleSheet.create({
   container: {
@@ -164,6 +167,13 @@ export default class GymMap extends Component {
     }
   }
   helpDone = () => this.props.helpDoneGymMap();
+  renderPin = (sex) => {
+    switch (sex) {
+      case true: return Pin2;
+      case false: return Pin1;
+      default: return Pin3;
+    }
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -237,16 +247,22 @@ export default class GymMap extends Component {
             <MapView.Marker
               key={gym.idgym}
               coordinate={{ latitude: gym.latgym, longitude: gym.longgym }}
-              // image={gym.activegym === true ? require('../../../assets/gym_marker_2.png'):null}
-              pinColor={gym.activegym === true ? 'blue' : 'red'}
+              // image={gym.activegym === true ? Pin1 : Pin2}
+              // pinColor={gym.activegym === true ? 'blue' : 'red'}
               description={gym.addressgym}
               onCalloutPress={() => this.gymDetail(gym)}
             >
-              <MapView.Callout style={{ width: 220 }}>
-                <GymCallOut
-                  gym={gym}
-                />
-              </MapView.Callout>
+              <ImageBackground
+                {...gym}
+                source={this.renderPin(gym.activegym)}
+                style={{ width: 40, height: 45 }}
+              >
+                <MapView.Callout style={{ width: 220 }} {...gym}>
+                  <GymCallOut
+                    gym={gym}
+                  />
+                </MapView.Callout>
+              </ImageBackground>
             </MapView.Marker>
           ))}
         </MapView>

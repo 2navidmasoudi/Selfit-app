@@ -71,7 +71,7 @@ export default class BuffetKeeper extends Component {
       const { tokenmember } = await this.props.user;
       const { tokenapi, buffetid } = await this.props;
       const order =
-        await getOrderBuffetAll(0, 0, 0, buffetid, tokenmember, tokenapi, 50, 0, false, 0);
+        await getOrderBuffetAll(0, 0, 0, buffetid, tokenmember, tokenapi, 50, 0, 'idfactorbuffet%20desc');
       console.log(order);
       this.props.getOrderBuffet(order);
       this.setState({ refreshing: false, refresh: false, loading: false });

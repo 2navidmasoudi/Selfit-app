@@ -141,7 +141,7 @@ export default class BuffetMenu extends Component {
       this.setState({ loadingMaterial: true });
       const { buffetid, tokenapi } = await this.props;
       const { tokenmember } = await this.props.user;
-      const MaterialList = await getAllBuffetMaterial(buffetid, false, tokenmember, tokenapi, 120, 0, false, 0);
+      const MaterialList = await getAllBuffetMaterial(buffetid, false, tokenmember, tokenapi, 120, 0);
       console.log(MaterialList);
       this.props.receiveMaterial(MaterialList);
       this.setState({ loadingMaterial: false });
