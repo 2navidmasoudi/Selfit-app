@@ -26,6 +26,9 @@ import { persianNumber } from '../../../utils/persian';
 import { sendPrice } from '../../../services/Alopeyk';
 import { getSingleBuffet } from '../../../services/buffet';
 
+let lat;
+let long;
+
 @connect(state => ({
   user: state.user,
   tokenapi: state.buffet.tokenapi,
@@ -36,7 +39,6 @@ import { getSingleBuffet } from '../../../services/buffet';
   Count2: state.basket.buffetBasketCount,
   PriceAllBuffet: state.basket.PriceAllBuffet,
   PriceAllMaterial: state.basket.PriceAllMaterial,
-
 }), {
   tokenBuffet,
   reBasketMaterial,
@@ -44,20 +46,15 @@ import { getSingleBuffet } from '../../../services/buffet';
   setRoad,
 })
 export default class finalOrderBuffet extends Component {
-  state = {
-    active: true,
-    state: false,
-    min: 0,
-    max: 30,
-    fsort: 0,
-    ssort: false,
-    total: 0,
-    descfactor: '',
-    sendServicePrice: 0,
-    lat: null,
-    long: null,
-    disableSendFactor: false,
-  };
+  constructor() {
+    super();
+    this.state = {
+      descfactor: '',
+      sendServicePrice: 0,
+      disableSendFactor: false,
+    };
+    this.sendOrderBuffet = this.sendOrderBuffet.bind(this);
+  }
   componentWillMount() {
     this.getInfo();
     console.log(this.props, 'props');
@@ -65,8 +62,21 @@ export default class finalOrderBuffet extends Component {
   async getInfo() {
     await this.props.tokenBuffet('selfit.buffet');
     await this.props.setRoad('buffet');
-    await this._getSingleBuffet();
-    this._sendPrice();
+    await this.getSingleBuffet();
+    this.sendPrice();
+  }
+  async getSingleBuffet() {
+    try {
+      const { tokenmember } = await this.props.user;
+      const { buffetid, tokenapi } = await this.props;
+      const buffetInfo = await getSingleBuffet(buffetid, tokenmember, tokenapi);
+      console.log('buffetInfo');
+      console.log(buffetInfo);
+      lat = buffetInfo.latgym;
+      long = buffetInfo.longgym;
+    } catch (e) {
+      console.log(e);
+    }
   }
   async sendOrderBuffet() {
     try {
@@ -97,25 +107,9 @@ export default class finalOrderBuffet extends Component {
       console.log(e);
     }
   }
-  async _getSingleBuffet() {
-    try {
-      const { tokenmember } = await this.props.user;
-      const { buffetid, tokenapi } = await this.props;
-      const buffetInfo = await getSingleBuffet(buffetid, tokenmember, tokenapi);
-      console.log('buffetInfo');
-      console.log(buffetInfo);
-      await this.setState({
-        lat: buffetInfo.latgym,
-        long: buffetInfo.longgym,
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  }
-  async _sendPrice() {
+  async sendPrice() {
     try {
       const { lataddressmember, longaddressmember } = await this.props.address;
-      const { lat, long } = await this.state;
       const sendServicePrice = await sendPrice(lat, long, lataddressmember, longaddressmember);
       console.log(sendServicePrice);
       await this.setState({
@@ -153,30 +147,33 @@ export default class finalOrderBuffet extends Component {
   );
   render() {
     const totalPrice =
-      (this.props.PriceAllBuffet + this.props.PriceAllMaterial + this.state.sendServicePrice * 3 / 5)
+      (this.props.PriceAllBuffet +
+        this.props.PriceAllMaterial +
+        (this.state.sendServicePrice * (3 / 5)))
         .toLocaleString();
     const addressTitle = Base64.decode(this.props.address.titleaddressmember);
+    const sendPrice =
+      this.state.sendServicePrice ? `${(this.state.sendServicePrice * (3 / 5)).toLocaleString()} تومان` : 'در حال بررسی';
     const {
       item, formInputText
     } = SignStyle;
     const FooterComponent =
       ((this.props.Count1 + this.props.Count2) === 0 || this.state.sendServicePrice === 0) ? null :
-        (<Footer>
-          <FooterTab>
-            <Button
-              style={{ backgroundColor: '#0F9D7A' }}
-              disabled={this.state.disableSendFactor}
-              onPress={this.sendOrderBuffet.bind(this)}
-            >
-              <Text style={{
-              color: 'white',
-            }}
+        (
+          <Footer>
+            <FooterTab>
+              <Button
+                style={{ backgroundColor: '#0F9D7A' }}
+                disabled={this.state.disableSendFactor}
+                onPress={this.sendOrderBuffet}
               >
-              صدور فاکتور
-              </Text>
-            </Button>
-          </FooterTab>
-         </Footer>);
+                <Text style={{ color: 'white' }}>
+                  صدور فاکتور
+                </Text>
+              </Button>
+            </FooterTab>
+          </Footer>
+        );
     return (
       <Container>
         <AppHeader rightTitle="صدور فاکتور بوفه" backButton="flex" />
@@ -194,7 +191,7 @@ export default class finalOrderBuffet extends Component {
               data={this.props.buffetBasket}
               renderItem={this.renderItem}
               scrollEnabled={false}
-              keyExtractor={item => item.idmenufood}
+              keyExtractor={Food => Food.idmenufood}
             />
             <Card style={{ flex: 0 }}>
               <CardItem>
@@ -205,7 +202,7 @@ export default class finalOrderBuffet extends Component {
               data={this.props.materialBasket}
               renderItem={this.renderItem2}
               scrollEnabled={false}
-              keyExtractor={item => item.idmixmaterial}
+              keyExtractor={Material => Material.idmixmaterial}
             />
             <CardItem bordered>
               <Right style={{ flex: 1 }}>
@@ -213,7 +210,7 @@ export default class finalOrderBuffet extends Component {
                     به آدرس:{` ${addressTitle}`}
                 </Text>
                 <Text style={{ flex: 1 }}>
-                    هزینه ارسال:{` ${persianNumber(this.state.sendServicePrice * 3 / 5)}تومان`}
+                    هزینه ارسال:{` ${persianNumber(sendPrice)}`}
                 </Text>
                 <Text style={{ flex: 1 }}>
                     توضیحات:{` ${this.state.descfactor}`}

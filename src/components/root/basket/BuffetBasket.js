@@ -16,7 +16,6 @@ import { persianNumber } from '../../../utils/persian';
 const active = true;
 const max = 100;
 const min = 0;
-const ssort = 0;
 
 @connect(state => ({
   user: state.user,

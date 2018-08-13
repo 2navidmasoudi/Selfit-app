@@ -36,7 +36,7 @@ export const postBasketMaterial = async (iddish, buffetid, token, tokenapi) => {
     const json = await response.json();
     console.log('BasketMaterial/Post');
     console.log(json);
-    return json.ResponseCode;
+    return json.Data;
   } catch (e) {
     console.log(e);
   }

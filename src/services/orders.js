@@ -9,7 +9,7 @@ export const getOrderBuffet = async (id, active, token, tokenapi, max, min, sort
     const json = await response.json();
     console.log('Orders/GetOrderBuffet');
     console.log(json);
-    return json;
+    return json.Data;
   } catch (e) {
     console.log(e);
   }

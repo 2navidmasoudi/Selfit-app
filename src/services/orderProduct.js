@@ -93,7 +93,7 @@ export const postFactorProduct = async (timefactor, descfactor, methodpayed, tok
     const json = await response.json();
     console.log('OrderProduct/PostFactor');
     console.log(json);
-    return json.ResponseCode;
+    return json.Data;
   } catch (e) {
     console.log(e);
   }

@@ -44,7 +44,7 @@ export default class EditGym extends Component {
       numbertuitiongym: props.gym.numbertuitiongym.toString(),
       latgym: props.gym.latgym.toString(),
       longgym: props.gym.longgym.toString(),
-      active: props.gym.active,
+      activegym: props.gym.activegym,
       telgym: props.gym.telgym,
       loading: false,
       Pic: null,
@@ -75,12 +75,16 @@ export default class EditGym extends Component {
         numbertuitiongym,
         latgym,
         longgym,
-        active,
+        activegym,
         telgym
       } = await this.state;
+      const Tui = tuitiongym ? Number(tuitiongym) : null;
+      const nTui = numbertuitiongym ? Number(numbertuitiongym) : null;
+      const lat = await Number(latgym);
+      const long = await Number(longgym);
       const json = await putGym(
-        idgym, namegym, descgym, PicJson, Number(tuitiongym), Number(numbertuitiongym),
-        Number(latgym), Number(longgym), active, telgym, addressgym, tokenmember, tokenapi
+        idgym, namegym, descgym, PicJson, Tui, nTui,
+        lat, long, activegym, telgym, addressgym, tokenmember, tokenapi
       );
       console.log('result: ', json);
       if (json) {
