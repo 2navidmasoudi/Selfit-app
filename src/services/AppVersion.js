@@ -3,7 +3,7 @@ import { logError } from './log';
 
 export default async () => {
   try {
-    const response = await fetch(`${SAPI}${APP}Get`);
+    const response = await fetch(`${SAPI}${APP}GetVersion`);
     const json = await response.json();
     console.log('app.version =');
     console.log(json);

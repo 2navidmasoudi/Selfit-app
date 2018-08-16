@@ -1,8 +1,6 @@
-import { Linking, Platform } from 'react-native';
-import { Actions } from 'react-native-router-flux';
-import {GET, headers, Payment, SAPI, Selfit} from './type';
+import { Linking } from 'react-native';
+import { GET, headers, Payment, SAPI } from './type';
 
-const isIOS = Platform.OS === 'ios';
 export const getPayment = async (type, token, delivery = 0, tokenapi = 'selfit.member') => {
   try {
     const results = await fetch(`${SAPI}${Payment}Get?type=${type}&delivery=${delivery}&t.token=${token}&t.tokenapi=${tokenapi}`, {
@@ -27,8 +25,6 @@ export const getRequestPayment = async (type, token, delivery = 0, tokenapi = 's
       .then(url => Linking.canOpenURL(url).then((supported) => {
         if (!supported) {
           console.log(`Can't handle url: ${url}`);
-        } else if (isIOS) {
-          return Actions.paymentWebView({ url });
         } else {
           Linking.openURL(url);
         }
