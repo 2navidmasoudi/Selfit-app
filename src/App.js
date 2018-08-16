@@ -179,7 +179,7 @@ export default class App extends Component {
                 <Scene key="sign" component={Sign} hideNavBar />
                 <Scene key="waiting" component={Waiting} hideNavBar />
                 {/* <Scene key="Music" hideNavBar component={Music} /> */}
-                <Scene key="root" initial hideNavBar>
+                <Scene key="root" hideNavBar>
                   <Drawer
                     key="drawer"
                     drawerPosition="right"
