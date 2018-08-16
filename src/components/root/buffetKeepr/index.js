@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Container, Header, Left, Right, Switch, Fab, Button } from 'native-base';
+import { Container, Header, Left, Right, Switch, Button, Icon } from 'native-base';
 import { Alert, FlatList, View } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import * as Animatable from 'react-native-animatable';
 import AppHeader from '../../header';
 import { putCheckToken } from '../../../services/index';
 import { getOrderBuffet, tokenBuffet } from '../../../redux/actions';
@@ -13,7 +14,6 @@ import OrderCard from './orderCard';
 import { Text } from '../../Kit';
 import Loader from '../../loader';
 import { darkColor, errorColor, mainColor, white } from '../../../assets/variables/colors';
-import { persianNumber } from '../../../utils/persian';
 
 @connect(state => ({
   user: state.user,
@@ -35,9 +35,12 @@ export default class BuffetKeeper extends Component {
       refreshing: true,
       refresh: true,
       loading: true,
+      pannelBtn: 'add',
+      display: 'none'
     };
     this.putActiveBuffet = this.putActiveBuffet.bind(this);
     this.getOrderBuffet = this.getOrderBuffet.bind(this);
+    this.togglePanel = this.togglePanel.bind(this);
   }
   componentWillMount() {
     const { tokenmember, tokenapi } = this.props.user;
@@ -80,6 +83,7 @@ export default class BuffetKeeper extends Component {
       this.setState({ refreshing: false, refresh: false, loading: false });
     }
   }
+  handleViewRef = (ref) => { this.view = ref; }
   async checkActiveBuffet() {
     try {
       const buffetInformation = await this.getSingleBuffet();
@@ -112,12 +116,22 @@ export default class BuffetKeeper extends Component {
       logError(err, 'putActiveBuffet', 'root/buffetKeeper/index', 'putActiveBuffet77');
     }
   }
+  togglePanel = () => {
+    const { pannelBtn } = this.state;
+    if (pannelBtn === 'add') {
+      this.setState({ pannelBtn: 'close', display: 'flex' });
+      this.view.slideInDown();
+    } else {
+      this.setState({ pannelBtn: 'add' });
+      this.view.slideOutUp();
+      setTimeout(() => this.setState({ display: 'none' }), 1000);
+    }
+  }
   renderItem = ({ item }) => <OrderCard order={item} />
   render() {
     const YesOrNo = this.state.Active ? ' بله (سفارش می پذیرم)' : ' خیر (بوفه تعطیل است)';
     const color = this.state.Active ? darkColor : errorColor;
     const name = this.props.namebuffet || 'نامشخص';
-    const Money = 50000;
     return (
       <Container>
         <AppHeader rightTitle="دریافت سفارش" backButton="flex" />
@@ -127,7 +141,13 @@ export default class BuffetKeeper extends Component {
           iosBarStyle="light-content"
         >
           <Left style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
-            <View style={{ flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Icon
+                name={this.state.pannelBtn}
+                style={{ padding: 20 }}
+                onPress={this.togglePanel}
+                color={darkColor}
+              />
               <Switch
                 onTintColor={darkColor}
                 thumbTintColor={darkColor}
@@ -154,37 +174,47 @@ export default class BuffetKeeper extends Component {
           </Right>
         </Header>
         <View style={{ height: 1, backgroundColor: darkColor }} />
-        <Header
-          style={{ justifyContent: 'center', backgroundColor: mainColor }}
-          androidStatusBarColor={darkColor}
-          iosBarStyle="light-content"
-        >
-          <Left style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Button
-              style={{ backgroundColor: darkColor }}
-              onPress={() => Alert.alert(
-                'درخواست تسویه',
-                'برای درخواست تسویه حسابتان با پشتیبانی تماس بگیرید.',
-                [
-                  { text: 'پشتیبانی', onPress: () => Actions.support() },
-                  { text: 'بازگشت' }
-                ]
-              )}
-            >
-              <Text style={{ color: white }}>
+        <Animatable.View ref={this.handleViewRef} style={{ display: this.state.display }}>
+          <Header
+            style={{ justifyContent: 'center', backgroundColor: mainColor }}
+            androidStatusBarColor={darkColor}
+            iosBarStyle="light-content"
+          >
+            <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center', flexDirection: 'row' }}>
+              <Button
+                style={{ backgroundColor: darkColor, borderColor: mainColor, borderWidth: 1 }}
+                onPress={() => Alert.alert(
+                  'درخواست تسویه',
+                  'برای درخواست تسویه حسابتان با پشتیبانی تماس بگیرید.',
+                  [
+                    { text: 'پشتیبانی', onPress: () => Actions.support() },
+                    { text: 'بازگشت' }
+                  ]
+                )}
+              >
+                <Text style={{ color: white }}>
                   تسویه حساب
-              </Text>
-            </Button>
-          </Left>
-          <Right style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ color: white }}>
-                مجموع درآمد شما:{' '}
-              <Text type="bold" style={{ color: darkColor }}>
-                {persianNumber(Money.toLocaleString())}{' تومان'}
-              </Text>
-            </Text>
-          </Right>
-        </Header>
+                </Text>
+              </Button>
+              <Button
+                style={{ backgroundColor: darkColor, borderColor: mainColor, borderWidth: 1 }}
+                onPress={() => Actions.buffet()}
+              >
+                <Text style={{ color: white }}>
+                  بوفه های اطراف
+                </Text>
+              </Button>
+              <Button
+                style={{ backgroundColor: darkColor, borderColor: mainColor, borderWidth: 1 }}
+                onPress={() => Actions.support()}
+              >
+                <Text style={{ color: white }}>
+                  تماس با پشتیبانی
+                </Text>
+              </Button>
+            </View>
+          </Header>
+        </Animatable.View>
         <View style={{ flex: 1, padding: 10 }}>
           <FlatList
             data={this.props.orderList}
@@ -195,23 +225,6 @@ export default class BuffetKeeper extends Component {
             ListEmptyComponent={<Loader loading={this.state.loading} />}
           />
         </View>
-        <Fab
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: 50,
-            width: 120,
-            right: 5,
-            bottom: 5,
-            borderRadius: 10,
-            backgroundColor: mainColor
-          }}
-          position="bottomRight"
-          onPress={() => Actions.buffet()}
-        >
-          <Text style={{ fontSize: 18 }}>بوفه های اطراف</Text>
-        </Fab>
       </Container>
     );
   }

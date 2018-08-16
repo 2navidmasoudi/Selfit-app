@@ -13,6 +13,6 @@
   },
   "globals": {
     "navigator": true,
-    "fetch": true,
+    "fetch": true
   }
 }
