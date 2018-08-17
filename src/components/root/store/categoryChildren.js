@@ -44,8 +44,6 @@ export default class CategoryChildren extends Component {
     Product: [],
     max: 150,
     min: 0,
-    ssort: false,
-    fsort: 0,
     loading: true,
     ModalNumber: 0,
   };
@@ -70,8 +68,8 @@ export default class CategoryChildren extends Component {
       this.setState({ loading: true });
       const { tokenmember } = await this.props.user;
       const { tokenapi, idcategory } = await this.props;
-      const { max, min, fsort, ssort } = await this.state;
-      const Product = await getAllAccessProduct(idcategory, tokenmember, tokenapi, max, min, ssort, fsort);
+      const { max, min } = await this.state;
+      const Product = await getAllAccessProduct(idcategory, tokenmember, tokenapi, max, min, null);
       console.log(Product, 'Product');
       // this.props.receiveProduct(Product,min);
       this.setState({ Product });

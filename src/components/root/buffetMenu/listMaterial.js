@@ -35,7 +35,7 @@ export default class ListMaterial extends Component {
       const { tokenmember } = await this.props.user;
       const { tokenapi, buffetid } = await this.props;
       const MaterialList =
-        await getAllBuffetMaterial(buffetid, false, tokenmember, tokenapi, 120, 0, false, 0);
+        await getAllBuffetMaterial(buffetid, false, tokenmember, tokenapi, 120, 0);
       console.log(MaterialList);
       await this.props.receiveMaterial(MaterialList);
       this.setState({ loading: false, refreshing: false });

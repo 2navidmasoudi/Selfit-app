@@ -4,6 +4,7 @@ import { Container } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { copilot, CopilotStep } from '@okgrow/react-native-copilot';
+import PropTypes from 'prop-types';
 import { styles } from './style';
 import Store from '../../Main/Store';
 import Music from '../../Main/Music';
@@ -33,6 +34,12 @@ import CoachPic from '../../../assets/Coach.jpg';
   stepNumberComponent: TipNumber
 })
 export default class BuffetGrid extends Component {
+  static propTypes = {
+    buffetid: PropTypes.number,
+  }
+  static defaultProps = {
+    buffetid: null,
+  }
   componentDidMount() {
     this.setInfo();
     this.help();

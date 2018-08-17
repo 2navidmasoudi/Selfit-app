@@ -37,9 +37,9 @@ export default class FactorBuffetDetail extends Component {
       const { tokenapi, item } = await this.props;
       const active = await item.statepayedid === 2;
       const json =
-        await getOrderBuffet(item.idfactorbuffet, active, tokenmember, tokenapi, 50, 0, true);
-      const buffetOrder = await json.Buffet_BasketBuffetOrderList.$values;
-      const basketMaterial = await json.Buffet_BasketMaterialOrderList.$values;
+        await getOrderBuffet(item.idfactorbuffet, active, tokenmember, tokenapi, 50, 0);
+      const buffetOrder = await json.DataFirst.$values;
+      const basketMaterial = await json.DataSecond.$values;
       let materialOrder = [];
       for (let i = 0; i < basketMaterial.length; i++) {
         for (let j = 0; j < basketMaterial[i].MixMaterialList.$values.length; j++) {

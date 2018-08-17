@@ -1,23 +1,23 @@
-import { Blog, GET, headers, Selfit } from './type';
+import {Blog, GET, headers, SAPI, Selfit} from './type';
 
-export const getAllBlog = async (token, tokenapi, max, min, ssort, fsort) => {
-  const response = await fetch(`${Selfit}${Blog}GetAll?token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
+export const getAllBlog = async (token, tokenapi, max, min, sort) => {
+  const response = await fetch(`${SAPI}${Blog}GetAll?t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`, {
     method: GET,
     headers
   });
   const json = await response.json();
   console.log('blog/getAllBlog');
   console.log(json);
-  return json.BlogList.$values;
+  return json.Data.$values;
 };
 
-export const getSearchBlog = async (search, token, tokenapi, max, min, ssort, fsort) => {
-  const response = await fetch(`${Selfit}${Blog}GetSearchAll?search=${search}&token=${token}&tokenapi=${tokenapi}&max=${max}&min=${min}&ssort=${ssort}&fsort=${fsort}`, {
+export const getSearchBlog = async (search, token, tokenapi, max, min, sort) => {
+  const response = await fetch(`${Selfit}${Blog}GetSearchAll?search=${search}&t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`, {
     method: GET,
     headers
   });
   const json = await response.json();
   console.log('blog/getSearchBlog');
   console.log(json);
-  return json.BlogSearch.$values;
+  return json.Data.$values;
 };

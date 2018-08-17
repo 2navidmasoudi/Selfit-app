@@ -94,7 +94,7 @@ export default class Music extends Component {
   async getSongs() {
     const { tokenmember } = await this.props.user;
     const { tokenapi } = await this.props;
-    const songs = await getAllMusic(tokenmember, tokenapi, 50, 0, false, 0);
+    const songs = await getAllMusic(tokenmember, tokenapi, 50, 0, 'idmusic%20desc');
     this.setState({ songs, songNumbers: songs.length - 1 });
   }
   async getInfo() {

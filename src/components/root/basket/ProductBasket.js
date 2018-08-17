@@ -11,6 +11,7 @@ import ProductCard from './ProductCard';
 import { getPayment } from '../../../services/payment';
 import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
+import Loader from '../../loader';
 
 @connect(state => ({
   user: state.user,
@@ -28,9 +29,10 @@ export default class ProductBasket extends Component {
   state = {
     active: true,
     min: 0,
-    max: 30,
+    max: 100,
     fsort: 0,
     ssort: false,
+    loading: true,
   };
   componentWillMount() {
     this.getInfo();
@@ -47,21 +49,23 @@ export default class ProductBasket extends Component {
   }
   async _getBasketProduct() {
     try {
+      this.setState({ loading: true });
       const { tokenmember } = await this.props.user;
       const { tokenapi } = await this.props;
       const { active, max, min, fsort, ssort } = await this.state;
-      const Basket = await getBasketProduct(active, tokenmember, tokenapi, max, min, ssort, fsort);
+      const Basket = await getBasketProduct(active, tokenmember, tokenapi, max, min);
       console.log(Basket, 'basket for Product!');
       this.props.reBasketProduct(Basket, Basket.length);
+      this.setState({ loading: false });
     } catch (e) {
+      this.setState({ loading: false });
       console.log(e);
       logError(e, '_getBasketProduct', 'DrawerLayout/index', 'getBasketProduct');
     }
   }
-  renderProduct({ item }) {
-    return <ProductCard product={item} />;
-  }
+  renderProduct = ({ item }) => <ProductCard product={item} />
   render() {
+    const totalPrice = this.props.totalPrice ? this.props.totalPrice.toLocaleString() : '0';
     const FooterComponent = (this.props.Count) === 0 ? null :
       (<Footer>
         <FooterTab>
@@ -88,13 +92,13 @@ export default class ProductBasket extends Component {
             <FlatList
               data={this.props.productBasket}
               renderItem={item => this.renderProduct(item)}
-              ListEmptyComponent={<Text style={{ marginRight: 20 }}>هیچ سفارشی دریافت نشد...</Text>}
+              ListEmptyComponent={<Loader loading={this.state.loading} />}
               keyExtractor={item => item.idproduct}
               scrollEnabled={false}
             />
             <CardItem footer bordered>
               <Text style={{ flex: 1 }}>
-              جمع کل: {persianNumber(this.props.totalPrice.toLocaleString() || '0')} تومان
+              جمع کل: {persianNumber(totalPrice)} تومان
               </Text>
             </CardItem>
           </Card>

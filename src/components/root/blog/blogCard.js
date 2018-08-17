@@ -12,15 +12,18 @@ import { Actions } from 'react-native-router-flux';
 import { Text } from '../../Kit';
 
 export default class BlogCard extends Component {
-  pressBlogHandler(blog) {
-    Actions.blogWeb({ blog });
+  constructor() {
+    super();
+    this.pressBlogHandler = (blog) => {
+      Actions.blogWeb({ blog });
+    };
   }
   render() {
     const { blog } = this.props;
     const m = moment(`${blog.datesave}`, 'YYYY/MM/DDTHH:mm:ss');
-    const datesaveblog = moment(`${blog.datesaveblog}`, 'YYYY/MM/DDTHH:mm:ss');
-    const jM = m.format('jYYYY/jMM');
-    const jS = datesaveblog.format('jYYYY/jMM');
+    // const datesaveblog = moment(`${blog.datesaveblog}`, 'YYYY/MM/DDTHH:mm:ss');
+    // const jM = m.format('jYYYY/jMM');
+    // const jS = datesaveblog.format('jYYYY/jMM');
     const ImgYear = m.jYear();
     const ImgMonth = m.jMonth() + 1;
     const ImgSrc = `${blog.httpserver}${blog.pathserver}${ImgYear}/${ImgMonth}/${blog.picblog}`;
@@ -41,7 +44,6 @@ export default class BlogCard extends Component {
           </CardItem>
         </Card>
       </TouchableWithoutFeedback>
-      // </List>
     );
   }
 }

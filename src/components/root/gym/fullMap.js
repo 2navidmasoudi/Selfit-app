@@ -1,13 +1,27 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import {Image, ImageBackground, StyleSheet, View} from 'react-native';
 import { Fab, Icon, Spinner } from 'native-base';
 import { connect } from 'react-redux';
-import MapView, { Marker } from 'react-native-maps';
+import MapView from 'react-native-maps';
 import { Actions } from 'react-native-router-flux';
 import { mapStyle } from '../../../assets/styles/map';
 import { getAllGyms } from '../../../services/gym';
 import { receiveGym, tokenGym } from '../../../redux/actions/index';
 import { mainColor } from '../../../assets/variables/colors';
+import Pin1 from '../../../assets/pinPics/Gym1.png';
+import Pin2 from '../../../assets/pinPics/Gym2.png';
+import Pin3 from '../../../assets/pinPics/Gym3.png';
+import { Text } from '../../Kit';
+
+const GymCallOut = ({ gym }) => (
+  <View>
+    <Text style={{ textAlign: 'center' }} type="bold">{gym.namegym}</Text>
+    <Text style={{ fontSize: 12 }} ellipsizeMode="tail">{gym.addressgym}</Text>
+    <Text style={{ textAlign: 'center', fontSize: 10 }} type="light">
+      برای مشاهده جزئیات کلیک کنید!
+    </Text>
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -116,7 +130,13 @@ export default class FullMap extends Component {
     Actions.gymDetail(gym);
     console.log(gym);
   }
-
+  renderPin = (sex) => {
+    switch (sex) {
+      case true: return Pin2;
+      case false: return Pin1;
+      default: return Pin3;
+    }
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -135,16 +155,23 @@ export default class FullMap extends Component {
           onMapReady={() => this.getCurrentPosition()}
         >
           {this.state.MarkerReady === false ? null : this.props.gym.map((gym, index) => (
-            <Marker
+            <MapView.Marker
               key={gym.gymid || index}
               coordinate={{ latitude: gym.latgym, longitude: gym.longgym }}
-              // image={require('../../../assets/gym_marker_2.png')}
               onPress={(e => console.log(e.nativeEvent.coordinate))}
               pinColor={gym.activegym === true ? 'blue' : 'red'}
               title={gym.namegym}
               description={gym.addressgym}
               onCalloutPress={() => this._gymDetail(gym)}
-            />
+            >
+              <Image
+                source={this.renderPin(gym.activegym)}
+                style={{ width: 40, height: 45 }}
+              />
+              <MapView.Callout style={{ width: 220 }} tooltip>
+                <GymCallOut gym={gym} />
+              </MapView.Callout>
+            </MapView.Marker>
           ))}
         </MapView>
         <Fab

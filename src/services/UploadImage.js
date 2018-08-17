@@ -1,11 +1,11 @@
 import RNFetchBlob from 'react-native-fetch-blob';
-import { Selfit, Upload } from './type';
+import {SAPI, Selfit, Upload} from './type';
 
 export const uploader = async (data, path, year, month, token, tokenapi) => {
   try {
     const response = await RNFetchBlob.fetch(
       'POST',
-      `${Selfit}${Upload}UploadJsonFile?path=${path}&year=${year}&month=${month}&token=${token}&tokenapi=${tokenapi}`, {
+      `${SAPI}${Upload}UploadJsonFile?path=${path}&year=${year}&month=${month}&token=${token}&tokenapi=${tokenapi}`, {
         'Content-Type': 'multipart/form-data'
       }, data
     );

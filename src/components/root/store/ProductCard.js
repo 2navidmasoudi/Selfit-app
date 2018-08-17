@@ -9,6 +9,7 @@ import { logError } from '../../../services/log';
 import { deleteBasketProduct, getBasketProduct, postOrderProduct } from '../../../services/orderProduct';
 import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
+import {white} from "../../../assets/variables/colors";
 
 @connect(state => ({
   user: state.user,
@@ -34,7 +35,7 @@ export default class ProductCard extends Component {
       const { tokenmember } = await this.props.user;
       console.log(tokenapi, 'tokenapi??');
       let deletedOrder;
-      const ProductOrdered = await getBasketProduct(true, tokenmember, tokenapi, 50, 0, false, 0);
+      const ProductOrdered = await getBasketProduct(true, tokenmember, tokenapi, 50, 0);
       console.log(ProductOrdered);
       for (let i = 0; i < ProductOrdered.length; i++) {
         if (product.idproduct === ProductOrdered[i].idproduct) {
@@ -44,14 +45,15 @@ export default class ProductCard extends Component {
           break;
         }
       }
-      const Basket = await getBasketProduct(true, tokenmember, tokenapi, 50, 0, false, 0);
+      const Basket = await getBasketProduct(true, tokenmember, tokenapi, 50, 0);
       this.props.reBasketProduct(Basket, Basket.length);
     } catch (error) {
       console.log(error);
       logError(error, 'removeButtonHandle', 'store/ProductCard', 'getBasketProduct');
     }
   }
-  async addButtonHandle() {
+  async addButtonHandle(active) {
+    if (!active) return;
     try {
       const { numberProduct } = await this.state;
       const { tokenmember } = await this.props.user;
@@ -62,7 +64,7 @@ export default class ProductCard extends Component {
       const result =
         await postOrderProduct(numberProduct + 1, product.idproduct, tokenmember, tokenapi);
       console.log('postOrderProduct for', numberProduct + 1, product.idproduct, product.priceproduct, result);
-      const Basket = await getBasketProduct(true, tokenmember, tokenapi, 30, 0, false, 0);
+      const Basket = await getBasketProduct(true, tokenmember, tokenapi, 30, 0);
       this.props.reBasketProduct(Basket, Basket.length);
     } catch (error) {
       console.log(error);
@@ -76,12 +78,11 @@ export default class ProductCard extends Component {
     const ImgYear = m.jYear();
     const ImgMonth = m.jMonth() + 1;
     const ImgSrc = `${product.httpserver}${product.pathserver}${ImgYear}/${ImgMonth}/${product.picproduct}`;
-    const display = (this.state.stateproductid !== 2 && product.numberproduct) ? 'flex' : 'none';
+    const display = (this.state.stateproductid !== 2 && product.numberproduct);
     return (
       <TouchableOpacity
         // disabled={!product.numberproduct}
-        onPress={() => this.addButtonHandle()}
-        style={{ display }}
+        onPress={() => this.addButtonHandle(display)}
       >
         <Card style={{ flex: 0 }}>
           <CardItem>
@@ -117,14 +118,19 @@ export default class ProductCard extends Component {
                 >
                   {persianNumber(this.state.numberProduct.toLocaleString())}
                 </Text>
+                {display &&
                 <Button
                   disabled={!product.numberproduct}
                   success={!!product.numberproduct}
                   bordered={!!product.numberproduct}
-                  onPress={() => this.addButtonHandle()}
+                  onPress={() => this.addButtonHandle(display)}
                 >
                   <Icon name="add-circle" />
-                </Button>
+                </Button>}
+                {!display &&
+                <Button disabled>
+                  <Text style={{ color: white, paddingHorizontal: 20 }}>ناموجود</Text>
+                </Button>}
               </View>
             </Right>
           </CardItem>

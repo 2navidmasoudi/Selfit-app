@@ -55,9 +55,7 @@ export default class List extends Component {
       const { tokenmember, latval, longval } = await this.props.user;
       const { min, tokenapi } = await this.props;
       // const json = await getAllBuffets(tokenmember, tokenapi, 120, min, false, 0);
-      const json = await getAllBuffet(latval, longval, tokenmember, tokenapi, 120, min, false, 0);
-      console.log(json);
-      const BuffetList = await json.BuffetMapList.$values;
+      const BuffetList = await getAllBuffet(latval, longval, tokenmember, tokenapi, 120, min, null);
       await this.props.receiveBuffet(BuffetList, min);
       this.setState({ loading: false, refreshing: false });
     } catch (error) {
@@ -75,8 +73,7 @@ export default class List extends Component {
       const { search } = await this.state;
       const { tokenmember } = await this.props.user;
       const { min, tokenapi } = await this.props;
-      const json = await getSearchBuffet(search, tokenmember, tokenapi, 120, min, false, 0);
-      const BuffetList = await json.BuffetSearch.$values;
+      const BuffetList = await getSearchBuffet(search, tokenmember, tokenapi, 120, min, null);
       await this.props.receiveBuffet(BuffetList, min);
       this.setState({ loading: false, refreshing: false });
     } catch (error) {
