@@ -9,7 +9,7 @@ import { logError } from '../../../services/log';
 import { deleteBasketProduct, getBasketProduct, postOrderProduct } from '../../../services/orderProduct';
 import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
-import {white} from "../../../assets/variables/colors";
+import { white } from '../../../assets/variables/colors';
 
 @connect(state => ({
   user: state.user,
