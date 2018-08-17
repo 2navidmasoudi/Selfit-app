@@ -122,10 +122,10 @@ export default class finalOrderBuffet extends Component {
   renderItem = ({ item }) => (
     <ListItem>
       <Left>
-        <Text>{persianNumber(item.pricemenufood.toLocaleString())} تومان</Text>
+        <Text>{persianNumber((item.pricemenufood).toLocaleString())} تومان</Text>
       </Left>
       <Body>
-        <Text style={{ textAlign: 'center' }}>{item.namemenufood}</Text>
+        <Text style={{ textAlign: 'center' }}>{persianNumber(item.namemenufood)}</Text>
       </Body>
       <Right>
         <Text>{persianNumber(item.numbermenufood)} عدد</Text>
@@ -135,10 +135,10 @@ export default class finalOrderBuffet extends Component {
   renderItem2 = ({ item }) => (
     <ListItem>
       <Left>
-        <Text>{persianNumber(item.pricematerial.toLocaleString())} تومان</Text>
+        <Text>{persianNumber((item.pricematerial).toLocaleString())} تومان</Text>
       </Left>
       <Body>
-        <Text style={{ textAlign: 'center' }}>{item.namematerial}</Text>
+        <Text style={{ textAlign: 'center' }}>{persianNumber(item.namematerial)}</Text>
       </Body>
       <Right>
         <Text>{persianNumber(item.numbermaterial)} عدد</Text>

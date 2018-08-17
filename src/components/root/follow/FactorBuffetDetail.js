@@ -11,7 +11,6 @@ import { tokenBuffet } from '../../../redux/actions';
 import { getOrderBuffet } from '../../../services/orders';
 import PayButton from './payButton';
 
-
 @connect(state => ({
   user: state.user,
   tokenapi: state.buffet.tokenapi,
@@ -58,7 +57,7 @@ export default class FactorBuffetDetail extends Component {
   renderItem = ({ item }) => (
     <ListItem>
       <Left>
-        <Text>{persianNumber(item.pricemenufood.toLocaleString())} تومان</Text>
+        <Text>{persianNumber((item.pricemenufood).toLocaleString())} تومان</Text>
       </Left>
       <Body>
         <Text style={{ textAlign: 'center' }}>{item.namemenufood}</Text>
@@ -71,7 +70,7 @@ export default class FactorBuffetDetail extends Component {
   renderItem2 = ({ item }) => (
     <ListItem>
       <Left>
-        <Text>{persianNumber(item.pricematerial.toLocaleString())} تومان</Text>
+        <Text>{persianNumber((item.pricematerial).toLocaleString())} تومان</Text>
       </Left>
       <Body>
         <Text style={{ textAlign: 'center' }}>{item.namematerial}</Text>
@@ -154,17 +153,17 @@ export default class FactorBuffetDetail extends Component {
                 <Text style={{ flex: 1 }}>{persianNumber(m)}</Text>
               </Left>
               <Right style={{ flex: 1 }}>
-                <Text style={{ flex: 1 }}>فاکتور خرید شماره: {persianNumber(item.idfactorbuffet)}</Text>
+                <Text style={{ flex: 1 }}>فاکتور خرید شماره:{' '}{persianNumber(item.idfactorbuffet)}</Text>
               </Right>
             </CardItem>
             <CardItem bordered>
               <Text style={{ flex: 1 }}>
-                هزینه ارسال: {persianNumber((this.props.sendPrice * 3 / 5).toLocaleString())} تومان
-              </Text>
+                هزینه ارسال:{' '}{persianNumber((this.props.sendPrice * (3 / 5)).toLocaleString())} تومان
+              </Text>.
             </CardItem>
             <CardItem bordered>
               <Text style={{ flex: 1 }}>
-            قیمت نهایی فاکتور: {persianNumber(totalPrice.toLocaleString())} تومان
+            قیمت نهایی فاکتور: {persianNumber((totalPrice).toLocaleString())} تومان
               </Text>
             </CardItem>
             <CardItem bordered>

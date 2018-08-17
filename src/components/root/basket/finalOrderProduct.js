@@ -93,10 +93,10 @@ export default class finalOrderProduct extends Component {
   renderItem = ({ item }) => (
     <ListItem style={{ flex: 1 }}>
       <Left>
-        <Text>{persianNumber(item.priceproduct.toLocaleString())} تومان</Text>
+        <Text>{persianNumber((item.priceproduct).toLocaleString())} تومان</Text>
       </Left>
       <Body>
-        <Text style={{ textAlign: 'center' }}>{item.titleproduct}</Text>
+        <Text style={{ textAlign: 'center' }}>{persianNumber(item.titleproduct)}</Text>
       </Body>
       <Right>
         <Text>{persianNumber(item.numberbasket)} عدد</Text>
@@ -105,7 +105,7 @@ export default class finalOrderProduct extends Component {
   );
 
   render() {
-    const totalPrice = this.props.totalPrice.toLocaleString();
+    const totalPrice = (this.props.totalPrice).toLocaleString();
     const addressTitle = Base64.decode(this.props.address.titleaddressmember);
     const FooterComponent = (this.props.Count) === 0 ? null :
       (<Footer>

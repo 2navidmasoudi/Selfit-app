@@ -72,8 +72,8 @@ export default class FactorBuffet extends Component {
   render() {
     const { item } = this.props;
     const m = moment(`${item.datesavefactorbuffet}`, 'YYYY/MM/DDTHH:mm:ss').format('jYYYY/jMM/jDD HH:mm');
-    const sendPrice = this.state.sendServicePrice * 3 / 5;
-    const totalPrice = item.finalpricefactorbuffet + sendPrice;
+    const sendPrices = this.state.sendServicePrice * (3 / 5);
+    const totalPrice = item.finalpricefactorbuffet + sendPrices;
     const statePayed = item.idstatepayed === 2 ?
       (<Text>
         <Text style={{ color: mainColor }}>
@@ -128,12 +128,12 @@ export default class FactorBuffet extends Component {
           </CardItem>
           <CardItem bordered>
             <Text style={{ flex: 1 }}>
-              هزینه ارسال: {persianNumber(sendPrice.toLocaleString())} تومان
+              هزینه ارسال: {persianNumber((sendPrice).toLocaleString())} تومان
             </Text>
           </CardItem>
           <CardItem bordered>
             <Text style={{ flex: 1 }}>
-            قیمت نهایی فاکتور: {persianNumber(totalPrice.toLocaleString())} تومان
+            قیمت نهایی فاکتور: {persianNumber((totalPrice).toLocaleString())} تومان
             </Text>
           </CardItem>
           <CardItem bordered>

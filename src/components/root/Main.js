@@ -12,7 +12,6 @@ import GymGrid from './grids/GymGrid';
 import BuffetGrid from './grids/BuffetGrid';
 import { Text } from '../Kit';
 import Music from './Music';
-import {setUserProperty} from "../../utils/analytics";
 
 let MusicRef;
 export const bounce = () => MusicRef.bounce(800);
@@ -85,7 +84,6 @@ export default class Main extends Component {
         {this.props.user.typememberid === 1 && pannel}
         <Animatable.View
           ref={(music) => { MusicRef = music; }}
-          // animation="fadeOut"
           style={{
             flex: 1,
             position: 'absolute',

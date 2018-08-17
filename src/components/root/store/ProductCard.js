@@ -100,7 +100,7 @@ export default class ProductCard extends Component {
                 {persianNumber(product.titleproduct)}
               </Text>
               <Text type="light">
-                {persianNumber(product.priceproduct.toLocaleString())} تومان
+                {persianNumber((product.priceproduct).toLocaleString())} تومان
               </Text>
               <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
                 <Button
@@ -116,7 +116,7 @@ export default class ProductCard extends Component {
                   display: this.state.numberProduct <= 0 ? 'none' : 'flex'
                 }}
                 >
-                  {persianNumber(this.state.numberProduct.toLocaleString())}
+                  {persianNumber((this.state.numberProduct).toLocaleString())}
                 </Text>
                 {display &&
                 <Button

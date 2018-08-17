@@ -33,7 +33,6 @@ export default class Music extends Component {
       muted: false,
       shuffle: false,
       sliding: false,
-      loading: false,
       currentTime: 0,
       songIndex: 0,
       songNumbers: null,
@@ -237,9 +236,6 @@ export default class Music extends Component {
             <Text style={[styles.songTitle, {}]}>
               {songPlaying.namemusic}
             </Text>
-            {/* <Text style={styles.albumTitle}> */}
-            {/* {songPlaying.descmusic} */}
-            {/* </Text> */}
             <View style={styles.sliderContainer}>
               <Slider
                 onSlidingStart={this.onSlidingStart}
@@ -303,11 +299,6 @@ export default class Music extends Component {
                 </Card>
               </TouchableOpacity>
             )}
-            ListEmptyComponent={() => <Spinner color={mainColor} />}
-            // onRefresh={this.handleRefresh.bind(this)}
-            // refreshing={this.state.refreshing}
-            // onEndReachedThreshold={0.5}
-            // ListFooterComponent={this.renderFooter.bind(this)}
           />
         </Content>
       </Container>

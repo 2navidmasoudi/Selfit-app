@@ -38,7 +38,7 @@ export default class FactorProductDetail extends Component {
   renderItem = ({ item }) => (
     <ListItem style={{ flex: 1 }}>
       <Left>
-        <Text>{persianNumber(item.priceproduct.toLocaleString())} تومان</Text>
+        <Text>{persianNumber((item.priceproduct).toLocaleString())} تومان</Text>
       </Left>
       <Body>
         <Text style={{ textAlign: 'center' }}>{item.titleproduct}</Text>
@@ -80,7 +80,7 @@ export default class FactorProductDetail extends Component {
               <Text style={{ flex: 1 }}>
                 مبلغ پرداخت شده:{' '}
                 <Text style={{ color: mainColor }}>
-                  {persianNumber(factor.finalpricefactor.toLocaleString())} تومان
+                  {persianNumber((factor.finalpricefactor).toLocaleString())} تومان
                 </Text>
               </Text>
             </CardItem>
