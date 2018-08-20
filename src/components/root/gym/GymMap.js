@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet, View, Image, Alert, ImageBackground} from 'react-native';
+import { StyleSheet, View, Image, Alert, ImageBackground } from 'react-native';
 import { Button, Fab, Icon, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
@@ -16,6 +16,7 @@ import { helpDoneGymMap } from '../../../redux/actions/help';
 import Pin1 from '../../../assets/pinPics/Gym1.png';
 import Pin2 from '../../../assets/pinPics/Gym2.png';
 import Pin3 from '../../../assets/pinPics/Gym3.png';
+import PinStyle from '../../../assets/styles/PinStyle';
 
 const styles = StyleSheet.create({
   container: {
@@ -161,17 +162,17 @@ export default class GymMap extends Component {
     switch (sex) {
       case true: return (<ImageBackground
         source={Pin2}
-        style={{ width: 40, height: 45 }}
+        style={PinStyle.size}
         resizeMode="cover"
       />);
       case false: return (<ImageBackground
         source={Pin1}
-        style={{ width: 40, height: 45 }}
+        style={PinStyle.size}
         resizeMode="cover"
       />);
       default: return (<ImageBackground
         source={Pin3}
-        style={{ width: 40, height: 45 }}
+        style={PinStyle.size}
         resizeMode="cover"
       />);
     }

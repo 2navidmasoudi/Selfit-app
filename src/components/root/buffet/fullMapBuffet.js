@@ -11,6 +11,7 @@ import { mainColor } from '../../../assets/variables/colors';
 import Pin1 from '../../../assets/pinPics/Buffet1.png';
 import Pin2 from '../../../assets/pinPics/Buffet2.png';
 import { Text } from '../../Kit';
+import PinStyle from '../../../assets/styles/PinStyle';
 
 const styles = StyleSheet.create({
   container: {
@@ -79,12 +80,12 @@ export default class FullMapBuffet extends Component {
     switch (sex) {
       case true: return (<ImageBackground
         source={Pin2}
-        style={{ width: 40, height: 45 }}
+        style={PinStyle.size}
         resizeMode="cover"
       />);
       default: return (<ImageBackground
         source={Pin1}
-        style={{ width: 40, height: 45 }}
+        style={PinStyle.size}
         resizeMode="cover"
       />);
     }

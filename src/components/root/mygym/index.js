@@ -103,6 +103,7 @@ export default class MyGym extends Component {
       const { tokenapi, gymid } = await this.props;
       const { tokenmember } = await this.props.user;
       const gymInfo = await getSingleGym(gymid, tokenmember, tokenapi);
+      if (!gymInfo) return;
       console.log(gymInfo, 'gymInfo');
       this.props.receiveGym(gymInfo, 0);
     } catch (e) {
@@ -115,7 +116,7 @@ export default class MyGym extends Component {
       const { gymid, tokenapi } = await this.props;
       const { tokenmember } = await this.props.user;
       const PicArray = await getAllPicGym(gymid, tokenmember, tokenapi, 50, 0, null);
-      if (!PicArray) return;
+      if (!PicArray.length) return;
       let dataSource = [];
       console.log('pics', PicArray);
       for (let i = 0; i < PicArray.length; i++) {
@@ -327,13 +328,14 @@ export default class MyGym extends Component {
         >
           <Text style={{ color: '#FFF' }}>نمایش در نقشه</Text>
         </Button>
+        {this.props.gymid &&
         <Button
           full
           style={{ backgroundColor: mainColor }}
           onPress={this.onPressHandler.bind(this)}
         >
           <Text style={{ color: '#FFF' }}>ویرایش باشگاه</Text>
-        </Button>
+        </Button>}
       </Container>
     );
   }

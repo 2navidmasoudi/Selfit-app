@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet, View, Alert, Image, ImageBackground} from 'react-native';
+import { StyleSheet, View, Alert, ImageBackground } from 'react-native';
 import { Button, Fab, Icon, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
@@ -11,6 +11,7 @@ import { Text } from '../../Kit';
 import { mainColor, white } from '../../../assets/variables/colors';
 import Pin1 from '../../../assets/pinPics/Buffet1.png';
 import Pin2 from '../../../assets/pinPics/Buffet2.png';
+import PinStyle from '../../../assets/styles/PinStyle';
 
 const styles = StyleSheet.create({
   container: {
@@ -138,12 +139,12 @@ export default class MapComponent extends Component {
     switch (sex) {
       case true: return (<ImageBackground
         source={Pin2}
-        style={{ width: 40, height: 45 }}
+        style={PinStyle.size}
         resizeMode="cover"
       />);
       default: return (<ImageBackground
         source={Pin1}
-        style={{ width: 40, height: 45 }}
+        style={PinStyle.size}
         resizeMode="cover"
       />);
     }
