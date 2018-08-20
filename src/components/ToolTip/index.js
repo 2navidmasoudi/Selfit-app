@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { walkthroughable } from '@okgrow/react-native-copilot';
 import styles from './style';
 import Button from './Button';
 import { persianNumber } from '../../utils/persian';
+import { Text } from '../Kit';
 
 type Props = {
   isFirstStep: Boolean | Object | Array,

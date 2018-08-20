@@ -57,6 +57,7 @@ export default StyleSheet.create({
   stepNumberText: {
     fontSize: 16,
     backgroundColor: 'transparent',
+    textAlign: 'center',
     color: white,
   },
   button: {

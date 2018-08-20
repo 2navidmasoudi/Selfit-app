@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, Alert } from 'react-native';
+import {StyleSheet, View, Image, Alert, ImageBackground} from 'react-native';
 import { Button, Fab, Icon, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
@@ -46,16 +46,6 @@ const initialRegion = {
   latitudeDelta: 0.5,
   longitudeDelta: 0.5,
 };
-
-const GymCallOut = ({ gym }) => (
-  <View>
-    <Text style={{ textAlign: 'center' }} type="bold">{gym.namegym}</Text>
-    <Text style={{ fontSize: 12 }} ellipsizeMode="tail">{gym.addressgym}</Text>
-    <Text style={{ textAlign: 'center', fontSize: 10 }} type="light">
-      برای مشاهده جزئیات کلیک کنید!
-    </Text>
-  </View>
-);
 
 @connect(state => ({
   gym: state.gym.GymList,
@@ -169,11 +159,23 @@ export default class GymMap extends Component {
   helpDone = () => this.props.helpDoneGymMap();
   renderPin = (sex) => {
     switch (sex) {
-      case true: return Pin2;
-      case false: return Pin1;
-      default: return Pin3;
+      case true: return (<ImageBackground
+        source={Pin2}
+        style={{ width: 40, height: 45 }}
+        resizeMode="cover"
+      />);
+      case false: return (<ImageBackground
+        source={Pin1}
+        style={{ width: 40, height: 45 }}
+        resizeMode="cover"
+      />);
+      default: return (<ImageBackground
+        source={Pin3}
+        style={{ width: 40, height: 45 }}
+        resizeMode="cover"
+      />);
     }
-  }
+  };
   render() {
     return (
       <View style={styles.container}>
@@ -247,15 +249,21 @@ export default class GymMap extends Component {
             <MapView.Marker
               key={gym.idgym}
               coordinate={{ latitude: gym.latgym, longitude: gym.longgym }}
-              description={gym.addressgym}
               onCalloutPress={() => this.gymDetail(gym)}
+              style={{ zIndex: 5 }}
             >
-              <Image
-                source={this.renderPin(gym.activegym)}
-                style={{ width: 40, height: 45 }}
-              />
-              <MapView.Callout style={{ width: 220 }} tooltip>
-                <GymCallOut gym={gym} />
+              {this.renderPin(gym.activegym)}
+              <MapView.Callout
+                style={{
+                  width: 220,
+                  position: 'absolute',
+                }}
+              >
+                <Text style={{ textAlign: 'center' }} type="bold">{gym.namegym}</Text>
+                <Text style={{ fontSize: 12 }} ellipsizeMode="tail">{gym.addressgym}</Text>
+                <Text style={{ textAlign: 'center', fontSize: 10 }} type="light">
+                  برای مشاهده جزئیات کلیک کنید!
+                </Text>
               </MapView.Callout>
             </MapView.Marker>
           ))}

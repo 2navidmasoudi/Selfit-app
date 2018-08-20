@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList } from 'react-native';
+import {FlatList, Linking} from 'react-native';
 import { connect } from 'react-redux';
 import { Body, Button, Card, CardItem, Container, Content, Footer, FooterTab, Left, ListItem, Right } from 'native-base';
 import { Actions } from 'react-native-router-flux';
@@ -38,7 +38,6 @@ export default class finalOrderProduct extends Component {
     this.getInfo();
     console.log(this.props, 'props');
   }
-
   async getInfo() {
     await this.props.tokenStore('selfit.store');
     await this._getPayment();
@@ -48,10 +47,6 @@ export default class finalOrderProduct extends Component {
     const totalPrice = await getPayment(2, this.props.user.tokenmember, 0, 'selfit.member');
     this.props.setProductPriceAll(totalPrice);
   }
-  async _getRequestPayment() {
-    getRequestPayment(2, this.props.user.tokenmember);
-  }
-
   async _putTimeFactor(idfactor) {
     try {
       const { tokenmember } = await this.props.user;
@@ -68,7 +63,8 @@ export default class finalOrderProduct extends Component {
     try {
       const { tokenmember } = await this.props.user;
       const { tokenapi, address } = await this.props;
-      const result = await postAddressProduct(idfactor, address.idaddressmember, tokenmember, tokenapi);
+      const result =
+        await postAddressProduct(idfactor, address.idaddressmember, tokenmember, tokenapi);
       console.log(result, 'postAddressProduct');
       this.setState({ selected: true });
     } catch (e) {
@@ -83,7 +79,14 @@ export default class finalOrderProduct extends Component {
       const idfactor = await postFactorProduct(idtimefactor, descProduct, 1, tokenmember, tokenapi);
       await this._putTimeFactor(idfactor);
       await this._postAddressProduct(idfactor);
-      this._getRequestPayment();
+      const url = getRequestPayment(2, this.props.user.tokenmember);
+      Linking.canOpenURL(url).then((supported) => {
+        if (!supported) {
+          console.log(`Can't handle url: ${url}`);
+        } else {
+          Linking.openURL(url);
+        }
+      });
       Actions.reset('root');
     } catch (e) {
       console.log(e);
