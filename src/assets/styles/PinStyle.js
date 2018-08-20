@@ -1,16 +1,8 @@
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   size: {
-    ...Platform.select({
-      ios: {
-        width: 20,
-        height: 25,
-      },
-      android: {
-        width: 30,
-        height: 35,
-      }
-    })
+    width: 25,
+    height: 30,
   },
 });
