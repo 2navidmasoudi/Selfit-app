@@ -3,16 +3,18 @@ import { Image, View } from 'react-native';
 import { connect } from 'react-redux';
 import { Button, Container, Content, Footer, FooterTab, Icon, Input, Item, Label } from 'native-base';
 import { Actions } from 'react-native-router-flux';
+import moment from 'moment-jalaali';
 import AppHeader from '../../header';
 import { setDescProduct, setProductIDAccess, setRoad, tokenStore } from '../../../redux/actions';
 import { SignStyle } from '../../../assets/styles/sign';
-import { getTimeAccessStore } from '../../../services/orderProduct';
+import { getTimeTommorowStore } from '../../../services/orderProduct';
 import { Modal, Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
 import { mainColor, white } from '../../../assets/variables/colors';
 import { helpDoneStoreTime } from '../../../redux/actions/help';
 import Pic1 from '../../../assets/helpPics/Store/StoreTimeSelect.png';
 import Pic2 from '../../../assets/helpPics/Store/StoreAddress.png';
+moment.loadPersian({ dialect: 'persian-modern' })
 
 @connect(state => ({
   user: state.user,
@@ -33,8 +35,6 @@ export default class TimeStore extends Component {
     active: true,
     min: 0,
     max: 30,
-    fsort: 0,
-    ssort: false,
     selected: false,
     selectedTime: null,
     TimeAccess: null,
@@ -55,8 +55,8 @@ export default class TimeStore extends Component {
     try {
       const { tokenmember } = await this.props.user;
       const { tokenapi } = await this.props;
-      const { max, min, ssort } = await this.state;
-      const TimeAccess = await getTimeAccessStore(tokenmember, tokenapi, max, min, ssort);
+      const { max, min } = await this.state;
+      const TimeAccess = await getTimeTommorowStore(tokenmember, tokenapi, max, min, 'fromdatehour%20asc');
       console.log(TimeAccess);
       this.setState({ TimeAccess });
     } catch (e) {
@@ -135,10 +135,10 @@ export default class TimeStore extends Component {
             محل دریافت سفارشت رو مشخص کن.
           </Text>
         </Modal>
-        <AppHeader rightTitle="سبد محصول" backButton="flex" />
+        <AppHeader rightTitle="سبد محصول" />
         <Content padder>
           <View style={{ flex: 1 }}>
-            <Text style={{ textAlign: 'center' }}>انتخاب زمان ارسال فردا</Text>
+            <Text style={{ textAlign: 'center' }}>انتخاب ساعت ارسال</Text>
             <View style={{
               flex: 1,
               flexDirection: 'row',
@@ -153,6 +153,7 @@ export default class TimeStore extends Component {
                   key={c.idtimefactor}
                   light={c.activetimefactor !== this.state.selectedTime}
                   disabled={!c.activetimefactor}
+                  block
                   onPress={() => {
                     this._putTimeFactor(c.idtimefactor);
                     this.setState({ selectedTime: c.idtimefactor });
@@ -160,6 +161,7 @@ export default class TimeStore extends Component {
                   style={{
                     margin: 5,
                     backgroundColor: c.idtimefactor === this.state.selectedTime ? mainColor : white,
+                    flexDirection: 'column'
                   }}
                 >
                   <Text
@@ -168,7 +170,17 @@ export default class TimeStore extends Component {
                       color: c.idtimefactor === this.state.selectedTime ? white : '#000',
                     }}
                   >
-                    {persianNumber(c.fromdatehour)} الی {persianNumber(c.todatehour)}
+                    {persianNumber(moment(c.dates).format('jYYYY/jM/jD'))}
+                  </Text>
+                  <Text
+                    style={{
+                      paddingHorizontal: 5,
+                      color: c.idtimefactor === this.state.selectedTime ? white : '#000',
+                    }}
+                  >
+                    {persianNumber(moment(c.dates).format('dddd'))}
+                    {' '}
+                    {persianNumber(c.timefactor)}
                   </Text>
                 </Button>
               ))}
