@@ -93,7 +93,8 @@ export default class Main extends Component {
           }}
           useNativeDriver
         >
-          <Music />
+          {this.props.music &&
+          <Music />}
         </Animatable.View>
       </Container>
     );

@@ -109,7 +109,7 @@ export default class GymDetail extends Component {
       const { gymid, tokenapi } = await this.props;
       const { tokenmember } = await this.props.user;
       const PicArray = await getAllPicGym(gymid, tokenmember, tokenapi, 50, 0, null);
-      if (!PicArray) return;
+      if (!PicArray.length) return;
       let dataSource = [];
       console.log('pics', PicArray);
       for (let i = 0; i < PicArray.length; i++) {

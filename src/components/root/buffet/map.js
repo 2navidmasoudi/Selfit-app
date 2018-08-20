@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Alert, Image } from 'react-native';
+import { StyleSheet, View, Alert, ImageBackground } from 'react-native';
 import { Button, Fab, Icon, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
@@ -11,6 +11,7 @@ import { Text } from '../../Kit';
 import { mainColor, white } from '../../../assets/variables/colors';
 import Pin1 from '../../../assets/pinPics/Buffet1.png';
 import Pin2 from '../../../assets/pinPics/Buffet2.png';
+import PinStyle from '../../../assets/styles/PinStyle';
 
 const styles = StyleSheet.create({
   container: {
@@ -41,16 +42,6 @@ const initialRegion = {
   latitudeDelta: 0.5,
   longitudeDelta: 0.5,
 };
-
-const BuffetCallOut = ({ buffet }) => (
-  <View>
-    <Text style={{ textAlign: 'center' }} type="bold">{buffet.namebuffet}</Text>
-    <Text style={{ fontSize: 12 }} ellipsizeMode="tail">{buffet.addressgym}</Text>
-    <Text style={{ textAlign: 'center', fontSize: 10 }} type="light">
-      برای مشاهده جزئیات کلیک کنید!
-    </Text>
-  </View>
-);
 
 @connect(state => ({
   buffet: state.buffet.BuffetList,
@@ -105,7 +96,6 @@ export default class MapComponent extends Component {
       const { tokenapi } = this.props;
       const BuffetList =
         await getAllBuffet(latitude, longitude, tokenmember, tokenapi, 120, 0, null);
-      // const BuffetList = await getAllBuffets(tokenmember, tokenapi, 120, 0, true, 0);
       console.log('buffetList:', BuffetList);
       this.props.receiveBuffet(BuffetList, 0);
       this.setState({ MarkerReady: true });
@@ -147,10 +137,18 @@ export default class MapComponent extends Component {
   }
   renderPin = (sex) => {
     switch (sex) {
-      case true: return Pin2;
-      default: return Pin1;
+      case true: return (<ImageBackground
+        source={Pin2}
+        style={PinStyle.size}
+        resizeMode="cover"
+      />);
+      default: return (<ImageBackground
+        source={Pin1}
+        style={PinStyle.size}
+        resizeMode="cover"
+      />);
     }
-  }
+  };
   render() {
     return (
       <View style={styles.container}>
@@ -168,16 +166,21 @@ export default class MapComponent extends Component {
             <MapView.Marker
               key={buffet.buffetid}
               coordinate={{ latitude: buffet.latgym, longitude: buffet.longgym }}
-              title={buffet.namebuffet}
-              description={buffet.addressgym}
               onCalloutPress={() => this.buffetMenu(buffet)}
+              style={{ zIndex: 5 }}
             >
-              <Image
-                source={this.renderPin(buffet.activebuffet)}
-                style={{ width: 40, height: 45 }}
-              />
-              <MapView.Callout style={{ width: 220 }}>
-                <BuffetCallOut buffet={buffet} />
+              {this.renderPin(buffet.activebuffet)}
+              <MapView.Callout
+                style={{
+                  width: 220,
+                  position: 'absolute',
+                }}
+              >
+                <Text style={{ textAlign: 'center' }} type="bold">{buffet.namebuffet}</Text>
+                <Text style={{ fontSize: 12 }} ellipsizeMode="tail">{buffet.addressgym}</Text>
+                <Text style={{ textAlign: 'center', fontSize: 10 }} type="light">
+                  برای مشاهده جزئیات کلیک کنید!
+                </Text>
               </MapView.Callout>
             </MapView.Marker>
           ))}
