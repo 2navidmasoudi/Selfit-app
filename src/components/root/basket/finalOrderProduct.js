@@ -79,14 +79,7 @@ export default class finalOrderProduct extends Component {
       const idfactor = await postFactorProduct(idtimefactor, descProduct, 1, tokenmember, tokenapi);
       await this._putTimeFactor(idfactor);
       await this._postAddressProduct(idfactor);
-      const url = getRequestPayment(2, this.props.user.tokenmember);
-      Linking.canOpenURL(url).then((supported) => {
-        if (!supported) {
-          console.log(`Can't handle url: ${url}`);
-        } else {
-          Linking.openURL(url);
-        }
-      });
+      getRequestPayment(2, this.props.user.tokenmember);
       Actions.reset('root');
     } catch (e) {
       console.log(e);

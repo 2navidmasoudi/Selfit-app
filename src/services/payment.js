@@ -18,19 +18,31 @@ export const getPayment = async (type, token, delivery = 0, tokenapi = 'selfit.m
   }
 };
 export const getRequestPayment = async (type, token, delivery = 0, tokenapi = 'selfit.member') => {
-  let direct;
   try {
     if (isIOS) {
-      direct = await `${SAPI}${Payment}GetRequest?type=${type}&delivery=${delivery}&t.token=${token}&t.tokenapi=${tokenapi}`;
+      const url = await `${SAPI}${Payment}GetRequest?type=${type}&delivery=${delivery}&t.token=${token}&t.tokenapi=${tokenapi}`;
+      Linking.canOpenURL(url).then((supported) => {
+        if (!supported) {
+          console.log(`Can't handle url: ${url}`);
+        } else {
+          Linking.openURL(url);
+        }
+      });
     } else {
-      const response = await fetch(`${SAPI}${Payment}GetRequest?type=${type}&delivery=${delivery}&t.token=${token}&t.tokenapi=${tokenapi}`, {
+      const url = await fetch(`${SAPI}${Payment}GetRequest?type=${type}&delivery=${delivery}&t.token=${token}&t.tokenapi=${tokenapi}`, {
         method: GET,
         redirect: 'follow'
+      }).then(response => response.url);
+      Linking.canOpenURL(url).then((supported) => {
+        if (!supported) {
+          console.log(`Can't handle url: ${url}`);
+        } else {
+          Linking.openURL(url);
+        }
       });
-      direct = await response.url;
     }
+
   } catch (e) {
     console.log(e);
   }
-  return direct;
 };
