@@ -80,7 +80,6 @@ export default class finalOrderBuffet extends Component {
   }
   async sendOrderBuffet() {
     try {
-      this.setState({ disableSendFactor: true });
       const { tokenmember } = await this.props.user;
       const { tokenapi, buffetid } = await this.props;
       const { descfactor, sendServicePrice } = await this.state;
@@ -98,6 +97,7 @@ export default class finalOrderBuffet extends Component {
           ]
         );
         Actions.reset('root');
+        this.setState({ disableSendFactor: true });
       } else {
         this.setState({ disableSendFactor: false });
       }

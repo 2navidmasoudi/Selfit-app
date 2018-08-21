@@ -31,3 +31,32 @@ export const putAcceptBuffet = async (memberid, factorid, active, token, tokenap
   console.log(json);
   return json.ResponseCode;
 };
+export const putCheckout = async (factorid, token, tokenapi) => {
+  const response = await fetch(`${SAPI}${Orders}PutCheckout`, {
+    method: PUT,
+    headers,
+    body: JSON.stringify({
+      factorid,
+      token,
+      tokenapi
+    })
+  });
+  const json = await response.json();
+  console.log('Orders/PutCheckout');
+  console.log(json);
+  return json.ResponseCode;
+};
+export const putCheckoutAll = async (token, tokenapi) => {
+  const response = await fetch(`${SAPI}${Orders}PutCheckoutAll`, {
+    method: PUT,
+    headers,
+    body: JSON.stringify({
+      token,
+      tokenapi
+    })
+  });
+  const json = await response.json();
+  console.log('Orders/PutCheckoutAll');
+  console.log(json);
+  return json.ResponseCode;
+};

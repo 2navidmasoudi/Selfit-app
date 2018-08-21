@@ -14,6 +14,7 @@ import OrderCard from './orderCard';
 import { Text } from '../../Kit';
 import Loader from '../../loader';
 import { darkColor, errorColor, mainColor, white } from '../../../assets/variables/colors';
+import {putCheckoutAll} from "../../../services/orders";
 
 @connect(state => ({
   user: state.user,
@@ -116,6 +117,34 @@ export default class BuffetKeeper extends Component {
       logError(err, 'putActiveBuffet', 'root/buffetKeeper/index', 'putActiveBuffet77');
     }
   }
+  async PutCheckoutAll() {
+    const { tokenmember } = await this.props.user;
+    const { tokenapi } = await this.props;
+    try {
+      const result = await putCheckoutAll(tokenmember, tokenapi);
+      if (result === 1) {
+        Alert.alert(
+          'موفقیت',
+          'درخواست شما با موفقیت ثبت شد. جهت اطلاعات بیشتر با پشتیبانی تماس بگیرید!',
+          [{ text: 'باشه' }]
+        );
+      } else if (result === -4 ) {
+        Alert.alert(
+          'خطا',
+          'فاکتوری از قبل ثبت نشده! جهت اطلاعات بیشتر با پشتیبانی تماس بگیرید!',
+          [{ text: 'باشه' }]
+        );
+      } else {
+        Alert.alert(
+          'خطا',
+          'مشکلی پیش آمده! جهت اطلاعات بیشتر با پشتیبانی تماس بگیرید!',
+          [{ text: 'باشه' }]
+        );
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
   togglePanel = () => {
     const { pannelBtn } = this.state;
     if (pannelBtn === 'add') {
@@ -185,9 +214,9 @@ export default class BuffetKeeper extends Component {
                 style={{ backgroundColor: darkColor, borderColor: mainColor, borderWidth: 1 }}
                 onPress={() => Alert.alert(
                   'درخواست تسویه',
-                  'برای درخواست تسویه حسابتان با پشتیبانی تماس بگیرید.',
+                  'آیا می خواهید تمامی فاکتور های شما تا دیروز برای شما تسویه شود؟',
                   [
-                    { text: 'پشتیبانی', onPress: () => Actions.support() },
+                    { text: 'قبول', onPress: () => this.PutCheckoutAll() },
                     { text: 'بازگشت' }
                   ]
                 )}

@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { FlatList } from 'react-native';
-import { Content, Separator } from 'native-base';
+import { Content } from 'native-base';
 import { connect } from 'react-redux';
 import { tokenBuffet } from '../../../redux/actions';
 import { getFactorBuffet } from '../../../services/orderBuffet';
 import { Text } from '../../Kit';
 import FactorCard from './FactorCardBuffet';
 
-// PARDAKHT NASHODE!!!!
 @connect(state => ({
   user: state.user,
   tokenapi: state.buffet.tokenapi,
@@ -38,7 +37,7 @@ export default class List1 extends Component {
       this.setState({ refreshing: true });
       const { tokenmember } = await this.props.user;
       const { tokenapi } = await this.props;
-      const { max, min, ssort, fsort } = await this.state;
+      const { max, min } = await this.state;
       const unpayedFactors = await getFactorBuffet(
         1, 2,
         tokenmember, tokenapi,

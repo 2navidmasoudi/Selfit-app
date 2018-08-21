@@ -98,7 +98,7 @@ export default class FactorBuffet extends Component {
       (<Text style={{ color: errorColor }}>
         منتظر تایید توسط بوفه دار.
       </Text>);
-    const payBtn = (item.acceptfactor && item.idstatepayed === 2 && sendPrice) ?
+    const payBtn = (item.acceptfactor && item.idstatepayed === 2 && sendPrices) ?
       <PayButton sendPrice={this.state.sendServicePrice} />
       : null;
     return (
@@ -128,7 +128,7 @@ export default class FactorBuffet extends Component {
           </CardItem>
           <CardItem bordered>
             <Text style={{ flex: 1 }}>
-              هزینه ارسال: {persianNumber((sendPrice).toLocaleString())} تومان
+              هزینه ارسال: {persianNumber((sendPrices).toLocaleString())} تومان
             </Text>
           </CardItem>
           <CardItem bordered>

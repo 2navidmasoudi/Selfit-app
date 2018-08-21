@@ -21,7 +21,6 @@ export default class FactorBuffetDetail extends Component {
   state= {
     buffetOrder: null,
     materialOrder: null,
-    refreshing: true,
   };
   componentWillMount() {
     this.getInfo();
@@ -110,7 +109,7 @@ export default class FactorBuffetDetail extends Component {
     const payBtn = (item.acceptfactor && item.idstatepayed === 2 && this.props.sendPrice) ?
       <PayButton sendPrice={this.props.sendPrice} />
       : null;
-    const totalPrice = item.finalpricefactorbuffet + this.props.sendPrice * 3 / 5;
+    const totalPrice = item.finalpricefactorbuffet + (this.props.sendPrice * (3 / 5));
     return (
       <Container>
         <AppHeader rightTitle="فاکتور خرید" />
@@ -125,7 +124,7 @@ export default class FactorBuffetDetail extends Component {
               data={this.state.buffetOrder}
               renderItem={this.renderItem}
               scrollEnabled={false}
-              keyExtractor={item => item.idmenufood}
+              keyExtractor={food => food.idmenufood}
             />
             <Card style={{ flex: 0 }}>
               <CardItem>
@@ -136,7 +135,7 @@ export default class FactorBuffetDetail extends Component {
               data={this.state.materialOrder}
               renderItem={this.renderItem2}
               scrollEnabled={false}
-              keyExtractor={item => item.idmixmaterial}
+              keyExtractor={material => material.idmixmaterial}
             />
             <CardItem>
               <Right style={{ flex: 1 }}>
@@ -159,7 +158,7 @@ export default class FactorBuffetDetail extends Component {
             <CardItem bordered>
               <Text style={{ flex: 1 }}>
                 هزینه ارسال:{' '}{persianNumber((this.props.sendPrice * (3 / 5)).toLocaleString())} تومان
-              </Text>.
+              </Text>
             </CardItem>
             <CardItem bordered>
               <Text style={{ flex: 1 }}>
