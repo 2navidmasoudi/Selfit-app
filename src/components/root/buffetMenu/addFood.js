@@ -148,9 +148,7 @@ export default class AddFood extends Component {
     }
   }
 
-  renderItem({ item }) {
-    return <FoodCard food={item} />;
-  }
+  renderItem = ({ item }) => <FoodCard food={item} />
 
   renderFooter() {
     if (!this.state.loading) return null;

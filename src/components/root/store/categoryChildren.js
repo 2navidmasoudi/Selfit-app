@@ -28,6 +28,7 @@ import { helpDoneStore } from '../../../redux/actions/help';
 import Pic1 from '../../../assets/helpPics/Store/StoreCard.png';
 import Pic2 from '../../../assets/helpPics/Store/StoreBasket.png';
 
+const MaterialSource = 'https://selfit.ir/Resource/Material/';
 @connect(state => ({
   user: state.user,
   tokenapi: state.store.tokenapi,
@@ -164,8 +165,13 @@ export default class CategoryChildren extends Component {
                 key={c.idcategory}
                 bordered
                 onPress={() => this.onItemPress(c)}
+                cardBody
               >
                 {/* <Icon active name="logo-googleplus" /> */}
+                <Image
+                  source={{ uri: `${MaterialSource}${c.piccategory}` }}
+                  style={{ width: 50, height: 50, marginHorizontal: 10 }}
+                />
                 <Text style={{ flex: 5 }}>{c.namecategory}</Text>
                 <Right style={{ flex: 1, alignItems: 'center' }}>
                   <Icon name="arrow-forward" />

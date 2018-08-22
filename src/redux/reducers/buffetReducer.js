@@ -41,6 +41,7 @@ export default (state = initialState, action = {}) => {
     case REFRESH_BUFFET:
       return {
         ...state,
+        BuffetList: [],
         min: 0,
       };
     case TOKEN_BUFFET:

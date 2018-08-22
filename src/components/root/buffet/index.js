@@ -16,6 +16,7 @@ import Pic2 from '../../../assets/helpPics/BuffetIndex/BuffetPin.png';
 import Pic3 from '../../../assets/helpPics/BuffetIndex/BuffetDetailMap.png';
 import Pic4 from '../../../assets/helpPics/BuffetIndex/BuffetFollow.png';
 import { getAllBuffet } from '../../../services/buffet';
+import {refreshBuffet} from "../../../redux/actions";
 
 @connect(state => ({
   user: state.user,
@@ -23,7 +24,8 @@ import { getAllBuffet } from '../../../services/buffet';
 }), {
   receiveBuffet,
   locateUser,
-  helpDoneBuffetIndex
+  helpDoneBuffetIndex,
+  refreshBuffet
 })
 export default class Buffet extends Component {
   constructor() {
@@ -40,6 +42,9 @@ export default class Buffet extends Component {
     const { tokenmember, tokenapi } = this.props.user;
     putCheckToken(tokenmember, tokenapi);
     this.getCurrentPosition();
+  }
+  componentWillUnmount() {
+    this.props.refreshBuffet();
   }
   getCurrentPosition() {
     const { tokenmember } = this.props.user;

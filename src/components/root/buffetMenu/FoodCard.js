@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import {TouchableWithoutFeedback, View} from 'react-native';
-import { Button, Card, CardItem, Grid, Left, Right, Row, Thumbnail, Toast } from 'native-base';
+import {Image, TouchableWithoutFeedback, View} from 'react-native';
+import { Button, Card, CardItem, Left, Right, Toast } from 'native-base';
 import moment from 'moment-jalaali';
 import { connect } from 'react-redux';
 import { deleteMenuFood, getMenuFood, postMenuFoodBuffet } from '../../../services/buffet';
@@ -86,18 +86,16 @@ export default class FoodCard extends Component {
         <Card style={{ flex: 0 }}>
           <CardItem>
             <Left style={{ flex: 1 }}>
-              <Thumbnail square large source={{ uri: ImgSrc }} />
+              <Image source={{ uri: ImgSrc }} style={{ width: 75, height: 75, borderRadius: 7 }} />
             </Left>
             <Right style={{ flex: 1 }}>
               <Text
                 style={{ marginRight: 10 }}
+                type="bold"
               >{food.namemenufood}
               </Text>
               <Text
                 style={{ marginRight: 10 }}
-                numberOfLines={1}
-                ellipsizeMode="tail"
-                note
               >{persianNumber(food.pricemenufood.toLocaleString())} تومان
               </Text>
             </Right>

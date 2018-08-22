@@ -68,15 +68,35 @@ export default class Profile extends Component {
             <TouchableWithoutFeedback onPress={() => Actions.showImage({ uri: ImgSrc })}>
               <Image
                 source={{ uri: ImgSrc }}
-                style={{ height: 150, width: 150, borderRadius: 10 }}
+                style={{ height: 200, width: 200, borderRadius: 10 }}
               />
             </TouchableWithoutFeedback>
           </View>
           <View style={{ flex: 1 }}>
-            <Text>نام: {name}</Text>
-            <Text>شماره موبایل: {persianNumber(ph)}</Text>
-            <Text>سن: {persianNumber(jalaliBirthDay)}</Text>
-            <Text>ایمیل: {mail}</Text>
+            <Text>
+              نام:{' '}
+              <Text style={{ color: mainColor }} type="bold">
+                {name}
+              </Text>
+            </Text>
+            <Text>
+              شماره موبایل:{' '}
+              <Text style={{ color: mainColor }} type="bold">
+                {persianNumber(ph)}
+              </Text>
+            </Text>
+            <Text>
+              ایمیل:{' '}
+              <Text style={{ color: mainColor }} type="bold">
+                {mail}
+              </Text>
+            </Text>
+            <Text>
+              سن:{' '}
+              <Text style={{ color: mainColor }} type="bold">
+                {persianNumber(jalaliBirthDay)}
+              </Text>
+            </Text>
           </View>
         </Content>
         <View style={{ margin: 10, flexDirection: 'column', justifyContent: 'flex-end' }}>

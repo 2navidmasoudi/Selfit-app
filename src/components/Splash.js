@@ -64,6 +64,7 @@ export default class Splash extends Component {
   }
   async checkUpdate() {
     const update = await AppVersion();
+    if (!update) return;
     const version = await DeviceInfo.getVersion();
     if (version !== update) {
       this.setState({ modalVisible: true });

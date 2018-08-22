@@ -9,12 +9,12 @@ import { TabsStyle } from '../../../assets/styles/gym';
 import { putCheckToken } from '../../../services/index';
 import GymMap from './GymMap';
 import { mainColor } from '../../../assets/variables/colors';
-import { locateUser, receiveGym, tokenGym } from '../../../redux/actions';
+import {locateUser, receiveGym, refreshGym, tokenGym} from '../../../redux/actions';
 import { getAllGym } from '../../../services/gym';
 
 @connect(state => ({
   user: state.user,
-}), { locateUser, tokenGym, receiveGym })
+}), { locateUser, tokenGym, receiveGym, refreshGym })
 export default class Gym extends Component {
   static propTypes = {
     tokenGym: PropTypes.func.isRequired,
@@ -36,6 +36,9 @@ export default class Gym extends Component {
     const { tokenmember, tokenapi } = this.props.user;
     putCheckToken(tokenmember, tokenapi);
     this.getCurrentPosition();
+  }
+  componentWillUnmount() {
+    this.props.refreshGym();
   }
   onPress() {
     this.setState(

@@ -19,7 +19,7 @@ import { Alert, FlatList } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { postAddressOrderBuffet, postFactor } from '../../../services/orderBuffet';
 import AppHeader from '../../header';
-import { reBasketBuffet, reBasketMaterial, setRoad, tokenBuffet } from '../../../redux/actions';
+import {reBasketBuffet, reBasketMaterial, refreshBuffet, setRoad, tokenBuffet} from '../../../redux/actions';
 import { SignStyle } from '../../../assets/styles/sign';
 import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
@@ -44,6 +44,7 @@ let long;
   reBasketMaterial,
   reBasketBuffet,
   setRoad,
+  refreshBuffet
 })
 export default class finalOrderBuffet extends Component {
   constructor() {
@@ -58,6 +59,9 @@ export default class finalOrderBuffet extends Component {
   componentWillMount() {
     this.getInfo();
     console.log(this.props, 'props');
+  }
+  componentWillUnmount() {
+    this.props.refreshBuffet();
   }
   async getInfo() {
     await this.props.tokenBuffet('selfit.buffet');

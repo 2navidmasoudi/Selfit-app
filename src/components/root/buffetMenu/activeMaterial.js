@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
-import { Card, CardItem, Left, Right, Switch, Thumbnail } from 'native-base';
+import {Image, TouchableWithoutFeedback} from 'react-native';
+import { Card, CardItem, Left, Right, Switch } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { logError } from '../../../services/log';
@@ -9,6 +9,7 @@ import { persianNumber } from '../../../utils/persian';
 import {errorColor, mainColor} from '../../../assets/variables/colors';
 import { Text } from '../../Kit';
 
+const MaterialSource = 'http://selfit.ir/Resource/Material/';
 @connect(state => ({
   user: state.user,
   tokenmember: state.user.tokenmember,
@@ -42,7 +43,7 @@ export default class ActiveMaterial extends Component {
 
   render() {
     const { food } = this.props;
-    const ImgSrc = `http://selfit.ir/Resource/Material/${food.picmaterial}`;
+    const ImgSrc = `${MaterialSource}${food.picmaterial}`;
     const Active = this.state.Active === null ? food.active_material_buffet : this.state.Active;
     const YesOrNo = Active ? 'فعال در منو' : 'غیر فعال در منو';
     const color = Active ? '#000' : errorColor;
@@ -52,10 +53,9 @@ export default class ActiveMaterial extends Component {
           <CardItem>
             <Left style={{ flex: 1 }}>
               <TouchableWithoutFeedback onPress={() => Actions.showImage({ uri: ImgSrc })}>
-                <Thumbnail
-                  square
-                  small
+                <Image
                   source={{ uri: ImgSrc }}
+                  style={{ width: 50, height: 50 }}
                   onPress={() => Actions.showImage({ uri: ImgSrc })}
                 />
               </TouchableWithoutFeedback>
@@ -69,13 +69,11 @@ export default class ActiveMaterial extends Component {
             <Right style={{ flex: 1 }}>
               <Text
                 style={{ marginRight: 10 }}
+                type="bold"
               >{persianNumber(food.namematerial)}
               </Text>
               <Text
                 style={{ marginRight: 10 }}
-                numberOfLines={1}
-                ellipsizeMode="tail"
-                note
               >{persianNumber(food.pricematerial.toLocaleString())} تومان
               </Text>
             </Right>

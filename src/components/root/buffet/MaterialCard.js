@@ -41,7 +41,8 @@ export default class MaterialCard extends Component {
       for (i = 0; i < FoodOrdered.length; i++) {
         if (Material.idmaterial == FoodOrdered[i].idmaterial) {
           // TODO: DeleteMixMaterial
-          deletedOrder = await deleteMixMaterial(FoodOrdered[i].idmixmaterial, tokenmember, tokenapi);
+          deletedOrder =
+            await deleteMixMaterial(FoodOrdered[i].idmixmaterial, tokenmember, tokenapi);
           console.log('this is it!', FoodOrdered[i], 'deleted?', deletedOrder);
           break;
         }
@@ -90,7 +91,7 @@ export default class MaterialCard extends Component {
               <TouchableWithoutFeedback onPress={() => Actions.showImage({ uri: ImgSrc })}>
                 <Image
                   source={{ uri: ImgSrc }}
-                  style={{ flex: 1, height: 100, width: null, resizeMode: 'cover' }}
+                  style={{ flex: 1, height: 100, width: 100 }}
                   onPress={() => Actions.showImage({ uri: ImgSrc })}
                 />
               </TouchableWithoutFeedback>

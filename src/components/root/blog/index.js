@@ -42,6 +42,9 @@ export default class Blog extends Component {
     putCheckToken(tokenmember, tokenapi);
     this.setInfo();
   }
+  componentWillUnmount() {
+    this.props.refreshBlog();
+  }
   async setInfo() {
     await this.props.tokenBlog('selfit.public');
     await this.getAllBlog();

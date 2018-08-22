@@ -50,9 +50,7 @@ export default class AddMaterial extends Component {
       this.setState({ loading: false, refreshing: false });
     }
   }
-  renderMaterial({ item }) {
-    return <MaterialCard food={item} />;
-  }
+  renderMaterial = ({ item }) => <MaterialCard food={item} />
   render() {
     return (
       <Container>

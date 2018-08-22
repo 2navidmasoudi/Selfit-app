@@ -15,31 +15,27 @@ export default (state = initialState, action = {}) => {
         BlogList: min === 0 ? blog : [...state.BlogList, ...blog],
         min
       };
-      break;
     case INCREMENT_MIN:
       return {
         ...state,
         min: state.min + 10
       };
-      break;
     case DECREMENT_MIN:
       return {
         ...state,
         min: state.min - 10
       };
-      break;
     case REFRESH_BLOG:
       return {
         ...state,
+        BlogList: [],
         min: 0,
       };
-      break;
     case TOKEN_BLOG:
       return {
         ...state,
         tokenapi: action.tokenapi,
       };
-      break;
     default:
       return state;
   }

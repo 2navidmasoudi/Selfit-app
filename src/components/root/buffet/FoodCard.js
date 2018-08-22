@@ -79,7 +79,7 @@ export default class FoodCard extends Component {
     const jM = m.format('jYYYY/jMM');
     const ImgYear = m.jYear();
     const ImgMonth = m.jMonth() + 1;
-    const ImgSrc = `${MenuFood.httpserver}${MenuFood.pathserver}${ImgYear}/${ImgMonth}/${MenuFood.picmenufood}`;
+    const ImgSrc = `${MenuFood.httpserver}${MenuFood.pathserver}${ImgYear}/${ImgMonth}/${MenuFood.picmenufoodbuffet}`;
     const Description = MenuFood.descmenufoodbuffet ? persianNumber(MenuFood.descmenufoodbuffet) : '';
     return (
       <TouchableOpacity
@@ -93,7 +93,7 @@ export default class FoodCard extends Component {
               <TouchableWithoutFeedback onPress={() => Actions.showImage({ uri: ImgSrc })}>
                 <Image
                   source={{ uri: ImgSrc }}
-                  style={{ flex: 1, borderRadius: 10, height: 100, width: null, resizeMode: 'cover' }}
+                  style={{ flex: 1, borderRadius: 10, height: 100, width: 100 }}
                   onPress={() => Actions.showImage({ uri: ImgSrc })}
                 />
               </TouchableWithoutFeedback>

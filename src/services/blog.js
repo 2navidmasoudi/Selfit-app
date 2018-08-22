@@ -12,7 +12,7 @@ export const getAllBlog = async (token, tokenapi, max, min, sort) => {
 };
 
 export const getSearchBlog = async (search, token, tokenapi, max, min, sort) => {
-  const response = await fetch(`${Selfit}${Blog}GetSearchAll?search=${search}&t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`, {
+  const response = await fetch(`${SAPI}${Blog}GetSearchAll?search=${search}&t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`, {
     method: GET,
     headers
   });

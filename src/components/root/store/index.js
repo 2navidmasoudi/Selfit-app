@@ -15,7 +15,7 @@ import {
 import { connect } from 'react-redux';
 import listToTree from 'list-to-tree-lite';
 import { Actions } from 'react-native-router-flux';
-import { View } from 'react-native';
+import { Image, View } from 'react-native';
 import AppHeader from '../../header';
 import { putCheckToken } from '../../../services/index';
 import { tokenStore } from '../../../redux/actions';
@@ -26,6 +26,7 @@ import { Text } from '../../Kit';
 import { mainColor, white } from '../../../assets/variables/colors';
 import Loader from '../../loader';
 
+const MaterialSource = 'https://selfit.ir/Resource/Material/';
 @connect(state => ({
   user: state.user,
   tokenapi: state.store.tokenapi,
@@ -133,8 +134,13 @@ export default class Store extends Component {
                 button
                 key={c.idcategory}
                 bordered
+                cardBody
                 onPress={() => this.onItemPress(c)}
               >
+                <Image
+                  source={{ uri: `${MaterialSource}${c.piccategory}` }}
+                  style={{ width: 50, height: 50, marginHorizontal: 10 }}
+                />
                 <Text style={{ flex: 5 }}>{c.namecategory}</Text>
                 <Right style={{ flex: 1, alignItems: 'center' }}>
                   <Icon name="arrow-forward" />

@@ -10,10 +10,11 @@ import { Modal, Text } from '../../Kit';
 import { helpDoneCoachList } from '../../../redux/actions/help';
 import Pic1 from '../../../assets/helpPics/Coach/CoachSearch.png';
 import Pic2 from '../../../assets/helpPics/Coach/CoachCard.png';
+import {refreshBuffet, refreshGym} from "../../../redux/actions";
 
 @connect(state => ({
   help: state.help.CoachList
-}), { helpDoneCoachList })
+}), { helpDoneCoachList, refreshGym, refreshBuffet })
 export default class Coach extends Component {
   constructor() {
     super();
@@ -25,6 +26,10 @@ export default class Coach extends Component {
     if (!this.props.help) {
       this.setState({ ModalNumber: 1 });
     }
+  }
+  componentWillUnmount() {
+    this.props.refreshGym();
+    this.props.refreshBuffet();
   }
   helpDone = () => this.props.helpDoneCoachList();
   render() {

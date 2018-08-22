@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { TouchableWithoutFeedback, View } from 'react-native';
-import { Button, Card, CardItem, Left, Right, Thumbnail, Toast } from 'native-base';
+import { Image, TouchableWithoutFeedback, View } from 'react-native';
+import { Button, Card, CardItem, Left, Right, Toast } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { logError } from '../../../services/log';
 import { deleteBuffetMaterial, getAllBuffetMaterial, postBuffetMaterial } from '../../../services/orderMaterial';
 import { Text } from '../../Kit';
-import {persianNumber} from "../../../utils/persian";
+import { persianNumber } from '../../../utils/persian';
 
+const MaterialSource = 'http://selfit.ir/Resource/Material/';
 @connect(state => ({
   user: state.user,
   tokenmember: state.user.tokenmember,
@@ -78,16 +79,15 @@ export default class MaterialCard extends Component {
 
   render() {
     const { food } = this.props;
-    const ImgSrc = `http://selfit.ir/Resource/Material/${food.picmaterial}`;
+    const ImgSrc = `${MaterialSource}${food.picmaterial}`;
     return (
       <Card style={{ flex: 0 }}>
         <CardItem>
           <Left style={{ flex: 1 }}>
             <TouchableWithoutFeedback onPress={() => Actions.showImage({ uri: ImgSrc })}>
-              <Thumbnail
-                square
-                large
+              <Image
                 source={{ uri: ImgSrc }}
+                style={{ width: 75, height: 75 }}
                 onPress={() => Actions.showImage({ uri: ImgSrc })}
               />
             </TouchableWithoutFeedback>
