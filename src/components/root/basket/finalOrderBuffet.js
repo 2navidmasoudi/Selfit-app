@@ -13,9 +13,9 @@ import {
   Input,
   Item,
   Label, Left,
-  ListItem, Right
+  ListItem, Right, Spinner
 } from 'native-base';
-import { Alert, FlatList } from 'react-native';
+import {Alert, FlatList, View} from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { postAddressOrderBuffet, postFactor } from '../../../services/orderBuffet';
 import AppHeader from '../../header';
@@ -25,6 +25,7 @@ import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
 import { sendPrice } from '../../../services/Alopeyk';
 import { getSingleBuffet } from '../../../services/buffet';
+import {mainColor} from "../../../assets/variables/colors";
 
 let lat;
 let long;
@@ -84,6 +85,7 @@ export default class finalOrderBuffet extends Component {
   }
   async sendOrderBuffet() {
     try {
+      this.setState({ disableSendFactor: true });
       const { tokenmember } = await this.props.user;
       const { tokenapi, buffetid } = await this.props;
       const { descfactor, sendServicePrice } = await this.state;
@@ -103,6 +105,13 @@ export default class finalOrderBuffet extends Component {
         Actions.reset('root');
         this.setState({ disableSendFactor: true });
       } else {
+        Alert.alert(
+          'خطا',
+          'خطا در صدور فاکتور، لطفا با پشتیبانی تماس بگیرید.',
+          [
+            { text: 'بازگشت' },
+          ]
+        );
         this.setState({ disableSendFactor: false });
       }
       console.log(result);
@@ -162,7 +171,17 @@ export default class finalOrderBuffet extends Component {
       item, formInputText
     } = SignStyle;
     const FooterComponent =
-      ((this.props.Count1 + this.props.Count2) === 0 || this.state.sendServicePrice === 0) ? null :
+      ((this.props.Count1 + this.props.Count2) === 0
+        || this.state.sendServicePrice === 0
+        || this.state.disableSendFactor
+      )
+        ?
+        (
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <Spinner color={mainColor} />
+          </View>
+        )
+        :
         (
           <Footer>
             <FooterTab>
