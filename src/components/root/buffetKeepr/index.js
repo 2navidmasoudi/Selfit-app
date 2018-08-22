@@ -36,7 +36,7 @@ export default class BuffetKeeper extends Component {
       refreshing: true,
       refresh: true,
       loading: true,
-      pannelBtn: 'add',
+      pannelBtn: 'md-add',
       display: 'none'
     };
     this.putActiveBuffet = this.putActiveBuffet.bind(this);
@@ -117,43 +117,43 @@ export default class BuffetKeeper extends Component {
       logError(err, 'putActiveBuffet', 'root/buffetKeeper/index', 'putActiveBuffet77');
     }
   }
-  async PutCheckoutAll() {
-    const { tokenmember } = await this.props.user;
-    const { tokenapi } = await this.props;
-    try {
-      const result = await putCheckoutAll(tokenmember, tokenapi);
-      if (result === 1) {
-        Alert.alert(
-          'موفقیت',
-          'درخواست شما با موفقیت ثبت شد. جهت اطلاعات بیشتر با پشتیبانی تماس بگیرید!',
-          [{ text: 'باشه' }]
-        );
-      } else if (result === -4) {
-        Alert.alert(
-          'خطا',
-          'فاکتوری از قبل ثبت نشده! جهت اطلاعات بیشتر با پشتیبانی تماس بگیرید!',
-          [{ text: 'باشه' }]
-        );
-      } else {
-        Alert.alert(
-          'خطا',
-          'مشکلی پیش آمده! جهت اطلاعات بیشتر با پشتیبانی تماس بگیرید!',
-          [{ text: 'باشه' }]
-        );
-      }
-    } catch (e) {
-      console.log(e);
-    }
-    this.getOrderBuffet();
-    Actions.refresh({ refresh: { refresh: Math.random() } });
-  }
+  // async PutCheckoutAll() {
+  //   const { tokenmember } = await this.props.user;
+  //   const { tokenapi } = await this.props;
+  //   try {
+  //     const result = await putCheckoutAll(tokenmember, tokenapi);
+  //     if (result === 1) {
+  //       Alert.alert(
+  //         'موفقیت',
+  //         'درخواست شما با موفقیت ثبت شد. جهت اطلاعات بیشتر با پشتیبانی تماس بگیرید!',
+  //         [{ text: 'باشه' }]
+  //       );
+  //     } else if (result === -4) {
+  //       Alert.alert(
+  //         'خطا',
+  //         'فاکتوری از قبل ثبت نشده! جهت اطلاعات بیشتر با پشتیبانی تماس بگیرید!',
+  //         [{ text: 'باشه' }]
+  //       );
+  //     } else {
+  //       Alert.alert(
+  //         'خطا',
+  //         'مشکلی پیش آمده! جهت اطلاعات بیشتر با پشتیبانی تماس بگیرید!',
+  //         [{ text: 'باشه' }]
+  //       );
+  //     }
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  //   this.getOrderBuffet();
+  //   Actions.refresh({ refresh: { refresh: Math.random() } });
+  // }
   togglePanel = () => {
     const { pannelBtn } = this.state;
-    if (pannelBtn === 'add') {
-      this.setState({ pannelBtn: 'close', display: 'flex' });
+    if (pannelBtn === 'md-add') {
+      this.setState({ pannelBtn: 'md-close', display: 'flex' });
       this.view.slideInDown();
     } else {
-      this.setState({ pannelBtn: 'add' });
+      this.setState({ pannelBtn: 'md-add' });
       this.view.slideOutUp();
       setTimeout(() => this.setState({ display: 'none' }), 1000);
     }
@@ -207,28 +207,13 @@ export default class BuffetKeeper extends Component {
         <View style={{ height: 1, backgroundColor: darkColor }} />
         <Animatable.View ref={this.handleViewRef} style={{ display: this.state.display }}>
           <Header
-            style={{ justifyContent: 'center', backgroundColor: mainColor }}
+            style={{ justifyContent: 'center', backgroundColor: '(0,0,0,0)', alignItems: 'center' }}
             androidStatusBarColor={darkColor}
             iosBarStyle="light-content"
           >
             <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center', flexDirection: 'row' }}>
               <Button
-                style={{ backgroundColor: darkColor, borderColor: mainColor, borderWidth: 1 }}
-                onPress={() => Alert.alert(
-                  'درخواست تسویه',
-                  'آیا می خواهید تمامی فاکتور های شما تا دیروز برای شما تسویه شود؟',
-                  [
-                    { text: 'قبول', onPress: () => this.PutCheckoutAll() },
-                    { text: 'بازگشت' }
-                  ]
-                )}
-              >
-                <Text style={{ color: white }}>
-                  تسویه حساب
-                </Text>
-              </Button>
-              <Button
-                style={{ backgroundColor: darkColor, borderColor: mainColor, borderWidth: 1 }}
+                style={{ backgroundColor: darkColor }}
                 onPress={() => Actions.buffet()}
               >
                 <Text style={{ color: white }}>
@@ -236,7 +221,7 @@ export default class BuffetKeeper extends Component {
                 </Text>
               </Button>
               <Button
-                style={{ backgroundColor: darkColor, borderColor: mainColor, borderWidth: 1 }}
+                style={{ backgroundColor: darkColor }}
                 onPress={() => Actions.support()}
               >
                 <Text style={{ color: white }}>

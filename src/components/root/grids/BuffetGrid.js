@@ -42,7 +42,10 @@ export default class BuffetGrid extends Component {
   }
   componentDidMount() {
     this.setInfo();
-    this.help();
+    setTimeout(
+      () => this.help(),
+      1000
+    );
   }
   async setInfo() {
     await this.props.tokenBuffet('selfit.buffet');
@@ -73,15 +76,11 @@ export default class BuffetGrid extends Component {
     }
   }
   async help() {
-    await this.props.copilotEvents.on('stepChange', this.handleStepChange);
     if (!this.props.help) {
       this.props.start();
       this.props.helpDoneBuffet();
     }
   }
-  handleStepChange = (step) => {
-    console.log(`Current step is: ${step.name}`);
-  };
   render() {
     return (
       <Container>

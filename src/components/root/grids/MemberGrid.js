@@ -27,19 +27,17 @@ import CoachPic from '../../../assets/Coach.jpg';
 })
 export default class MemberGrid extends Component {
   componentDidMount() {
-    this.help();
+    setTimeout(
+      () => this.help(),
+      1000
+    );
   }
   async help() {
-    // await this.props.helpReset();
-    await this.props.copilotEvents.on('stepChange', this.handleStepChange);
     if (!this.props.help) {
       this.props.start();
       this.props.helpDoneMember();
     }
   }
-  handleStepChange = (step) => {
-    console.log(`Current step is: ${step.name}`);
-  };
   render() {
     return (
       <Container>

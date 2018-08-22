@@ -61,7 +61,7 @@ export default class List1 extends Component {
       const { search, max, ssort, fsort } = await this.state;
       const { tokenmember } = await this.props.user;
       const { min, tokenapi } = await this.props;
-      const CoachList = await getSearchCoach(search, tokenmember, tokenapi, max, min, 'RateNumber%20desc');
+      const CoachList = await getSearchCoach(search, tokenmember, tokenapi, max, min, null);
       await this.props.receiveCoach(CoachList, min);
       this.setState({ loading: false, refreshing: false });
     } catch (error) {
@@ -72,10 +72,10 @@ export default class List1 extends Component {
   async _getAllCoach() {
     try {
       this.setState({ loading: true });
-      const { max, ssort, fsort } = await this.state;
+      const { max } = await this.state;
       const { tokenmember } = await this.props.user;
       const { min, tokenapi } = await this.props;
-      const CoachList = await getAllCoach(tokenmember, tokenapi, max, min, 'RateNumber%20desc');
+      const CoachList = await getAllCoach(1, tokenmember, tokenapi, max, min, null);
       console.log(CoachList);
       await this.props.receiveCoach(CoachList, min);
       this.setState({ loading: false, refreshing: false });

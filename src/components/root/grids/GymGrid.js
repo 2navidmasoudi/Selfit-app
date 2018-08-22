@@ -35,7 +35,10 @@ import CoachPic from '../../../assets/Coach.jpg';
 export default class GymGrid extends Component {
   componentDidMount() {
     this.setInfo();
-    this.help();
+    setTimeout(
+      () => this.help(),
+      1000
+    );
   }
   async setInfo() {
     await this.props.tokenGym('selfit.gym');
@@ -68,15 +71,11 @@ export default class GymGrid extends Component {
     }
   }
   async help() {
-    await this.props.copilotEvents.on('stepChange', this.handleStepChange);
     if (!this.props.help) {
       this.props.start();
       this.props.helpDoneGym();
     }
   }
-  handleStepChange = (step) => {
-    console.log(`Current step is: ${step.name}`);
-  };
   render() {
     return (
       <Container>

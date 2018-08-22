@@ -79,7 +79,7 @@ export default class Coach extends Component {
           tabBarUnderlineStyle={TabsStyle.underLine}
         >
           <Tab
-            heading="بر اساس نظرات"
+            heading="آقایون"
             activeTextStyle={TabsStyle.activeText}
             textStyle={TabsStyle.text}
             activeTabStyle={TabsStyle.activeTab}
@@ -88,7 +88,7 @@ export default class Coach extends Component {
             <List1 />
           </Tab>
           <Tab
-            heading="بر اساس حروف الفبا"
+            heading="بانوان"
             activeTextStyle={TabsStyle.activeText}
             textStyle={TabsStyle.text}
             activeTabStyle={TabsStyle.activeTab}

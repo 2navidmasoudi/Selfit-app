@@ -13,6 +13,7 @@ import {
 } from '../../../redux/actions/index';
 import { getAllCoach, getSearchCoach } from '../../../services/coach';
 import { logError } from '../../../services/log';
+import Loader from "../../loader/index";
 
 const mapDispatchToProps = dispatch => ({
   receiveCoach: (gym, min) => dispatch(receiveBuffet(gym, min)),
@@ -30,8 +31,6 @@ const mapDispatchToProps = dispatch => ({
 export default class List2 extends Component {
   state = {
     max: 120,
-    ssort: true,
-    fsort: 1,
     loading: true,
     refreshing: false,
     search: null,
@@ -64,10 +63,10 @@ export default class List2 extends Component {
       await this.setState({
         searchMode: true
       });
-      const { search, max, ssort, fsort } = await this.state;
+      const { search, max } = await this.state;
       const { tokenmember } = await this.props.user;
       const { min, tokenapi } = await this.props;
-      const CoachList = await getSearchCoach(search, tokenmember, tokenapi, max, min, 'namecoach%20asc');
+      const CoachList = await getSearchCoach(search, tokenmember, tokenapi, max, min, null);
       await this.props.receiveCoach(CoachList, min);
       this.setState({ loading: false, refreshing: false });
     } catch (error) {
@@ -77,10 +76,10 @@ export default class List2 extends Component {
   }
   async _getAllCoach() {
     try {
-      const { max, ssort, fsort } = await this.state;
+      const { max } = await this.state;
       const { tokenmember } = await this.props.user;
       const { min, tokenapi } = await this.props;
-      const CoachList = await getAllCoach(tokenmember, tokenapi, max, min, 'namecoach%20asc');
+      const CoachList = await getAllCoach(2, tokenmember, tokenapi, max, min, null);
       console.log(CoachList);
       await this.props.receiveCoach(CoachList, min);
       this.setState({ loading: false, refreshing: false });
@@ -129,7 +128,7 @@ export default class List2 extends Component {
           data={this.props.coach}
           renderItem={item => this.renderItem(item)}
           keyExtractor={item => item.idcoach}
-          ListEmptyComponent={() => <Spinner />}
+          ListEmptyComponent={<Loader loading={this.state.loading} />}
           onRefresh={this.handleRefresh.bind(this)}
           refreshing={this.state.refreshing}
           onEndReached={this.handleLoadMore.bind(this)}

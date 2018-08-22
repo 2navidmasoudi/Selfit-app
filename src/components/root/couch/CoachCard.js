@@ -14,46 +14,45 @@ import { postRateCoach } from '../../../services/coach';
   tokenapi: state.gym.tokenapi,
 }))
 export default class CoachCard extends Component {
-  constructor() {
-    super();
-    this.state = {
-      Btn: false,
-    };
-  }
+  // constructor() {
+  //   super();
+  //   this.state = {
+  //     Btn: false,
+  //   };
+  // }
   onPressHandle(coach) {
     Actions.coachDetail({ coach });
     console.log(coach);
   }
-  ratingCompleted(rate) {
-    console.log(`Rating is: ${rate}`);
-    this.setState({ rate, Btn: true });
-  }
-  async submitRate() {
-    try {
-      const { tokenmember } = await this.props.user;
-      const { tokenapi, coach } = await this.props;
-      let { rate } = await this.state;
-      rate = await Number(rate);
-      const result = await postRateCoach(coach.idcoach, rate, tokenmember, tokenapi);
-      console.log(result, 'postRateGym');
-      if (result === 1) {
-        this.setState({ disableRate: true, Btn: false });
-        Alert.alert(
-          'ثبت امتیاز',
-          'امتیاز شما ثبت شد. با تشکر!',
-          [
-            { text: 'بازگشت' },
-          ]
-        );
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  }
+  // ratingCompleted(rate) {
+  //   console.log(`Rating is: ${rate}`);
+  //   this.setState({ rate, Btn: true });
+  // }
+  // async submitRate() {
+  //   try {
+  //     const { tokenmember } = await this.props.user;
+  //     const { tokenapi, coach } = await this.props;
+  //     let { rate } = await this.state;
+  //     rate = await Number(rate);
+  //     const result = await postRateCoach(coach.idcoach, rate, tokenmember, tokenapi);
+  //     console.log(result, 'postRateGym');
+  //     if (result === 1) {
+  //       this.setState({ disableRate: true, Btn: false });
+  //       Alert.alert(
+  //         'ثبت امتیاز',
+  //         'امتیاز شما ثبت شد. با تشکر!',
+  //         [
+  //           { text: 'بازگشت' },
+  //         ]
+  //       );
+  //     }
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // }
   render() {
     const { coach } = this.props;
     const m = moment(`${coach.datesave}`, 'YYYY/MM/DDTHH:mm:ss');
-    const jM = m.format('jYYYY/jMM');
     const ImgYear = m.jYear();
     const ImgMonth = m.jMonth() + 1;
     const ImgSrc = `${coach.httpserver}${coach.pathserver}${ImgYear}/${ImgMonth}/${coach.piccoach}`;
@@ -65,24 +64,29 @@ export default class CoachCard extends Component {
               <Thumbnail square large source={{ uri: ImgSrc }} />
             </Left>
             <Right style={{ flex: 2 }}>
-              <Text style={{ marginRight: 10, marginBottom: 5 }}>{coach.namecoach}</Text>
-              <Rating
-                fractions={1}
-                startingValue={coach.RateNumber}
-                imageSize={20}
-                style={{ marginRight: 10 }}
-                onFinishRating={this.ratingCompleted.bind(this)}
-              />
-              {this.state.Btn &&
-              <Button
-                disabled={this.state.disableRate}
-                style={{ backgroundColor: mainColor, marginRight: 10, paddingHorizontal: 20 }}
-                onPress={this.submitRate.bind(this)}
+              <Text
+                style={{ marginRight: 10, marginBottom: 5 }}
+                type="bold"
               >
-                <Text style={{ color: white }}>
-                  ثبت امتیاز
-                </Text>
-              </Button>}
+                {coach.namecoach}
+              </Text>
+              {/* <Rating */}
+              {/* fractions={1} */}
+              {/* startingValue={coach.RateNumber} */}
+              {/* imageSize={20} */}
+              {/* style={{ marginRight: 10 }} */}
+              {/* onFinishRating={this.ratingCompleted.bind(this)} */}
+              {/* /> */}
+              {/* {this.state.Btn && */}
+              {/* <Button */}
+              {/* disabled={this.state.disableRate} */}
+              {/* style={{ backgroundColor: mainColor, marginRight: 10, paddingHorizontal: 20 }} */}
+              {/* onPress={this.submitRate.bind(this)} */}
+              {/* > */}
+              {/* <Text style={{ color: white }}> */}
+              {/* ثبت امتیاز */}
+              {/* </Text> */}
+              {/* </Button>} */}
             </Right>
           </CardItem>
         </Card>

@@ -1,7 +1,7 @@
 import { Coach, GET, headers, POST, SAPI, Selfit } from './type';
 
-export const getAllCoach = async (token, tokenapi, max, min, sort) => {
-  const response = await fetch(`${SAPI}${Coach}GetAll?t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`, {
+export const getAllCoach = async (sex, token, tokenapi, max, min, sort) => {
+  const response = await fetch(`${SAPI}${Coach}GetAll?sex=${sex}&t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`, {
     method: GET,
     headers
   });
