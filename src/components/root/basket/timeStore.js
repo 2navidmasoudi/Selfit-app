@@ -166,7 +166,7 @@ export default class TimeStore extends Component {
                 >
                   <Text
                     style={{
-                      paddingHorizontal: 5,
+                      paddingHorizontal: 10,
                       color: c.idtimefactor === this.state.selectedTime ? white : '#000',
                     }}
                   >
@@ -174,7 +174,7 @@ export default class TimeStore extends Component {
                   </Text>
                   <Text
                     style={{
-                      paddingHorizontal: 5,
+                      paddingHorizontal: 10,
                       color: c.idtimefactor === this.state.selectedTime ? white : '#000',
                     }}
                   >

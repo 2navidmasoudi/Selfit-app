@@ -12,7 +12,7 @@ const styles = EStyleSheet.create({
   },
   animationView: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.15)',
+    backgroundColor: 'rgba(0,0,0,0.2)',
     paddingHorizontal: 5,
     justifyContent: 'center'
   },
@@ -22,7 +22,7 @@ const styles = EStyleSheet.create({
     textAlign: 'center',
     textShadowColor: 'rgba(0, 0, 0, 0.9)',
     textShadowOffset: { width: -1, height: 1 },
-    textShadowRadius: 10
+    textShadowRadius: 25
   },
   animationDetail: {
     textAlign: 'center',
@@ -31,7 +31,7 @@ const styles = EStyleSheet.create({
     marginHorizontal: 2,
     textShadowColor: 'rgba(0, 0, 0, 0.9)',
     textShadowOffset: { width: -1, height: 1 },
-    textShadowRadius: 10
+    textShadowRadius: 30,
   },
 });
 export { styles };

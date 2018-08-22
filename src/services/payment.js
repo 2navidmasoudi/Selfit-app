@@ -1,8 +1,6 @@
-import { Linking, Platform } from 'react-native';
+import { Linking } from 'react-native';
 import { GET, headers, Payment, SAPI } from './type';
-import { Actions } from 'react-native-router-flux';
 
-const isIOS = Platform.OS === 'ios';
 export const getPayment = async (type, token, delivery = 0, tokenapi = 'selfit.member') => {
   try {
     const results = await fetch(`${SAPI}${Payment}Get?type=${type}&delivery=${delivery}&t.token=${token}&t.tokenapi=${tokenapi}`, {
@@ -19,29 +17,18 @@ export const getPayment = async (type, token, delivery = 0, tokenapi = 'selfit.m
 };
 export const getRequestPayment = async (type, token, delivery = 0, tokenapi = 'selfit.member') => {
   try {
-    if (isIOS) {
-      const url = await `${SAPI}${Payment}GetRequest?type=${type}&delivery=${delivery}&t.token=${token}&t.tokenapi=${tokenapi}`;
-      Linking.canOpenURL(url).then((supported) => {
-        if (!supported) {
-          console.log(`Can't handle url: ${url}`);
-        } else {
-          Linking.openURL(url);
-        }
-      });
-    } else {
-      const url = await fetch(`${SAPI}${Payment}GetRequest?type=${type}&delivery=${delivery}&t.token=${token}&t.tokenapi=${tokenapi}`, {
-        method: GET,
-        redirect: 'follow'
-      }).then(response => response.url);
-      Linking.canOpenURL(url).then((supported) => {
-        if (!supported) {
-          console.log(`Can't handle url: ${url}`);
-        } else {
-          Linking.openURL(url);
-        }
-      });
-    }
-
+    const response = await fetch(`${SAPI}${Payment}GetAddressRequest?type=${type}&delivery=${delivery}&t.token=${token}&t.tokenapi=${tokenapi}`);
+    const json = await response.json();
+    console.log('Payment/GetAddressRequest');
+    console.log(json);
+    const url = await json.Data;
+    Linking.canOpenURL(url).then((supported) => {
+      if (!supported) {
+        console.log(`Can't handle url: ${url}`);
+      } else {
+        Linking.openURL(url);
+      }
+    });
   } catch (e) {
     console.log(e);
   }

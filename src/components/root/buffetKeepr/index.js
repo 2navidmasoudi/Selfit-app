@@ -14,7 +14,7 @@ import OrderCard from './orderCard';
 import { Text } from '../../Kit';
 import Loader from '../../loader';
 import { darkColor, errorColor, mainColor, white } from '../../../assets/variables/colors';
-import {putCheckoutAll} from "../../../services/orders";
+import { putCheckoutAll } from '../../../services/orders';
 
 @connect(state => ({
   user: state.user,
@@ -128,7 +128,7 @@ export default class BuffetKeeper extends Component {
           'درخواست شما با موفقیت ثبت شد. جهت اطلاعات بیشتر با پشتیبانی تماس بگیرید!',
           [{ text: 'باشه' }]
         );
-      } else if (result === -4 ) {
+      } else if (result === -4) {
         Alert.alert(
           'خطا',
           'فاکتوری از قبل ثبت نشده! جهت اطلاعات بیشتر با پشتیبانی تماس بگیرید!',
@@ -144,6 +144,8 @@ export default class BuffetKeeper extends Component {
     } catch (e) {
       console.log(e);
     }
+    this.getOrderBuffet();
+    Actions.refresh({ refresh: { refresh: Math.random() } });
   }
   togglePanel = () => {
     const { pannelBtn } = this.state;

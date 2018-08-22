@@ -7,7 +7,7 @@ import moment from 'moment-jalaali';
 import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
 import { errorColor, mainColor, white } from '../../../assets/variables/colors';
-import {putCheckout} from "../../../services/orders";
+import { putCheckout } from '../../../services/orders';
 
 @connect(state => ({
   user: state.user,

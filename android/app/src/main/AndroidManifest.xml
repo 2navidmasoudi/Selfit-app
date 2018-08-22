@@ -40,13 +40,8 @@
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="selfit" />
             <data
-              android:scheme="https"
-              android:host="selfit.ir"
-            />
-            <data
-              android:scheme="https"
-              android:host="selfit.ir"
-              android:pathPrefix="/"
+              android:scheme="selfit"
+              android:host="open"
             />
           </intent-filter>
         </activity>

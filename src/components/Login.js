@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Platform, StyleSheet } from 'react-native';
-import { Button, Container } from 'native-base';
+import { Button, Container, Spinner } from 'native-base';
 import LinearGradient from 'react-native-linear-gradient';
 import { Actions } from 'react-native-router-flux';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
@@ -28,7 +28,7 @@ export default class Login extends Component {
         value: '',
         error: '',
       },
-      disabled: false,
+      loading: false,
     };
     this.putActivePhone = () => {
       Actions.authLightBox({ method: 'PutActivephone' });
@@ -39,6 +39,7 @@ export default class Login extends Component {
     this.onPress = this.onPress.bind(this);
   }
   async onPress() {
+    this.setState({ loading: true });
     const { phoneNumber } = await this.state;
     if (phoneNumber.value.length !== 11) {
       this.setState({
@@ -47,6 +48,7 @@ export default class Login extends Component {
           error: 'لطفا شماره تلفن خود را چک کنید'
         }
       });
+      this.setState({ loading: false });
     } else if (phoneNumber.value.length === 11) {
       this.setState({
         phoneNumber: {
@@ -61,26 +63,27 @@ export default class Login extends Component {
   async requestMemberLogin() {
     await this.props.setTokenapi({ tokenapi: 'selfit.member' });
     const { phone, tokenapi } = await this.props.user;
-    const json = await putMemberLogin(phone, tokenapi);
-    switch (json) {
-      case -4:
-      case -8:
-        this.postMember();
-        break;
-      case -9:
-        this.putActivePhone();
-        break;
-      case 1:
-        this.putCheckLogin();
-        break;
-      default:
-        logError('putMemberLogin', `json: ${json}`, 'Login', 'no match for this code');
-        break;
+    try {
+      const json = await putMemberLogin(phone, tokenapi);
+      switch (json) {
+        case -4:
+        case -8:
+          this.postMember();
+          break;
+        case -9:
+          this.putActivePhone();
+          break;
+        case 1:
+          this.putCheckLogin();
+          break;
+        default:
+          logError('putMemberLogin', `json: ${json}`, 'Login', 'no match for this code');
+          break;
+      }
+    } catch (e) {
+      logError(e, 'requestMemberLogin', 'Login', 'putMemberLogin');
     }
-    this.setState(
-      { disabled: true },
-      () => setTimeout(() => this.setState({ disabled: false }), 3000)
-    );
+    this.setState({ loading: false });
   }
   async postMember() {
     const { phone, tokenapi } = await this.props.user;
@@ -123,14 +126,16 @@ export default class Login extends Component {
               >
                 {phoneNumberError}
               </Text>
+              {!this.state.loading &&
               <Button
                 block
-                disabled={this.state.disabled}
-                style={{ backgroundColor: this.state.disabled ? mainColor : darkColor }}
+                style={{ backgroundColor: darkColor }}
                 onPress={this.onPress}
               >
                 <Text style={styles.txt}>تايید</Text>
-              </Button>
+              </Button>}
+              {this.state.loading &&
+              <Spinner color={darkColor} />}
             </View>
           </View>
         </LinearGradient>
