@@ -207,7 +207,7 @@ export default class BuffetKeeper extends Component {
         <View style={{ height: 1, backgroundColor: darkColor }} />
         <Animatable.View ref={this.handleViewRef} style={{ display: this.state.display }}>
           <Header
-            style={{ justifyContent: 'center', backgroundColor: '(0,0,0,0)', alignItems: 'center' }}
+            style={{ justifyContent: 'center', backgroundColor: 'transparent', alignItems: 'center' }}
             androidStatusBarColor={darkColor}
             iosBarStyle="light-content"
           >
