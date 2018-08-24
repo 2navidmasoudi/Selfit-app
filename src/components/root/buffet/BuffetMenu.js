@@ -112,8 +112,8 @@ export default class BuffetMenu extends Component {
     this.getInfo();
   }
   componentDidMount() {
-    setTimeout(this._tabs.goToPage.bind(this._tabs, 1), 50);
-    setTimeout(this._tabs2.goToPage.bind(this._tabs2, 1), 50);
+    setTimeout(this._tabs.goToPage.bind(this._tabs, 1), 800);
+    setTimeout(this._tabs2.goToPage.bind(this._tabs2, 1), 1000);
   }
   async getInfo() {
     await this.props.tokenBuffet('selfit.buffet');

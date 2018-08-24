@@ -41,11 +41,11 @@ export default class BuffetGrid extends Component {
     buffetid: null,
   }
   componentDidMount() {
-    this.setInfo();
     setTimeout(
       () => this.help(),
       1000
     );
+    this.setInfo();
   }
   async setInfo() {
     await this.props.tokenBuffet('selfit.buffet');
@@ -76,9 +76,13 @@ export default class BuffetGrid extends Component {
     }
   }
   async help() {
-    if (!this.props.help) {
-      this.props.start();
-      this.props.helpDoneBuffet();
+    try {
+      if (!this.props.help) {
+        this.props.start();
+        this.props.helpDoneBuffet();
+      }
+    } catch (e) {
+      console.log(e);
     }
   }
   render() {

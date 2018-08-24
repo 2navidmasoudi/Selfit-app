@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {FlatList, Image} from 'react-native';
+import { FlatList, Image } from 'react-native';
 import {
   Badge,
   Button,
@@ -20,7 +20,7 @@ import AppHeader from '../../header';
 import { putCheckToken } from '../../../services/index';
 import { receiveProduct, tokenStore } from '../../../redux/actions';
 import { getAllAccessProduct } from '../../../services/product';
-import {Modal, Text} from '../../Kit';
+import { Modal, Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
 import { mainColor, white } from '../../../assets/variables/colors';
 import Loader from '../../loader';
@@ -167,7 +167,6 @@ export default class CategoryChildren extends Component {
                 onPress={() => this.onItemPress(c)}
                 cardBody
               >
-                {/* <Icon active name="logo-googleplus" /> */}
                 <Image
                   source={{ uri: `${MaterialSource}${c.piccategory}` }}
                   style={{ width: 50, height: 50, marginHorizontal: 10 }}

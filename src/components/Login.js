@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Platform, StyleSheet } from 'react-native';
+import { View, Platform, StyleSheet, Alert } from 'react-native';
 import { Button, Container, Spinner } from 'native-base';
 import LinearGradient from 'react-native-linear-gradient';
 import { Actions } from 'react-native-router-flux';
@@ -87,8 +87,12 @@ export default class Login extends Component {
   }
   async postMember() {
     const { phone, tokenapi } = await this.props.user;
-    await postMember(phone, tokenapi);
-    this.putActivePhone();
+    const result = await postMember(phone, tokenapi);
+    if (result === 1) {
+      this.putActivePhone();
+    } else {
+      Alert.alert('خطا', 'خطایی در ثبت نام رخ داده', [{ text: 'باشه' }]);
+    }
   }
   changeMobileNumber(text) {
     this.setState({

@@ -10,7 +10,7 @@ import { Modal, Text } from '../../Kit';
 import { helpDoneCoachList } from '../../../redux/actions/help';
 import Pic1 from '../../../assets/helpPics/Coach/CoachSearch.png';
 import Pic2 from '../../../assets/helpPics/Coach/CoachCard.png';
-import {refreshBuffet, refreshGym} from "../../../redux/actions";
+import { refreshBuffet, refreshGym } from '../../../redux/actions/index';
 
 @connect(state => ({
   help: state.help.CoachList
@@ -79,7 +79,7 @@ export default class Coach extends Component {
           tabBarUnderlineStyle={TabsStyle.underLine}
         >
           <Tab
-            heading="آقایون"
+            heading="آقایان"
             activeTextStyle={TabsStyle.activeText}
             textStyle={TabsStyle.text}
             activeTabStyle={TabsStyle.activeTab}

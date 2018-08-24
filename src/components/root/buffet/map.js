@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Alert, ImageBackground } from 'react-native';
-import { Button, Fab, Icon, Spinner } from 'native-base';
+import { Fab, Icon, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
 import { Actions } from 'react-native-router-flux';
+import { Button } from 'react-native-elements';
 import { mapStyle } from '../../../assets/styles/map';
 import { receiveBuffet, tokenBuffet } from '../../../redux/actions/index';
 import { getAllBuffet } from '../../../services/buffet';
 import { Text } from '../../Kit';
-import { mainColor, white } from '../../../assets/variables/colors';
+import { mainColor } from '../../../assets/variables/colors';
 import Pin1 from '../../../assets/pinPics/Buffet1.png';
 import Pin2 from '../../../assets/pinPics/Buffet2.png';
 import PinStyle from '../../../assets/styles/PinStyle';
@@ -195,17 +196,13 @@ export default class MapComponent extends Component {
         </Fab>
         {this.state.MarkerReady === false ? <Spinner /> :
         <Button
-          block
-          style={{
-            margin: 25,
-            marginHorizontal: 150,
-            borderRadius: 5,
-            backgroundColor: mainColor,
-          }}
+          rightIcon={{ name: 'place', size: 25 }}
+          backgroundColor={mainColor}
+          borderRadius={10}
+          buttonStyle={{ marginBottom: 20, paddingRight: 20 }}
+          containerViewStyle={{ marginLeft: 50 }}
           onPress={() => this.getNewBuffet()}
-        >
-          <Icon name="pin" color={white} style={{ alignItems: 'center' }} />
-        </Button>}
+        />}
       </View>
     );
   }

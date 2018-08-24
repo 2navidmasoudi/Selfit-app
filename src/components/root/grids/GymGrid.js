@@ -34,11 +34,11 @@ import CoachPic from '../../../assets/Coach.jpg';
 })
 export default class GymGrid extends Component {
   componentDidMount() {
-    this.setInfo();
     setTimeout(
       () => this.help(),
       1000
     );
+    this.setInfo();
   }
   async setInfo() {
     await this.props.tokenGym('selfit.gym');
@@ -71,9 +71,13 @@ export default class GymGrid extends Component {
     }
   }
   async help() {
-    if (!this.props.help) {
-      this.props.start();
-      this.props.helpDoneGym();
+    try {
+      if (!this.props.help) {
+        this.props.start();
+        this.props.helpDoneGym();
+      }
+    } catch (e) {
+      console.log(e);
     }
   }
   render() {

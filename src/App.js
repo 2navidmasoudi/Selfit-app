@@ -39,7 +39,7 @@ import BuffetOrder from './components/root/buffet/BuffetOrder';
 import AddFood from './components/root/buffetMenu/addFood';
 import AddMaterial from './components/root/buffetMenu/addMaterial';
 import BlogWeb from './components/root/blog/blogWeb';
-import Main from './components/root/Main';
+import Main, { musicDown } from './components/root/Main';
 import DrawerLayout from './components/DrawerLayout';
 import BuffetBasket from './components/root/basket/BuffetBasket';
 import ProductBasket from './components/root/basket/ProductBasket';
@@ -164,6 +164,11 @@ export default class App extends Component {
   handleOpenURL(event) {
     console.log('Incoming url');
     console.log(event.url);
+    try {
+      musicDown();
+    } catch (e) {
+      console.log(e);
+    }
   }
   render() {
     return (

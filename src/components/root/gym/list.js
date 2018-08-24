@@ -114,7 +114,7 @@ export default class List extends Component {
       const { search } = await this.state;
       const { tokenmember } = await this.props.user;
       const { min, tokenapi } = await this.props;
-      const GymList = await getSearchGym(search, tokenmember, tokenapi, 120, min, 'addressgym%20asc');
+      const GymList = await getSearchGym(search, tokenmember, tokenapi, 120, min, null);
       await this.props.receiveGym(GymList, min);
       this.setState({ loading: false, refreshing: false });
     } catch (error) {

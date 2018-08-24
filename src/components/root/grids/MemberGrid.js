@@ -33,9 +33,13 @@ export default class MemberGrid extends Component {
     );
   }
   async help() {
-    if (!this.props.help) {
-      this.props.start();
-      this.props.helpDoneMember();
+    try {
+      if (!this.props.help) {
+        this.props.start();
+        this.props.helpDoneMember();
+      }
+    } catch (e) {
+      console.log(e);
     }
   }
   render() {
