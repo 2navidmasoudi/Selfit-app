@@ -179,6 +179,9 @@ export default class finalOrderBuffet extends Component {
         (
           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <Spinner color={mainColor} />
+            <Text>
+              درحال برقراری ارتباط با بوفه دار...
+            </Text>
           </View>
         )
         :

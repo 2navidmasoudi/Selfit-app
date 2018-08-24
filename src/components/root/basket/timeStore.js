@@ -10,7 +10,7 @@ import { SignStyle } from '../../../assets/styles/sign';
 import { getTimeTommorowStore } from '../../../services/orderProduct';
 import { Modal, Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
-import { mainColor, white } from '../../../assets/variables/colors';
+import {darkColor, mainColor, white} from '../../../assets/variables/colors';
 import { helpDoneStoreTime } from '../../../redux/actions/help';
 import Pic1 from '../../../assets/helpPics/Store/StoreTimeSelect.png';
 import Pic2 from '../../../assets/helpPics/Store/StoreAddress.png';
@@ -135,16 +135,17 @@ export default class TimeStore extends Component {
             محل دریافت سفارشت رو مشخص کن.
           </Text>
         </Modal>
-        <AppHeader rightTitle="سبد محصول" />
+        <AppHeader rightTitle="زمان ارسال" />
         <Content padder>
           <View style={{ flex: 1 }}>
             <Text style={{ textAlign: 'center' }}>انتخاب ساعت ارسال</Text>
             <View style={{
               flex: 1,
-              flexDirection: 'row',
+              flexDirection: 'row-reverse',
               flexWrap: 'wrap',
               justifyContent: 'space-around',
               alignContent: 'center',
+              margin: 20,
             }}
             >
               {this.state.TimeAccess &&
@@ -152,21 +153,25 @@ export default class TimeStore extends Component {
                 <Button
                   key={c.idtimefactor}
                   light={c.activetimefactor !== this.state.selectedTime}
+                  full
                   disabled={!c.activetimefactor}
-                  block
                   onPress={() => {
                     this._putTimeFactor(c.idtimefactor);
                     this.setState({ selectedTime: c.idtimefactor });
                   }}
                   style={{
-                    margin: 5,
+                    margin: 10,
+                    height: 70,
+                    width: 120,
+                    borderRadius: 10,
+                    borderWidth: 2,
+                    borderColor: c.idtimefactor === this.state.selectedTime ? white : darkColor,
                     backgroundColor: c.idtimefactor === this.state.selectedTime ? mainColor : white,
                     flexDirection: 'column'
                   }}
                 >
                   <Text
                     style={{
-                      paddingHorizontal: 10,
                       color: c.idtimefactor === this.state.selectedTime ? white : '#000',
                     }}
                   >
@@ -174,11 +179,10 @@ export default class TimeStore extends Component {
                   </Text>
                   <Text
                     style={{
-                      paddingHorizontal: 10,
                       color: c.idtimefactor === this.state.selectedTime ? white : '#000',
                     }}
                   >
-                    {persianNumber(moment(c.dates).format('dddd'))}
+                    {moment(c.dates).format('dddd')}
                     {' '}
                     {persianNumber(c.timefactor)}
                   </Text>

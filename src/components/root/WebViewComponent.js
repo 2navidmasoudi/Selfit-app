@@ -13,12 +13,14 @@ export default function WebViewComponent({ title, url }) {
       <WebView
         source={{ uri: url }}
         style={{ flex: 1 }}
-        renderLoading={
-          <View style={styles.view}>
-            <Spinner color={mainColor} />
-            <Text>درحال بارگذاری</Text>
-            <Text>لطفا چند لحظه صبر کنید...</Text>
-          </View>
+        renderLoading={() =>
+          (
+            <View style={styles.view}>
+              <Spinner color={mainColor} />
+              <Text>درحال بارگذاری</Text>
+              <Text>لطفا چند لحظه صبر کنید...</Text>
+            </View>
+          )
         }
         startInLoadingState
       />
