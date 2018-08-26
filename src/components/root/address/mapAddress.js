@@ -79,7 +79,7 @@ export default class MapAddress extends Component {
             loadingEnabled
             onRegionChangeComplete={this.onRegionChangeComplete}
             customMapStyle={mapStyle}
-            onMapReady={this.onMapReady}
+            onMapReady={() => this.getCurrentPosition()}
           />
           <View pointerEvents="none" style={styles.viewImage}>
             <Image

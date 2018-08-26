@@ -17,7 +17,10 @@ import { Text } from '../../Kit';
 export default class EditAddress extends Component {
   static propTypes = {
     user: PropTypes.objectOf(PropTypes.node).isRequired,
-    address: PropTypes.objectOf(PropTypes.node).isRequired,
+    address: PropTypes.objectOf(PropTypes.node),
+  }
+  static defaultProps = {
+    address: [],
   }
   constructor(props) {
     super(props);
@@ -35,7 +38,7 @@ export default class EditAddress extends Component {
       Alert.alert('خطا', 'خطا در حذف آدرس!', [{ text: 'باشه' }]);
     }
   }
-  async _deleteAddress(deleted) {
+  async deleteAddress(deleted) {
     const { tokenmember, tokenapi } = this.props.user;
     const id = deleted[0].idaddressmember;
     const result = await deleteAddress(id, tokenmember, tokenapi);
