@@ -61,6 +61,8 @@ import Waiting from './components/Waiting';
 import FullMapBuffet from './components/root/buffet/fullMapBuffet';
 import ListFood from './components/root/buffetMenu/listFood';
 import ListMaterial from './components/root/buffetMenu/listMaterial';
+import Inbox from './components/root/inbox';
+import { logError } from './services/log';
 
 // Geocoder.setApiKey('AIzaSyBlgHjeMbqK3xEZfh6HK2o8RdjhhgTOh0s');
 const RouterWithRedux = connect()(Router);
@@ -75,6 +77,18 @@ EStyleSheet.build({
 const activeBackGesture = (Platform.OS === 'android') ? null : undefined;
 
 export default class App extends Component {
+  constructor() {
+    super();
+    this.handleOpenURL = (event) => {
+      console.log('Incoming url');
+      console.log(event.url);
+      try {
+        musicDown();
+      } catch (e) {
+        console.log(e);
+      }
+    };
+  }
   componentWillMount() {
     function handleFirstConnectivityChange(isConnected) {
       console.log(`Then, is ${isConnected ? 'online' : 'offline'}`);
@@ -120,14 +134,14 @@ export default class App extends Component {
   async firebaseToken() {
     firebase.messaging().hasPermission()
       .then((enabled) => {
-        console.log('hasPermission');
-        console.log(enabled);
+        // console.log('hasPermission');
+        // console.log(enabled);
         if (enabled) {
           firebase.messaging().getToken()
             .then((fcmToken) => {
               if (fcmToken) {
-                console.log('getToken');
-                console.log(fcmToken);
+                // console.log('getToken');
+                // console.log(fcmToken);
               } else {
                 // @TODO: user doesn't have a device token yet
               }
@@ -157,18 +171,10 @@ export default class App extends Component {
             })
             .catch((error) => {
               // @TODO: User has rejected permissions
+              logError(error, 'User rejected Permisions', 'firebase', 'App');
             });
         }
       });
-  }
-  handleOpenURL(event) {
-    console.log('Incoming url');
-    console.log(event.url);
-    try {
-      musicDown();
-    } catch (e) {
-      console.log(e);
-    }
   }
   render() {
     return (
@@ -183,7 +189,6 @@ export default class App extends Component {
                 <Scene key="splash" initial component={Splash} hideNavBar />
                 <Scene key="sign" component={Sign} hideNavBar />
                 <Scene key="waiting" component={Waiting} hideNavBar />
-                {/* <Scene key="Music" hideNavBar component={Music} /> */}
                 <Scene key="root" hideNavBar>
                   <Drawer
                     key="drawer"
@@ -253,6 +258,7 @@ export default class App extends Component {
                       <Scene key="followProduct" component={FactorProductDetail} hideNavBar />
                       <Scene key="followBuffet" component={FactorBuffetDetail} hideNavBar />
                       <Scene key="paymentWebView" component={PaymentWeb} hideNavBar />
+                      <Scene key="inbox" component={Inbox} hideNavBar />
                     </Scene>
                   </Drawer>
                 </Scene>

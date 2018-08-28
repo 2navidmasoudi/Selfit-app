@@ -79,7 +79,12 @@ export default class Main extends Component {
       </View>);
     return (
       <Container>
-        <AppHeader rightTitle="صفحه اصلی" hasBlog />
+        <AppHeader
+          rightTitle="صفحه اصلی"
+          hasBlog
+          // TODO: Add Inbox to mdfin App
+          // Inbox
+        />
         {this.state.viewComponent}
         {this.props.user.typememberid === 1 && pannel}
         <Animatable.View

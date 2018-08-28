@@ -35,63 +35,59 @@ const MaterialSource = 'https://selfit.ir/Resource/Material/';
   tokenStore,
 })
 export default class Store extends Component {
-  state = {
-    productCategory: [],
-    max: 150,
-    min: 0,
-    ssort: false,
-    fsort: 0,
-    loading: true,
-  };
+  constructor() {
+    super();
+    this.state = {
+      productCategory: [],
+      loading: true,
+    };
+    this.onItemPress = (item) => {
+      Actions.categoryChildren({
+        productCategory: item.children,
+        categoryTitle: item.namecategory,
+        idcategory: item.idcategory
+      });
+      console.log(item);
+    };
+  }
   componentWillMount() {
     this.setInfo();
     const { tokenmember, tokenapi } = this.props.user;
     putCheckToken(tokenmember, tokenapi);
   }
-  onItemPress(item) {
-    Actions.categoryChildren({
-      productCategory: item.children,
-      categoryTitle: item.namecategory,
-      idcategory: item.idcategory
-    });
-    console.log(item);
-  }
+
   async setInfo() {
     await this.props.tokenStore('selfit.store');
-    await this._getCategoryProduct();
-    await this._listToTree();
+    await this.getCategoryProduct();
+    await this.listToTree();
   }
-  async _listToTree() {
-    const { productCategory } = await this.state;
-    const Tree = await listToTree(productCategory, {
-      idKey: 'idcategory',
-      parentKey: 'parentidcategory',
-      // childrenKey: childrenKey,
-    });
-    console.log(productCategory, 'productCategory');
-    this.setState({ productCategory: Tree, loading: false });
-  }
-  async _getCategoryProduct() {
+  async getCategoryProduct() {
     try {
       this.setState({ loading: true });
       const { tokenapi } = await this.props;
       const { tokenmember } = await this.props.user;
-      const { max, min, ssort, fsort } = await this.state;
       const productCategory =
-        await getAllCategoryProduct(tokenmember, tokenapi, max, min, null);
-      console.log(productCategory);
+        await getAllCategoryProduct(tokenmember, tokenapi, 150, 0, null);
       this.setState({
         productCategory
       });
     } catch (error) {
       this.setState({ loading: false });
-      logError(error, 'getAllCategoryProduct', 'root/store', '_getCategoryProduct');
+      logError(error, 'getAllCategoryProduct', 'root/store', 'getCategoryProduct');
       console.log(error);
     }
   }
+  async listToTree() {
+    const { productCategory } = await this.state;
+    const Tree = await listToTree(productCategory, {
+      idKey: 'idcategory',
+      parentKey: 'parentidcategory',
+    });
+    this.setState({ productCategory: Tree, loading: false });
+  }
   render() {
-    const FooterComponent = this.props.Count === 0 ? null :
-      (<Footer>
+    const FooterComponent = this.props.Count === 0 ? null : (
+      <Footer>
         <FooterTab>
           <Button
             badge
@@ -116,8 +112,8 @@ export default class Store extends Component {
       </Footer>);
     return (
       <Container>
-        <AppHeader rightTitle="فروشگاه" backButton="flex" />
-        <Content>
+        <AppHeader rightTitle="فروشگاه" />
+        <Content padder>
           <Card style={{ flex: 0 }}>
             <CardItem style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} header bordered>
               <Left style={{ flex: 1 }} />

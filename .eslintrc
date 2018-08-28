@@ -13,6 +13,7 @@
   },
   "globals": {
     "navigator": true,
-    "fetch": true
+    "fetch": true,
+    "__DEV__": true
   }
 }
