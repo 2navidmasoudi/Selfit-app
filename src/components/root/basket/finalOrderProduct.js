@@ -1,14 +1,30 @@
 import React, { Component } from 'react';
-import {FlatList, Linking} from 'react-native';
+import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
-import { Body, Button, Card, CardItem, Container, Content, Footer, FooterTab, Left, ListItem, Right } from 'native-base';
+import {
+  Body,
+  Button,
+  Card,
+  CardItem,
+  Container,
+  Content,
+  Footer,
+  FooterTab,
+  Left,
+  ListItem,
+  Right
+} from 'native-base';
 import { Actions } from 'react-native-router-flux';
+import { Base64 } from 'js-base64';
+import PropTypes from 'prop-types';
 import AppHeader from '../../header';
 import { setProductPriceAll, setRoad, tokenStore } from '../../../redux/actions';
 import { getPayment, getRequestPayment } from '../../../services/payment';
 import { postAddressProduct, postFactorProduct, putTimeFactor } from '../../../services/orderProduct';
 import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
+import { mainColor, white } from '../../../assets/variables/colors';
+import { logError } from '../../../services/log';
 
 @connect(state => ({
   user: state.user,
@@ -24,52 +40,62 @@ import { persianNumber } from '../../../utils/persian';
   setProductPriceAll,
 })
 export default class finalOrderProduct extends Component {
-  state = {
-    active: true,
-    state: false,
-    min: 0,
-    max: 30,
-    fsort: 0,
-    ssort: false,
-    total: 0,
-  };
-
+  static propTypes = {
+    user: PropTypes.objectOf(PropTypes.node).isRequired,
+    Count: PropTypes.number,
+    totalPrice: PropTypes.number,
+    setRoad: PropTypes.func.isRequired,
+    setProductPriceAll: PropTypes.func.isRequired,
+    tokenStore: PropTypes.func.isRequired,
+    address: PropTypes.objectOf(PropTypes.node).isRequired,
+    productBasket: PropTypes.arrayOf(PropTypes.node),
+    descProduct: PropTypes.string,
+  }
+  static defaultProps = {
+    Count: 0,
+    totalPrice: 0,
+    productBasket: [],
+    descProduct: '',
+  }
+  constructor() {
+    super();
+    this.handleFooterPress = this.handleFooterPress.bind(this);
+  }
   componentWillMount() {
     this.getInfo();
-    console.log(this.props, 'props');
   }
   async getInfo() {
     await this.props.tokenStore('selfit.store');
-    await this._getPayment();
+    await this.getPayment();
     this.props.setRoad('Store');
   }
-  async _getPayment() {
+  async getPayment() {
     const totalPrice = await getPayment(2, this.props.user.tokenmember, 0, 'selfit.member');
     this.props.setProductPriceAll(totalPrice);
   }
-  async _putTimeFactor(idfactor) {
+  async putTimeFactor(idfactor) {
     try {
       const { tokenmember } = await this.props.user;
       const { tokenapi, idtimefactor } = await this.props;
       const result = await putTimeFactor(idfactor, idtimefactor, tokenmember, tokenapi);
-      console.log(result, 'putTimeFactor');
-      this.setState({ selected: true });
+      if (result === 1) return result;
     } catch (e) {
-      console.log(e);
+      logError(e, 'postAddressProduct', 'finalOrderProduct', 'Basket');
     }
+    return 0;
   }
 
-  async _postAddressProduct(idfactor) {
+  async postAddressProduct(idfactor) {
     try {
       const { tokenmember } = await this.props.user;
       const { tokenapi, address } = await this.props;
       const result =
         await postAddressProduct(idfactor, address.idaddressmember, tokenmember, tokenapi);
-      console.log(result, 'postAddressProduct');
-      this.setState({ selected: true });
+      if (result === 1) return result;
     } catch (e) {
-      console.log(e);
+      logError(e, 'postAddressProduct', 'finalOrderProduct', 'Basket');
     }
+    return 0;
   }
 
   async handleFooterPress() {
@@ -77,12 +103,12 @@ export default class finalOrderProduct extends Component {
       const { tokenmember } = await this.props.user;
       const { tokenapi, idtimefactor, descProduct } = await this.props;
       const idfactor = await postFactorProduct(idtimefactor, descProduct, 1, tokenmember, tokenapi);
-      await this._putTimeFactor(idfactor);
-      await this._postAddressProduct(idfactor);
+      await this.putTimeFactor(idfactor);
+      await this.postAddressProduct(idfactor);
       getRequestPayment(2, this.props.user.tokenmember);
       Actions.reset('root');
     } catch (e) {
-      console.log(e);
+      logError(e, 'handleFooterPress', 'finalOrderProduct', 'Basket');
     }
   }
 
@@ -103,14 +129,14 @@ export default class finalOrderProduct extends Component {
   render() {
     const totalPrice = (this.props.totalPrice).toLocaleString();
     const addressTitle = Base64.decode(this.props.address.titleaddressmember);
-    const FooterComponent = (this.props.Count) === 0 ? null :
-      (<Footer>
+    const FooterComponent = (this.props.Count) === 0 ? null : (
+      <Footer>
         <FooterTab>
           <Button
-            style={{ backgroundColor: '#0F9D7A' }}
-            onPress={this.handleFooterPress.bind(this)}
+            style={{ backgroundColor: mainColor }}
+            onPress={this.handleFooterPress}
           >
-            <Text style={{ color: 'white' }}>
+            <Text style={{ color: white }}>
               پرداخت: {persianNumber(totalPrice)} تومان
             </Text>
           </Button>
@@ -118,12 +144,18 @@ export default class finalOrderProduct extends Component {
       </Footer>);
     return (
       <Container>
-        <AppHeader rightTitle="صدور فاکتور فروشگاه" backButton="flex" />
+        <AppHeader rightTitle="صدور فاکتور فروشگاه" />
         <Content padder>
           <Card>
             <Card style={{ flex: 0 }}>
               <CardItem>
                 <Text style={{ flex: 1, textAlign: 'center' }} type="bold">مشخصات فاکتور</Text>
+                <Text
+                  style={{ color: mainColor }}
+                  type="bold"
+                >
+                  ارسلان خوبه
+                </Text>
               </CardItem>
 
             </Card>

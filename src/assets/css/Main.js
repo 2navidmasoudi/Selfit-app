@@ -6,7 +6,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     backgroundColor: 'black',
-
   },
   LogoStyle: {
     justifyContent: 'center',
@@ -16,7 +15,6 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     marginRight: 50,
     resizeMode: 'cover',
-    // tintColor:'white'
   },
   welcome: {
     fontSize: 20,

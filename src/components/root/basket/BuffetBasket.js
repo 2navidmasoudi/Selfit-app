@@ -43,11 +43,15 @@ export default class BuffetBasket extends Component {
     reBasketMaterial: PropTypes.func.isRequired,
     setRoad: PropTypes.func.isRequired,
     selectBuffet: PropTypes.func.isRequired,
+    buffetBasket: PropTypes.arrayOf(PropTypes.node),
+    materialBasket: PropTypes.arrayOf(PropTypes.node),
   };
   static defaultProps = {
     Count1: 0,
     Count2: 0,
     PriceAll: 0,
+    buffetBasket: [],
+    materialBasket: [],
   }
   componentWillMount() {
     this.getInfo();
@@ -103,7 +107,7 @@ export default class BuffetBasket extends Component {
             </Card>
             <FlatList
               data={buffetBasket}
-              renderItem={item => this.returnBuffetItem(item)}
+              renderItem={this.returnBuffetItem}
               ListEmptyComponent={<Text style={{ marginRight: 20 }}>هیچ سفارشی دریافت نشد...</Text>}
               keyExtractor={item => item.idbasketbuffet}
               scrollEnabled={false}
@@ -115,7 +119,7 @@ export default class BuffetBasket extends Component {
             </Card>
             <FlatList
               data={materialBasket}
-              renderItem={item => this.renderMaterialItem(item)}
+              renderItem={this.renderMaterialItem}
               ListEmptyComponent={<Text style={{ marginRight: 20 }}>هیچ سفارشی دریافت نشد...</Text>}
               keyExtractor={item => item.idmixmaterial}
               scrollEnabled={false}

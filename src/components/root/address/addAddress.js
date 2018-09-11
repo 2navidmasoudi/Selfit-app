@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Alert } from 'react-native';
-import { Button, Container, Content, Input, Item, Label, View, Form } from 'native-base';
+import { Button, Container, Content, View } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -8,8 +8,9 @@ import { form } from '../../../assets/styles/index';
 import AppHeader from '../../header';
 import { postAddress } from '../../../services';
 import styles from './style';
-import { Text } from '../../Kit';
+import { Text, TextInput } from '../../Kit';
 import { latinNumber } from '../../../utils/persian';
+import { errorColor } from '../../../assets/variables/colors';
 
 @connect(state => ({ user: state.user }))
 export default class AddAddress extends Component {
@@ -17,12 +18,16 @@ export default class AddAddress extends Component {
     user: PropTypes.objectOf(PropTypes.node).isRequired,
     region: PropTypes.objectOf(PropTypes.node).isRequired,
   }
-  state = {
-    desc: null,
-    plaque: null,
-    floor: null,
-    titleaddress: null,
-  };
+  constructor() {
+    super();
+    this.state = {
+      desc: null,
+      plaque: null,
+      floor: null,
+      titleaddress: null,
+    };
+    this.addAddress = this.addAddress.bind(this);
+  }
   async addAddress() {
     const { tokenapi, tokenmember } = await this.props.user;
     const { plaque, floor, titleaddress, desc } = await this.state;
@@ -42,10 +47,11 @@ export default class AddAddress extends Component {
       if (result === 1) {
         Actions.popTo('address', { refresh: { refresh: Math.random() } });
         Actions.refresh({ refresh: { refresh: Math.random() } });
+        return;
       }
-      // alert('آدرس با موفقیت ثبت شد!');
+      Alert.alert('خطا', 'خطا در ثبت آدرس جدید! با پشتیبانی تماس بگیرید.', [{ text: 'باشه' }]);
     } else {
-      Alert.alert('خطا', 'خطا در ثبت آدرس جدید!', [{ text: 'باشه' }]);
+      Alert.alert('خطا', 'خطا در ثبت آدرس جدید! پر کردن تمام فیلد ها اجباریست.', [{ text: 'باشه' }]);
     }
   }
   changeFloor(text) {
@@ -68,29 +74,64 @@ export default class AddAddress extends Component {
           <Text style={styles.titleAddress}>
             اضافه کردن آدرس جدید:
           </Text>
-          <Form>
-            <Item floatingLabel style={styles.itemAddress} error={!this.state.desc}>
-              <Label style={styles.labelAddress}>آدرس کامل:</Label>
-              <Input onChangeText={text => this.changeAddressLocation(text)} />
-            </Item>
-            <Item floatingLabel error={!this.state.titleaddress}>
-              <Label style={styles.labelAddress}>نام آدرس (مثلا خانه، محل کار ...)</Label>
-              <Input onChangeText={text => this.changeTitle(text)} />
-            </Item>
+          <View>
+            <TextInput
+              onChangeText={text => this.changeTitle(text)}
+              label="نام آدرس (مثلا خانه، محل کار ...)"
+              value={this.state.titleaddress}
+              placeholder="نام آدرس (مثلا خانه، محل کار ...)"
+              required
+              autoFocus
+              placeholderTextColor={errorColor}
+              returnKeyType="next"
+              blurOnSubmit={false}
+            />
+            <TextInput
+              ref={(input) => { this.TextInput2 = input; }}
+              onChangeText={text => this.changeAddressLocation(text)}
+              label="آدرس کامل:"
+              value={this.state.desc}
+              placeholder="آدرس کامل:"
+              required
+              placeholderTextColor={errorColor}
+              returnKeyType="next"
+              blurOnSubmit={false}
+            />
             <View style={{ flexDirection: 'row' }} >
-              <Item style={{ flex: 1 }} error={!this.state.floor}>
-                <Label style={styles.labelAddress}>واحد</Label>
-                <Input onChangeText={text => this.changeFloor(text)} keyboardType="numeric" />
-              </Item >
-              <Item style={{ flex: 1, marginLeft: 20 }} error={!this.state.plaque}>
-                <Label style={styles.labelAddress}>پلاک</Label>
-                <Input onChangeText={text => this.changePlaque(text)} keyboardType="numeric" />
-              </Item>
+              <View style={{ flex: 1 }}>
+                <TextInput
+                  ref={(input) => { this.TextInput3 = input; }}
+                  onChangeText={text => this.changeFloor(text)}
+                  label="واحد:"
+                  value={this.state.floor}
+                  placeholder="واحد:"
+                  required
+                  placeholderTextColor={errorColor}
+                  keyboardType="numeric"
+                  onSubmitEditing={this.addAddress}
+                  returnKeyType="done"
+                  blurOnSubmit={false}
+                />
+              </View>
+              <View style={{ flex: 1, marginLeft: 20 }}>
+                <TextInput
+                  ref={(input) => { this.TextInput4 = input; }}
+                  onChangeText={text => this.changePlaque(text)}
+                  label="پلاک:"
+                  value={this.state.plaque}
+                  placeholder="پلاک:"
+                  required
+                  placeholderTextColor={errorColor}
+                  keyboardType="numeric"
+                  returnKeyType="next"
+                  blurOnSubmit={false}
+                />
+              </View>
             </View>
-          </Form>
+          </View>
         </Content>
         <View style={styles.btnAddress}>
-          <Button block style={form.submitButton} onPress={() => this.addAddress()}>
+          <Button block style={form.submitButton} onPress={this.addAddress}>
             <Text style={styles.btnAddressText}>ثبت آدرس</Text>
           </Button>
         </View>

@@ -65,6 +65,7 @@ SelfitModal.propTypes = {
   backdropTransitionInTiming: PropTypes.number,
   backdropTransitionOutTiming: PropTypes.number,
   hideModalContentWhileAnimating: PropTypes.bool,
+  style: PropTypes.objectOf(PropTypes.node),
 };
 SelfitModal.defaultProps = {
   backdropColor: darkColor,

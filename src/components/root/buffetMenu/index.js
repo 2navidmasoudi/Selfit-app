@@ -74,7 +74,6 @@ export default class FoodList extends Component {
                 borderRadius: 10,
                 borderWidth: 4,
                 margin: 10,
-
                 borderColor: darkColor,
                 justifyContent: 'center',
                 alignItems: 'center'

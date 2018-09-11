@@ -1,7 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { darkColor } from '../../assets/variables/colors';
 
-const styles = EStyleSheet.create({
+export const styles = EStyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: darkColor
@@ -34,4 +34,3 @@ const styles = EStyleSheet.create({
     textShadowRadius: 30,
   },
 });
-export { styles };
