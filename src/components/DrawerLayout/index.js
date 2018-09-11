@@ -7,13 +7,13 @@ import { connect } from 'react-redux';
 import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
 import { drawer } from '../../assets/styles/index';
-import {getSingleToken, putCheckToken, putUserLogout} from '../../services';
+import { getSingleToken, putUserLogout } from '../../services';
 import { Text } from '../Kit';
 import { persianNumber } from '../../utils/persian';
 import { setUser } from '../../redux/actions';
-import {darkColor, mainColor, white} from '../../assets/variables/colors';
+import { darkColor, mainColor, white } from '../../assets/variables/colors';
 import { helpOff, helpReset } from '../../redux/actions/help';
-import {setUserProperty} from "../../utils/analytics";
+import { setUserProperty } from '../../utils/analytics';
 
 @connect(state => ({
   user: state.user,
@@ -28,6 +28,8 @@ export default class DrawerLayout extends Component {
     buffetBasketCount: PropTypes.number.isRequired,
     materialBasketCount: PropTypes.number.isRequired,
     productBasketCount: PropTypes.number.isRequired,
+    helpReset: PropTypes.func.isRequired,
+    helpOff: PropTypes.func.isRequired,
   }
   constructor() {
     super();
@@ -52,11 +54,11 @@ export default class DrawerLayout extends Component {
     } = await this.props.user;
     const MemberSingleToken = await getSingleToken(tokenmember, tokenapi);
     await this.props.setUser(MemberSingleToken);
-    const name_family = await Base64.decode(namefamilymember);
+    const nameFamily = await Base64.decode(namefamilymember);
     const mobile = await Base64.decode(phone);
     const email = await Base64.decode(mailmember);
     setUserProperty({
-      name_family,
+      name_family: nameFamily,
       mobile,
       email
     });

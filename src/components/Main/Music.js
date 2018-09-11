@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { TouchableOpacity, View, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import Pic from '../../assets/MusicMain.jpg';
 import { styles } from './style';
 import { Text } from '../Kit';
@@ -9,6 +10,9 @@ import { musicOn } from '../../redux/actions';
 
 @connect(null, { musicOn })
 export default class Music extends Component {
+  static propTypes = {
+    musicOn: PropTypes.func.isRequired,
+  }
   constructor() {
     super();
     this.state = {

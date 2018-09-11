@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { setPhone, setTokenapi, setUser } from '../redux/actions';
 import { postMember, putMemberLogin } from '../services';
-import Status from './status';
+import StatusBar from './status';
 import { Text, TextInput } from './Kit';
 import { darkColor, errorColor, mainColor, white } from '../assets/variables/colors';
 import { logError } from '../services/log';
@@ -106,7 +106,7 @@ export default class Login extends Component {
     const phoneNumberError = this.state.phoneNumber.error;
     return (
       <Container>
-        <Status />
+        <StatusBar />
         <LinearGradient
           colors={[darkColor, darkColor, mainColor]}
           style={styles.linear}

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Title, Header, Left, Right, Body, Icon} from 'native-base';
+import { Title, Header, Left, Right, Body, Icon } from 'native-base';
 import { TouchableOpacity, View } from 'react-native';
 import PropTypes from 'prop-types';
 import { Actions } from 'react-native-router-flux';

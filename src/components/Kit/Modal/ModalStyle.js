@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import {darkColor, mainColor, white} from '../../../assets/variables/colors';
+import { darkColor, mainColor, white } from '../../../assets/variables/colors';
 
 export default StyleSheet.create({
   button: {

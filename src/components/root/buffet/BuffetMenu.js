@@ -3,26 +3,21 @@ import { Alert, FlatList, ImageBackground, StyleSheet, TouchableWithoutFeedback,
 import {
   Badge,
   Button,
-  Card,
-  CardItem,
   Container,
   Content,
   Footer,
   FooterTab,
   Icon,
-  Left,
-  Right,
   Tab,
   Tabs,
 } from 'native-base';
 import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
-import { Rating } from 'react-native-elements';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import AppHeader from '../../header';
-import { getMenuFood, postRateBuffet } from '../../../services/buffet';
+import { getMenuFood } from '../../../services/buffet';
 import { logError } from '../../../services/log';
-import { getFoodCategory } from '../../../services/MenuFood';
 import { getAllBuffetMaterial, postBasketMaterial } from '../../../services/orderMaterial';
 import {
   receiveMaterial,
@@ -38,7 +33,7 @@ import { TabsStyle } from '../../../assets/styles/gym';
 import { checkOrderBuffet, deleteOrderAll } from '../../../services/orderBuffet';
 import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
-import { errorColor, mainColor, white } from '../../../assets/variables/colors';
+import { errorColor, white } from '../../../assets/variables/colors';
 import Loader from '../../loader';
 
 moment.loadPersian({ dialect: 'persian-modern' });
@@ -75,6 +70,7 @@ const styles = StyleSheet.create({
   },
 });
 
+const iddish = 1;
 @connect(state => ({
   user: state.user,
   tokenapi: state.buffet.tokenapi,
@@ -92,18 +88,35 @@ const styles = StyleSheet.create({
   resetFood
 })
 export default class BuffetMenu extends Component {
-  state = {
-    ImgSrc: null,
+  static propTypes = {
+    user: PropTypes.objectOf(PropTypes.node).isRequired,
+    MenuFood: PropTypes.arrayOf(PropTypes.node),
+    Count2: PropTypes.number,
+    Count1: PropTypes.number,
+    Material: PropTypes.arrayOf(PropTypes.node),
+    idbasket: PropTypes.number.isRequired,
+    resetFood: PropTypes.func.isRequired,
+    selectBuffet: PropTypes.func.isRequired,
+    receiveMenuFood: PropTypes.func.isRequired,
+    receiveMaterial: PropTypes.func.isRequired,
+    tokenBuffet: PropTypes.func.isRequired,
+    setIDBasket: PropTypes.func.isRequired,
+    buffetid: PropTypes.number.isRequired,
+    namebuffet: PropTypes.string.isRequired,
+    datesave: PropTypes.string.isRequired,
+    httpserver: PropTypes.string.isRequired,
+    activebuffet: PropTypes.bool.isRequired,
+    pathserver: PropTypes.string.isRequired,
+    picbuffet: PropTypes.string.isRequired,
+    addressgym: PropTypes.string.isRequired,
+  }
+  static defaultProps = {
+    Material: [],
     MenuFood: [],
-    CountReady: false,
-    totalPrice: 0,
-    iddish: 1,
-    max: 120,
-    min: 0,
-    ssort: true,
-    fsort: 0,
-    rate: null,
-    disableRate: false,
+    Count2: PropTypes.number,
+    Count1: PropTypes.number,
+  }
+  state = {
     loadingFood: true,
     loadingMaterial: true,
   };
@@ -112,81 +125,51 @@ export default class BuffetMenu extends Component {
     this.getInfo();
   }
   componentDidMount() {
-    setTimeout(this._tabs.goToPage.bind(this._tabs, 1), 800);
-    setTimeout(this._tabs2.goToPage.bind(this._tabs2, 1), 1000);
+    setTimeout(this.tabs.goToPage.bind(this.tabs, 1), 800);
   }
   async getInfo() {
     await this.props.tokenBuffet('selfit.buffet');
     if (this.props.user.typememberid !== 5) {
       await this.props.selectBuffet(this.props.buffetid, this.props.namebuffet);
     }
-    await this._getFoodCategory();
-    await this._getMenuFood();
-    await this._getMaterial();
-    // await this._getDish();
-    await this._checkOrderBuffet();
+    this.getMenuFood();
+    this.getMaterial();
+    this.checkOrderBuffet();
   }
-  async _getFoodCategory() {
-    try {
-      const { tokenapi } = await this.props;
-      const { tokenmember } = await this.props.user;
-      const FoodCategory = await getFoodCategory(tokenmember, tokenapi);
-      console.log('FoodCategory:', FoodCategory);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  async _getMaterial() {
+  async getMaterial() {
     try {
       this.setState({ loadingMaterial: true });
       const { buffetid, tokenapi } = await this.props;
       const { tokenmember } = await this.props.user;
-      const MaterialList = await getAllBuffetMaterial(buffetid, false, tokenmember, tokenapi, 120, 0);
-      console.log(MaterialList);
+      const MaterialList =
+        await getAllBuffetMaterial(buffetid, false, tokenmember, tokenapi, 120, 0);
       this.props.receiveMaterial(MaterialList);
       this.setState({ loadingMaterial: false });
     } catch (err) {
       this.setState({ loadingMaterial: false });
       logError(err, 'getAllBuffetMaterial', 'Buffet/BuffetMenu', '_getMaterial');
-      console.log(err);
     }
   }
-  async _getMenuFood() {
+  async getMenuFood() {
     try {
       this.setState({ loadingFood: true });
       const { buffetid, tokenapi } = await this.props;
       const { tokenmember } = await this.props.user;
-      const MenuFood = await getMenuFood(buffetid, 0, tokenmember, tokenapi, 120, 0, true, 0);
+      const MenuFood = await getMenuFood(buffetid, 0, tokenmember, tokenapi, 120, 0, null);
       await this.props.receiveMenuFood(MenuFood);
-      this.setState({ MenuFood });
-      this.setState({ CountReady: true, loadingFood: false });
+      this.setState({ loadingFood: false });
     } catch (err) {
       this.setState({ loadingFood: false });
-      logError(err, '_getMenufood', 'Buffet/BuffetMenu', 'getMenuFood');
-      console.log(err);
+      logError(err, 'getMenufood', 'Buffet/BuffetMenu', 'getMenuFood');
     }
   }
-  // async _getDish() {
-  //   try {
-  //     const { tokenapi } = await this.props;
-  //     const { tokenmember } = await this.props.user;
-  //     const { max, min, ssort } = await this.state;
-  //     const DishSize = await getAllDish(tokenmember, tokenapi, max, min, ssort);
-  //     await this.setState({ iddish: DishSize[0].iddish });
-  //     console.log(this.state);
-  //   } catch (e) {
-  //     console.log(e);
-  //     logError(e, '_getDish', 'Buffet/BuffetMenu', 'getAllDish');
-  //   }
-  // }
-  async _checkOrderBuffet() {
+  async checkOrderBuffet() {
     try {
       const { buffetid, tokenapi, idbasket, Count1, Count2 } = await this.props;
       const { tokenmember } = await this.props.user;
       const result = await checkOrderBuffet(buffetid, tokenmember, tokenapi);
-      console.log(result, 'checkOrder');
       if (!idbasket) {
-        await this._postBasketMaterial();
+        await this.postBasketMaterial();
       } else if (result === 1) {
         if (Count1 || Count2) {
           Alert.alert(
@@ -194,72 +177,43 @@ export default class BuffetMenu extends Component {
             'شما قبلا از بوفه ی دیگری سفارش داده بودید، آیا می خواهید سفارش های قبلی خود را حذف کنید؟',
             [
               { text: 'خیر', onPress: () => Actions.pop() },
-              { text: 'بله', onPress: () => this._postBasketMaterial() },
+              { text: 'بله', onPress: () => this.postBasketMaterial() },
             ], {
               cancelable: false,
             }
           );
-        } else this._postBasketMaterial();
+        } else this.postBasketMaterial();
       } else if (result === 2) {
         Alert.alert(
           'وضعیت سفارش',
           'شما قبلا از فاکتوری صادر کرده بودید، آیا می خواهید فاکتور قبلی خود را حذف کنید؟',
           [
             { text: 'خیر', onPress: () => Actions.pop() },
-            { text: 'بله', onPress: () => this._postBasketMaterial() },
+            { text: 'بله', onPress: () => this.postBasketMaterial() },
           ], {
             cancelable: false,
           }
         );
       }
     } catch (e) {
-      console.log(e);
+      logError(e, 'checkOrderBuffet', 'postBasketMaterial', 'checkOrderBuffet');
     }
   }
-  async _postBasketMaterial() {
+  async postBasketMaterial() {
     try {
       const { tokenapi, buffetid } = await this.props;
       const { tokenmember } = await this.props.user;
-      const { iddish } = await this.state;
       const deleteOrder = await deleteOrderAll(tokenmember, tokenapi);
-      console.log(deleteOrder, 'deleteOrder?');
+      if (deleteOrder !== 1) return;
       const idbasket = await postBasketMaterial(iddish, buffetid, tokenmember, tokenapi);
       this.props.setIDBasket(idbasket);
-      console.log(idbasket, 'idbasket?');
     } catch (e) {
-      console.log(e);
-      logError(e, '_postBasketMaterial', 'Buffet/BuffetMenu', 'postBasketMaterial');
-    }
-  }
-  ratingCompleted(rate) {
-    console.log(`Rating is: ${rate}`);
-    this.setState({ rate });
-  }
-  async submitRate() {
-    try {
-      const { tokenmember } = await this.props.user;
-      const { tokenapi, buffetid } = await this.props;
-      let { rate } = await this.state;
-      rate = await Number(rate);
-      const result = await postRateBuffet(buffetid, rate, tokenmember, tokenapi);
-      console.log(result, 'postRateGym');
-      if (result === 1) {
-        this.setState({ disableRate: true });
-        Alert.alert(
-          'ثبت امتیاز',
-          'امتیاز شما ثبت شد. با تشکر!',
-          [
-            { text: 'بازگشت' },
-          ]
-        );
-      }
-    } catch (e) {
-      console.log(e);
+      logError(e, 'postBasketMaterial', 'Buffet/BuffetMenu', 'postBasketMaterial');
     }
   }
   render() {
-    const FooterComponent = (this.props.Count1 + this.props.Count2) === 0 ? null :
-      (<Footer>
+    const FooterComponent = (this.props.Count1 + this.props.Count2) === 0 ? null : (
+      <Footer>
         <FooterTab>
           <Button
             badge
@@ -283,7 +237,7 @@ export default class BuffetMenu extends Component {
         </FooterTab>
       </Footer>);
     const {
-      datesave, RateNumber, httpserver, activebuffet,
+      datesave, httpserver, activebuffet,
       pathserver, picbuffet, namebuffet, addressgym,
     } = this.props;
     const m = moment(`${datesave}`, 'YYYY/MM/DDTHH:mm:ss');
@@ -307,6 +261,12 @@ export default class BuffetMenu extends Component {
                   color: 'white',
                 }}
                 >
+                  آدرس:{''}{addressgym}
+                </Text>
+                <Text style={{
+                  color: 'white',
+                }}
+                >
                   بوفه {namebuffet}
                 </Text>
                 <Text style={{
@@ -323,92 +283,39 @@ export default class BuffetMenu extends Component {
           <Tabs
             initialPage={1}
             locked
-            ref={(c) => { this._tabs = c; }}
+            ref={(c) => { this.tabs = c; }}
             tabBarUnderlineStyle={TabsStyle.underLine}
           >
             <Tab
-              heading="نظرات و اطلاعات"
+              heading="بشقابت رو بساز"
               activeTextStyle={TabsStyle.activeText}
               textStyle={TabsStyle.text}
               activeTabStyle={TabsStyle.activeTab}
               tabStyle={TabsStyle.notActiveTabs}
             >
-              <Card>
-                <CardItem>
-                  <Text>
-                    آدرس: {addressgym}
-                  </Text>
-                </CardItem>
-                <CardItem>
-                  <Left style={{ flex: 1 }} />
-                  <Right style={{ flex: 1 }}>
-                    <Rating
-                      ratingCount={5}
-                      fractions={2}
-                      startingValue={RateNumber}
-                      imageSize={30}
-                      onFinishRating={this.ratingCompleted.bind(this)}
-                      style={{ paddingVertical: 10 }}
-                    />
-                    <Button
-                      block
-                      disabled={this.state.disableRate}
-                      style={{ backgroundColor: mainColor }}
-                      onPress={this.submitRate.bind(this)}
-                    >
-                      <Text style={{ color: white }}>
-                        ثبت امتیاز
-                      </Text>
-                    </Button>
-                  </Right>
-                </CardItem>
-              </Card>
+              {this.props.idbasket && <FlatList
+                data={this.props.Material}
+                renderItem={({ item }) =>
+                  <MaterialCard Material={item} active={activebuffet} />}
+                keyExtractor={item => item.idmaterial}
+                ListEmptyComponent={<Loader loading={this.state.loadingMaterial} />}
+                scrollEnabled={false}
+              />}
             </Tab>
             <Tab
-              heading="منو"
+              heading="منو بوفه"
               activeTextStyle={TabsStyle.activeText}
               textStyle={TabsStyle.text}
               activeTabStyle={TabsStyle.activeTab}
               tabStyle={TabsStyle.notActiveTabs}
             >
-              <Tabs
-                initialPage={1}
-                locked
-                ref={(c) => { this._tabs2 = c; }}
-                tabBarUnderlineStyle={TabsStyle.underLine}
-              >
-                <Tab
-                  heading="منو انتخابی"
-                  activeTextStyle={TabsStyle.activeText}
-                  textStyle={TabsStyle.text}
-                  activeTabStyle={TabsStyle.activeTab}
-                  tabStyle={TabsStyle.notActiveTabs}
-                >
-                  {this.props.idbasket && <FlatList
-                    data={this.props.Material}
-                    renderItem={({ item }) =>
-                      <MaterialCard Material={item} active={activebuffet} />}
-                    keyExtractor={item => item.idmaterial}
-                    ListEmptyComponent={<Loader loading={this.state.loadingMaterial} />}
-                    scrollEnabled={false}
-                  />}
-                </Tab>
-                <Tab
-                  heading="منو آماده"
-                  activeTextStyle={TabsStyle.activeText}
-                  textStyle={TabsStyle.text}
-                  activeTabStyle={TabsStyle.activeTab}
-                  tabStyle={TabsStyle.notActiveTabs}
-                >
-                  <FlatList
-                    data={this.props.MenuFood}
-                    renderItem={({ item }) => <FoodCard MenuFood={item} active={activebuffet} />}
-                    keyExtractor={item => item.idmenufood}
-                    ListEmptyComponent={<Loader loading={this.state.loadingFood} />}
-                    scrollEnabled={false}
-                  />
-                </Tab>
-              </Tabs>
+              <FlatList
+                data={this.props.MenuFood}
+                renderItem={({ item }) => <FoodCard MenuFood={item} active={activebuffet} />}
+                keyExtractor={item => item.idmenufood}
+                ListEmptyComponent={<Loader loading={this.state.loadingFood} />}
+                scrollEnabled={false}
+              />
             </Tab>
           </Tabs>
         </Content>

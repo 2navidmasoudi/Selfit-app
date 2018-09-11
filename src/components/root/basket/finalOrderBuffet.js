@@ -15,17 +15,20 @@ import {
   Label, Left,
   ListItem, Right, Spinner
 } from 'native-base';
-import {Alert, FlatList, View} from 'react-native';
+import { Alert, FlatList, View } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import { Base64 } from 'js-base64';
+import PropTypes from 'prop-types';
 import { postAddressOrderBuffet, postFactor } from '../../../services/orderBuffet';
 import AppHeader from '../../header';
-import {reBasketBuffet, reBasketMaterial, refreshBuffet, setRoad, tokenBuffet} from '../../../redux/actions';
+import { refreshBuffet, setRoad, tokenBuffet } from '../../../redux/actions';
 import { SignStyle } from '../../../assets/styles/sign';
 import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
 import { sendPrice } from '../../../services/Alopeyk';
 import { getSingleBuffet } from '../../../services/buffet';
-import {mainColor} from "../../../assets/variables/colors";
+import { mainColor } from '../../../assets/variables/colors';
+import { logError } from '../../../services/log';
 
 let lat;
 let long;
@@ -42,12 +45,31 @@ let long;
   PriceAllMaterial: state.basket.PriceAllMaterial,
 }), {
   tokenBuffet,
-  reBasketMaterial,
-  reBasketBuffet,
   setRoad,
   refreshBuffet
 })
 export default class finalOrderBuffet extends Component {
+  static propTypes = {
+    user: PropTypes.objectOf(PropTypes.node).isRequired,
+    Count1: PropTypes.number,
+    Count2: PropTypes.number,
+    PriceAllBuffet: PropTypes.number,
+    PriceAllMaterial: PropTypes.number,
+    tokenBuffet: PropTypes.func.isRequired,
+    setRoad: PropTypes.func.isRequired,
+    refreshBuffet: PropTypes.func.isRequired,
+    buffetBasket: PropTypes.arrayOf(PropTypes.node),
+    materialBasket: PropTypes.arrayOf(PropTypes.node),
+    address: PropTypes.objectOf(PropTypes.node).isRequired,
+  };
+  static defaultProps = {
+    Count1: 0,
+    Count2: 0,
+    PriceAllBuffet: 0,
+    PriceAllMaterial: 0,
+    buffetBasket: [],
+    materialBasket: [],
+  }
   constructor() {
     super();
     this.state = {
@@ -59,7 +81,6 @@ export default class finalOrderBuffet extends Component {
   }
   componentWillMount() {
     this.getInfo();
-    console.log(this.props, 'props');
   }
   componentWillUnmount() {
     this.props.refreshBuffet();
@@ -75,12 +96,10 @@ export default class finalOrderBuffet extends Component {
       const { tokenmember } = await this.props.user;
       const { buffetid, tokenapi } = await this.props;
       const buffetInfo = await getSingleBuffet(buffetid, tokenmember, tokenapi);
-      console.log('buffetInfo');
-      console.log(buffetInfo);
       lat = buffetInfo.latgym;
       long = buffetInfo.longgym;
     } catch (e) {
-      console.log(e);
+      logError(e, 'getSingleBuffet', 'finalOrderBuffet', 'Basket');
     }
   }
   async sendOrderBuffet() {
@@ -91,7 +110,6 @@ export default class finalOrderBuffet extends Component {
       const { descfactor, sendServicePrice } = await this.state;
       const idfactor =
         await postFactor(buffetid, descfactor, 1, sendServicePrice, tokenmember, tokenapi);
-      console.log(idfactor);
       const result = await postAddressOrderBuffet(idfactor, tokenmember, tokenapi);
       if (result === 1) {
         Alert.alert(
@@ -114,22 +132,20 @@ export default class finalOrderBuffet extends Component {
         );
         this.setState({ disableSendFactor: false });
       }
-      console.log(result);
     } catch (e) {
       this.setState({ disableSendFactor: false });
-      console.log(e);
+      logError(e, 'sendOrderBuffet', 'finalOrderBuffet', 'Basket');
     }
   }
   async sendPrice() {
     try {
       const { lataddressmember, longaddressmember } = await this.props.address;
       const sendServicePrice = await sendPrice(lat, long, lataddressmember, longaddressmember);
-      console.log(sendServicePrice);
       await this.setState({
         sendServicePrice: sendServicePrice.object.price,
       });
     } catch (e) {
-      console.log(e);
+      logError(e, 'sendPrice', 'finalOrderBuffet', 'Basket');
     }
   }
   renderItem = ({ item }) => (
@@ -165,8 +181,10 @@ export default class finalOrderBuffet extends Component {
         (this.state.sendServicePrice * (3 / 5)))
         .toLocaleString();
     const addressTitle = Base64.decode(this.props.address.titleaddressmember);
-    const sendPrice =
-      this.state.sendServicePrice ? `${(this.state.sendServicePrice * (3 / 5)).toLocaleString()} تومان` : 'در حال بررسی';
+    const sendPrices =
+      this.state.sendServicePrice ?
+        `${(this.state.sendServicePrice * (3 / 5)).toLocaleString()} تومان` :
+        'در حال بررسی';
     const {
       item, formInputText
     } = SignStyle;
@@ -236,7 +254,7 @@ export default class finalOrderBuffet extends Component {
                     به آدرس:{` ${addressTitle}`}
                 </Text>
                 <Text style={{ flex: 1 }}>
-                    هزینه ارسال:{` ${persianNumber(sendPrice)}`}
+                    هزینه ارسال:{` ${persianNumber(sendPrices)}`}
                 </Text>
                 <Text style={{ flex: 1 }}>
                     توضیحات:{` ${this.state.descfactor}`}
