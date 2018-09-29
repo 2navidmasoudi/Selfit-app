@@ -9,7 +9,8 @@
     "jsx-a11y/img-has-alt": [0],
     "jsx-a11y/href-no-hash": "off",
     "jsx-a11y/anchor-is-valid": "off",
-    "linebreak-style":"off"
+    "linebreak-style":"off",
+    "no-console": "warn",
   },
   "globals": {
     "navigator": true,

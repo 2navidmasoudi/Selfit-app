@@ -30,7 +30,7 @@ export default class DrawerLayout extends Component {
     productBasketCount: PropTypes.number.isRequired,
     helpReset: PropTypes.func.isRequired,
     helpOff: PropTypes.func.isRequired,
-  }
+  };
   constructor() {
     super();
     this.state = {
@@ -40,7 +40,7 @@ export default class DrawerLayout extends Component {
   }
   state = {
     Active: true,
-  }
+  };
   async componentDidMount() {
     await this.getSingleMember();
   }
@@ -86,7 +86,7 @@ export default class DrawerLayout extends Component {
   async putUserLogout() {
     const { tokenapi, tokenmember } = await this.props.user;
     const json = await putUserLogout(tokenmember, tokenapi);
-    if (json === 1) {
+    if (json !== undefined) {
       Actions.reset('sign');
     } else {
       Alert.alert(
@@ -121,8 +121,8 @@ export default class DrawerLayout extends Component {
           <Item
             style={drawer.item}
             onPress={() => {
-            Actions.profile();
-          }}
+              Actions.profile();
+            }}
           >
             <Text style={drawer.itemTitle}>پروفایل</Text>
             <Icon name="person" color={mainColor} style={drawer.itemIcon} />

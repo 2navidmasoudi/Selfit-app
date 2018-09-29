@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { TouchableOpacity, View } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 import { Container } from 'native-base';
 import { connect } from 'react-redux';
 import * as Animatable from 'react-native-animatable';
@@ -25,16 +26,22 @@ export const musicDown = () => MusicRef.bounceOutDown(1500);
 export default class Main extends Component {
   static propTypes = {
     user: PropTypes.objectOf(PropTypes.node).isRequired,
-  }
-  state = {
-    viewComponent: <MemberGrid />,
   };
+  constructor() {
+    super();
+    this.state = {
+      viewComponent: <MemberGrid />,
+    };
+  }
   async componentWillMount() {
     const {
       typememberid,
       tokenapi,
       tokenmember,
     } = await this.props.user;
+    if (!(typememberid || tokenapi || tokenmember)) {
+      Actions.reset('sign');
+    }
     switch (typememberid) {
       case 6: // member
       case 1: // admin

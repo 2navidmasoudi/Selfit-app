@@ -16,13 +16,14 @@ const initialState = {
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
-    case RECEIVE_GYM:
+    case RECEIVE_GYM: {
       const { gym, min } = action.payload;
       return {
         ...state,
         GymList: min === 0 ? gym : [...state.GymList, ...gym],
         min
       };
+    }
     case INCREMENT_MIN:
       return {
         ...state,

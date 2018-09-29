@@ -35,11 +35,17 @@ import CoachPic from '../../../assets/Coach.jpg';
 })
 export default class BuffetGrid extends Component {
   static propTypes = {
+    user: PropTypes.objectOf(PropTypes.node).isRequired,
     buffetid: PropTypes.number,
-  }
+    help: PropTypes.boolean.isRequired,
+    tokenBuffet: PropTypes.func.isRequired,
+    selectBuffet: PropTypes.func.isRequired,
+    helpDoneBuffet: PropTypes.func.isRequired,
+    start: PropTypes.func.isRequired
+  };
   static defaultProps = {
     buffetid: null,
-  }
+  };
   componentDidMount() {
     setTimeout(
       () => this.help(),
@@ -69,9 +75,12 @@ export default class BuffetGrid extends Component {
       const { tokenmember } = await this.props.user;
       const buffetInfo = await getSingleIDMemberBuffet(tokenmember, tokenapi);
       await this.props.selectBuffet(buffetInfo.idbuffet, buffetInfo.namebuffet);
-      console.log('buffet for this user:', buffetInfo.namebuffet, 'buffetid from props:', this.props.buffetid);
+      // console.log(
+      //   'buffet for this user:', buffetInfo.namebuffet,
+      //   'buffetid from props:', this.props.buffetid
+      // );
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       logError(error, '_getSingleIDMember', 'BuffetMenu/index', 'getSingleIDMember');
     }
   }

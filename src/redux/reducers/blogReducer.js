@@ -8,13 +8,14 @@ const initialState = {
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
-    case RECEIVE_BLOG:
+    case RECEIVE_BLOG: {
       const { blog, min } = action.payload;
       return {
         ...state,
         BlogList: min === 0 ? blog : [...state.BlogList, ...blog],
         min
       };
+    }
     case INCREMENT_MIN:
       return {
         ...state,

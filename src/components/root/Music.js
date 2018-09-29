@@ -25,7 +25,7 @@ export default class Music extends Component {
   static propTypes = {
     user: PropTypes.objectOf(PropTypes.node).isRequired,
     tokenBlog: PropTypes.func.isRequired,
-  }
+  };
   constructor() {
     super();
     this.state = {

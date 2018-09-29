@@ -12,7 +12,7 @@ import { musicOn } from '../../redux/actions';
 export default class Music extends Component {
   static propTypes = {
     musicOn: PropTypes.func.isRequired,
-  }
+  };
   constructor() {
     super();
     this.state = {
@@ -26,7 +26,7 @@ export default class Music extends Component {
       this.props.musicOn();
       this.setState({ music: true });
     }
-  }
+  };
   render() {
     return (
       <ImageBackground

@@ -21,13 +21,14 @@ const initialState = {
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
-    case RECEIVE_BUFFET:
+    case RECEIVE_BUFFET: {
       const { buffet, min } = action.payload;
       return {
         ...state,
         BuffetList: min === 0 ? buffet : [...state.BuffetList, ...buffet],
         min
       };
+    }
     case INCREMENT_MIN:
       return {
         ...state,

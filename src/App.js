@@ -64,7 +64,6 @@ import ListMaterial from './components/root/buffetMenu/listMaterial';
 import Inbox from './components/root/inbox';
 import { logError } from './services/log';
 
-// Geocoder.setApiKey('AIzaSyBlgHjeMbqK3xEZfh6HK2o8RdjhhgTOh0s');
 const RouterWithRedux = connect()(Router);
 const window = Dimensions.get('window');
 const { persistor, store } = configureStore();

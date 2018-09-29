@@ -30,8 +30,8 @@ export default class Waiting extends Component {
         Actions.pop();
         return;
       }
-      const TYPE = await json.typememberid;
-      if (TYPE) {
+      const { typememberid } = await json;
+      if (typememberid) {
         await this.props.setUser(json);
         Actions.reset('root');
       } else {
