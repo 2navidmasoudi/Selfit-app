@@ -9,10 +9,11 @@ import { mapStyle } from '../../../assets/styles/map';
 import { receiveBuffet, tokenBuffet } from '../../../redux/actions/index';
 import { getAllBuffet } from '../../../services/buffet';
 import { Text } from '../../Kit';
-import { mainColor } from '../../../assets/variables/colors';
+import {mainColor, white} from '../../../assets/variables/colors';
 import Pin1 from '../../../assets/pinPics/Buffet1.png';
 import Pin2 from '../../../assets/pinPics/Buffet2.png';
 import PinStyle from '../../../assets/styles/PinStyle';
+import {mainFont} from "../../../assets/variables/font";
 
 const styles = StyleSheet.create({
   container: {
@@ -194,15 +195,15 @@ export default class MapComponent extends Component {
         >
           <Icon name="md-locate" />
         </Fab>
-        {this.state.MarkerReady === false ? <Spinner /> :
         <Button
-          rightIcon={{ name: 'place', size: 25 }}
-          backgroundColor={mainColor}
+          title="جستجو در این محل"
+          titleStyle={{ fontFamily: mainFont, fontSize: 16, color: white }}
+          loading={!this.state.MarkerReady}
+          backgroundColor="rgba(0,0,0,0.6)"
           borderRadius={10}
-          buttonStyle={{ marginBottom: 20, paddingRight: 20 }}
-          containerViewStyle={{ marginLeft: 50 }}
+          buttonStyle={{ marginBottom: 20, marginLeft: 70 }}
           onPress={() => this.getNewBuffet()}
-        />}
+        />
       </View>
     );
   }

@@ -3,7 +3,6 @@ import { Container, Header, Left, Right, Switch, Button, Icon } from 'native-bas
 import { Alert, FlatList, View } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import * as Animatable from 'react-native-animatable';
 import AppHeader from '../../header';
 import { putCheckToken } from '../../../services/index';
 import { getOrderBuffet, tokenBuffet } from '../../../redux/actions';
@@ -41,7 +40,6 @@ export default class BuffetKeeper extends Component {
     };
     this.putActiveBuffet = this.putActiveBuffet.bind(this);
     this.getOrderBuffet = this.getOrderBuffet.bind(this);
-    this.togglePanel = this.togglePanel.bind(this);
   }
   componentWillMount() {
     const { tokenmember, tokenapi } = this.props.user;
@@ -173,12 +171,6 @@ export default class BuffetKeeper extends Component {
         >
           <Left style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Icon
-                name={this.state.pannelBtn}
-                style={{ padding: 20 }}
-                onPress={this.togglePanel}
-                color={darkColor}
-              />
               <Switch
                 onTintColor={darkColor}
                 thumbTintColor={darkColor}
@@ -205,18 +197,19 @@ export default class BuffetKeeper extends Component {
           </Right>
         </Header>
         <View style={{ height: 1, backgroundColor: darkColor }} />
-        <View ref={this.handleViewRef}>
-          {/* <Header */}
-          {/* style={{ justifyContent: 'center', backgroundColor: 'transparent', alignItems: 'center' }} */}
-          {/* androidStatusBarColor={darkColor} */}
-          {/* iosBarStyle="light-content" */}
-          {/* > */}
-          <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center', flexDirection: 'row' }}>
+        <Header style={{ backgroundColor: mainColor }}>
+          <View
+            style={{ flex: 1,
+              justifyContent: 'space-around',
+              alignItems: 'center',
+              flexDirection: 'row',
+            }}
+          >
             <Button
               style={{ backgroundColor: darkColor }}
               onPress={() => Actions.buffet()}
             >
-              <Text style={{ color: white }}>
+              <Text style={{ color: white, paddingHorizontal: 10 }}>
                   بوفه های اطراف
               </Text>
             </Button>
@@ -224,13 +217,12 @@ export default class BuffetKeeper extends Component {
               style={{ backgroundColor: darkColor }}
               onPress={() => Actions.support()}
             >
-              <Text style={{ color: white }}>
+              <Text style={{ color: white, paddingHorizontal: 10 }}>
                   تماس با پشتیبانی
               </Text>
             </Button>
           </View>
-          {/* </Header> */}
-        </View>
+        </Header>
         <View style={{ flex: 1, padding: 10 }}>
           <FlatList
             data={this.props.orderList}

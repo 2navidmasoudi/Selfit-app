@@ -8,7 +8,7 @@ import { Button } from 'react-native-elements';
 import { mapStyle } from '../../../assets/styles/map';
 import { getAllGym } from '../../../services/gym';
 import { receiveGym, tokenGym, refreshGym } from '../../../redux/actions';
-import { mainColor } from '../../../assets/variables/colors';
+import { mainColor, white } from '../../../assets/variables/colors';
 import { Text, Modal } from '../../Kit';
 import Pic1 from '../../../assets/helpPics/GymMap/PinMapGym.png';
 import Pic2 from '../../../assets/helpPics/GymMap/DetailMapGym.png';
@@ -17,6 +17,7 @@ import Pin1 from '../../../assets/pinPics/Gym1.png';
 import Pin2 from '../../../assets/pinPics/Gym2.png';
 import Pin3 from '../../../assets/pinPics/Gym3.png';
 import PinStyle from '../../../assets/styles/PinStyle';
+import { mainFont } from '../../../assets/variables/font';
 
 const styles = StyleSheet.create({
   container: {
@@ -270,14 +271,15 @@ export default class GymMap extends Component {
         {/* > */}
         {/* <Text style={{ color: 'white', textAlign: 'center' }}>اینجا باشگاه بگیر</Text> */}
         {/* </Button>} */}
-        {this.state.MarkerReady === false ? <Spinner /> :
         <Button
-          rightIcon={{ name: 'place', size: 25 }}
-          backgroundColor={mainColor}
+          title="جستجو در این محل"
+          titleStyle={{ fontFamily: mainFont, fontSize: 16, color: white }}
+          loading={!this.state.MarkerReady}
+          backgroundColor="rgba(0,0,0,0.6)"
           borderRadius={10}
-          buttonStyle={{ marginBottom: 20, paddingRight: 20 }}
+          buttonStyle={{ marginBottom: 20 }}
           onPress={() => this.getNewGym()}
-        />}
+        />
       </View>
 
     );

@@ -84,7 +84,6 @@ export default class Profile extends Component {
                 </Text>
               </View>
               <View style={{ flex: 1 }}>
-
                 <Text>
                     شماره موبایل:
                 </Text>

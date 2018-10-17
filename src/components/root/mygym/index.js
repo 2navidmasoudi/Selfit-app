@@ -326,7 +326,7 @@ export default class MyGym extends Component {
           style={[form.submitButton, { margin: 10, marginBottom: 20 }]}
           onPress={this.handleMapClick.bind(this)}
         >
-          <Text style={{ color: '#FFF' }}>نمایش در نقشه</Text>
+          <Text style={{ color: '#FFF' }}>مسیریابی</Text>
         </Button>
         {this.props.gymid &&
         <Button
