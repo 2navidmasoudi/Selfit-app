@@ -49,8 +49,8 @@ export default class MapAddress extends Component {
     });
   }
   getCurrentPosition() {
-    navigator.geolocation.getCurrentPosition((position) => {
-      const region = {
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      const region = await {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
         latitudeDelta: LATITUDE_DELTA,

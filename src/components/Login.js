@@ -116,7 +116,6 @@ export default class Login extends Component {
             <View style={styles.inputGroup}>
               <Text style={styles.txt}>شماره موبایل :</Text>
               <TextInput
-                style={styles.inputText}
                 placeholder="09xxxxxxxxx"
                 underlineColorAndroid="transparent"
                 keyboardType="numeric"

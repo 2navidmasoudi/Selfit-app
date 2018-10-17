@@ -14,6 +14,10 @@ import { persianNumber } from '../../../utils/persian';
   reBasketBuffet,
 })
 export default class FoodCard extends Component {
+  constructor() {
+    super();
+    this.handleRemove = this.handleRemove.bind(this);
+  }
   async handleRemove() {
     try {
       const { tokenmember } = this.props.user;
@@ -25,7 +29,7 @@ export default class FoodCard extends Component {
       this.props.reBasketBuffet(Basket, Basket.length, PriceAll);
     } catch (e) {
       console.log(e);
-      this.props.reBasketBuffet([], 0);
+      this.props.reBasketBuffet([], 0, 0);
     }
   }
   render() {
@@ -35,7 +39,7 @@ export default class FoodCard extends Component {
         <Text style={{ flex: 1, textAlign: 'center', marginTop: 5 }}>{food.namemenufood}</Text>
         <CardItem>
           <Left style={{ flex: 1 }}>
-            <Button bordered danger onPress={this.handleRemove.bind(this)}>
+            <Button bordered danger onPress={this.handleRemove}>
               <Icon name="close" />
             </Button>
           </Left>

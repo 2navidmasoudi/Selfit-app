@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Alert, Image, TouchableWithoutFeedback } from 'react-native';
-import { Button, Container, Content, View } from 'native-base';
+import { Alert, Image, TouchableWithoutFeedback, View } from 'react-native';
+import { Button, Container, Card, CardItem, Left, Right, Body } from 'native-base';
 import { connect } from 'react-redux';
 import { Base64 } from 'js-base64';
 import PropTypes from 'prop-types';
@@ -25,7 +25,7 @@ export default class Profile extends Component {
   static propTypes = {
     user: PropTypes.objectOf(PropTypes.node).isRequired,
     setUser: PropTypes.func.isRequired,
-  }
+  };
   componentWillMount() {
     this.getSingleToken();
   }
@@ -34,19 +34,19 @@ export default class Profile extends Component {
     const MemberSingleToken = await getSingleToken(tokenmember, tokenapi);
     await this.props.setUser(MemberSingleToken);
   }
-  async putUserLogout() {
-    const { tokenapi, tokenmember } = await this.props.user;
-    const json = await putUserLogout(tokenmember, tokenapi);
-    if (json === 1) {
-      Actions.reset('sign');
-    } else {
-      Alert.alert(
-        'خطا',
-        'خطا در خروج از حساب کاربری!',
-        [{ text: 'باشه' }]
-      );
-    }
-  }
+  // async putUserLogout() {
+  //   const { tokenapi, tokenmember } = await this.props.user;
+  //   const json = await putUserLogout(tokenmember, tokenapi);
+  //   if (json === 1) {
+  //     Actions.reset('sign');
+  //   } else {
+  //     Alert.alert(
+  //       'خطا',
+  //       'خطا در خروج از حساب کاربری!',
+  //       [{ text: 'باشه' }]
+  //     );
+  //   }
+  // }
   render() {
     const {
       namefamilymember, mailmember, birthdaymember, phone,
@@ -59,60 +59,65 @@ export default class Profile extends Component {
     const name = Base64.decode(namefamilymember);
     const ph = Base64.decode(phone);
     const mail = Base64.decode(mailmember);
-    const jalaliBirthDay = birthdaymember === null ? '?' : moment(birthdaymember, 'YYYY/MM/DD').toNow(true);
+    const Age = birthdaymember === null ? '?' : moment(birthdaymember, 'YYYY/MM/DD').toNow(true);
+    const Birth = birthdaymember === null ? '' : moment(birthdaymember, 'YYYY/MM/DD').format('jYYYY/jMM/jDD');
     return (
       <Container>
         <AppHeader rightTitle="پروفایل" backButton="flex" />
-        <Content padder>
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <TouchableWithoutFeedback onPress={() => Actions.showImage({ uri: ImgSrc })}>
-              <Image
-                source={{ uri: ImgSrc }}
-                style={{ height: 200, width: 200, borderRadius: 10 }}
-              />
-            </TouchableWithoutFeedback>
-          </View>
-          <View style={{ flex: 1 }}>
-            <Text>
-              نام:{' '}
-              <Text style={{ color: mainColor }} type="bold">
-                {name}
-              </Text>
-            </Text>
-            <Text>
-              شماره موبایل:{' '}
-              <Text style={{ color: mainColor }} type="bold">
-                {persianNumber(ph)}
-              </Text>
-            </Text>
-            <Text>
-              ایمیل:{' '}
-              <Text style={{ color: mainColor }} type="bold">
-                {mail}
-              </Text>
-            </Text>
-            <Text>
-              سن:{' '}
-              <Text style={{ color: mainColor }} type="bold">
-                {persianNumber(jalaliBirthDay)}
-              </Text>
-            </Text>
-          </View>
-        </Content>
-        <View style={{ margin: 10, flexDirection: 'column', justifyContent: 'flex-end' }}>
+        <View style={{ flex: 6, padding: 15 }}>
+          <Card style={{ flex: 7 }}>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <TouchableWithoutFeedback onPress={() => Actions.showImage({ uri: ImgSrc })}>
+                <Image
+                  source={{ uri: ImgSrc }}
+                  style={{ flex: 1, height: 200, width: 350 }}
+                />
+              </TouchableWithoutFeedback>
+            </View>
+            <View style={{ flex: 1, margin: 10 }}>
+              <View style={{ flex: 1 }}>
+                <Text>
+                          نام:
+                </Text>
+                <Text style={{ color: mainColor, textAlign: 'center' }} type="bold">
+                  {name}
+                </Text>
+              </View>
+              <View style={{ flex: 1 }}>
+
+                <Text>
+                    شماره موبایل:
+                </Text>
+                <Text style={{ color: mainColor, textAlign: 'center' }} type="bold">
+                  {persianNumber(ph)}
+                </Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text>
+                    ایمیل:
+                </Text>
+                <Text style={{ color: mainColor, textAlign: 'center' }} type="bold">
+                  {mail}
+                </Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text>
+                    تاریخ تولد (سن):
+                </Text>
+                <Text style={{ color: mainColor, textAlign: 'center' }} type="bold">
+                  {`(${persianNumber(Age)}) ${Birth}`}
+                </Text>
+              </View>
+            </View>
+          </Card>
+        </View>
+        <View style={{ flex: 1, marginHorizontal: 15 }}>
           <Button
             block
             onPress={() => Actions.editProfile()}
-            style={[form.submitButton, { marginTop: 5, marginBottom: 10 }]}
+            style={form.submitButton}
           >
             <Text style={{ color: white }}>ویرایش حساب کاربری</Text>
-          </Button>
-          <Button
-            block
-            onPress={() => this.putUserLogout()}
-            style={{ marginTop: 5, backgroundColor: mainColor }}
-          >
-            <Text style={{ color: white }}>خروج از حساب کاربری</Text>
           </Button>
         </View>
       </Container>

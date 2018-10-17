@@ -70,7 +70,8 @@ export default class CategoryChildren extends Component {
       const { tokenmember } = await this.props.user;
       const { tokenapi, idcategory } = await this.props;
       const { max, min } = await this.state;
-      const Product = await getAllAccessProduct(idcategory, tokenmember, tokenapi, max, min, null);
+      const Product =
+        await getAllAccessProduct(idcategory, tokenmember, tokenapi, max, min, 'stateproductid%20asc');
       console.log(Product, 'Product');
       // this.props.receiveProduct(Product,min);
       this.setState({ Product });
@@ -81,7 +82,7 @@ export default class CategoryChildren extends Component {
     }
   }
   helpDone = () => this.props.helpDoneStore();
-  renderProduct = ({ item }) => <ProductCard product={item} />
+  renderProduct = ({ item }) => <ProductCard product={item} />;
   render() {
     const FooterComponent = this.props.Count === 0 ? null :
       (<Footer>

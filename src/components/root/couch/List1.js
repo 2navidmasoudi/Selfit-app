@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, View } from 'react-native';
+import {FlatList, Platform, View} from 'react-native';
 import { connect } from 'react-redux';
 import { SearchBar } from 'react-native-elements';
 import CoachCard from './CoachCard';
@@ -119,6 +119,7 @@ export default class List1 extends Component {
           showLoading
           onChangeText={this.searchText.bind(this)}
           placeholder="نام، مشخصات و..."
+          inputStyle={{ textAlign: Platform.OS === 'ios' ? 'right' : undefined, fontFamily: 'IRANSansMobile', fontSize: 12 }}
         />
         <FlatList
           data={this.props.coach}

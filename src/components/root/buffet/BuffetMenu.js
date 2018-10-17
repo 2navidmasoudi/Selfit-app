@@ -33,7 +33,7 @@ import { TabsStyle } from '../../../assets/styles/gym';
 import { checkOrderBuffet, deleteOrderAll } from '../../../services/orderBuffet';
 import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
-import { errorColor, white } from '../../../assets/variables/colors';
+import {errorColor, mainColor, white} from '../../../assets/variables/colors';
 import Loader from '../../loader';
 
 moment.loadPersian({ dialect: 'persian-modern' });
@@ -109,13 +109,13 @@ export default class BuffetMenu extends Component {
     pathserver: PropTypes.string.isRequired,
     picbuffet: PropTypes.string.isRequired,
     addressgym: PropTypes.string.isRequired,
-  }
+  };
   static defaultProps = {
     Material: [],
     MenuFood: [],
     Count2: PropTypes.number,
     Count1: PropTypes.number,
-  }
+  };
   state = {
     loadingFood: true,
     loadingMaterial: true,
@@ -257,21 +257,24 @@ export default class BuffetMenu extends Component {
             >
               <View style={styles.bar}>
                 <Text style={{
-                  textAlign: 'center',
-                  color: 'white',
-                }}
-                >
-                  آدرس:{''}{addressgym}
-                </Text>
-                <Text style={{
                   color: 'white',
                 }}
                 >
                   بوفه {namebuffet}
                 </Text>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    color: 'white',
+                    fontSize: 12
+                  }}
+                  type="light"
+                >
+                  آدرس:{''}{addressgym}
+                </Text>
                 <Text style={{
                   textAlign: 'center',
-                  color: activebuffet ? white : errorColor,
+                  color: activebuffet ? mainColor : errorColor,
                   margin: 10
                 }}
                 >

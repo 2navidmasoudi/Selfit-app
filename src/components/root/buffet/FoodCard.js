@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import {Alert, Image, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 import { Button, Card, CardItem, Icon, Left, Right } from 'native-base';
 import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
@@ -21,7 +21,7 @@ export default class FoodCard extends Component {
   state = {
     numberbuffet: 0,
   };
-  async _rebasketBuffet() {
+  async rebasketBuffet() {
     try {
       const { tokenapi } = await this.props;
       const { tokenmember } = this.props.user;
@@ -48,7 +48,7 @@ export default class FoodCard extends Component {
           break;
         }
       }
-      this._rebasketBuffet();
+      this.rebasketBuffet();
     } catch (error) {
       console.log(error);
       logError(error, 'removeButtonHandle', 'buffet/FoodCard', 'deleteOrderBuffet');
@@ -56,7 +56,16 @@ export default class FoodCard extends Component {
     }
   }
   async addButtonHandle() {
-    if (!this.props.active) return;
+    if (!this.props.active) {
+      Alert.alert(
+        'وضعیت سفارش',
+        'شما قبلا از بوفه ی دیگری سفارش داده بودید، آیا می خواهید سفارش های قبلی خود را حذف کنید؟',
+        [
+          { text: 'خیر', onPress: () => Actions.pop() },
+        ]
+      );
+      return;
+    }
     try {
       const { numberbuffet } = this.state;
       const { MenuFood } = this.props;
@@ -65,11 +74,14 @@ export default class FoodCard extends Component {
       this.setState({
         numberbuffet: numberbuffet + 1
       });
-      const result = await postOrderBuffet(buffetid, MenuFood.menufoodid, numberbuffet + 1, tokenmember, tokenapi);
-      console.log('postOrderBuffet for', numberbuffet, MenuFood.menufoodid, MenuFood.pricemenufood, result);
-      this._rebasketBuffet();
+      const result = await postOrderBuffet(
+        buffetid, MenuFood.menufoodid,
+        numberbuffet + 1, tokenmember, tokenapi
+      );
+      // console.log('postOrderBuffet for', numberbuffet, MenuFood.menufoodid, MenuFood.pricemenufood, result);
+      this.rebasketBuffet();
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       logError(error, 'addButtonHandle', 'buffet/FoodCard', 'postOrderBuffet');
     }
   }

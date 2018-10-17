@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container } from 'native-base';
-import { FlatList } from 'react-native';
+import {FlatList, Platform} from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux';
 import AppHeader from '../../header';
@@ -129,6 +129,7 @@ export default class Blog extends Component {
           showLoading
           onChangeText={this.searchText}
           placeholder="تیتر، متن و ..."
+          inputStyle={{ textAlign: Platform.OS === 'ios' ? 'right' : undefined, fontFamily: 'IRANSansMobile', fontSize: 12 }}
         />
         <FlatList
           data={this.props.BlogList}

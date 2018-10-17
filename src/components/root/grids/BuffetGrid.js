@@ -37,7 +37,6 @@ export default class BuffetGrid extends Component {
   static propTypes = {
     user: PropTypes.objectOf(PropTypes.node).isRequired,
     buffetid: PropTypes.number,
-    help: PropTypes.boolean.isRequired,
     tokenBuffet: PropTypes.func.isRequired,
     selectBuffet: PropTypes.func.isRequired,
     helpDoneBuffet: PropTypes.func.isRequired,

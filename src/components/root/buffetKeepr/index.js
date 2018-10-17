@@ -14,7 +14,7 @@ import OrderCard from './orderCard';
 import { Text } from '../../Kit';
 import Loader from '../../loader';
 import { darkColor, errorColor, mainColor, white } from '../../../assets/variables/colors';
-import { putCheckoutAll } from '../../../services/orders';
+// import { putCheckoutAll } from '../../../services/orders';
 
 @connect(state => ({
   user: state.user,
@@ -147,17 +147,17 @@ export default class BuffetKeeper extends Component {
   //   this.getOrderBuffet();
   //   Actions.refresh({ refresh: { refresh: Math.random() } });
   // }
-  togglePanel = () => {
-    const { pannelBtn } = this.state;
-    if (pannelBtn === 'md-add') {
-      this.setState({ pannelBtn: 'md-close', display: 'flex' });
-      this.view.slideInDown();
-    } else {
-      this.setState({ pannelBtn: 'md-add' });
-      this.view.slideOutUp();
-      setTimeout(() => this.setState({ display: 'none' }), 1000);
-    }
-  }
+  // togglePanel = () => {
+  //   const { pannelBtn } = this.state;
+  //   if (pannelBtn === 'md-add') {
+  //     this.setState({ pannelBtn: 'md-close', display: 'flex' });
+  //     this.view.slideInDown();
+  //   } else {
+  //     this.setState({ pannelBtn: 'md-add' });
+  //     this.view.slideOutUp();
+  //     setTimeout(() => this.setState({ display: 'none' }), 1000);
+  //   }
+  // }
   renderItem = ({ item }) => <OrderCard order={item} />
   render() {
     const YesOrNo = this.state.Active ? ' بله (سفارش می پذیرم)' : ' خیر (بوفه تعطیل است)';
@@ -205,32 +205,32 @@ export default class BuffetKeeper extends Component {
           </Right>
         </Header>
         <View style={{ height: 1, backgroundColor: darkColor }} />
-        <Animatable.View ref={this.handleViewRef} style={{ display: this.state.display }}>
-          <Header
-            style={{ justifyContent: 'center', backgroundColor: 'transparent', alignItems: 'center' }}
-            androidStatusBarColor={darkColor}
-            iosBarStyle="light-content"
-          >
-            <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center', flexDirection: 'row' }}>
-              <Button
-                style={{ backgroundColor: darkColor }}
-                onPress={() => Actions.buffet()}
-              >
-                <Text style={{ color: white }}>
+        <View ref={this.handleViewRef}>
+          {/* <Header */}
+          {/* style={{ justifyContent: 'center', backgroundColor: 'transparent', alignItems: 'center' }} */}
+          {/* androidStatusBarColor={darkColor} */}
+          {/* iosBarStyle="light-content" */}
+          {/* > */}
+          <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center', flexDirection: 'row' }}>
+            <Button
+              style={{ backgroundColor: darkColor }}
+              onPress={() => Actions.buffet()}
+            >
+              <Text style={{ color: white }}>
                   بوفه های اطراف
-                </Text>
-              </Button>
-              <Button
-                style={{ backgroundColor: darkColor }}
-                onPress={() => Actions.support()}
-              >
-                <Text style={{ color: white }}>
+              </Text>
+            </Button>
+            <Button
+              style={{ backgroundColor: darkColor }}
+              onPress={() => Actions.support()}
+            >
+              <Text style={{ color: white }}>
                   تماس با پشتیبانی
-                </Text>
-              </Button>
-            </View>
-          </Header>
-        </Animatable.View>
+              </Text>
+            </Button>
+          </View>
+          {/* </Header> */}
+        </View>
         <View style={{ flex: 1, padding: 10 }}>
           <FlatList
             data={this.props.orderList}

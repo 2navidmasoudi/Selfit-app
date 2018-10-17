@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, View } from 'react-native';
+import {FlatList, Platform, View} from 'react-native';
 import { connect } from 'react-redux';
 import { SearchBar } from 'react-native-elements';
 import FederationCard from './FederationCard';
@@ -24,8 +24,6 @@ const mapDispatchToProps = dispatch => ({
 export default class List extends Component {
   state = {
     max: 120,
-    ssort: false,
-    fsort: 0,
     loading: true,
     refreshing: false,
     search: null,
@@ -36,29 +34,15 @@ export default class List extends Component {
   }
   async getInfo() {
     await this.props.tokenFED('selfit.public');
-    this._getAllFED();
+    this.getAllFED();
   }
-  async searchText(text) {
-    if (text) {
-      await this.setState({
-        search: text
-      });
-      this._getSearchFED();
-    } else {
-      await this.setState({
-        searchMode: false,
-      });
-      await this.props.refreshFED();
-      await this._getAllFED();
-    }
-  }
-  async _getSearchFED() {
+  async getSearchFED() {
     try {
       if (!this.state.search) this.refreshFED();
       await this.setState({
         searchMode: true
       });
-      const { search, max, ssort, fsort } = await this.state;
+      const { search, max } = await this.state;
       const { tokenmember } = await this.props.user;
       const { min, tokenapi } = await this.props;
       const FEDListList =
@@ -70,10 +54,10 @@ export default class List extends Component {
       this.setState({ loading: false });
     }
   }
-  async _getAllFED() {
+  async getAllFED() {
     try {
       this.setState({ loading: true });
-      const { max, ssort, fsort } = await this.state;
+      const { max } = await this.state;
       const { tokenmember } = await this.props.user;
       const { min, tokenapi } = await this.props;
       const FEDList = await getAllFED(tokenmember, tokenapi, max, min, null);
@@ -82,8 +66,22 @@ export default class List extends Component {
       this.setState({ loading: false, refreshing: false });
     } catch (error) {
       console.log(error);
-      logError(error, '_getAllCouch', 'FED/List', 'getAllFED');
+      logError(error, 'getAllCouch', 'FED/List', 'getAllFED');
       this.setState({ loading: false });
+    }
+  }
+  async searchText(text) {
+    if (text) {
+      await this.setState({
+        search: text
+      });
+      this.getSearchFED();
+    } else {
+      await this.setState({
+        searchMode: false,
+      });
+      await this.props.refreshFED();
+      await this.getAllFED();
     }
   }
   async handleLoadMore() {
@@ -92,9 +90,9 @@ export default class List extends Component {
       await this.props.incrementMin();
       await this.setState({ loading: true });
       if (!this.state.searchMode) {
-        this._getAllFED();
+        this.getAllFED();
       } else {
-        this._getSearchFED();
+        this.getSearchFED();
       }
     }
   }
@@ -102,9 +100,9 @@ export default class List extends Component {
     this.props.refreshFED();
     this.setState({ refreshing: true });
     if (!this.state.searchMode) {
-      this._getAllFED();
+      this.getAllFED();
     } else {
-      this._getSearchFED();
+      this.getSearchFED();
     }
     this.setState({ refreshing: false });
   }
@@ -118,7 +116,8 @@ export default class List extends Component {
         <SearchBar
           showLoading
           onChangeText={this.searchText.bind(this)}
-          placeholder="نام، مشخصات و..."
+          placeholder="نام فدراسیون ..."
+          inputStyle={{ textAlign: Platform.OS === 'ios' ? 'right' : undefined, fontFamily: 'IRANSansMobile', fontSize: 12 }}
         />
         <FlatList
           data={this.props.FED}

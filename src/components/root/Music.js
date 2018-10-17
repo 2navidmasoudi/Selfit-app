@@ -11,7 +11,7 @@ import { persianNumber } from '../../utils/persian';
 import { Text } from '../Kit';
 import { tokenBlog } from '../../redux/actions';
 import { getAllMusic } from '../../services/music';
-import image from '../../assets/music.jpg';
+import image from '../../assets/SelfitMix.jpg';
 import { bounce } from './Main';
 
 const SelfitMusic = 'https://selfit.ir/Resource/music/';

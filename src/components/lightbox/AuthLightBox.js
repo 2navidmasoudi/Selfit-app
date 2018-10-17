@@ -19,7 +19,7 @@ export default class AuthLightBox extends Component {
   static propTypes = {
     user: PropTypes.objectOf(PropTypes.node).isRequired,
     setTokenmember: PropTypes.func.isRequired,
-  }
+  };
   constructor() {
     super();
     this.state = {
@@ -64,7 +64,6 @@ export default class AuthLightBox extends Component {
             کد دریافت شده را وارد کنید.
           </Text>
           <TextInput
-            style={authInput}
             placeholder="xxxxx"
             autoFocus
             underlineColorAndroid="transparent"

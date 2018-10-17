@@ -77,8 +77,8 @@ export default class BuffetBasket extends Component {
     this.props.reBasketMaterial(Basket, Basket.length, PriceAll);
     this.props.selectBuffet(idbuffet);
   }
-  returnBuffetItem = ({ item }) => <FoodCard food={item} />
-  renderMaterialItem = ({ item }) => <MaterialCard food={item} />
+  returnBuffetItem = ({ item }) => <FoodCard food={item} />;
+  renderMaterialItem = ({ item }) => <MaterialCard food={item} />;
   render() {
     const FooterComponent = (this.props.Count1 + this.props.Count2) === 0 ? null : (
       <Footer>

@@ -56,7 +56,6 @@ export default class List extends Component {
   }
   async componentWillMount() {
     await this.props.tokenGym('selfit.gym');
-    this.getGymList();
     if (!this.props.help) {
       this.setState({ ModalNumber: 1 });
     }

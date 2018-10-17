@@ -7,7 +7,7 @@ import AppHeader from '../../header';
 import MapComponent from './map';
 import List from './list';
 import { TabsStyle } from '../../../assets/styles/gym';
-import { locateUser, receiveBuffet } from '../../../redux/actions/index';
+import { locateUser, receiveBuffet, refreshBuffet } from '../../../redux/actions';
 import { putCheckToken } from '../../../services/index';
 import { Text, Modal } from '../../Kit';
 import { helpDoneBuffetIndex } from '../../../redux/actions/help';
@@ -16,7 +16,6 @@ import Pic2 from '../../../assets/helpPics/BuffetIndex/BuffetPin.png';
 import Pic3 from '../../../assets/helpPics/BuffetIndex/BuffetDetailMap.png';
 import Pic4 from '../../../assets/helpPics/BuffetIndex/BuffetFollow.png';
 import { getAllBuffet } from '../../../services/buffet';
-import {refreshBuffet} from "../../../redux/actions";
 
 @connect(state => ({
   user: state.user,

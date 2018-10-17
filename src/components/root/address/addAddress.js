@@ -17,7 +17,7 @@ export default class AddAddress extends Component {
   static propTypes = {
     user: PropTypes.objectOf(PropTypes.node).isRequired,
     region: PropTypes.objectOf(PropTypes.node).isRequired,
-  }
+  };
   constructor() {
     super();
     this.state = {
@@ -87,7 +87,6 @@ export default class AddAddress extends Component {
               blurOnSubmit={false}
             />
             <TextInput
-              ref={(input) => { this.TextInput2 = input; }}
               onChangeText={text => this.changeAddressLocation(text)}
               label="آدرس کامل:"
               value={this.state.desc}
@@ -100,7 +99,6 @@ export default class AddAddress extends Component {
             <View style={{ flexDirection: 'row' }} >
               <View style={{ flex: 1 }}>
                 <TextInput
-                  ref={(input) => { this.TextInput3 = input; }}
                   onChangeText={text => this.changeFloor(text)}
                   label="واحد:"
                   value={this.state.floor}
@@ -115,7 +113,6 @@ export default class AddAddress extends Component {
               </View>
               <View style={{ flex: 1, marginLeft: 20 }}>
                 <TextInput
-                  ref={(input) => { this.TextInput4 = input; }}
                   onChangeText={text => this.changePlaque(text)}
                   label="پلاک:"
                   value={this.state.plaque}

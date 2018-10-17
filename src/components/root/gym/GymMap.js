@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Image, Alert, ImageBackground } from 'react-native';
-import { Button, Fab, Icon, Spinner } from 'native-base';
+import { Fab, Icon, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
 import { Actions } from 'react-native-router-flux';
+import { Button } from 'react-native-elements';
 import { mapStyle } from '../../../assets/styles/map';
 import { getAllGym } from '../../../services/gym';
 import { receiveGym, tokenGym, refreshGym } from '../../../redux/actions';
@@ -11,7 +12,6 @@ import { mainColor } from '../../../assets/variables/colors';
 import { Text, Modal } from '../../Kit';
 import Pic1 from '../../../assets/helpPics/GymMap/PinMapGym.png';
 import Pic2 from '../../../assets/helpPics/GymMap/DetailMapGym.png';
-import Pic3 from '../../../assets/helpPics/GymMap/BtnMapGym.png';
 import { helpDoneGymMap } from '../../../redux/actions/help';
 import Pin1 from '../../../assets/pinPics/Gym1.png';
 import Pin2 from '../../../assets/pinPics/Gym2.png';
@@ -80,7 +80,7 @@ export default class GymMap extends Component {
     this.getCurrentPosition = this.getCurrentPosition.bind(this);
     this.gymDetail = (gym) => {
       Actions.gymDetail(gym);
-      console.log(gym);
+      // console.log(gym);
     };
   }
   async componentWillMount() {
@@ -119,6 +119,7 @@ export default class GymMap extends Component {
       await this.props.receiveGym(GymMapList, min);
       this.setState({ MarkerReady: true });
     } catch (error) {
+      this.setState({ MarkerReady: true });
       console.log(error);
     }
   }
@@ -200,7 +201,7 @@ export default class GymMap extends Component {
         </Modal>
         <Modal
           isVisible={this.state.ModalNumber === 2}
-          onModalHide={() => this.setState({ ModalNumber: 3 })}
+          onModalHide={this.helpDone}
           exitText="خیلی خب"
           onExit={() => this.setState({ ModalNumber: 0 })}
         >
@@ -214,26 +215,6 @@ export default class GymMap extends Component {
           />
           <Text>
             با زدن این باکس می تونی جزئیات باشگاه رو ببینی.
-          </Text>
-        </Modal>
-        <Modal
-          isVisible={this.state.ModalNumber === 3}
-          onModalHide={this.helpDone}
-          exitText="تمام"
-          onExit={() => this.setState({ ModalNumber: 0 })}
-        >
-          <Image
-            style={{
-              width: 250,
-              height: 100,
-            }}
-            source={Pic3}
-            resizeMode="contain"
-          />
-          <Text>
-            با زدن دکمه لیست بر میگردی به لیست باشگاه های دور اطرافت،
-             با زدن دکمه وسط باشگاه ها رو تو محله مورد نظرت ببین،
-            با زدن دکمه آخر برگرد به محلی که هستی.
           </Text>
         </Modal>
         <MapView
@@ -276,19 +257,27 @@ export default class GymMap extends Component {
         >
           <Icon name="md-locate" />
         </Fab>
+        {/* {this.state.MarkerReady === false ? <Spinner /> : */}
+        {/* <Button */}
+        {/* block */}
+        {/* style={{ */}
+        {/* margin: 25, */}
+        {/* marginHorizontal: 100, */}
+        {/* borderRadius: 5, */}
+        {/* backgroundColor: mainColor, */}
+        {/* }} */}
+        {/* onPress={() => this.getNewGym()} */}
+        {/* > */}
+        {/* <Text style={{ color: 'white', textAlign: 'center' }}>اینجا باشگاه بگیر</Text> */}
+        {/* </Button>} */}
         {this.state.MarkerReady === false ? <Spinner /> :
         <Button
-          block
-          style={{
-            margin: 25,
-            marginHorizontal: 100,
-            borderRadius: 5,
-            backgroundColor: mainColor,
-          }}
+          rightIcon={{ name: 'place', size: 25 }}
+          backgroundColor={mainColor}
+          borderRadius={10}
+          buttonStyle={{ marginBottom: 20, paddingRight: 20 }}
           onPress={() => this.getNewGym()}
-        >
-          <Text style={{ color: 'white', textAlign: 'center' }}>اینجا باشگاه بگیر</Text>
-        </Button>}
+        />}
       </View>
 
     );
