@@ -63,7 +63,7 @@ export default class Profile extends Component {
     const Birth = birthdaymember === null ? '' : moment(birthdaymember, 'YYYY/MM/DD').format('jYYYY/jMM/jDD');
     return (
       <Container>
-        <AppHeader rightTitle="پروفایل" backButton="flex" />
+        <AppHeader rightTitle="پروفایل" />
         <View style={{ flex: 6, padding: 15 }}>
           <Card style={{ flex: 7 }}>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

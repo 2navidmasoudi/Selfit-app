@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { Dimensions, Linking, Platform, NetInfo, Alert } from 'react-native';
+import { Dimensions, Linking, Platform } from 'react-native';
 import { PersistGate } from 'redux-persist/es/integration/react';
-import { Drawer, Lightbox, Router, Scene, Actions } from 'react-native-router-flux';
+import { Drawer, Lightbox, Router, Scene } from 'react-native-router-flux';
 import firebase from 'react-native-firebase';
 import { Root, Spinner } from 'native-base';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { connect, Provider } from 'react-redux';
 import { setEnabled } from './utils/analytics';
 import configureStore from './redux/store/configureStore';
+import networkCheck from './components/networkCheck';
 import Splash from './components/Splash';
 import Login from './components/Login';
 import Register from './components/Register';
@@ -63,6 +64,8 @@ import ListFood from './components/root/buffetMenu/listFood';
 import ListMaterial from './components/root/buffetMenu/listMaterial';
 import Inbox from './components/root/inbox';
 import { logError } from './services/log';
+import Wallet from './components/Wallet';
+import CodeOff from './components/CodeOff';
 
 const RouterWithRedux = connect()(Router);
 const window = Dimensions.get('window');
@@ -87,30 +90,6 @@ export default class App extends Component {
         console.log(e);
       }
     };
-  }
-  componentWillMount() {
-    function handleFirstConnectivityChange(isConnected) {
-      console.log(`Then, is ${isConnected ? 'online' : 'offline'}`);
-      if (!isConnected) {
-        Alert.alert(
-          'خطا',
-          'لطفا اتصال خود را به اینترنت بررسی کنید.',
-          [
-            { text: 'بازگشت', onPress: () => Actions.reset('splash') },
-          ], {
-            cancelable: false,
-          }
-        );
-      }
-      NetInfo.isConnected.removeEventListener(
-        'connectionChange',
-        handleFirstConnectivityChange
-      );
-    }
-    NetInfo.isConnected.addEventListener(
-      'connectionChange',
-      handleFirstConnectivityChange
-    );
   }
   componentDidMount() {
     Linking.getInitialURL().then((url) => {
@@ -185,7 +164,8 @@ export default class App extends Component {
           >
             <RouterWithRedux hideNavBar>
               <Scene key="rootMain" hideNavbar>
-                <Scene key="splash" initial component={Splash} hideNavBar />
+                <Scene key="networkCheck" component={networkCheck} hideNavBar />
+                <Scene key="splash" component={Splash} hideNavBar />
                 <Scene key="sign" component={Sign} hideNavBar />
                 <Scene key="waiting" component={Waiting} hideNavBar />
                 <Scene key="root" hideNavBar>
@@ -195,72 +175,72 @@ export default class App extends Component {
                     contentComponent={DrawerLayout}
                     drawerWidth={window.width / 1.7}
                   >
-                    <Scene key="componentMain" hideNavbar>
-                      <Scene key="Home" hideNavBar initial component={Main} />
-                      <Scene key="support" component={Support} hideNavBar />
-                      <Scene key="gym" component={Gym} hideNavBar />
-                      <Scene key="fullMap" component={FullMap} hideNavBar />
-                      <Scene key="fullMapBuffet" component={FullMapBuffet} hideNavBar />
-                      <Scene key="gymDetail" component={GymDetail} hideNavBar />
-                      <Scene key="buffet" component={Buffet} hideNavBar />
-                      <Scene key="buffetMenu" component={BuffetMenu} hideNavBar />
-                      <Scene key="buffetBasket" component={BuffetBasket} hideNavBar />
-                      <Scene key="productBasket" component={ProductBasket} hideNavBar />
-                      <Scene key="timeStore" component={TimeStore} hideNavBar />
-                      <Scene key="factorBuffet" component={finalOrderBuffet} hideNavBar />
-                      <Scene key="factorProduct" component={finalOrderProduct} hideNavBar />
-                      <Scene key="addressRoot" hideNavBar>
-                        <Scene key="address" component={Address} initial hideNavBar />
-                        <Scene key="mapAddress" component={MapAddress} hideNavBar />
-                        <Scene key="addAddress" component={AddAddress} hideNavBar />
-                        <Scene key="editAddress" component={EditAddress} hideNavBar />
-                      </Scene>
-                      <Scene key="buffetKeeperRoot" hideNavBar>
-                        <Scene key="buffetKeeper" component={BuffetKeeper} initial hideNavBar />
-                        <Scene key="orderDetail" component={OrderDetail} hideNavBar />
-                      </Scene>
-                      <Scene key="buffetMenuRoot" hideNavBar>
-                        <Scene key="buffetMenu" component={FoodList} initial hideNavBar />
-                        <Scene key="addFood" component={AddFood} hideNavBar />
-                        <Scene key="addMaterial" component={AddMaterial} hideNavBar />
-                        <Scene key="listFood" component={ListFood} hideNavBar />
-                        <Scene key="listMaterial" component={ListMaterial} hideNavBar />
-                      </Scene>
-                      <Scene key="couchRoot" hideNavBar>
-                        <Scene key="couch" component={Couch} initial hideNavBar />
-                        <Scene key="coachDetail" component={CouchDetail} hideNavBar />
-                      </Scene>
-                      <Scene key="federationRoot" hideNavBar>
-                        <Scene key="federation" component={Federation} initial hideNavBar />
-                        <Scene key="federationDetail" component={FederationDetail} hideNavBar />
-                      </Scene>
-                      <Scene key="storeRoot" hideNavBar>
-                        <Scene key="store" component={Store} initial hideNavBar />
-                        <Scene key="categoryChildren" component={CategoryChildren} hideNavBar />
-                      </Scene>
-                      <Scene key="blogRoot" hideNavBar>
-                        <Scene key="blog" component={Blog} initial hideNavBar />
-                        <Scene key="blogWeb" component={BlogWeb} hideNavBar />
-                      </Scene>
-                      <Scene key="mygymRoot" hideNavBar>
-                        <Scene key="mygym" component={MyGym} initial hideNavBar />
-                        <Scene key="editGym" component={EditGym} hideNavBar />
-                        <Scene key="htmlEditor" component={HtmlEditor} hideNavBar />
-                      </Scene>
-                      <Scene key="buffetOrder" component={BuffetOrder} hideNavBar />
-                      <Scene key="showImage" component={ShowImage} hideNavBar />
-                      <Scene key="profile" hideNavBar component={Profile} />
-                      <Scene key="editProfile" component={EditProfile} hideNavBar />
-                      <Scene key="complaints" component={Complaints} hideNavBar />
-                      <Scene key="webView" component={WebViewComponent} hideNavBar />
-                      <Scene key="follow" component={Follow} hideNavBar />
-                      <Scene key="followProduct" component={FactorProductDetail} hideNavBar />
-                      <Scene key="followBuffet" component={FactorBuffetDetail} hideNavBar />
-                      <Scene key="paymentWebView" component={PaymentWeb} hideNavBar />
-                      <Scene key="inbox" component={Inbox} hideNavBar />
-                    </Scene>
+                    <Scene key="Home" hideNavBar initial component={Main} />
                   </Drawer>
                 </Scene>
+                <Scene key="codeOff" component={CodeOff} hideNavBar />
+                <Scene key="support" component={Support} hideNavBar />
+                <Scene key="gym" component={Gym} hideNavBar />
+                <Scene key="fullMap" component={FullMap} hideNavBar />
+                <Scene key="fullMapBuffet" component={FullMapBuffet} hideNavBar />
+                <Scene key="gymDetail" component={GymDetail} hideNavBar />
+                <Scene key="buffet" component={Buffet} hideNavBar />
+                <Scene key="buffetMenu" component={BuffetMenu} hideNavBar />
+                <Scene key="buffetBasket" component={BuffetBasket} hideNavBar />
+                <Scene key="productBasket" component={ProductBasket} hideNavBar />
+                <Scene key="timeStore" component={TimeStore} hideNavBar />
+                <Scene key="factorBuffet" component={finalOrderBuffet} hideNavBar />
+                <Scene key="factorProduct" component={finalOrderProduct} hideNavBar />
+                <Scene key="addressRoot" hideNavBar>
+                  <Scene key="address" component={Address} initial hideNavBar />
+                  <Scene key="mapAddress" component={MapAddress} hideNavBar />
+                  <Scene key="addAddress" component={AddAddress} hideNavBar />
+                  <Scene key="editAddress" component={EditAddress} hideNavBar />
+                </Scene>
+                <Scene key="buffetKeeperRoot" hideNavBar>
+                  <Scene key="buffetKeeper" component={BuffetKeeper} initial hideNavBar />
+                  <Scene key="orderDetail" component={OrderDetail} hideNavBar />
+                </Scene>
+                <Scene key="buffetMenuRoot" hideNavBar>
+                  <Scene key="buffetMenu" component={FoodList} initial hideNavBar />
+                  <Scene key="addFood" component={AddFood} hideNavBar />
+                  <Scene key="addMaterial" component={AddMaterial} hideNavBar />
+                  <Scene key="listFood" component={ListFood} hideNavBar />
+                  <Scene key="listMaterial" component={ListMaterial} hideNavBar />
+                </Scene>
+                <Scene key="couchRoot" hideNavBar>
+                  <Scene key="couch" component={Couch} initial hideNavBar />
+                  <Scene key="coachDetail" component={CouchDetail} hideNavBar />
+                </Scene>
+                <Scene key="federationRoot" hideNavBar>
+                  <Scene key="federation" component={Federation} initial hideNavBar />
+                  <Scene key="federationDetail" component={FederationDetail} hideNavBar />
+                </Scene>
+                <Scene key="storeRoot" hideNavBar>
+                  <Scene key="store" component={Store} initial hideNavBar />
+                  <Scene key="categoryChildren" component={CategoryChildren} hideNavBar />
+                </Scene>
+                <Scene key="blogRoot" hideNavBar>
+                  <Scene key="blog" component={Blog} initial hideNavBar />
+                  <Scene key="blogWeb" component={BlogWeb} hideNavBar />
+                </Scene>
+                <Scene key="mygymRoot" hideNavBar>
+                  <Scene key="mygym" component={MyGym} initial hideNavBar />
+                  <Scene key="editGym" component={EditGym} hideNavBar />
+                  <Scene key="htmlEditor" component={HtmlEditor} hideNavBar />
+                </Scene>
+                <Scene key="buffetOrder" component={BuffetOrder} hideNavBar />
+                <Scene key="showImage" component={ShowImage} hideNavBar />
+                <Scene key="profile" hideNavBar component={Profile} />
+                <Scene key="wallet" hideNavBar component={Wallet} />
+                <Scene key="editProfile" component={EditProfile} hideNavBar />
+                <Scene key="complaints" component={Complaints} hideNavBar />
+                <Scene key="webView" component={WebViewComponent} hideNavBar />
+                <Scene key="follow" component={Follow} hideNavBar />
+                <Scene key="followProduct" component={FactorProductDetail} hideNavBar />
+                <Scene key="followBuffet" component={FactorBuffetDetail} hideNavBar />
+                <Scene key="paymentWebView" component={PaymentWeb} hideNavBar />
+                <Scene key="inbox" component={Inbox} hideNavBar />
                 <Lightbox key="signUp" hideNavBar>
                   <Scene hideNavBar>
                     <Scene key="login" component={Login} panHandlers={activeBackGesture} />

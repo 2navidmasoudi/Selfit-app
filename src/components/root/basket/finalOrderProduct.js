@@ -150,14 +150,7 @@ export default class finalOrderProduct extends Component {
             <Card style={{ flex: 0 }}>
               <CardItem>
                 <Text style={{ flex: 1, textAlign: 'center' }} type="bold">مشخصات فاکتور</Text>
-                <Text
-                  style={{ color: mainColor }}
-                  type="bold"
-                >
-                  ارسلان خوبه
-                </Text>
               </CardItem>
-
             </Card>
             <FlatList
               data={this.props.productBasket}

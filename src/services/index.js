@@ -38,7 +38,7 @@ export const putMemberLogin = async (phone, tokenapi) => {
   }
 };
 
-export const getSingleToken = async (token, tokenapi) => {
+export const getSingleToken = async (token, tokenapi, Price = false) => {
   try {
     const response = await fetch(`${SAPI}${Member}GetSingleToken?t.token=${token}&t.tokenapi=${tokenapi}`, {
       method: GET,
@@ -47,6 +47,9 @@ export const getSingleToken = async (token, tokenapi) => {
     const json = await response.json();
     console.log('Member/GetSingleToken');
     console.log(json);
+    if (Price) {
+      return { Data: json.data, Wallet: json.Price };
+    }
     return json.Data;
   } catch (e) {
     console.log(e);

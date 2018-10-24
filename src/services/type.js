@@ -30,4 +30,6 @@ export const Product = '/Product/';
 export const PicProduct = '/PicProduct/';
 export const CategoryProduct = '/CategoryProduct/';
 export const Payment = '/Payment/';
+export const Wallet = '/Wallet/';
+export const CodeOff = '/CodeOff/';
 export const Coach = '/Coach/';

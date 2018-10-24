@@ -152,6 +152,24 @@ export const putTimeFactor = async (factorid, timefactor, token, tokenapi) => {
     console.log(e);
   }
 };
+export const FactorWalletProduct = async (token, tokenapi) => {
+  try {
+    const response = await fetch(`${SAPI}${OrderProduct}PutFactorWallet`, {
+      method: PUT,
+      headers,
+      body: JSON.stringify({
+        token,
+        tokenapi
+      })
+    });
+    const json = await response.json();
+    console.log('OrderProduct/PutFactorWallet');
+    console.log(json);
+    return json.ResponseCode;
+  } catch (e) {
+    console.log(e);
+  }
+};
 export const deleteBasketProduct = async (id, token, tokenapi) => {
   try {
     const response = await fetch(`${SAPI}${OrderProduct}Delete/${id}?t.token=${token}&t.tokenapi=${tokenapi}`, {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { NetInfo, TouchableOpacity, View } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { Container } from 'native-base';
 import { connect } from 'react-redux';
@@ -13,6 +13,7 @@ import GymGrid from './grids/GymGrid';
 import BuffetGrid from './grids/BuffetGrid';
 import { Text } from '../Kit';
 import Music from './Music';
+import { handleRootConnection } from '../../utils/handleConnection';
 
 let MusicRef;
 export const bounce = () => MusicRef.bounce(800);
@@ -34,6 +35,10 @@ export default class Main extends Component {
     };
   }
   async componentWillMount() {
+    NetInfo.isConnected.addEventListener(
+      'connectionChange',
+      handleRootConnection,
+    );
     const {
       typememberid,
       tokenapi,
@@ -59,6 +64,9 @@ export default class Main extends Component {
         break;
     }
     putCheckToken(tokenmember, tokenapi);
+  }
+  componentWillUnmount() {
+    NetInfo.isConnected.removeEventListener('connectionChange', handleRootConnection);
   }
   render() {
     const pannel = (
@@ -89,8 +97,7 @@ export default class Main extends Component {
         <AppHeader
           rightTitle="صفحه اصلی"
           hasBlog
-          // TODO: Add Inbox to mdfin App
-          // Inbox
+          Drawer
         />
         {this.state.viewComponent}
         {this.props.user.typememberid === 1 && pannel}

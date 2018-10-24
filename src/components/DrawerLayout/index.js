@@ -121,6 +121,15 @@ export default class DrawerLayout extends Component {
           <Item
             style={drawer.item}
             onPress={() => {
+              Actions.wallet();
+            }}
+          >
+            <Text style={drawer.itemTitle}>افزایش اعتبار ۳۰۰۰ تومان</Text>
+            <Icon name="person" color={mainColor} style={drawer.itemIcon} />
+          </Item>
+          <Item
+            style={drawer.item}
+            onPress={() => {
               Actions.profile();
             }}
           >
@@ -177,6 +186,10 @@ export default class DrawerLayout extends Component {
           </Item>
           <Item style={drawer.item} onPress={() => Actions.follow()}>
             <Text style={drawer.itemTitle}>پیگیری سفارش</Text>
+            <Icon name="card" style={drawer.itemIcon} />
+          </Item>
+          <Item style={drawer.item} onPress={() => Actions.codeOff()}>
+            <Text style={drawer.itemTitle}>هدیه و معرفی</Text>
             <Icon name="card" style={drawer.itemIcon} />
           </Item>
           <Item style={drawer.item}>

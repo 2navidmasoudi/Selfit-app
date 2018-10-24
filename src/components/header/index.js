@@ -8,7 +8,7 @@ import { Text } from '../Kit';
 import { musicDown } from '../root/Main';
 import { errorColor, mainColor } from '../../assets/variables/colors';
 
-export default function HeaderComponent({ rightTitle, hasBlog, noPop, Inbox }) {
+export default function HeaderComponent({ rightTitle, hasBlog, noPop, Inbox, Drawer }) {
   return (
     <Header hasSubtitle style={header.headerColor} androidStatusBarColor="#313131" iosBarStyle="light-content">
       <Left style={{ flex: 1, flexDirection: 'row' }}>
@@ -115,7 +115,7 @@ export default function HeaderComponent({ rightTitle, hasBlog, noPop, Inbox }) {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => Actions.drawerOpen()}>
           <View style={{
-            display: noPop ? 'none' : 'flex',
+            display: noPop || !Drawer ? 'none' : 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             height: 50,
@@ -142,9 +142,11 @@ HeaderComponent.propTypes = {
   hasBlog: PropTypes.bool,
   noPop: PropTypes.bool,
   Inbox: PropTypes.bool,
+  Drawer: PropTypes.bool
 };
 HeaderComponent.defaultProps = {
   hasBlog: undefined,
   noPop: undefined,
   Inbox: false,
+  Drawer: false,
 };

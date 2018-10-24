@@ -1,4 +1,4 @@
-import {GET, headers, Orders, PUT, SAPI, Selfit} from './type';
+import { GET, headers, Orders, PUT, SAPI } from './type';
 
 export const getOrderBuffet = async (id, active, token, tokenapi, max, min, sort = null) => {
   try {
@@ -28,6 +28,20 @@ export const putAcceptBuffet = async (memberid, factorid, active, token, tokenap
   });
   const json = await response.json();
   console.log('Orders/PutAccept');
+  console.log(json);
+  return json.ResponseCode;
+};
+export const putFactorWallet = async (token, tokenapi) => {
+  const response = await fetch(`${SAPI}${Orders}PutFactorWallet`, {
+    method: PUT,
+    headers,
+    body: JSON.stringify({
+      token,
+      tokenapi
+    })
+  });
+  const json = await response.json();
+  console.log('Orders/PutFactorWallet');
   console.log(json);
   return json.ResponseCode;
 };
