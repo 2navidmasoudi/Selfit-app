@@ -14,7 +14,9 @@ export const handleRootConnection = (isConnected) => {
 
 export const handleNetworkCheck = (isConnected) => {
   if (!isConnected) {
-    Actions.reset('networkCheck');
+    // Actions.reset('networkCheck');
+    // TODO: Bug in IOS
+    Actions.reset('splash');
   } else {
     Actions.reset('splash');
   }

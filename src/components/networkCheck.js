@@ -10,6 +10,7 @@ export default class NetworkCheck extends Component {
   constructor() {
     super();
     this.handleNetworkCheck = () => {
+      // TODO: ios Can't Fetch non HTTPS urls.
       NetInfo.isConnected.fetch().then(isConnected => handleNetworkCheck(isConnected));
     };
   }

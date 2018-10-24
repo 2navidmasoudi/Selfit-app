@@ -165,7 +165,7 @@ export default class App extends Component {
             <RouterWithRedux hideNavBar>
               <Scene key="rootMain" hideNavbar>
                 <Scene key="networkCheck" component={networkCheck} hideNavBar />
-                <Scene key="splash" component={Splash} hideNavBar />
+                <Scene key="splash" initial component={Splash} hideNavBar />
                 <Scene key="sign" component={Sign} hideNavBar />
                 <Scene key="waiting" component={Waiting} hideNavBar />
                 <Scene key="root" hideNavBar>
