@@ -25,17 +25,12 @@ export default class CodeOff extends Component {
   componentWillMount() {
     this.getCodeOff();
   }
-  getCodeOff() {
-    const { token, tokenapi } = this.props.user;
-    getCodeOff(token, tokenapi)
-      .then((CodeOff) => {
-        // TODO: Test and Debug.
-        console.log('CodeOff: ');
-        console.log(CodeOff);
-        if (CodeOff) {
-          this.setState({ CodeOff });
-        }
-      });
+  async getCodeOff() {
+    const { tokenmember } = this.props.user;
+    let CodeOff = await getCodeOff(tokenmember);
+    if (CodeOff) {
+      this.setState({ CodeOff });
+    }
   }
   render() {
     const messageWithCode = `کد معرف من در اپلیکیشن سلفیت: ${this.state.CodeOff}`;

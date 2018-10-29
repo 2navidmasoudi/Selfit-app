@@ -5,13 +5,19 @@ import Status from './status';
 import { handleNetworkCheck } from '../utils/handleConnection';
 import { Text } from './Kit';
 import { darkColor, mainColor, white } from '../assets/variables/colors';
+import AppVersion from "../services/AppVersion";
 
 export default class NetworkCheck extends Component {
   constructor() {
     super();
-    this.handleNetworkCheck = () => {
+    this.handleNetworkCheck = async () => {
       // TODO: ios Can't Fetch non HTTPS urls.
-      NetInfo.isConnected.fetch().then(isConnected => handleNetworkCheck(isConnected));
+      const update = await AppVersion();
+      if (update) {
+        handleNetworkCheck(true);
+      } else {
+        handleNetworkCheck(false);
+      }
     };
   }
   componentWillMount() {

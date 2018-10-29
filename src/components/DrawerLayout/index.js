@@ -34,7 +34,8 @@ export default class DrawerLayout extends Component {
   constructor() {
     super();
     this.state = {
-      Active: true
+      Active: true,
+      Wallet: null,
     };
     this.toggleHelp = this.toggleHelp.bind(this);
   }
@@ -43,6 +44,7 @@ export default class DrawerLayout extends Component {
   };
   async componentDidMount() {
     await this.getSingleMember();
+    this.getWallet();
   }
   async getSingleMember() {
     const {
@@ -62,6 +64,14 @@ export default class DrawerLayout extends Component {
       mobile,
       email
     });
+  }
+  async getWallet() {
+    const { tokenmember, tokenapi } = await this.props.user;
+    const {  Wallet } = await getSingleToken(tokenmember, tokenapi, true);
+    console.log('Wallet Amount');
+    console.log(Wallet);
+    if(!Wallet) return;
+    this.setState({ Wallet });
   }
   getRequestLogout() {
     Alert.alert(
@@ -124,8 +134,8 @@ export default class DrawerLayout extends Component {
               Actions.wallet();
             }}
           >
-            <Text style={drawer.itemTitle}>افزایش اعتبار ۳۰۰۰ تومان</Text>
-            <Icon name="person" color={mainColor} style={drawer.itemIcon} />
+            <Text style={drawer.itemTitle}>افزایش اعتبار: {`${persianNumber(this.state.Wallet || '0')} تومان`}</Text>
+            <Icon name="cash" color={mainColor} style={drawer.itemIcon} />
           </Item>
           <Item
             style={drawer.item}

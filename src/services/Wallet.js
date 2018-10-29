@@ -1,9 +1,9 @@
 import { Linking } from 'react-native';
 import { SAPI, Wallet } from './type';
 
-export default async (Price, token, tokenapi = 'selfit.member') => {
+export default async (price, token, tokenapi = 'selfit.member') => {
   try {
-    const response = await fetch(`${SAPI}${Wallet}GetAddressRequest?Price=${Price}&t.token=${token}&t.tokenapi=${tokenapi}`);
+    const response = await fetch(`${SAPI}${Wallet}GetAddressRequest?price=${price}&t.token=${token}&t.tokenapi=${tokenapi}`);
     const json = await response.json();
     console.log('Payment/GetAddressRequest');
     console.log(json);

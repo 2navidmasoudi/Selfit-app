@@ -11,5 +11,6 @@ export default async () => {
   } catch (e) {
     console.log(e);
     logError(e, 'AppVersion', 'Appversion', 'Line4');
+    return null;
   }
 };
