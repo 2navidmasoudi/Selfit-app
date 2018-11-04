@@ -1,7 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          package="com.selfit.universal"
-  >
+          package="com.selfit.universal">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -12,9 +11,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <permission android:name="com.selfit.universal.permission.C2D_MESSAGE"
-                android:protectionLevel="signature"/>
-
     <application
             android:name=".MainApplication"
             android:allowBackup="true"
@@ -29,37 +25,23 @@
                 android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
                 android:windowSoftInputMode="adjustResize"
                 android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-                <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
-            </intent-filter>
+          <intent-filter>
+            <action android:name="android.intent.action.MAIN"/>
+            <category android:name="android.intent.category.LAUNCHER"/>
+            <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
+          </intent-filter>
           <intent-filter>
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="selfit" />
-            <data
-              android:scheme="selfit"
-              android:host="open"
-            />
+            <data android:scheme="selfit" android:host="open" />
           </intent-filter>
         </activity>
-        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity"/>
+        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
         <meta-data
-                android:name="com.google.android.geo.API_KEY"
-                android:value="AIzaSyBlgHjeMbqK3xEZfh6HK2o8RdjhhgTOh0s"/>
-        <service android:name="io.invertase.firebase.messaging.RNFirebaseMessagingService">
-          <intent-filter>
-            <action android:name="com.google.firebase.MESSAGING_EVENT" />
-          </intent-filter>
-        </service>
-        <service android:name="io.invertase.firebase.messaging.RNFirebaseInstanceIdService">
-          <intent-filter>
-            <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-          </intent-filter>
-        </service>
-        <service android:name="io.invertase.firebase.messaging.RNFirebaseBackgroundMessagingService" />
+          android:name="com.google.android.geo.API_KEY"
+          android:value="AIzaSyBlgHjeMbqK3xEZfh6HK2o8RdjhhgTOh0s"
+        />
     </application>
-
 </manifest>

@@ -13,7 +13,6 @@ import { persianNumber } from '../../utils/persian';
 import { setUser } from '../../redux/actions';
 import { darkColor, mainColor, white } from '../../assets/variables/colors';
 import { helpOff, helpReset } from '../../redux/actions/help';
-import { setUserProperty } from '../../utils/analytics';
 
 @connect(state => ({
   user: state.user,
@@ -50,27 +49,22 @@ export default class DrawerLayout extends Component {
     const {
       tokenmember,
       tokenapi,
-      namefamilymember,
-      phone,
-      mailmember,
+      // namefamilymember,
+      // phone,
+      // mailmember,
     } = await this.props.user;
     const MemberSingleToken = await getSingleToken(tokenmember, tokenapi);
     await this.props.setUser(MemberSingleToken);
-    const nameFamily = await Base64.decode(namefamilymember);
-    const mobile = await Base64.decode(phone);
-    const email = await Base64.decode(mailmember);
-    setUserProperty({
-      name_family: nameFamily,
-      mobile,
-      email
-    });
+    // const nameFamily = await Base64.decode(namefamilymember);
+    // const mobile = await Base64.decode(phone);
+    // const email = await Base64.decode(mailmember);
   }
   async getWallet() {
     const { tokenmember, tokenapi } = await this.props.user;
-    const {  Wallet } = await getSingleToken(tokenmember, tokenapi, true);
+    const { Wallet } = await getSingleToken(tokenmember, tokenapi, true);
     console.log('Wallet Amount');
     console.log(Wallet);
-    if(!Wallet) return;
+    if (!Wallet) return;
     this.setState({ Wallet });
   }
   getRequestLogout() {
