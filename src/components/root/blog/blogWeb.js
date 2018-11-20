@@ -58,18 +58,16 @@ export default ({ blog }) => {
           </CardItem>
         </Card>
       </Content>
-      <View style={{ flexDirection: 'column', justifyContent: 'flex-end' }}>
-        <Button
-          block
-          style={[form.submitButton, { margin: 10, marginBottom: 20 }]}
-          onPress={() => Share.share({
-            message: ` بیشتر بدانید سلفیت | selfit : ${blog.titleblog} لینک: https://selfit.ir/#/Home/SingleBlog/${blog.blogid}`,
+      <Button
+        full
+        style={form.submitButton}
+        onPress={() => Share.share({
+            message: ` آموزش سلفیت | selfit : ${blog.titleblog} لینک: https://selfit.ir/#/Home/SingleBlog/${blog.blogid}`,
             title: `${blog.titleblog}`
           })}
-        >
-          <Text style={{ color: '#FFF' }}>اشتراک با دوستان</Text>
-        </Button>
-      </View>
+      >
+        <Text style={{ color: '#FFF' }}>اشتراک با دوستان</Text>
+      </Button>
     </Container>
   );
 };

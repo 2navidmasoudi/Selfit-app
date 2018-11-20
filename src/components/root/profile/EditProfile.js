@@ -194,16 +194,6 @@ export default class EditProfile extends React.Component {
               <Text>ایمیل:</Text>
               <Icon active name="mail" />
             </Item>
-            <Item rounded style={form.item}>
-              <Input
-                placeholder={jalaliBirthDay}
-                style={form.input}
-                keyboardType="numeric"
-                onChangeText={this.changeAge.bind(this)}
-              />
-              <Text>سن:</Text>
-              <Icon active name="checkmark" />
-            </Item>
             <Button
               full
               style={{ backgroundColor: mainColor }}

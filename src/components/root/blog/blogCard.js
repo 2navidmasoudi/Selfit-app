@@ -21,9 +21,6 @@ export default class BlogCard extends Component {
   render() {
     const { blog } = this.props;
     const m = moment(`${blog.datesave}`, 'YYYY/MM/DDTHH:mm:ss');
-    // const datesaveblog = moment(`${blog.datesaveblog}`, 'YYYY/MM/DDTHH:mm:ss');
-    // const jM = m.format('jYYYY/jMM');
-    // const jS = datesaveblog.format('jYYYY/jMM');
     const ImgYear = m.jYear();
     const ImgMonth = m.jMonth() + 1;
     const ImgSrc = `${blog.httpserver}${blog.pathserver}${ImgYear}/${ImgMonth}/${blog.picblog}`;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, Alert, ImageBackground } from 'react-native';
-import { Fab, Icon, Spinner } from 'native-base';
+import { StyleSheet, View, Image, Alert, ImageBackground, Platform } from 'react-native';
+import { Fab, Icon } from 'native-base';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
 import { Actions } from 'react-native-router-flux';
@@ -235,7 +235,7 @@ export default class GymMap extends Component {
               onCalloutPress={() => this.gymDetail(gym)}
               style={{ zIndex: 5 }}
             >
-              {this.renderPin(gym.activegym)}
+              {Platform.OS === 'ios' ? this.renderPin(gym.activegym) : null}
               <MapView.Callout
                 style={{
                   width: 220,

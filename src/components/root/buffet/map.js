@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Alert, ImageBackground } from 'react-native';
-import { Fab, Icon, Spinner } from 'native-base';
+import { StyleSheet, View, Alert, ImageBackground, Platform } from 'react-native';
+import { Fab, Icon } from 'native-base';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
 import { Actions } from 'react-native-router-flux';
@@ -9,11 +9,11 @@ import { mapStyle } from '../../../assets/styles/map';
 import { receiveBuffet, tokenBuffet } from '../../../redux/actions/index';
 import { getAllBuffet } from '../../../services/buffet';
 import { Text } from '../../Kit';
-import {mainColor, white} from '../../../assets/variables/colors';
+import { white } from '../../../assets/variables/colors';
 import Pin1 from '../../../assets/pinPics/Buffet1.png';
 import Pin2 from '../../../assets/pinPics/Buffet2.png';
 import PinStyle from '../../../assets/styles/PinStyle';
-import {mainFont} from "../../../assets/variables/font";
+import { mainFont } from '../../../assets/variables/font';
 
 const styles = StyleSheet.create({
   container: {
@@ -171,7 +171,7 @@ export default class MapComponent extends Component {
               onCalloutPress={() => this.buffetMenu(buffet)}
               style={{ zIndex: 5 }}
             >
-              {this.renderPin(buffet.activebuffet)}
+              {Platform.OS === 'ios' ? this.renderPin(buffet.activebuffet) : null}
               <MapView.Callout
                 style={{
                   width: 220,

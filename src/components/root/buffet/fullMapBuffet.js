@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ImageBackground, StyleSheet, View } from 'react-native';
+import { ImageBackground, StyleSheet, View, Platform } from 'react-native';
 import { Fab, Icon, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
@@ -107,7 +107,7 @@ export default class FullMapBuffet extends Component {
               onCalloutPress={() => this.buffetMenu(buffet)}
               style={{ zIndex: 5 }}
             >
-              {this.renderPin(buffet.activebuffet)}
+              {Platform.OS === 'ios' ? this.renderPin(buffet.activebuffet) : null}
               <MapView.Callout
                 style={{
                   width: 220,

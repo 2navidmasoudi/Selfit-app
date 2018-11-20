@@ -9,6 +9,7 @@ import styles from './InputTextStyles';
 
 export default function InputText(props) {
   const {
+    defaultValue,
     keyboardType,
     iconName,
     placeholder,
@@ -63,6 +64,7 @@ export default function InputText(props) {
         }
         <View style={styles.inputContainer}>
           <TextInput
+            defaultValue={defaultValue}
             style={inputStyles}
             keyboardType={keyboardType}
             onChangeText={onChangeText}
@@ -89,6 +91,7 @@ export default function InputText(props) {
 }
 
 InputText.propTypes = {
+  defaultValue: PropTypes.string,
   keyboardType: PropTypes.oneOf(['default', 'email-address', 'numeric', 'phone-pad']),
   iconName: PropTypes.string,
   placeholderTextColor: PropTypes.string,
@@ -112,6 +115,7 @@ InputText.propTypes = {
   maxLength: PropTypes.number,
 };
 InputText.defaultProps = {
+  defaultValue: null,
   keyboardType: 'default',
   iconName: '',
   label: '',

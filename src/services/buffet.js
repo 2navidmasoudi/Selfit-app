@@ -1,4 +1,4 @@
-import {Buffet, DELETE, GET, headers, POST, PUT, SAPI, Selfit} from './type';
+import { Buffet, DELETE, GET, headers, POST, PUT, SAPI } from './type';
 
 export const getAllBuffets = async (token, tokenapi, max, min, sort) => {
   const response = await fetch(`${SAPI}${Buffet}GetAll?t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`, {

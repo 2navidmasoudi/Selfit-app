@@ -8,7 +8,8 @@ import requestWallet from '../../services/Wallet';
 import { Text, TextInput } from '../Kit';
 import { darkColor, mainColor, white } from '../../assets/variables/colors';
 import { persianNumber } from '../../utils/persian';
-import {getSingleToken} from "../../services";
+import { getSingleToken } from '../../services';
+import moment from 'moment-jalaali';
 
 @connect(state => ({
   user: state.user,
@@ -19,6 +20,7 @@ export default class Wallet extends Component {
   constructor() {
     super();
     this.state = {
+      selected: 0,
       AddWallet: null,
       Wallet: null
     };
@@ -28,10 +30,10 @@ export default class Wallet extends Component {
   }
   async getWallet() {
     const { tokenmember, tokenapi } = await this.props.user;
-    const {  Wallet } = await getSingleToken(tokenmember, tokenapi, true);
+    const { Wallet } = await getSingleToken(tokenmember, tokenapi, true);
     console.log('Wallet Amount');
     console.log(Wallet);
-    if(!Wallet) return;
+    if (!Wallet) return;
     this.setState({ Wallet });
   }
   async PaymentDirect() {
@@ -50,14 +52,127 @@ export default class Wallet extends Component {
     return (
       <Container>
         <AppHeader rightTitle="کیف پول" />
-        <Content padder>
-          <Text style={{ textAlign: 'center' }}>مبلغ موجودی: {`${persianNumber(this.state.Wallet || '0')}`} ریال</Text>
+        <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-around' }} scrollEnabled={false}>
+          <Text type="bold" style={{ textAlign: 'center', fontSize: 22 }}>مبلغ موجودی: {`${persianNumber(this.state.Wallet || '0')}`} ریال</Text>
+          <View style={{
+            flexDirection: 'row-reverse',
+            flexWrap: 'wrap',
+            justifyContent: 'space-around',
+            alignContent: 'center',
+            margin: 10,
+          }}
+          >
+            <Button
+              light={this.state.selected === 1}
+              full
+              onPress={() => {
+                this.setState({ selected: 1, AddWallet: 5000 });
+              }}
+              style={{
+                margin: 5,
+                height: 70,
+                width: 100,
+                borderRadius: 10,
+                borderWidth: 2,
+                borderColor: this.state.selected === 1 ? white : darkColor,
+                backgroundColor: this.state.selected === 1 ? mainColor : white,
+                flexDirection: 'column'
+              }}
+            >
+              <Text
+                style={{
+                  color: this.state.selected === 1 ? white : '#000',
+                }}
+              >
+                {persianNumber('5000'.toLocaleString())} تومان
+              </Text>
+            </Button>
+            <Button
+              light={this.state.selected === 2}
+              full
+              onPress={() => {
+                this.setState({ selected: 2, AddWallet: 10000 });
+              }}
+              style={{
+                margin: 5,
+                height: 70,
+                width: 100,
+                borderRadius: 10,
+                borderWidth: 2,
+                borderColor: this.state.selected === 2 ? white : darkColor,
+                backgroundColor: this.state.selected === 2 ? mainColor : white,
+                flexDirection: 'column'
+              }}
+            >
+              <Text
+                style={{
+                  color: this.state.selected === 2 ? white : '#000',
+                }}
+              >
+                {persianNumber('10000'.toLocaleString())} تومان
+              </Text>
+            </Button>
+            <Button
+              light={this.state.selected === 3}
+              full
+              onPress={() => {
+                this.setState({ selected: 3, AddWallet: 20000 });
+              }}
+              style={{
+                margin: 5,
+                height: 70,
+                width: 100,
+                borderRadius: 10,
+                borderWidth: 2,
+                borderColor: this.state.selected === 3 ? white : darkColor,
+                backgroundColor: this.state.selected === 3 ? mainColor : white,
+                flexDirection: 'column'
+              }}
+            >
+              <Text
+                style={{
+                  color: this.state.selected === 2 ? white : '#000',
+                }}
+              >
+                {persianNumber('20000'.toLocaleString())} تومان
+              </Text>
+            </Button>
+            <Button
+              light={this.state.selected === 4}
+              full
+              onPress={() => {
+                this.setState({ selected: 4, AddWallet: 50000 });
+              }}
+              style={{
+                margin: 5,
+                height: 70,
+                width: 100,
+                borderRadius: 10,
+                borderWidth: 2,
+                borderColor: this.state.selected === 4 ? white : darkColor,
+                backgroundColor: this.state.selected === 4 ? mainColor : white,
+                flexDirection: 'column'
+              }}
+            >
+              <Text
+                style={{
+                  color: this.state.selected === 4 ? white : '#000',
+                }}
+              >
+                {persianNumber('50000'.toLocaleString())} تومان
+              </Text>
+            </Button>
+          </View>
           <TextInput
-            onChangeText={AddWallet => this.setState({ AddWallet })}
+            onChangeText={(AddWallet) => {
+              this.setState({ AddWallet });
+              if (this.state.selected) {
+                this.setState({ selected: 0 });
+              }
+            }}
             label="مبلغ افزایش اعتبار"
             value={this.state.AddWallet}
             placeholder="مبلغ افزایش اعتبار (به ریال)"
-            required
             keyboardType="numeric"
             placeholderTextColor={darkColor}
             blurOnSubmit={false}

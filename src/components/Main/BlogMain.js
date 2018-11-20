@@ -11,14 +11,14 @@ export default () => (
     <Divider style={{ backgroundColor: darkColor, marginHorizontal: 10 }} />
     <TouchableOpacity
       style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.3)' }}
-      onPress={() => Actions.federationRoot()}
+      onPress={() => Actions.blogRoot()}
     >
       <View style={styles.animationView}>
         <Text type="bold" style={styles.animationTitle}>
-          فدراسیون ها
+          آموزش
         </Text>
         <Text type="bold" style={styles.animationDetail}>
-          انجمن ها و کمیته ها
+          تغذیه، حرکات ورزشی و ...
         </Text>
       </View>
     </TouchableOpacity>

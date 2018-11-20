@@ -36,5 +36,6 @@ export const sendPrice = async (srcLat, srcLong, destLat, destLong) => {
     return json;
   } catch (e) {
     console.log(e);
+    return 0;
   }
 };

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ImageBackground, StyleSheet, View } from 'react-native';
+import { ImageBackground, StyleSheet, View, Platform } from 'react-native';
 import { Fab, Icon, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
@@ -110,7 +110,7 @@ export default class FullMap extends Component {
               onCalloutPress={() => this.gymDetail(gym)}
               style={{ zIndex: 5 }}
             >
-              {this.renderPin(gym.activegym)}
+              {Platform.OS === 'ios' ? this.renderPin(gym.activegym) : null}
               <MapView.Callout
                 style={{
                   width: 220,

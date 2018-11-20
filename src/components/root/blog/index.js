@@ -1,15 +1,21 @@
+/* eslint-disable no-console */
 import React, { Component } from 'react';
-import { Container } from 'native-base';
-import {FlatList, Platform} from 'react-native';
+import { Card, CardItem, Container, Content, Icon, Left, Right } from 'native-base';
+import { FlatList, Image, Platform } from 'react-native';
 import { SearchBar } from 'react-native-elements';
+import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import listToTree from 'list-to-tree-lite';
 import AppHeader from '../../header';
 import { putCheckToken } from '../../../services/index';
 import { tokenBlog, incrementMin, decrementMin, refreshBlog, receiveBlog } from '../../../redux/actions';
 import { logError } from '../../../services/log';
-import { getAllBlog, getSearchBlog } from '../../../services/blog';
+import { getAllBlog, getCategoryBlog, getSearchBlog } from '../../../services/blog';
 import BlogCard from './blogCard';
 import Loader from '../../loader';
+import { Text } from '../../Kit';
+
+const MaterialSource = 'https://selfit.ir/Resource/Material/';
 
 @connect(state => ({
   user: state.user,
@@ -27,8 +33,9 @@ export default class Blog extends Component {
   constructor() {
     super();
     this.state = {
-      max: 70,
-      loading: false,
+      blogCategory: [],
+      loading: true,
+      categoryLoading: true,
       refreshing: false,
       search: '',
       searchMode: false,
@@ -36,26 +43,43 @@ export default class Blog extends Component {
     this.searchText = this.searchText.bind(this);
     this.handleRefresh = this.handleRefresh.bind(this);
     this.handleLoadMore = this.handleLoadMore.bind(this);
+    this.onItemPress = (item) => {
+      Actions.blogChildren({
+        blogCategory: item.children,
+        categoryTitle: item.titlecategory,
+        idcategory: item.idblog_category
+      });
+      console.log(item);
+    };
   }
-  componentWillMount() {
-    const { tokenmember, tokenapi } = this.props.user;
+  async componentWillMount() {
+    const { tokenmember, tokenapi } = await this.props.user;
     putCheckToken(tokenmember, tokenapi);
-    this.setInfo();
+    await this.props.tokenBlog('selfit.public');
+    await this.getAllBlog();
+    await this.getCategoryBlog();
+    await this.listToTree();
   }
   componentWillUnmount() {
     this.props.refreshBlog();
   }
-  async setInfo() {
-    await this.props.tokenBlog('selfit.public');
-    await this.getAllBlog();
+  async getCategoryBlog() {
+    try {
+      const { tokenapi } = await this.props;
+      const { tokenmember } = await this.props.user;
+      const blogCategory = await getCategoryBlog(tokenmember, tokenapi, 70, 0);
+      this.setState({ blogCategory, categoryLoading: false });
+    } catch (e) {
+      await logError(e, 'getCategoryBlog', 'root/blog', 'getCategoryBlog');
+      this.setState({ categoryLoading: false });
+    }
   }
   async getAllBlog() {
     try {
       this.setState({ loading: true });
-      const { max } = await this.state;
       const { tokenmember } = await this.props.user;
       const { min, tokenapi } = await this.props;
-      const BlogList = await getAllBlog(tokenmember, tokenapi, max, min, null);
+      const BlogList = await getAllBlog(tokenmember, tokenapi, 100, 0, 'idblog%20desc');
       console.log(BlogList);
       await this.props.receiveBlog(BlogList, min);
       this.setState({ loading: false });
@@ -71,10 +95,10 @@ export default class Blog extends Component {
       await this.setState({
         searchMode: true, loading: true
       });
-      const { search, max } = await this.state;
+      const { search } = await this.state;
       const { tokenmember } = await this.props.user;
       const { min, tokenapi } = await this.props;
-      const BlogList = await getSearchBlog(search, tokenmember, tokenapi, max, min, null);
+      const BlogList = await getSearchBlog(search, tokenmember, tokenapi, 250, min, 'blogid%20desc');
       console.log(BlogList);
       await this.props.receiveBlog(BlogList, min);
       this.setState({ loading: false, refreshing: false });
@@ -83,6 +107,14 @@ export default class Blog extends Component {
       logError(error, 'getSearchBlog', 'root/blog', 'getSearchBlog');
       this.setState({ loading: false });
     }
+  }
+  async listToTree() {
+    const { blogCategory } = await this.state;
+    const Tree = await listToTree(blogCategory, {
+      idKey: 'idblog_category',
+      parentKey: 'parentidcategory',
+    });
+    this.setState({ blogCategory: Tree, loading: false });
   }
   async searchText(text) {
     if (text) {
@@ -120,27 +152,62 @@ export default class Blog extends Component {
     }
     this.setState({ refreshing: false });
   }
-  renderItem = ({ item }) => <BlogCard blog={item} />
+  renderItem = ({ item }) => <BlogCard blog={item} />;
   render() {
     return (
       <Container>
-        <AppHeader rightTitle="بیشتر بدانید" backButton="flex" />
-        <SearchBar
-          showLoading
-          onChangeText={this.searchText}
-          placeholder="تیتر، متن و ..."
-          inputStyle={{ textAlign: Platform.OS === 'ios' ? 'right' : undefined, fontFamily: 'IRANSansMobile', fontSize: 12 }}
-        />
-        <FlatList
-          data={this.props.BlogList}
-          renderItem={item => this.renderItem(item)}
-          keyExtractor={item => item.blogid}
-          ListEmptyComponent={<Loader loading={this.state.loading} />}
-          onRefresh={this.handleRefresh}
-          refreshing={this.state.refreshing}
-          onEndReached={this.handleLoadMore}
-          onEndReachedThreshold={0.5}
-        />
+        <AppHeader rightTitle="آموزش" />
+        <Content>
+          <SearchBar
+            showLoading
+            onChangeText={this.searchText}
+            placeholder="تیتر، متن و ..."
+            inputStyle={{ textAlign: Platform.OS === 'ios' ? 'right' : undefined, fontFamily: 'IRANSansMobile', fontSize: 12 }}
+          />
+          <Card style={{ flex: 0 }}>
+            <CardItem style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} header bordered>
+              <Left style={{ flex: 1 }} />
+              <Text
+                type="bold"
+                style={{ flex: 5, textAlign: 'center' }}
+              >
+              دسته بندی آموزش
+              </Text>
+              <Icon active name="book" style={{ flex: 1 }} />
+            </CardItem>
+            {this.state.blogCategory.map(c => (
+              <CardItem
+                button
+                key={c.idblog_category}
+                bordered
+                cardBody
+                onPress={() => this.onItemPress(c)}
+              >
+                <Image
+                  source={{ uri: `${MaterialSource}${c.piccategory}` }}
+                  style={{ width: 50, height: 50, marginHorizontal: 10 }}
+                />
+                <Text style={{ flex: 5 }}>{c.titlecategory}</Text>
+                <Right style={{ flex: 1, alignItems: 'center' }}>
+                  <Icon name="arrow-forward" />
+                </Right>
+              </CardItem>
+             ))}
+          </Card>
+          {this.state.categoryLoading &&
+          <Loader loading={this.state.categoryLoading} />}
+          <FlatList
+            data={this.props.BlogList}
+            renderItem={item => this.renderItem(item)}
+            keyExtractor={item => item.blogid}
+            ListEmptyComponent={<Loader loading={this.state.loading} />}
+            onRefresh={this.handleRefresh}
+            refreshing={this.state.refreshing}
+            onEndReached={this.handleLoadMore}
+            onEndReachedThreshold={0.5}
+            scrollEnabled={false}
+          />
+        </Content>
       </Container>
     );
   }

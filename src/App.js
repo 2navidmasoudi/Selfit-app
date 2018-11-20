@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { Component } from 'react';
 import { Dimensions, Linking, Platform } from 'react-native';
 import { PersistGate } from 'redux-persist/es/integration/react';
@@ -5,7 +6,6 @@ import { Drawer, Lightbox, Router, Scene } from 'react-native-router-flux';
 import { Root, Spinner } from 'native-base';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { connect, Provider } from 'react-redux';
-import { setEnabled } from './utils/analytics';
 import configureStore from './redux/store/configureStore';
 import networkCheck from './components/networkCheck';
 import Splash from './components/Splash';
@@ -55,16 +55,14 @@ import PaymentWeb from './components/root/payment';
 import FactorBuffetDetail from './components/root/follow/FactorBuffetDetail';
 import HtmlEditor from './components/root/htmlEditor';
 import { darkColor, mainColor } from './assets/variables/colors';
-import Federation from './components/root/federation';
-import FederationDetail from './components/root/federation/FederationDetail';
 import Waiting from './components/Waiting';
 import FullMapBuffet from './components/root/buffet/fullMapBuffet';
 import ListFood from './components/root/buffetMenu/listFood';
 import ListMaterial from './components/root/buffetMenu/listMaterial';
 import Inbox from './components/root/inbox';
-import { logError } from './services/log';
 import Wallet from './components/Wallet';
 import CodeOff from './components/CodeOff';
+import BlogChildren from "./components/root/blog/blogChildren";
 
 const RouterWithRedux = connect()(Router);
 const window = Dimensions.get('window');
@@ -89,6 +87,11 @@ export default class App extends Component {
         console.log(e);
       }
     };
+  }
+  componentWillMount() {
+    if (__DEV__) {
+      console.disableYellowBox = true;
+    }
   }
   componentDidMount() {
     Linking.getInitialURL().then((url) => {
@@ -159,17 +162,14 @@ export default class App extends Component {
                   <Scene key="couch" component={Couch} initial hideNavBar />
                   <Scene key="coachDetail" component={CouchDetail} hideNavBar />
                 </Scene>
-                <Scene key="federationRoot" hideNavBar>
-                  <Scene key="federation" component={Federation} initial hideNavBar />
-                  <Scene key="federationDetail" component={FederationDetail} hideNavBar />
+                <Scene key="blogRoot" hideNavBar>
+                  <Scene key="blog" component={Blog} initial hideNavBar />
+                  <Scene key="blogWeb" component={BlogWeb} hideNavBar />
+                  <Scene key="blogChildren" component={BlogChildren} hideNavBar />
                 </Scene>
                 <Scene key="storeRoot" hideNavBar>
                   <Scene key="store" component={Store} initial hideNavBar />
                   <Scene key="categoryChildren" component={CategoryChildren} hideNavBar />
-                </Scene>
-                <Scene key="blogRoot" hideNavBar>
-                  <Scene key="blog" component={Blog} initial hideNavBar />
-                  <Scene key="blogWeb" component={BlogWeb} hideNavBar />
                 </Scene>
                 <Scene key="mygymRoot" hideNavBar>
                   <Scene key="mygym" component={MyGym} initial hideNavBar />

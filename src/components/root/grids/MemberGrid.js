@@ -11,7 +11,7 @@ import Gym from '../../Main/Gym';
 import Coach from '../../Main/Coach';
 import { HelpStyle, HelpView, TipNumber, Tooltip } from '../../ToolTip';
 import { helpDoneMember, helpReset } from '../../../redux/actions/help';
-import Federation from '../../Main/Federation';
+import Blog from '../../Main/BlogMain';
 import CoachPic from '../../../assets/Coach.jpg';
 
 @connect(state => ({
@@ -81,12 +81,12 @@ export default class MemberGrid extends Component {
               </View>
               <View style={styles.wrapper}>
                 <CopilotStep
-                  text="با زدن این دکمه می تونی با فدراسیون هر ورزش آشنا بشی و راه ارتباطی مستقیمش رو ببینی."
+                  text="با زدن این دکمه می تونی آموزش های مختلفی یاد بگیری و اون ها رو با دوستان خود به اشتراک بگذاری."
                   order={6}
                   name="Federation"
                 >
                   <HelpView style={HelpStyle.main}>
-                    <Federation />
+                    <Blog />
                   </HelpView>
                 </CopilotStep>
               </View>
