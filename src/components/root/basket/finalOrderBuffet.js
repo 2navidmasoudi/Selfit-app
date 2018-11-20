@@ -19,16 +19,18 @@ import { Alert, FlatList, View } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { Base64 } from 'js-base64';
 import PropTypes from 'prop-types';
+import { Button as Btn } from 'react-native-elements';
 import { postAddressOrderBuffet, postFactor } from '../../../services/orderBuffet';
 import AppHeader from '../../header';
 import { refreshBuffet, setRoad, tokenBuffet } from '../../../redux/actions';
 import { SignStyle } from '../../../assets/styles/sign';
-import { Text } from '../../Kit';
+import { Text, TextInput } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
 import { sendPrice } from '../../../services/Alopeyk';
 import { getSingleBuffet } from '../../../services/buffet';
-import { mainColor } from '../../../assets/variables/colors';
+import { mainColor, white } from '../../../assets/variables/colors';
 import { logError } from '../../../services/log';
+import { getPrice } from '../../../services/payment';
 
 let lat;
 let long;
@@ -69,13 +71,15 @@ export default class finalOrderBuffet extends Component {
     PriceAllMaterial: 0,
     buffetBasket: [],
     materialBasket: [],
-  }
+  };
   constructor() {
     super();
     this.state = {
       descfactor: '',
       sendServicePrice: 0,
       disableSendFactor: false,
+      CodeOff: null,
+      totalPrice: '0',
     };
     this.sendOrderBuffet = this.sendOrderBuffet.bind(this);
   }
@@ -89,7 +93,8 @@ export default class finalOrderBuffet extends Component {
     await this.props.tokenBuffet('selfit.buffet');
     await this.props.setRoad('buffet');
     await this.getSingleBuffet();
-    this.sendPrice();
+    await this.sendPrice();
+    await this.getPrice();
   }
   async getSingleBuffet() {
     try {
@@ -100,6 +105,27 @@ export default class finalOrderBuffet extends Component {
       long = buffetInfo.longgym;
     } catch (e) {
       logError(e, 'getSingleBuffet', 'finalOrderBuffet', 'Basket');
+    }
+  }
+  async getPrice() {
+    try {
+      const { tokenmember } = await this.props.user;
+      const { sendServicePrice, CodeOff } = await this.state;
+      const totalPrice = await getPrice(1, tokenmember, sendServicePrice, CodeOff);
+      this.setState({ totalPrice });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  async sendPrice() {
+    try {
+      const { lataddressmember, longaddressmember } = await this.props.address;
+      const sendServicePrice = await sendPrice(lat, long, lataddressmember, longaddressmember);
+      await this.setState({
+        sendServicePrice: sendServicePrice.object.price,
+      });
+    } catch (e) {
+      logError(e, 'sendPrice', 'finalOrderBuffet', 'Basket');
     }
   }
   async sendOrderBuffet() {
@@ -137,17 +163,6 @@ export default class finalOrderBuffet extends Component {
       logError(e, 'sendOrderBuffet', 'finalOrderBuffet', 'Basket');
     }
   }
-  async sendPrice() {
-    try {
-      const { lataddressmember, longaddressmember } = await this.props.address;
-      const sendServicePrice = await sendPrice(lat, long, lataddressmember, longaddressmember);
-      await this.setState({
-        sendServicePrice: sendServicePrice.object.price,
-      });
-    } catch (e) {
-      logError(e, 'sendPrice', 'finalOrderBuffet', 'Basket');
-    }
-  }
   renderItem = ({ item }) => (
     <ListItem>
       <Left>
@@ -175,11 +190,11 @@ export default class finalOrderBuffet extends Component {
     </ListItem>
   );
   render() {
-    const totalPrice =
-      (this.props.PriceAllBuffet +
-        this.props.PriceAllMaterial +
-        (this.state.sendServicePrice * (3 / 5)))
-        .toLocaleString();
+    // const totalPrice =
+    //   (this.props.PriceAllBuffet +
+    //     this.props.PriceAllMaterial +
+    //     (this.state.sendServicePrice * (3 / 5)))
+    //     .toLocaleString();
     const addressTitle = Base64.decode(this.props.address.titleaddressmember);
     const sendPrices =
       this.state.sendServicePrice ?
@@ -264,9 +279,22 @@ export default class finalOrderBuffet extends Component {
             </CardItem>
             <CardItem bordered>
               <Text style={{ flex: 1 }}>
-                  قیمت نهایی:{` ${persianNumber(totalPrice)} تومان`}
+                  قیمت نهایی:{` ${persianNumber(this.state.totalPrice)} تومان`}
               </Text>
             </CardItem>
+            <TextInput
+              label="کد تخفیف"
+              placeholder="کد تخفیف را اینجا وارد کنید:"
+              placeholderTextColor="#555"
+              onChangeText={text => this.setState({ CodeOff: text })}
+            />
+            <Btn
+              buttonStyle={{ backgroundColor: mainColor }}
+              disabled={!this.state.CodeOff}
+              textStyle={{ fontFamily: 'IRANSansMobile', color: white }}
+              title="اعمال کد تخفیف"
+              onPress={() => this.getPrice()}
+            />
           </Card>
           <Item style={[item, { flex: 1 }]}>
             <Icon active name="clipboard" />
