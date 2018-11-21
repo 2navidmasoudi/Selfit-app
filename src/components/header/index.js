@@ -80,7 +80,7 @@ export default function HeaderComponent({ rightTitle, hasBlog, noPop, Inbox, Dra
             width: 50
           }}
           >
-            <Icon name="school" onPress={() => Actions.blogRoot()} style={{ color: 'white' }} fontSize={30} />
+            <Icon name="help-circle-outline" onPress={() => Actions.support()} style={{ color: 'white' }} fontSize={30} />
           </View>
         </TouchableOpacity>
       </Left>

@@ -226,7 +226,7 @@ export default class DrawerLayout extends Component {
           </Item>
           <Item style={drawer.item} onPress={() => this.getRequestLogout()}>
             <Text style={drawer.itemTitle}>خروج از حساب</Text>
-            <Icon name="backspace" style={drawer.itemIcon} />
+            <Icon name="exit" style={drawer.itemIcon} />
           </Item>
         </Content>
       </View>
