@@ -114,7 +114,7 @@ export const postMember = async (phone, tokenapi) => {
   }
 };
 
-export const putMember = async (namefamilymember, mailmember, birthdaymember, sexmember, typememberid, phone, token, tokenapi, picmember = 'Default.png') => {
+export const putMember = async (namefamilymember, mailmember, birthdaymember, sexmember, typememberid, phone, token, tokenapi, picmember = 'Default.png', code = null) => {
   try {
     const response = await fetch(`${SAPI}${Member}Put`, {
       method: PUT,
@@ -128,7 +128,8 @@ export const putMember = async (namefamilymember, mailmember, birthdaymember, se
         picmember,
         phone,
         token,
-        tokenapi
+        tokenapi,
+        code
       })
     });
     const json = await response.json();

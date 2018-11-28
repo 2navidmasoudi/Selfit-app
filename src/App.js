@@ -62,7 +62,7 @@ import ListMaterial from './components/root/buffetMenu/listMaterial';
 import Inbox from './components/root/inbox';
 import Wallet from './components/Wallet';
 import CodeOff from './components/CodeOff';
-import BlogChildren from "./components/root/blog/blogChildren";
+import BlogChildren from './components/root/blog/blogChildren';
 
 const RouterWithRedux = connect()(Router);
 const window = Dimensions.get('window');

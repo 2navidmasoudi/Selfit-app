@@ -207,7 +207,7 @@ export default class DrawerLayout extends Component {
               />
             </Left>
             <Text style={drawer.itemTitle}>راهنمای برنامه</Text>
-            <Icon name="call" style={[drawer.itemIcon, { marginHorizontal: 5 }]} />
+            <Icon name="help" style={[drawer.itemIcon, { marginHorizontal: 5 }]} />
           </Item>
           <Item style={drawer.item} onPress={() => Actions.support()}>
             <Text style={drawer.itemTitle}>پشتیبانی</Text>

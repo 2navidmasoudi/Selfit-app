@@ -27,6 +27,7 @@ let birthYear = '1373';
 let birthMonth = '10';
 let birthDay = '08';
 let birth = null;
+let code = null;
 @connect(state => ({ user: state.user }), { setUser })
 export default class Register extends Component {
   static propTypes = {
@@ -65,14 +66,13 @@ export default class Register extends Component {
     if (birthDay.length !== 2 || birthMonth.length !== 2 || birthYear.length !== 4) {
       Alert.alert(
         'خطا',
-        'تاریخ تولد بصورت نادرست وارد شده!',
+        'تاریخ تولد بصورت نادرست وارد شده! (مثلا 1 را بصورت 01 در روز و ماه وارد کنید!)',
         [{ text: 'باشه' }]
       );
       return;
     }
     const m = await moment(`${birthYear}/${birthMonth}/${birthDay}`, 'jYYYY/jMM/jDD');
     birth = await m.format('YYYY-MM-DDTHH:mm:ss');
-    // TODO: BIRTH FORMAT NOT THE RIGHT ONE WE WANT!!!!
     console.log(m);
     console.log(birth);
     if (name && typememberid && birth) {
@@ -85,7 +85,8 @@ export default class Register extends Component {
         typememberid,
         phone,
         tokenmember,
-        tokenapi
+        tokenapi,
+        code
       );
       if (json === 1) {
         const MemberSingleToken = await getSingleToken(tokenmember, tokenapi);
@@ -150,6 +151,12 @@ export default class Register extends Component {
               />
               <Text style={{ color: white, marginHorizontal: 5 }}>تاریخ تولد:{' '}</Text>
             </View>
+            <TextInput
+              placeholder="کد معرف (اختیاری)"
+              placeholderTextColor="#000"
+              iconName="person"
+              onChangeText={(text) => { code = text; }}
+            />
             <Divider style={{ backgroundColor: darkColor }} />
             <Text style={{ color: white, marginTop: 5 }}>نوع حساب کاربری</Text>
             <CheckBox
