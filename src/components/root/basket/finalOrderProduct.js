@@ -50,15 +50,18 @@ export default class finalOrderProduct extends Component {
     address: PropTypes.objectOf(PropTypes.node).isRequired,
     productBasket: PropTypes.arrayOf(PropTypes.node),
     descProduct: PropTypes.string,
-  }
+  };
   static defaultProps = {
     Count: 0,
     totalPrice: 0,
     productBasket: [],
     descProduct: '',
-  }
-  constructor() {
-    super();
+  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      totalPrice: props.totalPrice
+    };
     this.handleFooterPress = this.handleFooterPress.bind(this);
   }
   componentWillMount() {
@@ -100,6 +103,8 @@ export default class finalOrderProduct extends Component {
 
   async handleFooterPress() {
     try {
+      Actions.wallet({ Amount: this.props.totalPrice });
+      return;
       const { tokenmember } = await this.props.user;
       const { tokenapi, idtimefactor, descProduct } = await this.props;
       const idfactor = await postFactorProduct(idtimefactor, descProduct, 1, tokenmember, tokenapi);
@@ -127,7 +132,7 @@ export default class finalOrderProduct extends Component {
   );
 
   render() {
-    const totalPrice = (this.props.totalPrice).toLocaleString();
+    const totalPrice = (this.state.totalPrice).toLocaleString();
     const addressTitle = Base64.decode(this.props.address.titleaddressmember);
     const FooterComponent = (this.props.Count) === 0 ? null : (
       <Footer>

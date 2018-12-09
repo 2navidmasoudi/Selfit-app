@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Alert } from 'react-native';
 import { Button, Container, Content, View } from 'native-base';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import AppHeader from '../header';
 import { setUser } from '../../redux/actions';
 import requestWallet from '../../services/Wallet';
@@ -9,7 +10,6 @@ import { Text, TextInput } from '../Kit';
 import { darkColor, mainColor, white } from '../../assets/variables/colors';
 import { persianNumber } from '../../utils/persian';
 import { getSingleToken } from '../../services';
-import moment from 'moment-jalaali';
 
 @connect(state => ({
   user: state.user,
@@ -17,11 +17,17 @@ import moment from 'moment-jalaali';
   setUser,
 })
 export default class Wallet extends Component {
-  constructor() {
-    super();
+  static propTypes = {
+    Amount: PropTypes.number
+  };
+  static defaultProps = {
+    Amount: null,
+  };
+  constructor(props) {
+    super(props);
     this.state = {
       selected: 0,
-      AddWallet: null,
+      AddWallet: props.Amount,
       Wallet: null
     };
   }
@@ -54,7 +60,8 @@ export default class Wallet extends Component {
         <AppHeader rightTitle="کیف پول" />
         <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-around' }} scrollEnabled={false}>
           <Text type="bold" style={{ textAlign: 'center', fontSize: 22 }}>مبلغ موجودی: {`${persianNumber(this.state.Wallet || '0')}`} ریال</Text>
-          <View style={{
+          <View
+            style={{
             flexDirection: 'row-reverse',
             flexWrap: 'wrap',
             justifyContent: 'space-around',
