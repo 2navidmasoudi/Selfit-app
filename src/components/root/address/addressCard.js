@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { activeAddress } from '../../../services';
 import { Text } from '../../Kit';
+import {persianNumber} from "../../../utils/persian";
 
 @connect(state => ({
   user: state.user,
@@ -41,10 +42,16 @@ export default class AddressCard extends Component {
             <Left style={{ flex: 1 }} >
               <Icon name="pin" />
             </Left>
-            <Body style={{ flex: 1 }} />
-            <Right style={{ flex: 1 }}>
+            <Right style={{ flex: 5 }}>
               <Text style={{ marginRight: 10 }}>
                 {address.titleaddressmember ? Base64.decode(address.titleaddressmember) : 'نام وارد نشده.'}
+                {': '}
+                {address.descaddressmember}
+                {' (طبقه '}
+                {persianNumber(address.plaque)}
+                {' واحد '}
+                {persianNumber(address.floor)}
+                {')'}
               </Text>
             </Right>
           </CardItem>

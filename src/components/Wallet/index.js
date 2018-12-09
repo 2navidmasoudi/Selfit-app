@@ -21,7 +21,7 @@ export default class Wallet extends Component {
     Amount: PropTypes.number
   };
   static defaultProps = {
-    Amount: null,
+    Amount: 0,
   };
   constructor(props) {
     super(props);
@@ -55,6 +55,7 @@ export default class Wallet extends Component {
     }
   }
   render() {
+    const AddWallet = this.state.AddWallet.toLocaleString();
     return (
       <Container>
         <AppHeader rightTitle="کیف پول" />
@@ -91,7 +92,7 @@ export default class Wallet extends Component {
                   color: this.state.selected === 1 ? white : '#000',
                 }}
               >
-                {persianNumber('5000'.toLocaleString())} تومان
+                {persianNumber('5,000')} تومان
               </Text>
             </Button>
             <Button
@@ -116,7 +117,7 @@ export default class Wallet extends Component {
                   color: this.state.selected === 2 ? white : '#000',
                 }}
               >
-                {persianNumber('10000'.toLocaleString())} تومان
+                {persianNumber('10,000')} تومان
               </Text>
             </Button>
             <Button
@@ -138,10 +139,10 @@ export default class Wallet extends Component {
             >
               <Text
                 style={{
-                  color: this.state.selected === 2 ? white : '#000',
+                  color: this.state.selected === 3 ? white : '#000',
                 }}
               >
-                {persianNumber('20000'.toLocaleString())} تومان
+                {persianNumber('20,000')} تومان
               </Text>
             </Button>
             <Button
@@ -166,13 +167,13 @@ export default class Wallet extends Component {
                   color: this.state.selected === 4 ? white : '#000',
                 }}
               >
-                {persianNumber('50000'.toLocaleString())} تومان
+                {persianNumber('50,000')} تومان
               </Text>
             </Button>
           </View>
           <TextInput
-            onChangeText={(AddWallet) => {
-              this.setState({ AddWallet });
+            onChangeText={(c) => {
+              this.setState({ AddWallet: c });
               if (this.state.selected) {
                 this.setState({ selected: 0 });
               }
@@ -191,7 +192,7 @@ export default class Wallet extends Component {
           style={{ backgroundColor: mainColor }}
         >
           <Text style={{ color: white }} type="bold">
-            افزایش اعتبار {this.state.AddWallet ? `${persianNumber(this.state.AddWallet)} ریال` : ''}
+            افزایش اعتبار {this.state.AddWallet ? `${persianNumber(AddWallet)} ریال` : ''}
           </Text>
         </Button>
       </Container>

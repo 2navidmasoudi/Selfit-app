@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import {
   Body,
@@ -25,6 +25,7 @@ import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
 import { mainColor, white } from '../../../assets/variables/colors';
 import { logError } from '../../../services/log';
+import { getSingleToken } from '../../../services';
 
 @connect(state => ({
   user: state.user,
@@ -60,7 +61,8 @@ export default class finalOrderProduct extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      totalPrice: props.totalPrice
+      totalPrice: props.totalPrice,
+      Wallet: 'در حال بررسی...',
     };
     this.handleFooterPress = this.handleFooterPress.bind(this);
   }
@@ -70,11 +72,17 @@ export default class finalOrderProduct extends Component {
   async getInfo() {
     await this.props.tokenStore('selfit.store');
     await this.getPayment();
+    await this.getWallet();
     this.props.setRoad('Store');
   }
   async getPayment() {
     const totalPrice = await getPayment(2, this.props.user.tokenmember, 0, 'selfit.member');
     this.props.setProductPriceAll(totalPrice);
+  }
+  async getWallet() {
+    const { tokenmember, tokenapi } = await this.props.user;
+    const { Wallet } = await getSingleToken(tokenmember, tokenapi, true);
+    this.setState({ Wallet });
   }
   async putTimeFactor(idfactor) {
     try {
@@ -103,8 +111,21 @@ export default class finalOrderProduct extends Component {
 
   async handleFooterPress() {
     try {
-      Actions.wallet({ Amount: this.props.totalPrice });
-      return;
+      const { totalPrice, Wallet } = await this.state;
+      if (totalPrice > Wallet) {
+        const Diff = await totalPrice - Wallet;
+        const DotedDiff = Diff.toLocaleString();
+        const PersianDiff = await persianNumber(DotedDiff);
+        Alert.alert(
+          'درخواست شارژ کیف پول',
+          `برای پرداخت این فاکتور باید کیف پول خود را شارژ کنید! میزان شارژ: ${PersianDiff} تومان`,
+          [
+            { text: 'انصراف' },
+            { text: 'شارژ کیف پول', onPress: () => Actions.wallet({ Amount: Diff }) },
+          ]
+        );
+        return;
+      }
       const { tokenmember } = await this.props.user;
       const { tokenapi, idtimefactor, descProduct } = await this.props;
       const idfactor = await postFactorProduct(idtimefactor, descProduct, 1, tokenmember, tokenapi);
@@ -173,6 +194,11 @@ export default class finalOrderProduct extends Component {
                 </Text>
               </Right>
 
+            </CardItem>
+            <CardItem bordered>
+              <Text style={{ flex: 1 }}>
+                کیف پول:{` ${persianNumber(this.state.Wallet)} تومان`}
+              </Text>
             </CardItem>
             <CardItem bordered>
               <Text style={{ flex: 1 }}>
