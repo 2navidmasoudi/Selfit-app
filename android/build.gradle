@@ -25,6 +25,17 @@ allprojects {
   }
 }
 
+subprojects {
+    if (project.name.contains('react-native-image-picker')) {
+        buildscript {
+            repositories {
+                jcenter()
+                maven { url "https://dl.bintray.com/android/android-tools/"  }
+            }
+        }
+    }
+}
+
 ext {
   compileSdkVersion   = 26
   targetSdkVersion    = 26

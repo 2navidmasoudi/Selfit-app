@@ -179,7 +179,7 @@ export default class Wallet extends Component {
               }
             }}
             label="مبلغ افزایش اعتبار"
-            value={this.state.AddWallet}
+            value={`${this.state.AddWallet}`}
             placeholder="مبلغ افزایش اعتبار (به ریال)"
             keyboardType="numeric"
             placeholderTextColor={darkColor}

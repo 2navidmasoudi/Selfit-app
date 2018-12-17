@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, Alert } from 'react-native';
+import { FlatList, Alert, View } from 'react-native';
 import { connect } from 'react-redux';
 import {
   Body,
@@ -14,23 +14,29 @@ import {
   ListItem,
   Right
 } from 'native-base';
+import { Button as CodeBtn } from 'react-native-elements';
 import { Actions } from 'react-native-router-flux';
 import { Base64 } from 'js-base64';
 import PropTypes from 'prop-types';
 import AppHeader from '../../header';
 import { setProductPriceAll, setRoad, tokenStore } from '../../../redux/actions';
-import { getPayment, getRequestPayment } from '../../../services/payment';
-import { postAddressProduct, postFactorProduct, putTimeFactor } from '../../../services/orderProduct';
-import { Text } from '../../Kit';
+import { getPrice } from '../../../services/payment';
+import {
+  FactorWalletProduct,
+  postFactorProduct,
+  putTimeFactor
+} from '../../../services/orderProduct';
+import { Text, TextInput } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
-import { mainColor, white } from '../../../assets/variables/colors';
+import { darkColor, mainColor, white } from '../../../assets/variables/colors';
 import { logError } from '../../../services/log';
 import { getSingleToken } from '../../../services';
+import Loader from '../../loader';
 
+let codeInput = null;
 @connect(state => ({
   user: state.user,
   tokenapi: state.store.tokenapi,
-  Count: state.basket.productBasketCount,
   totalPrice: state.basket.PriceAllProduct,
   idtimefactor: state.basket.idtimefactor,
   descProduct: state.basket.descProduct,
@@ -43,41 +49,35 @@ import { getSingleToken } from '../../../services';
 export default class finalOrderProduct extends Component {
   static propTypes = {
     user: PropTypes.objectOf(PropTypes.node).isRequired,
-    Count: PropTypes.number,
-    totalPrice: PropTypes.number,
     setRoad: PropTypes.func.isRequired,
-    setProductPriceAll: PropTypes.func.isRequired,
     tokenStore: PropTypes.func.isRequired,
-    address: PropTypes.objectOf(PropTypes.node).isRequired,
-    productBasket: PropTypes.arrayOf(PropTypes.node),
     descProduct: PropTypes.string,
   };
   static defaultProps = {
-    Count: 0,
-    totalPrice: 0,
-    productBasket: [],
     descProduct: '',
   };
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
-      totalPrice: props.totalPrice,
-      Wallet: 'در حال بررسی...',
+      totalPrice: 0,
+      Wallet: 0,
+      Msg: 'لطفا کد تخفیف خود را وارد کنید.'
     };
     this.handleFooterPress = this.handleFooterPress.bind(this);
   }
-  componentWillMount() {
-    this.getInfo();
-  }
-  async getInfo() {
+  async componentWillMount() {
     await this.props.tokenStore('selfit.store');
-    await this.getPayment();
+    await this.getPrice();
     await this.getWallet();
     this.props.setRoad('Store');
   }
-  async getPayment() {
-    const totalPrice = await getPayment(2, this.props.user.tokenmember, 0, 'selfit.member');
-    this.props.setProductPriceAll(totalPrice);
+  async getPrice(code = null) {
+    const { totalPrice, Msg } = await getPrice(2, this.props.user.tokenmember, 0, code);
+    if (!totalPrice) {
+      this.setState({ Msg });
+      return;
+    }
+    this.setState({ totalPrice, Msg });
   }
   async getWallet() {
     const { tokenmember, tokenapi } = await this.props.user;
@@ -88,27 +88,12 @@ export default class finalOrderProduct extends Component {
     try {
       const { tokenmember } = await this.props.user;
       const { tokenapi, idtimefactor } = await this.props;
-      const result = await putTimeFactor(idfactor, idtimefactor, tokenmember, tokenapi);
-      if (result === 1) return result;
+      await putTimeFactor(idfactor, idtimefactor, tokenmember, tokenapi);
     } catch (e) {
-      logError(e, 'postAddressProduct', 'finalOrderProduct', 'Basket');
+      await logError(e, 'postAddressProduct', 'finalOrderProduct', 'Basket');
     }
     return 0;
   }
-
-  async postAddressProduct(idfactor) {
-    try {
-      const { tokenmember } = await this.props.user;
-      const { tokenapi, address } = await this.props;
-      const result =
-        await postAddressProduct(idfactor, address.idaddressmember, tokenmember, tokenapi);
-      if (result === 1) return result;
-    } catch (e) {
-      logError(e, 'postAddressProduct', 'finalOrderProduct', 'Basket');
-    }
-    return 0;
-  }
-
   async handleFooterPress() {
     try {
       const { totalPrice, Wallet } = await this.state;
@@ -128,34 +113,47 @@ export default class finalOrderProduct extends Component {
       }
       const { tokenmember } = await this.props.user;
       const { tokenapi, idtimefactor, descProduct } = await this.props;
-      const idfactor = await postFactorProduct(idtimefactor, descProduct, 1, tokenmember, tokenapi);
+      const idfactor = await postFactorProduct(idtimefactor, descProduct, 3, tokenmember, tokenapi);
       await this.putTimeFactor(idfactor);
-      await this.postAddressProduct(idfactor);
-      getRequestPayment(2, this.props.user.tokenmember);
-      Actions.reset('root');
+      const result = await FactorWalletProduct(tokenmember, 'selfit.member');
+      if (result === 1) {
+        Alert.alert(
+          'موفقیت',
+          'سفارش شما با موفقیت ثبت شد و از کیف پول شما کسر گردید.',
+          [
+            { text: 'باشه' },
+          ]
+        );
+        Actions.reset('root');
+      } else {
+        Alert.alert(
+          'خطا',
+          'خطایی ناخواسته در پرداخت از کیف پول پیش آمده، لطفا با پشتیبانی تماس بگیرید.',
+          [
+            { text: 'باشه' },
+          ]
+        );
+      }
     } catch (e) {
-      logError(e, 'handleFooterPress', 'finalOrderProduct', 'Basket');
+      await logError(e, 'handleFooterPress', 'finalOrderProduct', 'Basket');
     }
   }
-
   renderItem = ({ item }) => (
-    <ListItem style={{ flex: 1 }}>
-      <Left>
+    <ListItem>
+      <Left style={{ flex: 1 }}>
         <Text>{persianNumber((item.priceproduct).toLocaleString())} تومان</Text>
       </Left>
-      <Body>
+      <Body style={{ flex: 2 }}>
         <Text style={{ textAlign: 'center' }}>{persianNumber(item.titleproduct)}</Text>
       </Body>
       <Right>
-        <Text>{persianNumber(item.numberbasket)} عدد</Text>
+        <Text style={{ flex: 1 }}>{persianNumber(item.numberbasket)} عدد</Text>
       </Right>
     </ListItem>
   );
-
   render() {
-    const totalPrice = (this.state.totalPrice).toLocaleString();
     const addressTitle = Base64.decode(this.props.address.titleaddressmember);
-    const FooterComponent = (this.props.Count) === 0 ? null : (
+    const FooterComponent = this.state.totalPrice && this.state.Wallet ? (
       <Footer>
         <FooterTab>
           <Button
@@ -163,11 +161,11 @@ export default class finalOrderProduct extends Component {
             onPress={this.handleFooterPress}
           >
             <Text style={{ color: white }}>
-              پرداخت: {persianNumber(totalPrice)} تومان
+              پرداخت: {persianNumber(this.state.totalPrice.toLocaleString() || '?')} تومان
             </Text>
           </Button>
         </FooterTab>
-      </Footer>);
+      </Footer>) : <Loader loading />;
     return (
       <Container>
         <AppHeader rightTitle="صدور فاکتور فروشگاه" />
@@ -190,21 +188,57 @@ export default class finalOrderProduct extends Component {
                   به آدرس:{` ${addressTitle}`}
                 </Text>
                 <Text style={{ flex: 1 }}>
-                  توضیحات:{` ${this.props.descProduct}`}
+                  توضیحات:{` ${this.props.descProduct || 'ندارد.'}`}
                 </Text>
               </Right>
-
             </CardItem>
+            {this.state.Wallet && this.state.totalPrice
+              ?
+                <View>
+                  <Card style={{ flex: 0 }}>
+                    <CardItem>
+                      <Text style={{ flex: 1, textAlign: 'center' }} type="bold">
+                      کیف پول:{` ${persianNumber(this.state.Wallet.toLocaleString() || '?')} تومان`}
+                      </Text>
+                    </CardItem>
+                  </Card>
+                  <Card style={{ flex: 0 }}>
+                    <CardItem>
+                      <Text style={{ flex: 1, textAlign: 'center' }} type="bold">
+                      قیمت نهایی:{` ${persianNumber(this.state.totalPrice.toLocaleString() || '?')} تومان`}
+                      </Text>
+                    </CardItem>
+                  </Card>
+                </View>
+              :
+                <Loader loading />
+            }
+          </Card>
+          <Card>
+            <Card style={{ flex: 0 }}>
+              <CardItem>
+                <Text style={{ flex: 1, textAlign: 'center' }} type="bold">کد تخفیف</Text>
+              </CardItem>
+            </Card>
+            <TextInput
+              placeholder="کد تخفیف را اینجا وارد کنید."
+              placeholderTextColor={darkColor}
+              onChangeText={(text) => { codeInput = text; }}
+              style={{ backgroundColor: mainColor, marginHorizontal: 10 }}
+            />
             <CardItem bordered>
               <Text style={{ flex: 1 }}>
-                کیف پول:{` ${persianNumber(this.state.Wallet)} تومان`}
+                پیام:{' '}{this.state.Msg}{'.'}
               </Text>
             </CardItem>
-            <CardItem bordered>
-              <Text style={{ flex: 1 }}>
-                قیمت نهایی:{` ${persianNumber(totalPrice)} تومان`}
-              </Text>
-            </CardItem>
+            <View>
+              <CodeBtn
+                title="اعمال کد تخفیف"
+                onPress={() => this.getPrice(codeInput)}
+                containerViewStyle={{ flex: 1 }}
+                buttonStyle={{ backgroundColor: mainColor }}
+              />
+            </View>
           </Card>
         </Content>
         {FooterComponent}

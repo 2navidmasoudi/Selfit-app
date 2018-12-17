@@ -43,20 +43,6 @@ export const getFactorDetailProduct = async (id, token, tokenapi, max, min, sort
     console.log(e);
   }
 };
-// export const getTimeAccessStore = async (token, tokenapi, max, min, sort = null) => {
-//   try {
-//     const response = await fetch(`${SAPI}${OrderProduct}GetTimeAccessStore?t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`, {
-//       method: GET,
-//       headers
-//     });
-//     const json = await response.json();
-//     console.log('OrderProduct/GetTimeAccessStore');
-//     console.log(json);
-//     return json.Data.$values;
-//   } catch (e) {
-//     console.log(e);
-//   }
-// };
 export const getTimeTommorowStore = async (token, tokenapi, max, min, sort = null) => {
   try {
     const response = await fetch(`${SAPI}${OrderProduct}GetTimeAccessTomorrowStore?t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`, {

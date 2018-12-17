@@ -49,7 +49,7 @@ export default class AddAddress extends Component {
         Actions.refresh({ refresh: { refresh: Math.random() } });
         return;
       }
-      Alert.alert('خطا', 'خطا در ثبت آدرس جدید! با پشتیبانی تماس بگیرید.', [{ text: 'باشه' }]);
+      Alert.alert('خطا', 'خطا در ثبت آدرس جدید! لطفا اعداد پلاک و طبقه دار انگلیسی وارد کنید.', [{ text: 'باشه' }]);
     } else {
       Alert.alert('خطا', 'خطا در ثبت آدرس جدید! پر کردن تمام فیلد ها اجباریست.', [{ text: 'باشه' }]);
     }
