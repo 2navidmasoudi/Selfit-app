@@ -55,7 +55,7 @@ export default class List extends Component {
       const { tokenmember, latval, longval } = await this.props.user;
       const { min, tokenapi } = await this.props;
       // const json = await getAllBuffets(tokenmember, tokenapi, 120, min, false, 0);
-      const BuffetList = await getAllBuffet(latval, longval, tokenmember, tokenapi, 120, min, null);
+      const BuffetList = await getAllBuffet(latval, longval, tokenmember, tokenapi, 120, min, 'activebuffet%20desc');
       await this.props.receiveBuffet(BuffetList, min);
       this.setState({ loading: false, refreshing: false });
     } catch (error) {

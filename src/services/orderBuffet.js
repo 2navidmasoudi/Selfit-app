@@ -101,7 +101,7 @@ export const checkOrderBuffet = async (buffetid, token, tokenapi) => {
   }
   return 0;
 };
-export const postFactor = async (buffetid, descfactor, methodpayed, delivery, token, tokenapi) => {
+export const postFactor = async (buffetid, descfactor, methodpayed, delivery, token, tokenapi, code = null) => {
   try {
     const response = await fetch(`${SAPI}${Orders}PostFactor`, {
       method: POST,
@@ -112,7 +112,8 @@ export const postFactor = async (buffetid, descfactor, methodpayed, delivery, to
         methodpayed,
         delivery,
         token,
-        tokenapi
+        tokenapi,
+        code
       })
     });
     const json = await response.json();

@@ -77,7 +77,7 @@ export const postOrderProduct = async (numberproduct, productid, token, tokenapi
     console.log(e);
   }
 };
-export const postFactorProduct = async (timefactor, descfactor, methodpayed, token, tokenapi) => {
+export const postFactorProduct = async (timefactor, descfactor, methodpayed, token, tokenapi, code = null) => {
   try {
     const response = await fetch(`${SAPI}${OrderProduct}PostFactor`, {
       method: POST,
@@ -87,7 +87,8 @@ export const postFactorProduct = async (timefactor, descfactor, methodpayed, tok
         descfactor,
         methodpayed,
         token,
-        tokenapi
+        tokenapi,
+        code
       })
     });
     const json = await response.json();
@@ -138,14 +139,15 @@ export const putTimeFactor = async (factorid, timefactor, token, tokenapi) => {
     console.log(e);
   }
 };
-export const FactorWalletProduct = async (token, tokenapi) => {
+export const FactorWalletProduct = async (token, tokenapi, code = null) => {
   try {
     const response = await fetch(`${SAPI}${OrderProduct}PutFactorWallet`, {
       method: PUT,
       headers,
       body: JSON.stringify({
         token,
-        tokenapi
+        tokenapi,
+        code
       })
     });
     const json = await response.json();

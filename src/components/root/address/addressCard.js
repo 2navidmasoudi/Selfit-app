@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { Base64 } from 'js-base64';
-import { Card, CardItem, Icon, Left, Body, Right } from 'native-base';
+import { Card, CardItem, Icon, Left, Right } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { activeAddress } from '../../../services';
 import { Text } from '../../Kit';
-import {persianNumber} from "../../../utils/persian";
+import { persianNumber } from '../../../utils/persian';
 
 @connect(state => ({
   user: state.user,
@@ -16,12 +16,11 @@ import {persianNumber} from "../../../utils/persian";
 export default class AddressCard extends Component {
   static propTypes = {
     user: PropTypes.objectOf(PropTypes.node).isRequired,
-    address: PropTypes.objectOf(PropTypes.node).isRequired,
     roadTo: PropTypes.string,
-  }
+  };
   static defaultProps = {
     roadTo: 'Store'
-  }
+  };
   async onPressHandle(address) {
     const { tokenmember, tokenapi } = await this.props.user;
     const result = await activeAddress(address.idaddressmember, tokenmember, tokenapi);

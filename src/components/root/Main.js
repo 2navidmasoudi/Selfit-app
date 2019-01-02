@@ -31,7 +31,7 @@ export default class Main extends Component {
   constructor() {
     super();
     this.state = {
-      viewComponent: <MemberGrid />,
+      viewComponent: 1,
     };
   }
   async componentWillMount() {
@@ -52,13 +52,13 @@ export default class Main extends Component {
       case 1: // admin
       case 2: // support
       case 3: // author
-        this.setState({ viewComponent: <MemberGrid /> });
+        this.setState({ viewComponent: 1 });
         break;
       case 5: // buffet
-        this.setState({ viewComponent: <BuffetGrid /> });
+        this.setState({ viewComponent: 2 });
         break;
       case 4: // gym
-        this.setState({ viewComponent: <GymGrid /> });
+        this.setState({ viewComponent: 3 });
         break;
       default:
         break;
@@ -68,25 +68,37 @@ export default class Main extends Component {
   componentWillUnmount() {
     NetInfo.isConnected.removeEventListener('connectionChange', handleRootConnection);
   }
+  renderMain = () => {
+    switch (this.state.viewComponent) {
+      case 1:
+        return <MemberGrid />;
+      case 2:
+        return <BuffetGrid />;
+      case 3:
+        return <GymGrid />;
+      default:
+        return <MemberGrid />;
+    }
+  };
   render() {
     const pannel = (
       <View>
         <View style={main.pannelContainer}>
           <TouchableOpacity
             style={main.pannelBtn}
-            onPress={() => this.setState({ viewComponent: <GymGrid /> })}
+            onPress={() => this.setState({ viewComponent: 3 })}
           >
             <Text style={main.pannelTextBtn}>باشگاه دار</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={main.pannelBtn}
-            onPress={() => this.setState({ viewComponent: <BuffetGrid /> })}
+            onPress={() => this.setState({ viewComponent: 2 })}
           >
             <Text style={main.pannelTextBtn}>بوفه دار</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={main.pannelBtn}
-            onPress={() => this.setState({ viewComponent: <MemberGrid /> })}
+            onPress={() => this.setState({ viewComponent: 1 })}
           >
             <Text style={main.pannelTextBtn}>ورزشکار</Text>
           </TouchableOpacity>
@@ -99,7 +111,7 @@ export default class Main extends Component {
           hasBlog
           Drawer
         />
-        {this.state.viewComponent}
+        {this.renderMain()}
         {this.props.user.typememberid === 1 && pannel}
         <Animatable.View
           ref={(music) => { MusicRef = music; }}

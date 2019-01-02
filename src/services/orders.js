@@ -31,13 +31,14 @@ export const putAcceptBuffet = async (memberid, factorid, active, token, tokenap
   console.log(json);
   return json.ResponseCode;
 };
-export const putFactorWallet = async (token, tokenapi) => {
+export const putFactorWallet = async (token, tokenapi, code = null) => {
   const response = await fetch(`${SAPI}${Orders}PutFactorWallet`, {
     method: PUT,
     headers,
     body: JSON.stringify({
       token,
-      tokenapi
+      tokenapi,
+      code
     })
   });
   const json = await response.json();

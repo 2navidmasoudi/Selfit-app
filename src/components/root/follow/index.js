@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Content, Tab, Tabs } from 'native-base';
+import { Container, Tab, Tabs } from 'native-base';
 import { connect } from 'react-redux';
 import AppHeader from '../../header';
 import { putCheckToken } from '../../../services/index';

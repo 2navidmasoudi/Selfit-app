@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
 import { Text } from '../../Kit';
+import { errorColor, mainColor } from '../../../assets/variables/colors';
 
 export default class BuffetCard extends Component {
   static propTypes = {
@@ -40,6 +41,15 @@ export default class BuffetCard extends Component {
                 note
               >
                 {buffet.addressgym}
+              </Text>
+              <Text style={{
+                fontSize: 12,
+                color: buffet.activebuffet ? mainColor : errorColor,
+                textAlign: 'center',
+                marginRight: 10
+              }}
+              >
+                {buffet.activebuffet ? 'بوفه سفارش می پذیرد.' : 'بوفه تعطیل است.'}
               </Text>
               <Rating
                 readonly

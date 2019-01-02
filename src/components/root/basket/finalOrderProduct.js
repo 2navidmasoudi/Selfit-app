@@ -14,7 +14,6 @@ import {
   ListItem,
   Right
 } from 'native-base';
-import { Button as CodeBtn } from 'react-native-elements';
 import { Actions } from 'react-native-router-flux';
 import { Base64 } from 'js-base64';
 import PropTypes from 'prop-types';
@@ -72,11 +71,8 @@ export default class finalOrderProduct extends Component {
     this.props.setRoad('Store');
   }
   async getPrice(code = null) {
-    const { totalPrice, Msg } = await getPrice(2, this.props.user.tokenmember, 0, code);
-    if (!totalPrice) {
-      this.setState({ Msg });
-      return;
-    }
+    const { totalPrice, Msg } =
+      await getPrice(2, this.props.user.tokenmember, 0, code);
     this.setState({ totalPrice, Msg });
   }
   async getWallet() {
@@ -113,9 +109,10 @@ export default class finalOrderProduct extends Component {
       }
       const { tokenmember } = await this.props.user;
       const { tokenapi, idtimefactor, descProduct } = await this.props;
-      const idfactor = await postFactorProduct(idtimefactor, descProduct, 3, tokenmember, tokenapi);
+      const idfactor =
+        await postFactorProduct(idtimefactor, descProduct, 3, tokenmember, tokenapi, codeInput);
       await this.putTimeFactor(idfactor);
-      const result = await FactorWalletProduct(tokenmember, 'selfit.member');
+      const result = await FactorWalletProduct(tokenmember, 'selfit.store', codeInput);
       if (result === 1) {
         Alert.alert(
           'موفقیت',
@@ -231,14 +228,15 @@ export default class finalOrderProduct extends Component {
                 پیام:{' '}{this.state.Msg}{'.'}
               </Text>
             </CardItem>
-            <View>
-              <CodeBtn
-                title="اعمال کد تخفیف"
+            <CardItem cardBody>
+              <Button
+                full
+                style={{ flex: 1, backgroundColor: mainColor }}
                 onPress={() => this.getPrice(codeInput)}
-                containerViewStyle={{ flex: 1 }}
-                buttonStyle={{ backgroundColor: mainColor }}
-              />
-            </View>
+              >
+                <Text style={{ color: white }}>اعمال کد تخفیف</Text>
+              </Button>
+            </CardItem>
           </Card>
         </Content>
         {FooterComponent}

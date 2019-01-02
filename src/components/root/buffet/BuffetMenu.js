@@ -90,11 +90,8 @@ const iddish = 1;
 export default class BuffetMenu extends Component {
   static propTypes = {
     user: PropTypes.objectOf(PropTypes.node).isRequired,
-    MenuFood: PropTypes.arrayOf(PropTypes.node),
     Count2: PropTypes.number,
     Count1: PropTypes.number,
-    Material: PropTypes.arrayOf(PropTypes.node),
-    idbasket: PropTypes.number.isRequired,
     resetFood: PropTypes.func.isRequired,
     selectBuffet: PropTypes.func.isRequired,
     receiveMenuFood: PropTypes.func.isRequired,
@@ -111,8 +108,6 @@ export default class BuffetMenu extends Component {
     addressgym: PropTypes.string.isRequired,
   };
   static defaultProps = {
-    Material: [],
-    MenuFood: [],
     Count2: PropTypes.number,
     Count1: PropTypes.number,
   };
@@ -120,14 +115,8 @@ export default class BuffetMenu extends Component {
     loadingFood: true,
     loadingMaterial: true,
   };
-  componentWillMount() {
-    this.props.resetFood();
-    this.getInfo();
-  }
-  componentDidMount() {
-    setTimeout(this.tabs.goToPage.bind(this.tabs, 1), 800);
-  }
-  async getInfo() {
+  async componentWillMount() {
+    await this.props.resetFood();
     await this.props.tokenBuffet('selfit.buffet');
     if (this.props.user.typememberid !== 5) {
       await this.props.selectBuffet(this.props.buffetid, this.props.namebuffet);
@@ -136,6 +125,9 @@ export default class BuffetMenu extends Component {
     this.getMaterial();
     this.checkOrderBuffet();
   }
+  componentDidMount() {
+    setTimeout(() => this.tabs.goToPage.bind(this.tabs, 1), 2000);
+}
   async getMaterial() {
     try {
       this.setState({ loadingMaterial: true });

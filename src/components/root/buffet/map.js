@@ -9,7 +9,7 @@ import { mapStyle } from '../../../assets/styles/map';
 import { receiveBuffet, tokenBuffet } from '../../../redux/actions/index';
 import { getAllBuffet } from '../../../services/buffet';
 import { Text } from '../../Kit';
-import { white } from '../../../assets/variables/colors';
+import {darkColor, errorColor, mainColor, white} from '../../../assets/variables/colors';
 import Pin1 from '../../../assets/pinPics/Buffet1.png';
 import Pin2 from '../../../assets/pinPics/Buffet2.png';
 import PinStyle from '../../../assets/styles/PinStyle';
@@ -97,7 +97,7 @@ export default class MapComponent extends Component {
       const { latitude, longitude } = await this.state.region;
       const { tokenapi } = this.props;
       const BuffetList =
-        await getAllBuffet(latitude, longitude, tokenmember, tokenapi, 120, 0, null);
+        await getAllBuffet(latitude, longitude, tokenmember, tokenapi, 120, 0, 'activebuffet%20desc');
       console.log('buffetList:', BuffetList);
       this.props.receiveBuffet(BuffetList, 0);
       this.setState({ MarkerReady: true });
@@ -169,6 +169,7 @@ export default class MapComponent extends Component {
               key={buffet.buffetid}
               coordinate={{ latitude: buffet.latgym, longitude: buffet.longgym }}
               onCalloutPress={() => this.buffetMenu(buffet)}
+              pinColor={buffet.activebuffet ? mainColor : darkColor}
               style={{ zIndex: 5 }}
             >
               {Platform.OS === 'ios' ? this.renderPin(buffet.activebuffet) : null}
@@ -180,6 +181,14 @@ export default class MapComponent extends Component {
               >
                 <Text style={{ textAlign: 'center' }} type="bold">{buffet.namebuffet}</Text>
                 <Text style={{ fontSize: 12 }} ellipsizeMode="tail">{buffet.addressgym}</Text>
+                <Text style={{
+                  fontSize: 12,
+                  color: buffet.activebuffet ? mainColor : errorColor,
+                  textAlign: 'center'
+                }}
+                >
+                  {buffet.activebuffet ? 'بوفه سفارش می پذیرد.' : 'بوفه تعطیل است.'}
+                </Text>
                 <Text style={{ textAlign: 'center', fontSize: 10 }} type="light">
                   برای مشاهده جزئیات کلیک کنید!
                 </Text>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Alert, Image, TouchableWithoutFeedback, View } from 'react-native';
-import { Button, Container, Card, CardItem, Left, Right, Body } from 'native-base';
+import { Image, TouchableWithoutFeedback, View } from 'react-native';
+import { Button, Container, Card } from 'native-base';
 import { connect } from 'react-redux';
 import { Base64 } from 'js-base64';
 import PropTypes from 'prop-types';
@@ -8,7 +8,7 @@ import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
 import { form } from '../../assets/styles/index';
 import AppHeader from '../header';
-import { getSingleToken, putUserLogout } from '../../services';
+import { getSingleToken } from '../../services';
 import { setUser } from '../../redux/actions';
 import { persianNumber } from '../../utils/persian';
 import { Text } from '../Kit';
@@ -34,19 +34,6 @@ export default class Profile extends Component {
     const MemberSingleToken = await getSingleToken(tokenmember, tokenapi);
     await this.props.setUser(MemberSingleToken);
   }
-  // async putUserLogout() {
-  //   const { tokenapi, tokenmember } = await this.props.user;
-  //   const json = await putUserLogout(tokenmember, tokenapi);
-  //   if (json === 1) {
-  //     Actions.reset('sign');
-  //   } else {
-  //     Alert.alert(
-  //       'خطا',
-  //       'خطا در خروج از حساب کاربری!',
-  //       [{ text: 'باشه' }]
-  //     );
-  //   }
-  // }
   render() {
     const {
       namefamilymember, mailmember, birthdaymember, phone,

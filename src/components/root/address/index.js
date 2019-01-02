@@ -18,7 +18,7 @@ import { Text } from '../../Kit';
 export default class Address extends Component {
   static propTypes = {
     user: PropTypes.objectOf(PropTypes.node).isRequired,
-  }
+  };
   state = {
     address: [],
   };
@@ -76,7 +76,6 @@ export default class Address extends Component {
           </Button>
         </View>
       </Container>
-
     );
   }
 }
