@@ -2,19 +2,15 @@ import React, { Component } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import { Card, CardItem, Left, Right, Thumbnail } from 'native-base';
 import { Rating } from 'react-native-elements';
-import PropTypes from 'prop-types';
 import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
 import { Text } from '../../Kit';
 import { errorColor, mainColor } from '../../../assets/variables/colors';
 
 export default class BuffetCard extends Component {
-  static propTypes = {
-    buffet: PropTypes.node.isRequired,
-  }
   onPressHandle = (buffet) => {
     Actions.buffetMenu(buffet);
-  }
+  };
   render() {
     const { buffet } = this.props;
     const m = moment(`${buffet.datesave}`, 'YYYY/MM/DDTHH:mm:ss');

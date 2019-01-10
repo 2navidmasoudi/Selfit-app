@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { FlatList } from 'react-native';
-import { Body, Card, CardItem, Container, Content, Left, ListItem, Right, } from 'native-base';
+import {Body, Button, Card, CardItem, Container, Content, Left, ListItem, Right,} from 'native-base';
 import { connect } from 'react-redux';
 import moment from 'moment-jalaali';
 import AppHeader from '../../header';
 import { Text } from '../../Kit';
-import { mainColor } from '../../../assets/variables/colors';
+import {mainColor, white} from '../../../assets/variables/colors';
 import { persianNumber } from '../../../utils/persian';
 import { getFactorDetailProduct } from '../../../services/orderProduct';
 
@@ -15,9 +15,9 @@ import { getFactorDetailProduct } from '../../../services/orderProduct';
 }))
 export default class FactorProductDetail extends Component {
   state = {
-    orders: [],
+    product: [],
+    time: null,
   };
-
   componentWillMount() {
     this.getFactorDetail();
   }
@@ -26,29 +26,41 @@ export default class FactorProductDetail extends Component {
     try {
       const { tokenmember } = await this.props.user;
       const { tokenapi, factor } = await this.props;
-      const orders = await getFactorDetailProduct(factor.idorder, tokenmember, tokenapi, 50, 0);
-      this.setState({ orders });
+      const { product, time } =
+        await getFactorDetailProduct(factor.idorder, tokenmember, tokenapi, 50, 0);
+      this.setState({ product, time });
       console.log('factorDetailProduct');
-      console.log(orders);
+      console.log(product, time);
     } catch (e) {
       console.log(e);
     }
   }
-
+  renderDay = (day) => {
+    switch (day) {
+      case 1: return 'یک شنبه';
+      case 2: return 'دو شنبه';
+      case 3: return 'سه شنبه';
+      case 4: return 'چهار شنبه';
+      case 5: return 'پنج شنبه';
+      case 6: return 'جمعه';
+      default: return 'شنبه';
+    }
+  };
   renderItem = ({ item }) => (
     <ListItem style={{ flex: 1 }}>
-      <Left>
+      <Left style={{ flex: 2 }}>
         <Text>{persianNumber((item.priceproduct).toLocaleString())} تومان</Text>
       </Left>
-      <Body>
-        <Text style={{ textAlign: 'center' }}>{item.titleproduct}</Text>
+      <Body style={{ flex: 5 }}>
+        <Text>{item.titleproduct}</Text>
       </Body>
-      <Right>
-        <Text>{persianNumber(item.numberbasket)} عدد</Text>
+      <Right style={{ flex: 2 }}>
+        <Text >{persianNumber(item.numberbasket)} عدد</Text>
       </Right>
     </ListItem>
   );
   render() {
+    const { time } = this.state;
     const { factor } = this.props;
     const m = moment(`${factor.datesaveorder}`, 'YYYY/MM/DDTHH:mm:ss').format('jYYYY/jMM/jDD HH:mm:ss');
     return (
@@ -57,16 +69,16 @@ export default class FactorProductDetail extends Component {
         <Content padder>
           <Card>
             <CardItem>
-              <Text style={{ flex: 1 }}>
+              <Text style={{ flex: 2 }}>
                 تاریخ: {persianNumber(m)}
               </Text>
-              <Text style={{ flex: 1 }}>
+              <Text style={{ flex: 3 }}>
                 فاکتور شماره: {persianNumber(factor.factorid)}
               </Text>
             </CardItem>
             <CardItem cardBody>
               <FlatList
-                data={this.state.orders}
+                data={this.state.product}
                 renderItem={this.renderItem}
                 keyExtractor={item => item.idbasket}
               />
@@ -76,6 +88,18 @@ export default class FactorProductDetail extends Component {
                 وضعیت فاکتور:{' '}<Text style={{ color: mainColor }}>پرداخت شده</Text>
               </Text>
             </CardItem>
+            {time &&
+            <CardItem bordered>
+              <Text style={{ flex: 1 }}>
+                {'ساعت ارسال:'}
+                {' '}
+                {persianNumber(time.timefactor)}
+                {' '}
+                {this.renderDay(time.dateday)}
+                {' '}
+                {persianNumber(moment(time.dates).format('jYYYY/jM/jD'))}
+              </Text>
+            </CardItem>}
             <CardItem bordered>
               <Text style={{ flex: 1 }}>
                 مبلغ پرداخت شده:{' '}

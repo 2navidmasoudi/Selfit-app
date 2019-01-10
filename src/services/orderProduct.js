@@ -38,7 +38,7 @@ export const getFactorDetailProduct = async (id, token, tokenapi, max, min, sort
     const json = await response.json();
     console.log('OrderProduct/GetFactorDetail');
     console.log(json);
-    return json.Data.$values;
+    return { product: json.Data.DataFirst.$values, time: json.Data.DataThird };
   } catch (e) {
     console.log(e);
   }

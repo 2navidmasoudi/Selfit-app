@@ -14,20 +14,16 @@ import FactorCard from './FactorCardBuffet';
   tokenBuffet,
 })
 export default class List1 extends Component {
-  state = {
-    max: 50,
-    min: 0,
-    ssort: false,
-    fsort: 0,
-    unpayedFactors: null,
-    refreshing: true,
-  };
-
-  componentWillMount() {
-    this.getInfo();
+  constructor(props) {
+    super(props);
+    this.state = {
+      refreshing: true,
+    };
+    this.getUnpayedFactors = this.getUnpayedFactors.bind(this);
   }
 
-  async getInfo() {
+
+  async componentWillMount() {
     await this.props.tokenBuffet('selfit.buffet');
     await this.getUnpayedFactors();
   }
@@ -37,11 +33,10 @@ export default class List1 extends Component {
       this.setState({ refreshing: true });
       const { tokenmember } = await this.props.user;
       const { tokenapi } = await this.props;
-      const { max, min } = await this.state;
       const unpayedFactors = await getFactorBuffet(
         1, 2,
         tokenmember, tokenapi,
-        max, min, 'idfactorbuffet%20desc'
+        20, 0, 'idfactorbuffet%20desc'
       );
       this.setState({ unpayedFactors });
       this.setState({ refreshing: false });
@@ -64,7 +59,7 @@ export default class List1 extends Component {
           keyExtractor={item => item.idfactorbuffet}
           ListEmptyComponent={<Text style={{ marginRight: 20 }}>هیچ فاکتوری دریافت نشد...</Text>}
           refreshing={this.state.refreshing}
-          onRefresh={this.getUnpayedFactors.bind(this)}
+          onRefresh={this.getUnpayedFactors}
         />
       </Content>
     );

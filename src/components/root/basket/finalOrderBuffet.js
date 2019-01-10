@@ -23,25 +23,28 @@ import { postFactor } from '../../../services/orderBuffet';
 import AppHeader from '../../header';
 import { refreshBuffet, setRoad, tokenBuffet } from '../../../redux/actions';
 import { SignStyle } from '../../../assets/styles/sign';
-import { Text, TextInput } from '../../Kit';
+import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
 import { sendPrice } from '../../../services/Alopeyk';
 import { getSingleBuffet } from '../../../services/buffet';
-import { darkColor, mainColor, white } from '../../../assets/variables/colors';
+import { mainColor } from '../../../assets/variables/colors';
 import { logError } from '../../../services/log';
-import { getPrice } from '../../../services/payment';
 import { getSingleToken } from '../../../services';
 import Loader from '../../loader';
 
 let lat;
 let long;
-let codeInput = null;
+
 @connect(state => ({
   user: state.user,
   tokenapi: state.buffet.tokenapi,
   materialBasket: state.basket.materialBasket,
   buffetBasket: state.basket.buffetBasket,
   buffetid: state.buffet.buffetid,
+  Count1: state.basket.materialBasketCount,
+  Count2: state.basket.buffetBasketCount,
+  PriceAllBuffet: state.basket.PriceAllBuffet,
+  PriceAllMaterial: state.basket.PriceAllMaterial,
 }), {
   tokenBuffet,
   setRoad,
@@ -50,49 +53,40 @@ let codeInput = null;
 export default class finalOrderBuffet extends Component {
   static propTypes = {
     user: PropTypes.objectOf(PropTypes.node).isRequired,
+    Count1: PropTypes.number,
+    Count2: PropTypes.number,
+    PriceAllBuffet: PropTypes.number,
+    PriceAllMaterial: PropTypes.number,
     tokenBuffet: PropTypes.func.isRequired,
     setRoad: PropTypes.func.isRequired,
     refreshBuffet: PropTypes.func.isRequired,
-    buffetBasket: PropTypes.arrayOf(PropTypes.node),
-    materialBasket: PropTypes.arrayOf(PropTypes.node),
+    address: PropTypes.objectOf(PropTypes.node).isRequired,
   };
   static defaultProps = {
-    buffetBasket: [],
-    materialBasket: [],
+    Count1: 0,
+    Count2: 0,
+    PriceAllBuffet: 0,
+    PriceAllMaterial: 0,
   };
   constructor() {
     super();
     this.state = {
       descfactor: '',
       sendServicePrice: 0,
-      disableSendFactor: false,
-      totalPrice: 0,
       Wallet: 0,
-      Msg: 'لطفا کد تخفیف خود را وارد کنید.'
+      disableSendFactor: false,
     };
     this.sendOrderBuffet = this.sendOrderBuffet.bind(this);
   }
   async componentWillMount() {
     await this.props.tokenBuffet('selfit.buffet');
+    await this.props.setRoad('buffet');
     await this.getSingleBuffet();
-    await this.sendPrice();
-    await this.getPrice();
     await this.getWallet();
-    this.props.setRoad('buffet');
+    await this.sendPrice();
   }
   componentWillUnmount() {
     this.props.refreshBuffet();
-  }
-  async getPrice(code = null) {
-    const { sendServicePrice } = await this.state;
-    const { totalPrice, Msg } =
-      await getPrice(1, this.props.user.tokenmember, sendServicePrice, code);
-    this.setState({ totalPrice, Msg });
-  }
-  async getWallet() {
-    const { tokenmember, tokenapi } = await this.props.user;
-    const { Wallet } = await getSingleToken(tokenmember, tokenapi, true);
-    this.setState({ Wallet });
   }
   async getSingleBuffet() {
     try {
@@ -105,9 +99,17 @@ export default class finalOrderBuffet extends Component {
       logError(e, 'getSingleBuffet', 'finalOrderBuffet', 'Basket');
     }
   }
+  async getWallet() {
+    const { tokenmember, tokenapi } = await this.props.user;
+    const { Wallet } = await getSingleToken(tokenmember, tokenapi, true);
+    this.setState({ Wallet });
+  }
   async sendOrderBuffet() {
     try {
-      const { totalPrice, Wallet } = await this.state;
+      const totalPrice = await this.props.PriceAllBuffet +
+        this.props.PriceAllMaterial +
+        (this.state.sendServicePrice * (3 / 5));
+      const { Wallet } = await this.state;
       if (totalPrice > Wallet) {
         const Diff = await totalPrice - Wallet;
         const DotedDiff = Diff.toLocaleString();
@@ -116,8 +118,7 @@ export default class finalOrderBuffet extends Component {
           'درخواست شارژ کیف پول',
           `برای پرداخت این فاکتور باید کیف پول خود را شارژ کنید! میزان شارژ: ${PersianDiff} تومان`,
           [
-            { text: 'بعدا' },
-            { text: 'شارژ کیف پول', onPress: () => Actions.wallet({ Amount: Diff }) },
+            { text: 'ادامه' },
           ]
         );
       }
@@ -125,10 +126,8 @@ export default class finalOrderBuffet extends Component {
       const { tokenmember } = await this.props.user;
       const { tokenapi, buffetid } = await this.props;
       const { descfactor, sendServicePrice } = await this.state;
-      const idfactor = await postFactor(
-        buffetid, descfactor, 3,
-        sendServicePrice, tokenmember, tokenapi, codeInput
-      );
+      const idfactor =
+        await postFactor(buffetid, descfactor, 3, sendServicePrice, tokenmember, tokenapi);
       if (idfactor) {
         Alert.alert(
           'صدور فاکتور',
@@ -193,6 +192,11 @@ export default class finalOrderBuffet extends Component {
     </ListItem>
   );
   render() {
+    const totalPrice =
+      (this.props.PriceAllBuffet +
+        this.props.PriceAllMaterial +
+        (this.state.sendServicePrice * (3 / 5)))
+        .toLocaleString();
     const addressTitle = Base64.decode(this.props.address.titleaddressmember);
     const sendPrices =
       this.state.sendServicePrice ?
@@ -201,26 +205,36 @@ export default class finalOrderBuffet extends Component {
     const {
       item, formInputText
     } = SignStyle;
-    const FooterComponent = this.state.totalPrice && this.state.Wallet ? (
-      <Footer>
-        <FooterTab>
-          <Button
-            style={{ backgroundColor: '#0F9D7A' }}
-            disabled={this.state.disableSendFactor}
-            onPress={this.sendOrderBuffet}
-          >
-            <Text style={{ color: 'white' }}>
-                  صدور فاکتور
+    const FooterComponent =
+      ((this.props.Count1 + this.props.Count2) === 0
+        || this.state.sendServicePrice === 0
+        || this.state.disableSendFactor
+      )
+        ?
+        (
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <Spinner color={mainColor} />
+            <Text>
+              درحال برقراری ارتباط با بوفه دار...
             </Text>
-          </Button>
-        </FooterTab>
-      </Footer>) : (
-        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-          <Spinner color={mainColor} />
-          <Text>
-            درحال برقراری ارتباط با بوفه دار...
-          </Text>
-        </View>);
+          </View>
+        )
+        :
+        (
+          <Footer>
+            <FooterTab>
+              <Button
+                style={{ backgroundColor: '#0F9D7A' }}
+                disabled={this.state.disableSendFactor}
+                onPress={this.sendOrderBuffet}
+              >
+                <Text style={{ color: 'white' }}>
+                  صدور فاکتور
+                </Text>
+              </Button>
+            </FooterTab>
+          </Footer>
+        );
     return (
       <Container>
         <AppHeader rightTitle="صدور فاکتور بوفه" backButton="flex" />
@@ -254,14 +268,18 @@ export default class finalOrderBuffet extends Component {
             <CardItem bordered>
               <Right style={{ flex: 1 }}>
                 <Text style={{ flex: 1 }}>
-                    به آدرس:{` ${addressTitle}`}
+                  به آدرس:{` ${addressTitle}`}
                 </Text>
                 <Text style={{ flex: 1 }}>
-                    هزینه ارسال:{` ${persianNumber(sendPrices)}`}
+                  هزینه ارسال:{` ${persianNumber(sendPrices)}`}
+                </Text>
+                <Text style={{ flex: 1 }}>
+                  توضیحات:{` ${this.state.descfactor}`}
                 </Text>
               </Right>
+
             </CardItem>
-            {this.state.Wallet && this.state.totalPrice
+            {this.state.Wallet && totalPrice
               ?
                 <View>
                   <Card style={{ flex: 0 }}>
@@ -274,7 +292,7 @@ export default class finalOrderBuffet extends Component {
                   <Card style={{ flex: 0 }}>
                     <CardItem>
                       <Text style={{ flex: 1, textAlign: 'center' }} type="bold">
-                      قیمت نهایی:{` ${persianNumber(this.state.totalPrice.toLocaleString() || '?')} تومان`}
+                      قیمت نهایی:{` ${persianNumber(totalPrice.toLocaleString() || '?')} تومان`}
                       </Text>
                     </CardItem>
                   </Card>
@@ -282,33 +300,6 @@ export default class finalOrderBuffet extends Component {
               :
                 <Loader loading />
             }
-          </Card>
-          <Card>
-            <Card style={{ flex: 0 }}>
-              <CardItem>
-                <Text style={{ flex: 1, textAlign: 'center' }} type="bold">کد تخفیف</Text>
-              </CardItem>
-            </Card>
-            <TextInput
-              placeholder="کد تخفیف را اینجا وارد کنید."
-              placeholderTextColor={darkColor}
-              onChangeText={(text) => { codeInput = text; }}
-              style={{ backgroundColor: mainColor, marginHorizontal: 10 }}
-            />
-            <CardItem bordered>
-              <Text style={{ flex: 1 }}>
-                پیام:{' '}{this.state.Msg}{'.'}
-              </Text>
-            </CardItem>
-            <CardItem cardBody>
-              <Button
-                full
-                style={{ flex: 1, backgroundColor: mainColor }}
-                onPress={() => this.getPrice(codeInput)}
-              >
-                <Text style={{ color: white }}>اعمال کد تخفیف</Text>
-              </Button>
-            </CardItem>
           </Card>
           <Item style={[item, { flex: 1 }]}>
             <Icon active name="clipboard" />
@@ -318,7 +309,7 @@ export default class finalOrderBuffet extends Component {
               multiline
               onChangeText={descfactor => this.setState({ descfactor })}
             />
-            <Label>:توضیحات</Label>
+            <Label>توضیحات</Label>
           </Item>
         </Content>
         {FooterComponent}

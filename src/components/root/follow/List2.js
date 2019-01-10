@@ -23,10 +23,6 @@ import { mainColor } from '../../../assets/variables/colors';
 })
 export default class List2 extends Component {
   state = {
-    max: 50,
-    min: 0,
-    ssort: false,
-    fsort: 0,
     payedFactor: null,
     payedFactorProduct: null,
     refreshing: true,
@@ -46,12 +42,10 @@ export default class List2 extends Component {
     try {
       this.setState({ refreshing: true });
       const { tokenmember } = await this.props.user;
-      const { tokenapiBuffet } = await this.props;
-      const { max, min, ssort, fsort } = await this.state;
       const payedFactor = await getFactorBuffet(
         1, 1,
         tokenmember, 'selfit.buffet',
-        max, min, ssort, fsort
+        50, 0, null
       );
       this.setState({ payedFactor });
       this.setState({ refreshing: false });
@@ -63,12 +57,10 @@ export default class List2 extends Component {
   async getPayedFactorsProduct() {
     try {
       const { tokenmember } = await this.props.user;
-      const { tokenapiProduct } = await this.props;
-      const { max, min, ssort, fsort } = await this.state;
       const payedFactorProduct = await getFactorProduct(
         false,
         tokenmember, 'selfit.store',
-        max, min, null
+        50, 0, null
       );
       console.log('payedFactorProduct');
       console.log(payedFactorProduct);
@@ -79,12 +71,7 @@ export default class List2 extends Component {
       this.setState({ refreshingP: false });
     }
   }
-  renderItem = ({ item }) => {
-    const m = moment(`${item.datesavefactorbuffet}`, 'YYYY/MM/DDTHH:mm:ss').format('jYYYY/jMM/jDD HH:mm:ss');
-    return (
-      <FactorCard item={item} />
-    );
-  };
+  renderItem = ({ item }) => <FactorCard item={item} />;
   renderItem2 = ({ item }) => {
     const m = moment(`${item.datesaveorder}`, 'YYYY/MM/DDTHH:mm:ss').format('jYYYY/jMM/jDD HH:mm:ss');
     return (
@@ -127,7 +114,6 @@ export default class List2 extends Component {
           keyExtractor={item => item.idfactorbuffet}
           ListEmptyComponent={<Text style={{ marginRight: 20 }}>هیچ فاکتوری دریافت نشد...</Text>}
           refreshing={this.state.refreshing}
-          // onRefresh={() => <Spinner />}
           scrollEnabled={false}
           onEndReachedThreshold={0.5}
         />
