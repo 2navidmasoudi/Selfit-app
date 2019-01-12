@@ -125,9 +125,6 @@ export default class BuffetMenu extends Component {
     this.getMaterial();
     this.checkOrderBuffet();
   }
-  componentDidMount() {
-    setTimeout(() => this.tabs.goToPage.bind(this.tabs, 1), 2000);
-}
   async getMaterial() {
     try {
       this.setState({ loadingMaterial: true });
@@ -276,11 +273,25 @@ export default class BuffetMenu extends Component {
             </ImageBackground>
           </TouchableWithoutFeedback>
           <Tabs
-            initialPage={1}
             locked
             ref={(c) => { this.tabs = c; }}
             tabBarUnderlineStyle={TabsStyle.underLine}
           >
+            <Tab
+              heading="منو بوفه"
+              activeTextStyle={TabsStyle.activeText}
+              textStyle={TabsStyle.text}
+              activeTabStyle={TabsStyle.activeTab}
+              tabStyle={TabsStyle.notActiveTabs}
+            >
+              <FlatList
+                data={this.props.MenuFood}
+                renderItem={({ item }) => <FoodCard MenuFood={item} active={activebuffet} />}
+                keyExtractor={item => item.idmenufood}
+                ListEmptyComponent={<Loader loading={this.state.loadingFood} />}
+                scrollEnabled={false}
+              />
+            </Tab>
             <Tab
               heading="بشقابت رو بساز"
               activeTextStyle={TabsStyle.activeText}
@@ -296,21 +307,6 @@ export default class BuffetMenu extends Component {
                 ListEmptyComponent={<Loader loading={this.state.loadingMaterial} />}
                 scrollEnabled={false}
               />}
-            </Tab>
-            <Tab
-              heading="منو بوفه"
-              activeTextStyle={TabsStyle.activeText}
-              textStyle={TabsStyle.text}
-              activeTabStyle={TabsStyle.activeTab}
-              tabStyle={TabsStyle.notActiveTabs}
-            >
-              <FlatList
-                data={this.props.MenuFood}
-                renderItem={({ item }) => <FoodCard MenuFood={item} active={activebuffet} />}
-                keyExtractor={item => item.idmenufood}
-                ListEmptyComponent={<Loader loading={this.state.loadingFood} />}
-                scrollEnabled={false}
-              />
             </Tab>
           </Tabs>
         </Content>
