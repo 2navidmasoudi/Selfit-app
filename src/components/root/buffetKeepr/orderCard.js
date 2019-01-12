@@ -21,9 +21,9 @@ export default class OrderCard extends Component {
       // checkout: 0,
     };
   }
-  onPressHandle(order) {
+  onPressHandle = (order) => {
     Actions.orderDetail({ order });
-  }
+  };
   async checkout() {
     const { tokenmember } = await this.props.user;
     const { tokenapi } = await this.props;
@@ -45,7 +45,7 @@ export default class OrderCard extends Component {
       (order.acceptfactor && order.idstatepayed === 1 && this.state.checkout === 0);
     const checkouted =
       (order.acceptfactor && order.idstatepayed === 1 && this.state.checkout === 1);
-    const statePayed = order.idstatepayed === 2 ?
+    const statePayed = order.idstatepayed === 6 ?
       (
         <Text>
           <Text style={{ color: mainColor }}>
@@ -69,9 +69,11 @@ export default class OrderCard extends Component {
         </Text>
       );
     const stateFactor = order.acceptfactor ? statePayed :
-      (<Text style={{ color: errorColor }}>
-        منتظر تایید.
-       </Text>);
+      (
+        <Text style={{ color: errorColor }}>
+          منتظر تایید.
+        </Text>
+      );
     const checkoutBtn = (
       <CardItem cardBody>
         <Button

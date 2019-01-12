@@ -39,3 +39,53 @@ export const sendPrice = async (srcLat, srcLong, destLat, destLong) => {
     return 0;
   }
 };
+
+export const getPeyk = async (data) => {
+  try {
+    const response = await fetch('https://api.alopeyk.com/api/v2/orders', {
+      method: POST,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      body: JSON.stringify({
+        city: 'tehran',
+        transport_type: 'motorbike',
+        addresses: [
+          {
+            city: 'tehran',
+            type: 'origin',
+            lat: data.buffet.lat,
+            lng: data.buffet.long,
+            address: data.buffet.address,
+            description: 'خرید مواد غذایی از بوفه',
+            unit: data.buffet.unit.toString(),
+            number: data.buffet.floor.toString(),
+            person_fullname: data.buffet.name,
+            person_phone: data.buffet.phone
+          },
+          {
+            city: 'tehran',
+            type: 'destination',
+            lat: data.person.lat,
+            lng: data.person.long,
+            address: data.person.address,
+            description: 'خرید مواد غذایی از بوفه',
+            unit: data.person.unit.toString(),
+            number: data.person.floor.toString(),
+            person_fullname: data.person.name,
+            person_phone: data.person.phone
+          },
+        ],
+        has_return: false,
+        cashed: false
+      })
+    });
+    const json = await response.json();
+    return json;
+  } catch (e) {
+    console.log(e);
+    return 0;
+  }
+};

@@ -60,7 +60,7 @@ export default class Wallet extends Component {
       <Container>
         <AppHeader rightTitle="کیف پول" />
         <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-around' }} scrollEnabled={false}>
-          <Text type="bold" style={{ textAlign: 'center', fontSize: 22 }}>مبلغ موجودی: {`${persianNumber(this.state.Wallet || '0')}`} ریال</Text>
+          <Text type="bold" style={{ textAlign: 'center', fontSize: 22 }}>مبلغ موجودی: {`${persianNumber(this.state.Wallet || '0')}`} تومان</Text>
           <View
             style={{
             flexDirection: 'row-reverse',
@@ -180,7 +180,7 @@ export default class Wallet extends Component {
             }}
             label="مبلغ افزایش اعتبار"
             value={`${this.state.AddWallet}`}
-            placeholder="مبلغ افزایش اعتبار (به ریال)"
+            placeholder="مبلغ افزایش اعتبار (به تومان)"
             keyboardType="numeric"
             placeholderTextColor={darkColor}
             blurOnSubmit={false}
@@ -192,7 +192,7 @@ export default class Wallet extends Component {
           style={{ backgroundColor: mainColor }}
         >
           <Text style={{ color: white }} type="bold">
-            افزایش اعتبار {this.state.AddWallet ? `${persianNumber(AddWallet)} ریال` : ''}
+            افزایش اعتبار {this.state.AddWallet ? `${persianNumber(AddWallet)} تومان` : ''}
           </Text>
         </Button>
       </Container>

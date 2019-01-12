@@ -13,6 +13,7 @@ import { getOrderBuffet, putFactorWallet } from '../../../services/orders';
 import { getPrice } from '../../../services/payment';
 import { getSingleToken } from '../../../services';
 import { logError } from '../../../services/log';
+import {getPeyk} from "../../../services/Alopeyk";
 
 let codeInput = null;
 @connect(state => ({
@@ -44,7 +45,7 @@ export default class FactorBuffetDetail extends Component {
     try {
       const { tokenmember } = await this.props.user;
       const { tokenapi, item } = await this.props;
-      const active = true;
+      const active = await item.statepayedid === 6;
       const json =
         await getOrderBuffet(item.idfactorbuffet, active, tokenmember, tokenapi, 50, 0);
       const buffetOrder = await json.DataFirst.$values;
@@ -90,13 +91,49 @@ export default class FactorBuffetDetail extends Component {
       const { tokenmember } = await this.props.user;
       const result = await putFactorWallet(tokenmember, 'selfit.buffet', codeInput);
       if (result === 1) {
-        Alert.alert(
-          'موفقیت',
-          'سفارش شما با موفقیت ثبت شد و از کیف پول شما کسر گردید.',
-          [
-            { text: 'باشه' },
-          ]
-        );
+        const { item, buffetInfo } = await this.props;
+        const data = {
+          person: {
+            lat: item.lataddressmember,
+            long: item.longaddressmember,
+            address: item.descaddressmember,
+            name: item.namefamilymember,
+            unit: item.floor,
+            floor: item.plaque,
+            phone: item.phone,
+          },
+          buffet: {
+            lat: buffetInfo.latgym,
+            long: buffetInfo.longgym,
+            address: buffetInfo.addressgym,
+            name: buffetInfo.namebuffet,
+            unit: '',
+            floor: '',
+            phone: '02188058525',
+          }
+        };
+        console.log('this is data');
+        console.log(data);
+        const PeykResult = await getPeyk(data);
+        console.log('----------------TEST PEYK ---------------');
+        console.log(PeykResult);
+        if (PeykResult.status === 'success') {
+          Alert.alert(
+            'موفقیت',
+            'سفارش شما با موفقیت ثبت شد و از کیف پول شما کسر گردید.',
+            [
+              { text: 'باشه' },
+            ]
+          );
+        } else {
+          Alert.alert(
+            'خطا',
+            'خطایی ناخواسته در گرفتن پیک پیش آمده، لطفا با پشتیبانی تماس بگیرید.',
+            [
+              { text: 'باشه' },
+            ]
+          );
+        }
         Actions.reset('root');
       } else {
         Alert.alert(
@@ -137,7 +174,7 @@ export default class FactorBuffetDetail extends Component {
   render() {
     const { item } = this.props;
     const m = moment(`${item.datesavefactorbuffet}`, 'YYYY/MM/DDTHH:mm:ss').format('jYYYY/jMM/jDD HH:mm');
-    const statePayed = item.idstatepayed === 6 ?
+    const statePayed = item.statepayedid === 6 ?
       (
         <Text>
           <Text style={{ color: mainColor }}>
@@ -169,8 +206,7 @@ export default class FactorBuffetDetail extends Component {
       );
     const totalPrice =
       this.state.totalPrice || item.finalpricefactorbuffet + (this.props.sendPrice * (3 / 5));
-    const FooterComponent = (this.state.totalPrice && this.state.Wallet)
-    && (item.acceptfactor && item.idstatepayed === 6 && this.props.sendPrice)
+    const FooterComponent = (item.acceptfactor && item.idstatepayed === 6 && this.props.sendPrice)
       ? (
         <Footer>
           <FooterTab>
@@ -232,16 +268,17 @@ export default class FactorBuffetDetail extends Component {
                 </Text>
               </Right>
             </CardItem>
-            {this.state.Wallet && this.state.totalPrice && item.statepayedid !== 1
+            {this.state.totalPrice && item.statepayedid !== 1
               ?
                 <View>
-                  <Card style={{ flex: 0 }}>
-                    <CardItem>
-                      <Text style={{ flex: 1, textAlign: 'center' }} type="bold">
-                      کیف پول:{` ${persianNumber(this.state.Wallet.toLocaleString() || '?')} تومان`}
-                      </Text>
-                    </CardItem>
-                  </Card>
+                  {this.state.Wallet ?
+                    <Card style={{ flex: 0 }}>
+                      <CardItem>
+                        <Text style={{ flex: 1, textAlign: 'center' }} type="bold">
+                          کیف پول:{` ${persianNumber(this.state.Wallet.toLocaleString() || '?')} تومان`}
+                        </Text>
+                      </CardItem>
+                    </Card> : null}
                   <Card style={{ flex: 0 }}>
                     <CardItem>
                       <Text style={{ flex: 1, textAlign: 'center' }} type="bold">
@@ -263,34 +300,34 @@ export default class FactorBuffetDetail extends Component {
               </Text>
             </CardItem>
           </Card>
-          {item.statepayedid !== 1 && this.state.totalPrice !== 0 &&
-          <Card>
-            <Card style={{ flex: 0 }}>
-              <CardItem>
-                <Text style={{ flex: 1, textAlign: 'center' }} type="bold">کد تخفیف</Text>
-              </CardItem>
-            </Card>
-            <TextInput
-              placeholder="کد تخفیف را اینجا وارد کنید."
-              placeholderTextColor={darkColor}
-              onChangeText={(text) => { codeInput = text; }}
-              style={{ backgroundColor: mainColor, marginHorizontal: 10 }}
-            />
-            <CardItem bordered>
-              <Text style={{ flex: 1 }}>
+          {item.statepayedid !== 1 && this.state.totalPrice !== 0 ?
+            <Card>
+              <Card style={{ flex: 0 }}>
+                <CardItem>
+                  <Text style={{ flex: 1, textAlign: 'center' }} type="bold">کد تخفیف</Text>
+                </CardItem>
+              </Card>
+              <TextInput
+                placeholder="کد تخفیف را اینجا وارد کنید."
+                placeholderTextColor={darkColor}
+                onChangeText={(text) => { codeInput = text; }}
+                style={{ backgroundColor: mainColor, marginHorizontal: 10 }}
+              />
+              <CardItem bordered>
+                <Text style={{ flex: 1 }}>
                 پیام:{' '}{this.state.Msg}{'.'}
-              </Text>
-            </CardItem>
-            <CardItem cardBody>
-              <Button
-                full
-                style={{ flex: 1, backgroundColor: mainColor }}
-                onPress={() => this.getPrice(codeInput)}
-              >
-                <Text style={{ color: white }}>اعمال کد تخفیف</Text>
-              </Button>
-            </CardItem>
-          </Card>}
+                </Text>
+              </CardItem>
+              <CardItem cardBody>
+                <Button
+                  full
+                  style={{ flex: 1, backgroundColor: mainColor }}
+                  onPress={() => this.getPrice(codeInput)}
+                >
+                  <Text style={{ color: white }}>اعمال کد تخفیف</Text>
+                </Button>
+              </CardItem>
+            </Card> : null}
         </Content>
         {FooterComponent}
       </Container>

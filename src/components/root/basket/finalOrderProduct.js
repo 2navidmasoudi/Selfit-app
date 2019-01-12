@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { FlatList, Alert, View } from 'react-native';
 import { connect } from 'react-redux';
 import {
-  Body,
   Button,
   Card,
   CardItem,
@@ -59,7 +58,7 @@ export default class finalOrderProduct extends Component {
     super();
     this.state = {
       totalPrice: 0,
-      Wallet: 0,
+      Wallet: null,
       Msg: 'لطفا کد تخفیف خود را وارد کنید.'
     };
     this.handleFooterPress = this.handleFooterPress.bind(this);
@@ -93,6 +92,7 @@ export default class finalOrderProduct extends Component {
   async handleFooterPress() {
     try {
       const { totalPrice, Wallet } = await this.state;
+      if (Wallet === null) return;
       if (totalPrice > Wallet) {
         const Diff = await totalPrice - Wallet;
         const DotedDiff = Diff.toLocaleString();
@@ -111,6 +111,16 @@ export default class finalOrderProduct extends Component {
       const { tokenapi, idtimefactor, descProduct } = await this.props;
       const idfactor =
         await postFactorProduct(idtimefactor, descProduct, 3, tokenmember, tokenapi, codeInput);
+      if (!idfactor) {
+        Alert.alert(
+          'خطا',
+          'میزان سفارش شما باید حداقل ده هزار تومان باشد!',
+          [
+            { text: 'باشه' },
+          ]
+        );
+        return;
+      }
       await this.putTimeFactor(idfactor);
       const result = await FactorWalletProduct(tokenmember, 'selfit.store', codeInput);
       if (result === 1) {
@@ -140,7 +150,7 @@ export default class finalOrderProduct extends Component {
       <Left>
         <Text>{persianNumber((item.priceproduct).toLocaleString())} تومان</Text>
       </Left>
-      <Text style={{ textAlign: 'center' }}>{persianNumber(item.titleproduct)}</Text>
+      <Text>{persianNumber(item.titleproduct)}</Text>
       <Right>
         <Text>{persianNumber(item.numberbasket)} عدد</Text>
       </Right>
@@ -148,7 +158,7 @@ export default class finalOrderProduct extends Component {
   );
   render() {
     const addressTitle = Base64.decode(this.props.address.titleaddressmember);
-    const FooterComponent = this.state.totalPrice && this.state.Wallet ? (
+    const FooterComponent = this.state.totalPrice ? (
       <Footer>
         <FooterTab>
           <Button
@@ -187,16 +197,17 @@ export default class finalOrderProduct extends Component {
                 </Text>
               </Right>
             </CardItem>
-            {this.state.Wallet && this.state.totalPrice
+            {this.state.totalPrice
               ?
                 <View>
-                  <Card style={{ flex: 0 }}>
-                    <CardItem>
-                      <Text style={{ flex: 1, textAlign: 'center' }} type="bold">
-                      کیف پول:{` ${persianNumber(this.state.Wallet.toLocaleString() || '?')} تومان`}
-                      </Text>
-                    </CardItem>
-                  </Card>
+                  {this.state.Wallet ?
+                    <Card style={{ flex: 0 }}>
+                      <CardItem>
+                        <Text style={{ flex: 1, textAlign: 'center' }} type="bold">
+                          کیف پول:{` ${persianNumber(this.state.Wallet.toLocaleString() || '?')} تومان`}
+                        </Text>
+                      </CardItem>
+                    </Card> : null}
                   <Card style={{ flex: 0 }}>
                     <CardItem>
                       <Text style={{ flex: 1, textAlign: 'center' }} type="bold">

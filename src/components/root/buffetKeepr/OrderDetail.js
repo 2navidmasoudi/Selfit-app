@@ -35,7 +35,7 @@ export default class OrderDetail extends Component {
     try {
       const { tokenmember } = await this.props.user;
       const { tokenapi, order } = await this.props;
-      const active = true;
+      const active = await order.statepayedid === 6;
       const json =
         await getOrderBuffet(order.idfactorbuffet, active, tokenmember, tokenapi, 50, 0);
       const buffetOrder = await json.DataFirst.$values;
@@ -97,7 +97,7 @@ export default class OrderDetail extends Component {
   );
   render() {
     const { order } = this.props;
-    const acceptedFooter = order.idstatepayed === 2 ?
+    const acceptedFooter = order.idstatepayed === 6 ?
       (
         <Footer>
           <FooterTab>
@@ -154,7 +154,7 @@ export default class OrderDetail extends Component {
       )
       :
       acceptedFooter;
-    const statePayed = order.idstatepayed === 2 ?
+    const statePayed = order.idstatepayed === 6 ?
       (
         <Text>
           <Text style={{ color: mainColor }}>

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-  Body,
   Button,
   Card,
   CardItem,
@@ -106,22 +105,6 @@ export default class finalOrderBuffet extends Component {
   }
   async sendOrderBuffet() {
     try {
-      const totalPrice = await this.props.PriceAllBuffet +
-        this.props.PriceAllMaterial +
-        (this.state.sendServicePrice * (3 / 5));
-      const { Wallet } = await this.state;
-      if (totalPrice > Wallet) {
-        const Diff = await totalPrice - Wallet;
-        const DotedDiff = Diff.toLocaleString();
-        const PersianDiff = await persianNumber(DotedDiff);
-        Alert.alert(
-          'درخواست شارژ کیف پول',
-          `برای پرداخت این فاکتور باید کیف پول خود را شارژ کنید! میزان شارژ: ${PersianDiff} تومان`,
-          [
-            { text: 'ادامه' },
-          ]
-        );
-      }
       this.setState({ disableSendFactor: true });
       const { tokenmember } = await this.props.user;
       const { tokenapi, buffetid } = await this.props;
@@ -129,6 +112,16 @@ export default class finalOrderBuffet extends Component {
       const idfactor =
         await postFactor(buffetid, descfactor, 3, sendServicePrice, tokenmember, tokenapi);
       if (idfactor) {
+        if (idfactor === -15) {
+          Alert.alert(
+            'خطا',
+            'میزان سفارش شما باید حداقل ده هزار تومان باشد!',
+            [
+              { text: 'باشه' },
+            ]
+          );
+          return;
+        }
         Alert.alert(
           'صدور فاکتور',
           'سفارش شما ثبت شد و به بوفه دار ارسال شد. لطفا منتظر تایید توسط بوفه دار باشید.',

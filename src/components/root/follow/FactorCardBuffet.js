@@ -27,6 +27,7 @@ export default class FactorBuffet extends Component {
       lat: null,
       long: null,
       sendServicePrice: 0,
+      buffetInfo: null
     };
     this.followOrder = this.followOrder.bind(this);
   }
@@ -46,6 +47,7 @@ export default class FactorBuffet extends Component {
       await this.setState({
         lat: buffetInfo.latgym,
         long: buffetInfo.longgym,
+        buffetInfo,
       });
     } catch (e) {
       console.log(e);
@@ -66,7 +68,11 @@ export default class FactorBuffet extends Component {
   }
   followOrder() {
     if (this.state.sendServicePrice) {
-      Actions.followBuffet({ item: this.props.item, sendPrice: this.state.sendServicePrice });
+      Actions.followBuffet({
+        item: this.props.item,
+        sendPrice: this.state.sendServicePrice,
+        buffetInfo: this.state.buffetInfo
+      });
     }
   }
   render() {

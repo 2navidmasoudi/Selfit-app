@@ -1,4 +1,4 @@
-import {DELETE, GET, headers, OrderProduct, POST, PUT, SAPI, Selfit} from './type';
+import { DELETE, GET, headers, OrderProduct, POST, PUT, SAPI, Selfit } from './type';
 
 export const getBasketProduct = async (active, token, tokenapi, max, min, sort = null) => {
   try {
@@ -77,28 +77,32 @@ export const postOrderProduct = async (numberproduct, productid, token, tokenapi
     console.log(e);
   }
 };
-export const postFactorProduct = async (timefactor, descfactor, methodpayed, token, tokenapi, code = null) => {
-  try {
-    const response = await fetch(`${SAPI}${OrderProduct}PostFactor`, {
-      method: POST,
-      headers,
-      body: JSON.stringify({
-        timefactor,
-        descfactor,
-        methodpayed,
-        token,
-        tokenapi,
-        code
-      })
-    });
-    const json = await response.json();
-    console.log('OrderProduct/PostFactor');
-    console.log(json);
-    return json.Data;
-  } catch (e) {
-    console.log(e);
-  }
-};
+export const postFactorProduct =
+  async (timefactor, descfactor, methodpayed, token, tokenapi, code = null) => {
+    try {
+      const response = await fetch(`${SAPI}${OrderProduct}PostFactor`, {
+        method: POST,
+        headers,
+        body: JSON.stringify({
+          timefactor,
+          descfactor,
+          methodpayed,
+          token,
+          tokenapi,
+          code
+        })
+      });
+      const json = await response.json();
+      console.log('OrderProduct/PostFactor');
+      console.log(json);
+      if (json.ResponseCode === -15) {
+        return 0;
+      }
+      return json.Data;
+    } catch (e) {
+      console.log(e);
+    }
+  };
 export const postAddressProduct = async (factorid, Addressmemberid, token, tokenapi) => {
   try {
     const response = await fetch(`${SAPI}${OrderProduct}PostAddress`, {

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { FlatList } from 'react-native';
-import {Body, Button, Card, CardItem, Container, Content, Left, ListItem, Right,} from 'native-base';
+import { Card, CardItem, Container, Content, Left, ListItem, Right, } from 'native-base';
 import { connect } from 'react-redux';
 import moment from 'moment-jalaali';
 import AppHeader from '../../header';
 import { Text } from '../../Kit';
-import {mainColor, white} from '../../../assets/variables/colors';
+import { mainColor } from '../../../assets/variables/colors';
 import { persianNumber } from '../../../utils/persian';
 import { getFactorDetailProduct } from '../../../services/orderProduct';
 
@@ -48,13 +48,11 @@ export default class FactorProductDetail extends Component {
   };
   renderItem = ({ item }) => (
     <ListItem style={{ flex: 1 }}>
-      <Left style={{ flex: 2 }}>
+      <Left>
         <Text>{persianNumber((item.priceproduct).toLocaleString())} تومان</Text>
       </Left>
-      <Body style={{ flex: 5 }}>
-        <Text>{item.titleproduct}</Text>
-      </Body>
-      <Right style={{ flex: 2 }}>
+      <Text>{item.titleproduct}</Text>
+      <Right>
         <Text >{persianNumber(item.numberbasket)} عدد</Text>
       </Right>
     </ListItem>
@@ -69,13 +67,23 @@ export default class FactorProductDetail extends Component {
         <Content padder>
           <Card>
             <CardItem>
-              <Text style={{ flex: 2 }}>
+              <Text style={{ flex: 3 }}>
                 تاریخ: {persianNumber(m)}
               </Text>
-              <Text style={{ flex: 3 }}>
+              <Text style={{ flex: 2 }}>
                 فاکتور شماره: {persianNumber(factor.factorid)}
               </Text>
             </CardItem>
+            <Card style={{ flex: 0 }}>
+              <CardItem>
+                <Text
+                  type="bold"
+                  style={{ flex: 1, textAlign: 'center' }}
+                >
+                ریز سفارشات
+                </Text>
+              </CardItem>
+            </Card>
             <CardItem cardBody>
               <FlatList
                 data={this.state.product}

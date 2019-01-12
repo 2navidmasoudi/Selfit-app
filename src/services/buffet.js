@@ -127,7 +127,9 @@ export const deleteMenuFood = async (id, token, tokenapi) => {
   return json.ResponseCode;
 };
 export const getSingleBuffet = async (id, token, tokenapi) => {
-  const response = await fetch(`${SAPI}${Buffet}GetSingle/${id}?t.token=${token}&t.tokenapi=${tokenapi}`, {
+  const url = `${SAPI}${Buffet}GetSingle/${id}?t.token=${token}&t.tokenapi=${tokenapi}`;
+  console.log(url);
+  const response = await fetch(url, {
     method: GET,
     headers
   });

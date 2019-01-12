@@ -60,7 +60,7 @@ export default class List2 extends Component {
       const payedFactorProduct = await getFactorProduct(
         false,
         tokenmember, 'selfit.store',
-        50, 0, null
+        50, 0, 'factorid%20desc'
       );
       console.log('payedFactorProduct');
       console.log(payedFactorProduct);
@@ -78,10 +78,10 @@ export default class List2 extends Component {
       <TouchableOpacity onPress={() => Actions.followProduct({ factor: item })}>
         <Card>
           <CardItem>
-            <Text style={{ flex: 1 }}>
+            <Text style={{ flex: 3 }}>
               تاریخ: {persianNumber(m)}
             </Text>
-            <Text style={{ flex: 1 }}>
+            <Text style={{ flex: 2 }}>
               فاکتور شماره: {persianNumber(item.factorid)}
             </Text>
           </CardItem>
