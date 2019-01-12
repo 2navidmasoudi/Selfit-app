@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { TouchableOpacity } from 'react-native';
-import { Button, Card, CardItem, Left, Right } from 'native-base';
+import { Card, CardItem, Left, Right } from 'native-base';
 import { connect } from 'react-redux';
 import moment from 'moment-jalaali';
 import { Actions } from 'react-native-router-flux';
-import { errorColor, mainColor, white } from '../../../assets/variables/colors';
+import { errorColor, mainColor } from '../../../assets/variables/colors';
 import { persianNumber } from '../../../utils/persian';
 import { Text } from '../../Kit';
 import { tokenBuffet } from '../../../redux/actions';
-import PayButton from './payButton';
 import { getSingleBuffet } from '../../../services/buffet';
 import { sendPrice } from '../../../services/Alopeyk';
 
@@ -19,23 +18,24 @@ import { sendPrice } from '../../../services/Alopeyk';
   tokenBuffet
 })
 export default class FactorBuffet extends Component {
-  state= {
-    buffetOrder: null,
-    materialOrder: null,
-    refreshing: true,
-    lat: null,
-    long: null,
-    sendServicePrice: 0,
-  };
-  componentWillMount() {
-    this.getInfo();
+  constructor(props) {
+    super(props);
+    this.state = {
+      buffetOrder: null,
+      materialOrder: null,
+      refreshing: true,
+      lat: null,
+      long: null,
+      sendServicePrice: 0,
+    };
+    this.followOrder = this.followOrder.bind(this);
   }
-  async getInfo() {
+  async componentWillMount() {
     await this.props.tokenBuffet('selfit.buffet');
-    await this._getSingleBuffet();
-    await this._sendPrice();
+    await this.getSingleBuffet();
+    await this.sendPrice();
   }
-  async _getSingleBuffet() {
+  async getSingleBuffet() {
     try {
       const { tokenmember } = await this.props.user;
       const { tokenapi } = await this.props;
@@ -51,7 +51,7 @@ export default class FactorBuffet extends Component {
       console.log(e);
     }
   }
-  async _sendPrice() {
+  async sendPrice() {
     try {
       const { lataddressmember, longaddressmember } = await this.props.item;
       const { lat, long } = await this.state;
@@ -74,36 +74,48 @@ export default class FactorBuffet extends Component {
     const m = moment(`${item.datesavefactorbuffet}`, 'YYYY/MM/DDTHH:mm:ss').format('jYYYY/jMM/jDD HH:mm');
     const sendPrices = this.state.sendServicePrice * (3 / 5);
     const totalPrice = item.finalpricefactorbuffet + sendPrices;
-    const statePayed = item.idstatepayed === 2 ?
-      (<Text>
-        <Text style={{ color: mainColor }}>
+    const statePayed = item.idstatepayed === 6 ?
+      (
+        <Text>
+          <Text style={{ color: mainColor }}>
           تایید شده
-        </Text>
-        {' '}و{' '}
-        <Text style={{ color: errorColor }}>
+          </Text>
+          {' '}و{' '}
+          <Text style={{ color: errorColor }}>
           منتظر پرداخت
+          </Text>
         </Text>
-      </Text>)
+      )
       :
-      (<Text>
-        <Text style={{ color: mainColor }}>
+      (
+        <Text>
+          <Text style={{ color: mainColor }}>
           پرداخت شده
-        </Text>
-        {' '}و{' '}
-        <Text style={{ color: mainColor }}>
+          </Text>
+          {' '}و{' '}
+          <Text style={{ color: mainColor }}>
           درحال آماده سازی غذا!
+          </Text>
         </Text>
-      </Text>);
+      );
     const stateFactor = item.acceptfactor ? statePayed :
-      (<Text style={{ color: errorColor }}>
+      (
+        <Text style={{ color: errorColor }}>
         منتظر تایید توسط بوفه دار.
-      </Text>);
-    const payBtn = (item.acceptfactor && item.idstatepayed === 2 && sendPrices) ?
-      <PayButton sendPrice={this.state.sendServicePrice} />
+        </Text>
+      );
+    const payBtn = (item.acceptfactor && item.idstatepayed === 6 && sendPrices) ?
+      (
+        <CardItem>
+          <Text style={{ textAlign: 'center' }}>
+            برای پرداخت و وارد کردن کد تخفیف بر روی فاکتور کلیک کنید.
+          </Text>
+        </CardItem>
+      )
       : null;
     return (
       <TouchableOpacity
-        onPress={this.followOrder.bind(this)}
+        onPress={this.followOrder}
       >
         <Card>
           <CardItem>

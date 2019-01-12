@@ -3,7 +3,6 @@ import { FlatList } from 'react-native';
 import { Button, Card, CardItem, Container, Content, Footer, FooterTab, Left, ListItem, Right } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import moment from 'moment-jalaali';
 import AppHeader from '../../header';
 import { Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
@@ -24,20 +23,19 @@ export default class OrderDetail extends Component {
     disableAddButton: false,
     buffetOrder: null,
     materialOrder: null,
-    Accepted: false,
   };
   componentWillMount() {
     this.getInfo();
   }
   async getInfo() {
     await this.props.tokenBuffet('selfit.buffet');
-    await this._getOrderBuffet();
+    await this.getOrderBuffet();
   }
-  async _getOrderBuffet() {
+  async getOrderBuffet() {
     try {
       const { tokenmember } = await this.props.user;
       const { tokenapi, order } = await this.props;
-      const active = await order.statepayedid === 2;
+      const active = true;
       const json =
         await getOrderBuffet(order.idfactorbuffet, active, tokenmember, tokenapi, 50, 0);
       const buffetOrder = await json.DataFirst.$values;
@@ -100,81 +98,92 @@ export default class OrderDetail extends Component {
   render() {
     const { order } = this.props;
     const acceptedFooter = order.idstatepayed === 2 ?
-      (<Footer>
-        <FooterTab>
-          <Button
-            success
-          >
-            <Text style={{ color: 'white' }}>
+      (
+        <Footer>
+          <FooterTab>
+            <Button
+              success
+            >
+              <Text style={{ color: 'white' }}>
               فاکتور قبول شده و منتظر پرداخت است.
-            </Text>
-          </Button>
-        </FooterTab>
-      </Footer>)
+              </Text>
+            </Button>
+          </FooterTab>
+        </Footer>
+      )
       :
-      (<Footer>
-        <FooterTab>
-          <Button
-            style={{ backgroundColor: mainColor }}
-          >
-            <Text style={{ color: 'white' }}>
+      (
+        <Footer>
+          <FooterTab>
+            <Button
+              style={{ backgroundColor: mainColor }}
+            >
+              <Text style={{ color: 'white' }}>
               درحال آماده سازی غذا
-            </Text>
-          </Button>
-        </FooterTab>
-      </Footer>);
+              </Text>
+            </Button>
+          </FooterTab>
+        </Footer>
+      );
     const FooterComponent = (!order.acceptfactor) ?
-      (<Footer>
-        <FooterTab>
-          <Button
-            full
-            danger={!this.state.disableAddButton}
-            disabled={this.state.disableAddButton}
-            onPress={() => this.sendAccept(false)}
-          >
-            <Text style={{ color: 'white' }}>
+      (
+        <Footer>
+          <FooterTab>
+            <Button
+              full
+              danger={!this.state.disableAddButton}
+              disabled={this.state.disableAddButton}
+              onPress={() => this.sendAccept(false)}
+            >
+              <Text style={{ color: 'white' }}>
               رد فاکتور
-            </Text>
-          </Button>
-          <Button
-            full
-            success={!this.state.disableAddButton}
-            disabled={this.state.disableAddButton}
-            onPress={() => this.sendAccept(true)}
-          >
-            <Text style={{ color: 'white' }}>
+              </Text>
+            </Button>
+            <Button
+              full
+              success={!this.state.disableAddButton}
+              disabled={this.state.disableAddButton}
+              onPress={() => this.sendAccept(true)}
+            >
+              <Text style={{ color: 'white' }}>
               قبول فاکتور
-            </Text>
-          </Button>
-        </FooterTab>
-       </Footer>)
+              </Text>
+            </Button>
+          </FooterTab>
+        </Footer>
+      )
       :
       acceptedFooter;
-    const m = moment(`${order.datesavefactorbuffet}`, 'YYYY/MM/DDTHH:mm:ss').format('jYYYY/jMM/jDD HH:mm');
     const statePayed = order.idstatepayed === 2 ?
-      (<Text>
-        <Text style={{ color: mainColor }}>
+      (
+        <Text>
+          <Text style={{ color: mainColor }}>
           تایید شده
-        </Text>
-        {' '}و{' '}
-        <Text style={{ color: errorColor }}>
+          </Text>
+          {' '}و{' '}
+          <Text style={{ color: errorColor }}>
           منتظر پرداخت
+          </Text>
         </Text>
-      </Text>)
+      )
       :
-      (<Text>
-        <Text style={{ color: mainColor }}>
+      (
+        <Text>
+          <Text style={{ color: mainColor }}>
           تایید شده
-        </Text>
-        {' '}و{' '}
-        <Text style={{ color: mainColor }}>
+          </Text>
+          {' '}و{' '}
+          <Text style={{ color: mainColor }}>
           پرداخت شده، سفارش را آماده کنید!
+          </Text>
         </Text>
-      </Text>);
+      );
     const stateFactor = order.acceptfactor ? statePayed :
-      (<Text style={{ color: errorColor }}>
+      (
+        <Text style={{ color: errorColor }}>
         منتظر تایید.
-      </Text>);
+        </Text>
+      );
     return (
       <Container>
         <AppHeader rightTitle="مشخصات سفارش" backButton="flex" />

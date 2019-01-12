@@ -43,7 +43,7 @@ export default class List2 extends Component {
       this.setState({ refreshing: true });
       const { tokenmember } = await this.props.user;
       const payedFactor = await getFactorBuffet(
-        1, 1,
+        3, 1,
         tokenmember, 'selfit.buffet',
         50, 0, null
       );

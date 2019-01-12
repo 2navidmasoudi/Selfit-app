@@ -34,9 +34,9 @@ export default class List1 extends Component {
       const { tokenmember } = await this.props.user;
       const { tokenapi } = await this.props;
       const unpayedFactors = await getFactorBuffet(
-        1, 2,
+        3, 6,
         tokenmember, tokenapi,
-        20, 0, 'idfactorbuffet%20desc'
+        20, 0, null
       );
       this.setState({ unpayedFactors });
       this.setState({ refreshing: false });

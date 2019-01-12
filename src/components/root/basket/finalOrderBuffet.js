@@ -170,9 +170,7 @@ export default class finalOrderBuffet extends Component {
       <Left>
         <Text>{persianNumber((item.pricemenufood).toLocaleString())} تومان</Text>
       </Left>
-      <Body>
-        <Text style={{ textAlign: 'center' }}>{persianNumber(item.namemenufood)}</Text>
-      </Body>
+      <Text style={{ textAlign: 'center' }}>{persianNumber(item.namemenufood)}</Text>
       <Right>
         <Text>{persianNumber(item.numbermenufood)} عدد</Text>
       </Right>
@@ -183,9 +181,7 @@ export default class finalOrderBuffet extends Component {
       <Left>
         <Text>{persianNumber((item.pricematerial).toLocaleString())} تومان</Text>
       </Left>
-      <Body>
-        <Text style={{ textAlign: 'center' }}>{persianNumber(item.namematerial)}</Text>
-      </Body>
+      <Text style={{ textAlign: 'center' }}>{persianNumber(item.namematerial)}</Text>
       <Right>
         <Text>{persianNumber(item.numbermaterial)} عدد</Text>
       </Right>

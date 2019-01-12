@@ -2,7 +2,10 @@ import { GET, headers, Orders, PUT, SAPI } from './type';
 
 export const getOrderBuffet = async (id, active, token, tokenapi, max, min, sort = null) => {
   try {
-    const response = await fetch(`${SAPI}${Orders}GetOrderBuffet/${id}?active=${active}&t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`, {
+    const url = `${SAPI}${Orders}GetOrderBuffet/${id}?active=${active}&t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`;
+    console.log('Orders/GetOrderBuffet');
+    console.log(url);
+    const response = await fetch(url, {
       method: GET,
       headers
     });

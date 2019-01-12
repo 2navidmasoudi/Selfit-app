@@ -137,14 +137,12 @@ export default class finalOrderProduct extends Component {
   }
   renderItem = ({ item }) => (
     <ListItem>
-      <Left style={{ flex: 1 }}>
+      <Left>
         <Text>{persianNumber((item.priceproduct).toLocaleString())} تومان</Text>
       </Left>
-      <Body style={{ flex: 2 }}>
-        <Text style={{ textAlign: 'center' }}>{persianNumber(item.titleproduct)}</Text>
-      </Body>
+      <Text style={{ textAlign: 'center' }}>{persianNumber(item.titleproduct)}</Text>
       <Right>
-        <Text style={{ flex: 1 }}>{persianNumber(item.numberbasket)} عدد</Text>
+        <Text>{persianNumber(item.numberbasket)} عدد</Text>
       </Right>
     </ListItem>
   );

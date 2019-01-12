@@ -20,8 +20,8 @@ android {
     applicationId "com.selfit.universal"
     minSdkVersion 16
     targetSdkVersion 28
-    versionCode 8
-    versionName "1.5.2"
+    versionCode 10
+    versionName "2.0.0"
     ndk {
       abiFilters "armeabi-v7a", "x86"
     }
