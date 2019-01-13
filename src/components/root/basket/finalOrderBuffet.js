@@ -72,7 +72,7 @@ export default class finalOrderBuffet extends Component {
     this.state = {
       descfactor: '',
       sendServicePrice: 0,
-      Wallet: 0,
+      Wallet: null,
       disableSendFactor: false,
     };
     this.sendOrderBuffet = this.sendOrderBuffet.bind(this);
@@ -268,16 +268,17 @@ export default class finalOrderBuffet extends Component {
               </Right>
 
             </CardItem>
-            {this.state.Wallet && totalPrice
+            {totalPrice
               ?
                 <View>
-                  <Card style={{ flex: 0 }}>
-                    <CardItem>
-                      <Text style={{ flex: 1, textAlign: 'center' }} type="bold">
-                      کیف پول:{` ${persianNumber(this.state.Wallet.toLocaleString() || '?')} تومان`}
-                      </Text>
-                    </CardItem>
-                  </Card>
+                  {this.state.Wallet ?
+                    <Card style={{ flex: 0 }}>
+                      <CardItem>
+                        <Text style={{ flex: 1, textAlign: 'center' }} type="bold">
+                          کیف پول:{` ${persianNumber(this.state.Wallet.toLocaleString() || '?')} تومان`}
+                        </Text>
+                      </CardItem>
+                    </Card> : null}
                   <Card style={{ flex: 0 }}>
                     <CardItem>
                       <Text style={{ flex: 1, textAlign: 'center' }} type="bold">

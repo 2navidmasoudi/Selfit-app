@@ -37,15 +37,15 @@ export default class EditGym extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      namegym: props.gym.namegym,
-      addressgym: props.gym.addressgym,
-      picgym: props.gym.picgym,
-      tuitiongym: props.gym.tuitiongym.toString(),
-      numbertuitiongym: props.gym.numbertuitiongym.toString(),
-      latgym: props.gym.latgym.toString(),
-      longgym: props.gym.longgym.toString(),
-      activegym: props.gym.activegym,
-      telgym: props.gym.telgym,
+      namegym: props.gym.namegym || '',
+      addressgym: props.gym.addressgym || '',
+      picgym: props.gym.picgym || '',
+      tuitiongym: props.gym.tuitiongym.toString() || '',
+      numbertuitiongym: props.gym.numbertuitiongym.toString() || '',
+      latgym: props.gym.latgym.toString() || '',
+      longgym: props.gym.longgym.toString() || '',
+      activegym: props.gym.activegym || '',
+      telgym: props.gym.telgym || '',
       loading: false,
       Pic: null,
       PicJson: null,
@@ -53,6 +53,8 @@ export default class EditGym extends Component {
       type: null,
       ModalNumber: 0,
     };
+    this.UploadSelected = this.UploadSelected.bind(this);
+    this.onPressHandler = this.onPressHandler.bind(this);
   }
   componentWillMount() {
     if (!this.props.help) {
@@ -88,7 +90,7 @@ export default class EditGym extends Component {
       );
       console.log('result: ', json);
       if (json) {
-        await this._getSingLeGym();
+        await this.getSingLeGym();
         Actions.pop({ refresh: { refresh: Math.random() } });
       }
     } catch (e) {
@@ -99,6 +101,17 @@ export default class EditGym extends Component {
   async getInfo() {
     await this.props.tokenGym('selfit.gym');
     // await this._getSingLeGym();
+  }
+  async getSingLeGym() {
+    try {
+      const { tokenapi, gymid } = await this.props;
+      const { tokenmember } = await this.props.user;
+      const gymInfo = await getSingleGym(gymid, tokenmember, tokenapi);
+      console.log(gymInfo, 'gymInfo');
+      this.props.receiveGym(gymInfo, 0);
+    } catch (e) {
+      console.log(e);
+    }
   }
   async UploadSelected() {
     await picker(async (source, data, type) => {
@@ -128,17 +141,6 @@ export default class EditGym extends Component {
         this.setState({ loading: false });
       }
     });
-  }
-  async _getSingLeGym() {
-    try {
-      const { tokenapi, gymid } = await this.props;
-      const { tokenmember } = await this.props.user;
-      const gymInfo = await getSingleGym(gymid, tokenmember, tokenapi);
-      console.log(gymInfo, 'gymInfo');
-      this.props.receiveGym(gymInfo, 0);
-    } catch (e) {
-      console.log(e);
-    }
   }
   helpDone = () => this.props.helpDoneEditGym();
   render() {
@@ -193,7 +195,7 @@ export default class EditGym extends Component {
           <Text style={{ textAlign: 'center', fontSize: 20, margin: 10 }}>ویرایش باشگاه</Text>
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
             <TouchableWithoutFeedback
-              onPress={this.UploadSelected.bind(this)}
+              onPress={this.UploadSelected}
             >
               {this.state.Pic ? <Image
                 style={{
@@ -231,7 +233,7 @@ export default class EditGym extends Component {
                 borderBottomRightRadius: 5
               }}
               containerStyle={{ marginTop: 100 }}
-              onPress={this.UploadSelected.bind(this)}
+              onPress={this.UploadSelected}
             />
           </View>
           <InputText
@@ -253,7 +255,9 @@ export default class EditGym extends Component {
           <FullButton
             block
             style={{ backgroundColor: mainColor }}
-            onPress={() => Actions.htmlEditor({ gym: { ...this.state, descgym: gym.descgym, idgym: gym.idgym } })}
+            onPress={() => Actions.htmlEditor({
+              gym: { ...this.state, descgym: gym.descgym, idgym: gym.idgym }
+            })}
           >
             <Text style={{ color: white }}>
               ویرایش توضیحات
@@ -261,16 +265,19 @@ export default class EditGym extends Component {
           </FullButton>
           <InputText
             label="تلفن"
+            keyboardType="numeric"
             value={persianNumber(this.state.telgym)}
             onChangeText={telgym => this.setState({ telgym: latinNumber(telgym) })}
           />
           <InputText
             label="شهریه (تومان)"
+            keyboardType="numeric"
             value={persianNumber(this.state.tuitiongym.toLocaleString())}
             onChangeText={tuitiongym => this.setState({ tuitiongym: latinNumber(tuitiongym) })}
           />
           <InputText
             label="ظرفیت (نفر)"
+            keyboardType="numeric"
             value={persianNumber(this.state.numbertuitiongym.toLocaleString())}
             onChangeText={
               numbertuitiongym => this.setState({ numbertuitiongym: latinNumber(numbertuitiongym) })
@@ -280,7 +287,7 @@ export default class EditGym extends Component {
         <FullButton
           full
           style={{ backgroundColor: mainColor }}
-          onPress={this.onPressHandler.bind(this)}
+          onPress={this.onPressHandler}
         >
           <Text style={{ color: white }}>ثبت و تائید</Text>
         </FullButton>
