@@ -8,8 +8,7 @@
 #import "AppDelegate.h"
 #import <Firebase.h>
 #import "RNFirebaseNotifications.h"
-#import "RNFirebaseMessaging.h"
-#import <CodePush/CodePush.h>
+#import "RNFirebaseMessaging.h
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
@@ -25,11 +24,8 @@
   NSURL *jsCodeLocation;
 
   
-    #ifdef DEBUG
         jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
-    #else
-        jsCodeLocation = [CodePush bundleURL];
-    #endif
+
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"Selfit"
