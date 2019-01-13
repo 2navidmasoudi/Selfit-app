@@ -1,5 +1,4 @@
 PODS:
-  - Base64 (1.1.2)
   - boost (1.59.0):
     - boost/graph-includes (= 1.59.0)
     - boost/math-includes (= 1.59.0)
@@ -17,11 +16,6 @@ PODS:
   - boost/string_algorithms-includes (1.59.0)
   - BVLinearGradient (2.4.0):
     - React
-  - CodePush (5.3.3):
-    - Base64 (~> 1.1)
-    - JWT (~> 3.0.0-beta.7)
-    - React
-    - SSZipArchive (~> 2.1)
   - Crashlytics (3.10.9):
     - Fabric (~> 1.7.13)
   - DoubleConversion (1.1.5)
@@ -119,8 +113,6 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (5.3.3):
     - GoogleUtilities/Logger
-  - JWT (3.0.0-beta.11):
-    - Base64 (~> 1.1.2)
   - nanopb (0.3.8):
     - nanopb/decode (= 0.3.8)
     - nanopb/encode (= 0.3.8)
@@ -190,12 +182,10 @@ PODS:
     - React
   - RNSVG (6.4.1):
     - React
-  - SSZipArchive (2.1.4)
   - yoga (0.52.2.React)
 
 DEPENDENCIES:
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
-  - CodePush (from `../node_modules/react-native-code-push`)
   - Crashlytics (~> 3.10.1)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - Fabric (~> 1.7.5)
@@ -230,7 +220,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
-    - Base64
     - boost
     - Crashlytics
     - Fabric
@@ -245,16 +234,12 @@ SPEC REPOS:
     - GoogleMaps
     - GoogleToolboxForMac
     - GoogleUtilities
-    - JWT
     - nanopb
     - Protobuf
-    - SSZipArchive
 
 EXTERNAL SOURCES:
   BVLinearGradient:
     :path: "../node_modules/react-native-linear-gradient"
-  CodePush:
-    :path: "../node_modules/react-native-code-push"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   Folly:
@@ -281,17 +266,15 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga/yoga.podspec"
 
 SPEC CHECKSUMS:
-  Base64: cecfb41a004124895a7bcee567a89bae5a89d49b
   boost: 30a15ffb6d9aa4646dd3caffc960753f4cb4ca4e
   BVLinearGradient: 4b3f3bdf1ac1a52a5ef5e65c9585d793a7c3f825
-  CodePush: f6b348759cdc42c734d9c3a46ceb2997c270b12e
   Crashlytics: 55e24fc23989680285a21cb1146578d9d18e432c
   DoubleConversion: ebb6747c5b66026ad4f97b789c3ceac6f18e57a6
   Fabric: 25d0963b691fc97be566392243ff0ecef5a68338
   Firebase: 6691d47562a780c26281ce8464518faafc90c610
   FirebaseAnalytics: 831f1f127f4a75698e9875a87bf7e2668730d953
   FirebaseCore: c6079de64c1a87000e52e9b408dddcadc901177f
-  FirebaseCrash: fd373fbf5f9d1e235a984f2c7e446a5f26b968e8
+  FirebaseCrash: 011365f2c0dfac64315109103ed350bacfcdc03f
   FirebaseInstanceID: 78ba376fcd5b94c001f9999b2cbd3d1f1e56e78d
   FirebaseMessaging: 000b32447b461b34b6b912b23ec11be20b503b5b
   Folly: b7255b29f1d693c375d642d0f04f0592181156d9
@@ -301,7 +284,6 @@ SPEC CHECKSUMS:
   GoogleMaps: c087b8e5dfe87ca6ebf59adb9b4894a4146bec4f
   GoogleToolboxForMac: 91c824d21e85b31c2aae9bb011c5027c9b4e738f
   GoogleUtilities: 8208aee3e97a1ae93d44c57e96c476a5a3b03f0a
-  JWT: 05028b9624591bba9681bb57df2c5f95fa258bad
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
   React: 43e97926f429d846050880666de1809e22dd5cc5
@@ -312,9 +294,8 @@ SPEC CHECKSUMS:
   RNDeviceInfo: 568c5641057313b4912d08a7742ff0b2f753ed5c
   RNFS: bbb1a64eb245763daf34aea86f97c97c4e85f74c
   RNSVG: 6252323c0312735f0af5f58b5adf2965b6a9ffbf
-  SSZipArchive: 41455d4b8d2b6ab93990820b50dc697c2554a322
   yoga: 55da126afc384965b96bff46652464373b330add
 
-PODFILE CHECKSUM: d852b213449c9ba53fd9451e8e8a8f2b93b37e4c
+PODFILE CHECKSUM: 675e07a5a9db5a8c9180eadf66c9a4d3fa5f44aa
 
 COCOAPODS: 1.5.3
