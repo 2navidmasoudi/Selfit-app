@@ -87,28 +87,15 @@ export default class GymDetail extends Component {
     this.getInfo();
   }
   async getInfo() {
-    await this._getAllPicGym();
-    await this._putVisit();
+    await this.getAllPicGym();
+    await this.putVisit();
   }
-  async _putVisit() {
-    try {
-      const { gymid, tokenapi, user } = await this.props;
-      const { tokenmember } = await this.props.user;
-      if (user.typememberid !== 4) {
-        this.props.selectGym(gymid);
-      }
-      const json = await putVisit(gymid, tokenmember, tokenapi);
-      console.log('put visit? ', json);
-    } catch (e) {
-      console.log(e);
-    }
-  }
-  async _getAllPicGym() {
+  async getAllPicGym() {
     try {
       await this.setState({ dataSource: [] });
-      const { gymid, tokenapi } = await this.props;
+      const { idgym, tokenapi } = await this.props;
       const { tokenmember } = await this.props.user;
-      const PicArray = await getAllPicGym(gymid, tokenmember, tokenapi, 50, 0, null);
+      const PicArray = await getAllPicGym(idgym, tokenmember, tokenapi, 50, 0, null);
       if (!PicArray.length) return;
       let dataSource = [];
       console.log('pics', PicArray);
@@ -128,6 +115,19 @@ export default class GymDetail extends Component {
       console.log(err);
     }
   }
+  async putVisit() {
+    try {
+      const { idgym, tokenapi, user } = await this.props;
+      const { tokenmember } = await this.props.user;
+      if (user.typememberid !== 4) {
+        this.props.selectGym(idgym);
+      }
+      const json = await putVisit(idgym, tokenmember, tokenapi);
+      console.log('put visit? ', json);
+    } catch (e) {
+      console.log(e);
+    }
+  }
   ratingCompleted(rate) {
     console.log(`Rating is: ${rate}`);
     this.setState({ rate });
@@ -135,10 +135,10 @@ export default class GymDetail extends Component {
   async submitRate() {
     try {
       const { tokenmember } = await this.props.user;
-      const { tokenapi, gymid } = await this.props;
+      const { tokenapi, idgym } = await this.props;
       let { rate } = await this.state;
       rate = await Number(rate);
-      const result = await postRateGym(gymid, rate, tokenmember, tokenapi);
+      const result = await postRateGym(idgym, rate, tokenmember, tokenapi);
       console.log(result, 'postRateGym');
       if (result) {
         this.setState({ disableRate: true });

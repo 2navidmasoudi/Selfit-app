@@ -44,8 +44,8 @@ export default class EditGym extends Component {
       numbertuitiongym: props.gym.numbertuitiongym.toString() || '',
       latgym: props.gym.latgym.toString() || '',
       longgym: props.gym.longgym.toString() || '',
-      activegym: props.gym.activegym || '',
-      telgym: props.gym.telgym || '',
+      activegym: props.gym.activegym,
+      telgym: props.gym.telgym || '021',
       loading: false,
       Pic: null,
       PicJson: null,
@@ -80,6 +80,10 @@ export default class EditGym extends Component {
         activegym,
         telgym
       } = await this.state;
+      console.log('this.state');
+      console.log(this.state);
+      console.log('this.props');
+      console.log(this.props);
       const Tui = tuitiongym ? Number(tuitiongym) : null;
       const nTui = numbertuitiongym ? Number(numbertuitiongym) : null;
       const lat = await Number(latgym);

@@ -7,9 +7,9 @@ import { Rating } from 'react-native-elements';
 import { Text } from '../../Kit';
 
 export default class GymCard extends Component {
-  onPressHandle(gym) {
+  onPressHandle = (gym) => {
     Actions.gymDetail(gym);
-  }
+  };
   render() {
     const { gym } = this.props;
     const m = gym.datesave ? moment(`${gym.datesave}`, 'YYYY/MM/DDTHH:mm:ss') : moment();

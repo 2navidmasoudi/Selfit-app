@@ -10,6 +10,7 @@ import { Text, TextInput } from '../Kit';
 import { darkColor, mainColor, white } from '../../assets/variables/colors';
 import { persianNumber } from '../../utils/persian';
 import { getSingleToken } from '../../services';
+import {Actions} from "react-native-router-flux";
 
 @connect(state => ({
   user: state.user,
@@ -52,7 +53,9 @@ export default class Wallet extends Component {
     const result = await requestWallet(AddWallet, tokenmember);
     if (!result) {
       Alert.alert('خطا', 'مشکلی در درگاه پرداخت پیش آمده لطفا مجددا تلاش کنید', [{ text: 'باشه' }]);
+      return;
     }
+    Actions.pop();
   }
   render() {
     const AddWallet = this.state.AddWallet.toLocaleString();

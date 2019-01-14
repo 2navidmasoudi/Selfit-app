@@ -27,7 +27,7 @@ export default function imageShow({ images, uri }) {
   );
 }
 imageShow.propTypes = {
-  images: PropTypes.arrayOf(PropTypes.node),
+  images: PropTypes.arrayOf(PropTypes.string),
   uri: PropTypes.string,
 };
 imageShow.defaultProps = {

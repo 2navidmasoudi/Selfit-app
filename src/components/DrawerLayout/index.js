@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ImageBackground, TouchableWithoutFeedback, View, Alert } from 'react-native';
+import { AppState, ImageBackground, TouchableWithoutFeedback, View, Alert } from 'react-native';
 import { Icon, Item, Badge, Left, Content, Switch } from 'native-base';
 import PropTypes from 'prop-types';
 import { Base64 } from 'js-base64';
@@ -37,13 +37,19 @@ export default class DrawerLayout extends Component {
       Wallet: null,
     };
     this.toggleHelp = this.toggleHelp.bind(this);
+    this.logEvent = (smth) => {
+      console.log(smth);
+      if (smth === 'active') this.getWallet();
+      console.log('appStateChanged');
+    };
   }
-  state = {
-    Active: true,
-  };
   async componentDidMount() {
+    AppState.addEventListener('change', this.logEvent);
     await this.getSingleMember();
     this.getWallet();
+  }
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this.logEvent);
   }
   async getSingleMember() {
     const {

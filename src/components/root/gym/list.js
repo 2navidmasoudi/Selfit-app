@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { FlatList, View, Platform, Image } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import { Actions } from 'react-native-router-flux';
-import { Fab, Spinner } from 'native-base';
-import PropTypes from 'prop-types';
+import { Fab } from 'native-base';
 import { connect } from 'react-redux';
 import { getAllGym, getSearchGym } from '../../../services/gym';
 import GymCard from './GymCard';
@@ -30,17 +29,6 @@ import { helpDoneGymList } from '../../../redux/actions/help';
   helpDoneGymList
 })
 export default class List extends Component {
-  // static propTypes = {
-  //   tokenGym: PropTypes.func.isRequired,
-  //   refreshGym: PropTypes.func.isRequired,
-  //   incrementMin: PropTypes.func.isRequired,
-  //   receiveGym: PropTypes.func.isRequired,
-  //   user: PropTypes.any.isRequired,
-  //   gym: PropTypes.node,
-  // };
-  // static defaultProps = {
-  //   gym: [],
-  // }
   constructor() {
     super();
     this.state = {
@@ -99,6 +87,7 @@ export default class List extends Component {
     const { min, tokenapi } = await this.props;
     const GymList =
         await getAllGym(latval, longval, tokenmember, tokenapi, 120, min, 'addressgym%20asc');
+    console.log('--------------GYMLIST NORMAL______________');
     console.log(GymList);
     await this.props.receiveGym(GymList, min);
     this.setState({ loading: false, refreshing: false });
@@ -114,6 +103,9 @@ export default class List extends Component {
       const { tokenmember } = await this.props.user;
       const { min, tokenapi } = await this.props;
       const GymList = await getSearchGym(search, tokenmember, tokenapi, 120, min, null);
+
+      console.log('--------------GYMLIST SEARCH________________');
+      console.log(GymList);
       await this.props.receiveGym(GymList, min);
       this.setState({ loading: false, refreshing: false });
     } catch (error) {
