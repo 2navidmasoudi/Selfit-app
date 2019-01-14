@@ -13,7 +13,7 @@ import { getOrderBuffet, putFactorWallet } from '../../../services/orders';
 import { getPrice } from '../../../services/payment';
 import { getSingleToken } from '../../../services';
 import { logError } from '../../../services/log';
-import {getPeyk} from "../../../services/Alopeyk";
+import { getPeyk } from '../../../services/Alopeyk';
 
 let codeInput = null;
 @connect(state => ({
@@ -64,7 +64,11 @@ export default class FactorBuffetDetail extends Component {
   async getPrice(code = null) {
     const { totalPrice, Msg } =
       await getPrice(1, this.props.user.tokenmember, this.props.sendPrice, code);
-    this.setState({ totalPrice, Msg });
+    if (totalPrice) {
+      this.setState({ totalPrice, Msg });
+    } else {
+      this.setState({ Msg });
+    }
   }
   async getWallet() {
     const { tokenmember, tokenapi } = await this.props.user;
@@ -149,6 +153,54 @@ export default class FactorBuffetDetail extends Component {
       await logError(e, 'handleFooterPress', 'finalOrderProduct', 'Basket');
     }
   }
+  renderStatePayed() {
+    const { idstatepayed, acceptfactor } = this.props.item;
+    if (idstatepayed === 6 && acceptfactor === true) {
+      return (
+        <Text>
+          <Text style={{ color: mainColor }}>
+            تایید شده
+          </Text>
+          {' '}و{' '}
+          <Text style={{ color: errorColor }}>
+            منتظر پرداخت
+          </Text>
+        </Text>
+      );
+    }
+    if (idstatepayed === 1 && acceptfactor === true) {
+      return (
+        <Text>
+          <Text style={{ color: mainColor }}>
+            تایید شده
+          </Text>
+          {' '}و{' '}
+          <Text style={{ color: mainColor }}>
+            پرداخت شده، سفارش را آماده کنید!
+          </Text>
+        </Text>
+      );
+    }
+    if (idstatepayed === 6 && acceptfactor === null) {
+      return (
+        <Text style={{ color: errorColor }}>
+          منتظر تایید توسط بوفه دار.
+        </Text>
+      );
+    }
+    if (idstatepayed === 6 && acceptfactor === false) {
+      return (
+        <Text style={{ color: errorColor }}>
+          فاکتور رد شده.
+        </Text>
+      );
+    }
+    return (
+      <Text style={{ color: errorColor }}>
+        در حال بررسی!.
+      </Text>
+    );
+  }
   renderItem = ({ item }) => (
     <ListItem>
       <Left>
@@ -174,36 +226,6 @@ export default class FactorBuffetDetail extends Component {
   render() {
     const { item } = this.props;
     const m = moment(`${item.datesavefactorbuffet}`, 'YYYY/MM/DDTHH:mm:ss').format('jYYYY/jMM/jDD HH:mm');
-    const statePayed = item.statepayedid === 6 ?
-      (
-        <Text>
-          <Text style={{ color: mainColor }}>
-          تایید شده
-          </Text>
-          {' '}و{' '}
-          <Text style={{ color: errorColor }}>
-          منتظر پرداخت
-          </Text>
-        </Text>
-      )
-      :
-      (
-        <Text>
-          <Text style={{ color: mainColor }}>
-          پرداخت شده
-          </Text>
-          {' '}و{' '}
-          <Text style={{ color: mainColor }}>
-          درحال آماده سازی غذا!
-          </Text>
-        </Text>
-      );
-    const stateFactor = item.acceptfactor ? statePayed :
-      (
-        <Text style={{ color: errorColor }}>
-        منتظر تایید توسط بوفه دار.
-        </Text>
-      );
     const totalPrice =
       this.state.totalPrice || item.finalpricefactorbuffet + (this.props.sendPrice * (3 / 5));
     const FooterComponent = (item.acceptfactor && item.idstatepayed === 6 && this.props.sendPrice)
@@ -258,7 +280,7 @@ export default class FactorBuffetDetail extends Component {
             <CardItem>
               <Right style={{ flex: 1 }}>
                 <Text style={{ flex: 1 }}>
-              به آدرس: {item.titleaddressmember}
+              به آدرس: {item.titleaddressmember}{'، '}{item.descaddressmember}
                 </Text>
                 <Text style={{ flex: 1 }}>
                   هزینه ارسال:{' '}{persianNumber((this.props.sendPrice * (3 / 5)).toLocaleString())} تومان
@@ -296,7 +318,7 @@ export default class FactorBuffetDetail extends Component {
             }
             <CardItem bordered>
               <Text style={{ flex: 1, textAlign: 'center' }}>
-            وضعیت فاکتور: {stateFactor}
+            وضعیت فاکتور: {this.renderStatePayed()}
               </Text>
             </CardItem>
           </Card>

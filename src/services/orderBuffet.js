@@ -57,7 +57,10 @@ export const deleteOrderBuffet = async (id, token, tokenapi) => {
 export const getOrderBuffetAll =
   async (id, methodpayed, statepayed, buffetid, token, tokenapi, max, min, sort) => {
     try {
-      const response = await fetch(`${SAPI}${Orders}GetFactorBuffet/${id}?methodpayed=${methodpayed}&statepayed=${statepayed}&buffetid=${buffetid}&t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`, {
+      const url = `${SAPI}${Orders}GetFactorBuffet/${id}?methodpayed=${methodpayed}&statepayed=${statepayed}&buffetid=${buffetid}&t.token=${token}&t.tokenapi=${tokenapi}&p.max=${max}&p.min=${min}&p.sort=${sort}`;
+      console.log('Orders/GetFactorBuffet');
+      console.log(url);
+      const response = await fetch(url, {
         method: GET,
         headers
       });

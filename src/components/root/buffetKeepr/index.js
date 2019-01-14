@@ -156,7 +156,7 @@ export default class BuffetKeeper extends Component {
   //     setTimeout(() => this.setState({ display: 'none' }), 1000);
   //   }
   // }
-  renderItem = ({ item }) => <OrderCard order={item} />
+  renderItem = ({ item }) => <OrderCard order={item} />;
   render() {
     const YesOrNo = this.state.Active ? ' بله (سفارش می پذیرم)' : ' خیر (بوفه تعطیل است)';
     const color = this.state.Active ? darkColor : errorColor;

@@ -115,7 +115,7 @@ export default class finalOrderBuffet extends Component {
         if (idfactor === -15) {
           Alert.alert(
             'خطا',
-            'میزان سفارش شما باید حداقل ده هزار تومان باشد!',
+            'میزان سفارش شما باید حداقل دوازده هزار تومان باشد!',
             [
               { text: 'باشه' },
             ]

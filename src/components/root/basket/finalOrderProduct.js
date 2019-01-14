@@ -72,7 +72,11 @@ export default class finalOrderProduct extends Component {
   async getPrice(code = null) {
     const { totalPrice, Msg } =
       await getPrice(2, this.props.user.tokenmember, 0, code);
-    this.setState({ totalPrice, Msg });
+    if (totalPrice) {
+      this.setState({ totalPrice, Msg });
+    } else {
+      this.setState({ Msg });
+    }
   }
   async getWallet() {
     const { tokenmember, tokenapi } = await this.props.user;
@@ -114,7 +118,7 @@ export default class finalOrderProduct extends Component {
       if (!idfactor) {
         Alert.alert(
           'خطا',
-          'میزان سفارش شما باید حداقل ده هزار تومان باشد!',
+          'میزان سفارش شما باید حداقل بیست هزار تومان باشد!',
           [
             { text: 'باشه' },
           ]

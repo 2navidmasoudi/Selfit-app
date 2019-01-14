@@ -20,7 +20,6 @@ import { getOrderBuffet, putAcceptBuffet } from '../../../services/orders';
 })
 export default class OrderDetail extends Component {
   state = {
-    disableAddButton: false,
     buffetOrder: null,
     materialOrder: null,
   };
@@ -64,14 +63,146 @@ export default class OrderDetail extends Component {
       );
       console.log(result, 'accept Result');
       if (result === 1) {
-        await this.setState({
-          disableAddButton: true,
-        });
         Actions.pop({ refresh: { refresh: Math.random() } });
       }
     } catch (e) {
       console.log(e);
     }
+  }
+  renderStatePayed() {
+    const { idstatepayed, acceptfactor } = this.props.order;
+    if (idstatepayed === 6 && acceptfactor === true) {
+      return (
+        <Text>
+          <Text style={{ color: mainColor }}>
+            تایید شده
+          </Text>
+          {' '}و{' '}
+          <Text style={{ color: errorColor }}>
+            منتظر پرداخت
+          </Text>
+        </Text>
+      );
+    }
+    if (idstatepayed === 1 && acceptfactor === true) {
+      return (
+        <Text>
+          <Text style={{ color: mainColor }}>
+            تایید شده
+          </Text>
+          {' '}و{' '}
+          <Text style={{ color: mainColor }}>
+            پرداخت شده، سفارش را آماده کنید!
+          </Text>
+        </Text>
+      );
+    }
+    if (idstatepayed === 6 && acceptfactor === null) {
+      return (
+        <Text style={{ color: errorColor }}>
+          منتظر تایید.
+        </Text>
+      );
+    }
+    if (idstatepayed === 6 && acceptfactor === false) {
+      return (
+        <Text style={{ color: errorColor }}>
+          فاکتور رد شده.
+        </Text>
+      );
+    }
+    return (
+      <Text style={{ color: errorColor }}>
+        در حال بررسی!.
+      </Text>
+    );
+  }
+  renderFooter() {
+    const { idstatepayed, acceptfactor } = this.props.order;
+    if (idstatepayed === 6 && acceptfactor === true) {
+      return (
+        <Footer>
+          <FooterTab>
+            <Button
+              success
+            >
+              <Text style={{ color: 'white' }}>
+                فاکتور قبول شده و منتظر پرداخت است.
+              </Text>
+            </Button>
+          </FooterTab>
+        </Footer>
+      );
+    }
+    if (idstatepayed === 1 && acceptfactor === true) {
+      return (
+        <Footer>
+          <FooterTab>
+            <Button
+              style={{ backgroundColor: mainColor }}
+            >
+              <Text style={{ color: 'white' }}>
+                درحال آماده سازی غذا
+              </Text>
+            </Button>
+          </FooterTab>
+        </Footer>
+      );
+    }
+    if (idstatepayed === 6 && acceptfactor === null) {
+      return (
+        <Footer>
+          <FooterTab>
+            <Button
+              full
+              danger
+              onPress={() => this.sendAccept(false)}
+            >
+              <Text style={{ color: 'white' }}>
+                رد فاکتور
+              </Text>
+            </Button>
+            <Button
+              full
+              success
+              onPress={() => this.sendAccept(true)}
+            >
+              <Text style={{ color: 'white' }}>
+                قبول فاکتور
+              </Text>
+            </Button>
+          </FooterTab>
+        </Footer>
+      );
+    }
+    if (idstatepayed === 6 && acceptfactor === false) {
+      return (
+        <Footer>
+          <FooterTab>
+            <Button
+              danger
+            >
+              <Text style={{ color: 'white' }}>
+                فاکتور رد شده.
+              </Text>
+            </Button>
+          </FooterTab>
+        </Footer>
+      );
+    }
+    return (
+      <Footer>
+        <FooterTab>
+          <Button
+            warning
+          >
+            <Text style={{ color: 'white' }}>
+              درحال بررسی!
+            </Text>
+          </Button>
+        </FooterTab>
+      </Footer>
+    );
   }
   renderItem = ({ item }) => (
     <ListItem>
@@ -97,93 +228,6 @@ export default class OrderDetail extends Component {
   );
   render() {
     const { order } = this.props;
-    const acceptedFooter = order.idstatepayed === 6 ?
-      (
-        <Footer>
-          <FooterTab>
-            <Button
-              success
-            >
-              <Text style={{ color: 'white' }}>
-              فاکتور قبول شده و منتظر پرداخت است.
-              </Text>
-            </Button>
-          </FooterTab>
-        </Footer>
-      )
-      :
-      (
-        <Footer>
-          <FooterTab>
-            <Button
-              style={{ backgroundColor: mainColor }}
-            >
-              <Text style={{ color: 'white' }}>
-              درحال آماده سازی غذا
-              </Text>
-            </Button>
-          </FooterTab>
-        </Footer>
-      );
-    const FooterComponent = (!order.acceptfactor) ?
-      (
-        <Footer>
-          <FooterTab>
-            <Button
-              full
-              danger={!this.state.disableAddButton}
-              disabled={this.state.disableAddButton}
-              onPress={() => this.sendAccept(false)}
-            >
-              <Text style={{ color: 'white' }}>
-              رد فاکتور
-              </Text>
-            </Button>
-            <Button
-              full
-              success={!this.state.disableAddButton}
-              disabled={this.state.disableAddButton}
-              onPress={() => this.sendAccept(true)}
-            >
-              <Text style={{ color: 'white' }}>
-              قبول فاکتور
-              </Text>
-            </Button>
-          </FooterTab>
-        </Footer>
-      )
-      :
-      acceptedFooter;
-    const statePayed = order.idstatepayed === 6 ?
-      (
-        <Text>
-          <Text style={{ color: mainColor }}>
-          تایید شده
-          </Text>
-          {' '}و{' '}
-          <Text style={{ color: errorColor }}>
-          منتظر پرداخت
-          </Text>
-        </Text>
-      )
-      :
-      (
-        <Text>
-          <Text style={{ color: mainColor }}>
-          تایید شده
-          </Text>
-          {' '}و{' '}
-          <Text style={{ color: mainColor }}>
-          پرداخت شده، سفارش را آماده کنید!
-          </Text>
-        </Text>
-      );
-    const stateFactor = order.acceptfactor ? statePayed :
-      (
-        <Text style={{ color: errorColor }}>
-        منتظر تایید.
-        </Text>
-      );
     return (
       <Container>
         <AppHeader rightTitle="مشخصات سفارش" backButton="flex" />
@@ -219,17 +263,28 @@ export default class OrderDetail extends Component {
             </CardItem>
             <CardItem bordered>
               <Text style={{ flex: 1, textAlign: 'center' }}>
-                وضعیت فاکتور: {stateFactor}
+                وضعیت فاکتور: {this.renderStatePayed()}
               </Text>
             </CardItem>
             <CardItem bordered footer>
-              <Text style={{ flex: 1, marginHorizontal: 10 }}>
-                قیمت نهایی سفارش: {persianNumber(order.allpricefactorbuffet.toLocaleString())} تومان
-              </Text>
+              <Right style={{ flex: 1 }}>
+                <Text style={{ flex: 1, marginHorizontal: 10 }}>
+                  هزینه ارسال:
+                  {persianNumber(order.delivery.toLocaleString())} تومان
+                </Text>
+                <Text style={{ flex: 1, marginHorizontal: 10 }}>
+                  سهم شما از هزینه ارسال:
+                  {persianNumber((order.delivery * (3 / 10)).toLocaleString())} تومان
+                </Text>
+                <Text style={{ flex: 1, marginHorizontal: 10 }}>
+                  قیمت نهایی سفارش:
+                  {persianNumber(order.allpricefactorbuffet.toLocaleString())} تومان
+                </Text>
+              </Right>
             </CardItem>
           </Card>
         </Content>
-        {FooterComponent}
+        {this.renderFooter()}
       </Container>
     );
   }

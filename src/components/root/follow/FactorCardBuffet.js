@@ -75,41 +75,59 @@ export default class FactorBuffet extends Component {
       });
     }
   }
+  renderStatePayed() {
+    const { idstatepayed, acceptfactor } = this.props.item;
+    if (idstatepayed === 6 && acceptfactor === true) {
+      return (
+        <Text>
+          <Text style={{ color: mainColor }}>
+            تایید شده
+          </Text>
+          {' '}و{' '}
+          <Text style={{ color: errorColor }}>
+            منتظر پرداخت
+          </Text>
+        </Text>
+      );
+    }
+    if (idstatepayed === 1 && acceptfactor === true) {
+      return (
+        <Text>
+          <Text style={{ color: mainColor }}>
+            تایید شده
+          </Text>
+          {' '}و{' '}
+          <Text style={{ color: mainColor }}>
+            پرداخت شده، سفارش را آماده کنید!
+          </Text>
+        </Text>
+      );
+    }
+    if (idstatepayed === 6 && acceptfactor === null) {
+      return (
+        <Text style={{ color: errorColor }}>
+          منتظر تایید توسط بوفه دار.
+        </Text>
+      );
+    }
+    if (idstatepayed === 6 && acceptfactor === false) {
+      return (
+        <Text style={{ color: errorColor }}>
+          فاکتور رد شده.
+        </Text>
+      );
+    }
+    return (
+      <Text style={{ color: errorColor }}>
+        در حال بررسی!.
+      </Text>
+    );
+  }
   render() {
     const { item } = this.props;
     const m = moment(`${item.datesavefactorbuffet}`, 'YYYY/MM/DDTHH:mm:ss').format('jYYYY/jMM/jDD HH:mm');
     const sendPrices = this.state.sendServicePrice * (3 / 5);
     const totalPrice = item.finalpricefactorbuffet + sendPrices;
-    const statePayed = item.idstatepayed === 6 ?
-      (
-        <Text>
-          <Text style={{ color: mainColor }}>
-          تایید شده
-          </Text>
-          {' '}و{' '}
-          <Text style={{ color: errorColor }}>
-          منتظر پرداخت
-          </Text>
-        </Text>
-      )
-      :
-      (
-        <Text>
-          <Text style={{ color: mainColor }}>
-          پرداخت شده
-          </Text>
-          {' '}و{' '}
-          <Text style={{ color: mainColor }}>
-          درحال آماده سازی غذا!
-          </Text>
-        </Text>
-      );
-    const stateFactor = item.acceptfactor ? statePayed :
-      (
-        <Text style={{ color: errorColor }}>
-        منتظر تایید توسط بوفه دار.
-        </Text>
-      );
     const payBtn = (item.acceptfactor && item.idstatepayed === 6 && sendPrices) ?
       (
         <CardItem>
@@ -156,7 +174,7 @@ export default class FactorBuffet extends Component {
           </CardItem>
           <CardItem bordered>
             <Text style={{ flex: 1, textAlign: 'center' }}>
-            وضعیت فاکتور: {stateFactor}
+            وضعیت فاکتور: {this.renderStatePayed()}
             </Text>
           </CardItem>
           {payBtn}

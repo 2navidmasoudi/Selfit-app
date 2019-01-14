@@ -38,6 +38,54 @@ export default class OrderCard extends Component {
       console.log(e);
     }
   }
+  renderStatePayed() {
+    const { idstatepayed, acceptfactor } = this.props.order;
+    if (idstatepayed === 6 && acceptfactor === true) {
+      return (
+        <Text>
+          <Text style={{ color: mainColor }}>
+            تایید شده
+          </Text>
+          {' '}و{' '}
+          <Text style={{ color: errorColor }}>
+            منتظر پرداخت
+          </Text>
+        </Text>
+      );
+    }
+    if (idstatepayed === 1 && acceptfactor === true) {
+      return (
+        <Text>
+          <Text style={{ color: mainColor }}>
+            تایید شده
+          </Text>
+          {' '}و{' '}
+          <Text style={{ color: mainColor }}>
+            پرداخت شده، سفارش را آماده کنید!
+          </Text>
+        </Text>
+      );
+    }
+    if (idstatepayed === 6 && acceptfactor === null) {
+      return (
+        <Text style={{ color: errorColor }}>
+          منتظر تایید.
+        </Text>
+      );
+    }
+    if (idstatepayed === 6 && acceptfactor === false) {
+      return (
+        <Text style={{ color: errorColor }}>
+          فاکتور رد شده.
+        </Text>
+      );
+    }
+    return (
+      <Text style={{ color: errorColor }}>
+        در حال بررسی!.
+      </Text>
+    );
+  }
   render() {
     const { order } = this.props;
     const m = moment(`${order.datesavefactorbuffet}`, 'YYYY/MM/DDTHH:mm:ss').format('jYYYY/jMM/jDD HH:mm');
@@ -45,35 +93,6 @@ export default class OrderCard extends Component {
       (order.acceptfactor && order.idstatepayed === 1 && this.state.checkout === 0);
     const checkouted =
       (order.acceptfactor && order.idstatepayed === 1 && this.state.checkout === 1);
-    const statePayed = order.idstatepayed === 6 ?
-      (
-        <Text>
-          <Text style={{ color: mainColor }}>
-        تایید شده
-          </Text>
-          {' '}و{' '}
-          <Text style={{ color: errorColor }}>
-        منتظر پرداخت
-          </Text>
-        </Text>
-      ) :
-      (
-        <Text>
-          <Text style={{ color: mainColor }}>
-        تایید شده
-          </Text>
-          {' '}و{' '}
-          <Text style={{ color: mainColor }}>
-        پرداخت شده، سفارش را آماده کنید!
-          </Text>
-        </Text>
-      );
-    const stateFactor = order.acceptfactor ? statePayed :
-      (
-        <Text style={{ color: errorColor }}>
-          منتظر تایید.
-        </Text>
-      );
     const checkoutBtn = (
       <CardItem cardBody>
         <Button
@@ -109,7 +128,7 @@ export default class OrderCard extends Component {
           </CardItem>
           <CardItem bordered>
             <Text style={{ flex: 1, textAlign: 'center' }}>
-              وضعیت فاکتور: {stateFactor}
+              وضعیت فاکتور: {this.renderStatePayed()}
             </Text>
           </CardItem>
           {!notcheckout &&
