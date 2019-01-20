@@ -20,7 +20,7 @@ import AppHeader from '../../header';
 import { getAllPicGym, postRateGym, putVisit } from '../../../services/gym';
 import { form } from '../../../assets/styles/index';
 import { mainColor, white } from '../../../assets/variables/colors';
-import {Modal, Text} from '../../Kit';
+import { Modal, Text } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
 import { htmlStyle } from '../../../assets/styles/html';
 import { selectGym } from '../../../redux/actions';
@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
     // other styles for the inner container
   }
 });
+let rate = null;
 
 @connect(state => ({
   user: state.user,
@@ -73,20 +74,21 @@ const styles = StyleSheet.create({
   helpDoneGymDetail
 })
 export default class GymDetail extends Component {
-  state = {
-    slideready: false,
-    dataSource: [],
-    rate: null,
-    disableRate: false,
-    ModalNumber: 0,
-  };
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      slideready: false,
+      dataSource: [],
+      disableRate: false,
+      ModalNumber: 0,
+    };
+    this.submitRate = this.submitRate.bind(this);
+    this.handleMapClick = this.handleMapClick.bind(this);
+  }
+  async componentWillMount() {
     if (!this.props.help) {
       this.setState({ ModalNumber: 1 });
     }
-    this.getInfo();
-  }
-  async getInfo() {
     await this.getAllPicGym();
     await this.putVisit();
   }
@@ -99,7 +101,7 @@ export default class GymDetail extends Component {
       if (!PicArray.length) return;
       let dataSource = [];
       console.log('pics', PicArray);
-      for (let i = 0; i < PicArray.length; i++) {
+      for (let i = 0; i < PicArray.length; i += 1) {
         const m = moment(`${PicArray[i].datesave}`, 'YYYY/MM/DDTHH:mm:ss');
         const ImgYear = m.jYear();
         const ImgMonth = m.jMonth() + 1;
@@ -128,16 +130,10 @@ export default class GymDetail extends Component {
       console.log(e);
     }
   }
-  ratingCompleted(rate) {
-    console.log(`Rating is: ${rate}`);
-    this.setState({ rate });
-  }
   async submitRate() {
     try {
       const { tokenmember } = await this.props.user;
       const { tokenapi, idgym } = await this.props;
-      let { rate } = await this.state;
-      rate = await Number(rate);
       const result = await postRateGym(idgym, rate, tokenmember, tokenapi);
       console.log(result, 'postRateGym');
       if (result) {
@@ -193,7 +189,7 @@ export default class GymDetail extends Component {
     console.log(this.props);
     const {
       datesave, httpserver, pathserver, picgym,
-      descgym, namegym, addressgym, activegym, numbertuitiongym,
+      descgym, namegym, addressgym, numbertuitiongym,
       RateNumber, visitgym, telgym, tuitiongym, TimeWorkList,
     } = this.props;
     const TimeWork = TimeWorkList ? TimeWorkList.$values : [];
@@ -292,27 +288,7 @@ export default class GymDetail extends Component {
                   value={htmlContent}
                   stylesheet={htmlStyle}
                 />
-                {telgym &&
-                <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-                  <Text>{persianNumber(telgym)}</Text>
-                  <Text>تلفن: </Text>
-                </View>}
-                <CardItem>
-                  <Left style={{ flex: 1 }} />
-                  <Right style={{ flex: 1 }}>
-                    {telgym &&
-                    <Button
-                      style={{ backgroundColor: mainColor, marginHorizontal: 5 }}
-                      onPress={() => call({ number: telgym }).catch(console.error)}
-                    >
-                      <Text style={{ color: '#FFF', paddingHorizontal: 5 }}>
-                        تماس با باشگاه
-                      </Text>
-                    </Button>}
-                  </Right>
-                </CardItem>
                 <Text>شهریه باشگاه: {persianNumber(tuitionGym)} تومان</Text>
-                {/* <Text>فعالیت باشگاه: {activegym ? 'فعال' : 'غیر فعال'}</Text> */}
                 <Text>ظرفیت باشگاه: {numbertuitiongym ? persianNumber(numbertuitiongym) : 'نامشخص'}</Text>
               </ScrollView>
             </CardItem>
@@ -333,6 +309,27 @@ export default class GymDetail extends Component {
               </Right>
             </CardItem>}
             <CardItem>
+              <Left style={{ flex: 1 }} >
+                {telgym &&
+                <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+                  <Text>{persianNumber(telgym)}</Text>
+                  <Text>تلفن: </Text>
+                </View>}
+              </Left>
+              <Right style={{ flex: 1 }}>
+                {telgym &&
+                <Button
+                  block
+                  style={{ backgroundColor: mainColor }}
+                  onPress={() => call({ number: telgym }).catch(console.error)}
+                >
+                  <Text style={{ color: '#FFF', paddingHorizontal: 5 }}>
+                    تماس با باشگاه
+                  </Text>
+                </Button>}
+              </Right>
+            </CardItem>
+            <CardItem>
               <Left style={{ flex: 1 }}>
                 <Text>تعداد بازدید: {persianNumber(visitgym)}</Text>
               </Left>
@@ -342,14 +339,17 @@ export default class GymDetail extends Component {
                   fractions={2}
                   startingValue={RateNumber}
                   imageSize={30}
-                  onFinishRating={this.ratingCompleted.bind(this)}
+                  onFinishRating={(rating) => {
+                    rate = Number(rating);
+                    console.log(rate);
+                  }}
                   style={{ paddingVertical: 10 }}
                 />
                 <Button
                   block
                   disabled={this.state.disableRate}
                   style={{ backgroundColor: mainColor }}
-                  onPress={this.submitRate.bind(this)}
+                  onPress={this.submitRate}
                 >
                   <Text style={{ color: white }}>
                     ثبت امتیاز
@@ -359,13 +359,13 @@ export default class GymDetail extends Component {
             </CardItem>
           </Card>
         </Content>
-          <Button
-            block
-            style={{ backgroundColor: mainColor }}
-            onPress={this.handleMapClick.bind(this)}
-          >
-            <Text style={{ color: '#FFF' }}>نمایش در نقشه</Text>
-          </Button>
+        <Button
+          block
+          style={{ backgroundColor: mainColor }}
+          onPress={this.handleMapClick}
+        >
+          <Text style={{ color: '#FFF' }}>نمایش در نقشه</Text>
+        </Button>
       </Container>
     );
   }

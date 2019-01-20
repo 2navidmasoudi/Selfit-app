@@ -97,7 +97,6 @@ export default class GymMap extends Component {
   }
   async onRegionChangeComplete(region) {
     await this.setState({ region });
-    console.log('onRegionChangeComplete', region, 'new region:', this.state.region);
   }
   async getGym() {
     try {
@@ -233,6 +232,7 @@ export default class GymMap extends Component {
               key={gym.idgym}
               coordinate={{ latitude: gym.latgym, longitude: gym.longgym }}
               onCalloutPress={() => this.gymDetail(gym)}
+              pinColor={gym.activegym ? 'red' : 'navy'}
               style={{ zIndex: 5 }}
             >
               {Platform.OS === 'ios' ? this.renderPin(gym.activegym) : null}

@@ -22,11 +22,11 @@ import { postFactor } from '../../../services/orderBuffet';
 import AppHeader from '../../header';
 import { refreshBuffet, setRoad, tokenBuffet } from '../../../redux/actions';
 import { SignStyle } from '../../../assets/styles/sign';
-import { Text } from '../../Kit';
+import { Text, TextInput } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
 import { sendPrice } from '../../../services/Alopeyk';
 import { getSingleBuffet } from '../../../services/buffet';
-import { mainColor } from '../../../assets/variables/colors';
+import { darkColor, mainColor } from '../../../assets/variables/colors';
 import { logError } from '../../../services/log';
 import { getSingleToken } from '../../../services';
 import Loader from '../../loader';
@@ -115,7 +115,7 @@ export default class finalOrderBuffet extends Component {
         if (idfactor === -15) {
           Alert.alert(
             'خطا',
-            'میزان سفارش شما باید حداقل دوازده هزار تومان باشد!',
+            'میزان سفارش شما باید حداقل بیست هزار تومان باشد!',
             [
               { text: 'باشه' },
             ]
@@ -191,9 +191,6 @@ export default class finalOrderBuffet extends Component {
       this.state.sendServicePrice ?
         `${(this.state.sendServicePrice * (3 / 5)).toLocaleString()} تومان` :
         'در حال بررسی';
-    const {
-      item, formInputText
-    } = SignStyle;
     const FooterComponent =
       ((this.props.Count1 + this.props.Count2) === 0
         || this.state.sendServicePrice === 0
@@ -243,11 +240,12 @@ export default class finalOrderBuffet extends Component {
               scrollEnabled={false}
               keyExtractor={Food => Food.idmenufood}
             />
-            <Card style={{ flex: 0 }}>
-              <CardItem>
-                <Text type="bold" style={{ flex: 1, marginHorizontal: 10 }}>غذای انتخابی</Text>
-              </CardItem>
-            </Card>
+            {this.props.materialBasket.length > 0 ?
+              <Card style={{ flex: 0 }}>
+                <CardItem>
+                  <Text type="bold" style={{ flex: 1, marginHorizontal: 10 }}>غذای انتخابی</Text>
+                </CardItem>
+              </Card> : null}
             <FlatList
               data={this.props.materialBasket}
               renderItem={this.renderItem2}
@@ -262,12 +260,19 @@ export default class finalOrderBuffet extends Component {
                 <Text style={{ flex: 1 }}>
                   هزینه ارسال:{` ${persianNumber(sendPrices)}`}
                 </Text>
-                <Text style={{ flex: 1 }}>
+                {this.state.descfactor ?
+                  <Text style={{ flex: 1 }}>
                   توضیحات:{` ${this.state.descfactor}`}
-                </Text>
+                  </Text> : null}
               </Right>
-
             </CardItem>
+            <TextInput
+              placeholder="توضیحات:"
+              placeholderTextColor={darkColor}
+              onChangeText={descfactor => this.setState({ descfactor })}
+              style={{ backgroundColor: mainColor, marginHorizontal: 5 }}
+              multiline
+            />
             {totalPrice
               ?
                 <View>
@@ -291,16 +296,6 @@ export default class finalOrderBuffet extends Component {
                 <Loader loading />
             }
           </Card>
-          <Item style={[item, { flex: 1 }]}>
-            <Icon active name="clipboard" />
-            <Input
-              style={formInputText}
-              value={this.state.descfactor}
-              multiline
-              onChangeText={descfactor => this.setState({ descfactor })}
-            />
-            <Label>توضیحات</Label>
-          </Item>
         </Content>
         {FooterComponent}
       </Container>

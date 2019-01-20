@@ -27,7 +27,7 @@ moment.loadPersian({ dialect: 'persian-modern' });
 const horizontalMargin = 30;
 const slideWidth = 280;
 const sliderWidth = Dimensions.get('window').width;
-const itemWidth = slideWidth + horizontalMargin * 2;
+const itemWidth = slideWidth + (horizontalMargin * 2);
 const itemHeight = 200;
 const styles = StyleSheet.create({
   wrapper: {
@@ -71,34 +71,31 @@ const styles = StyleSheet.create({
   helpDoneMyGym
 })
 export default class MyGym extends Component {
-  state = {
-    ImgSrc: null,
-    slideready: false,
-    position: 1,
-    interval: null,
-    dataSource: [],
-    isVisible: false,
-    rate: null,
-    disableRate: false,
-    ModalNumber: 0,
-  };
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      slideready: false,
+      dataSource: [],
+      ModalNumber: 0,
+    };
+    this.handleMapClick = this.handleMapClick.bind(this);
+    this.onPressHandler = this.onPressHandler.bind(this);
+  }
+
+  async componentWillMount() {
     if (!this.props.help) {
       this.setState({ ModalNumber: 1 });
     }
+    await this.props.tokenGym('selfit.gym');
+    await this.getSingLeGym();
+    await this.getAllPicGym();
     const { tokenmember, tokenapi } = this.props.user;
     putCheckToken(tokenmember, tokenapi);
-    this.getInfo();
   }
   onPressHandler() {
     Actions.editGym({ gym: this.props.gym });
   }
-  async getInfo() {
-    await this.props.tokenGym('selfit.gym');
-    await this._getSingLeGym();
-    await this._getAllPicGym();
-  }
-  async _getSingLeGym() {
+  async getSingLeGym() {
     try {
       const { tokenapi, gymid } = await this.props;
       const { tokenmember } = await this.props.user;
@@ -110,7 +107,7 @@ export default class MyGym extends Component {
       console.log(e);
     }
   }
-  async _getAllPicGym() {
+  async getAllPicGym() {
     try {
       await this.setState({ dataSource: [] });
       const { gymid, tokenapi } = await this.props;
@@ -119,7 +116,7 @@ export default class MyGym extends Component {
       if (!PicArray.length) return;
       let dataSource = [];
       console.log('pics', PicArray);
-      for (let i = 0; i < PicArray.length; i++) {
+      for (let i = 0; i < PicArray.length; i += 1) {
         const m = moment(`${PicArray[i].datesave}`, 'YYYY/MM/DDTHH:mm:ss');
         const ImgYear = m.jYear();
         const ImgMonth = m.jMonth() + 1;
@@ -153,7 +150,7 @@ export default class MyGym extends Component {
   render() {
     const {
       datesave, httpserver, pathserver, picgym,
-      descgym, namegym, addressgym, activegym, numbertuitiongym,
+      descgym, namegym, addressgym, numbertuitiongym,
       RateNumber, visitgym, telgym, tuitiongym
     } = this.props.gym;
     const m = datesave ? moment(`${datesave}`, 'YYYY/MM/DDTHH:mm:ss') : moment();
@@ -161,7 +158,6 @@ export default class MyGym extends Component {
     const ImgYear = m.jYear();
     const ImgMonth = m.jMonth() + 1;
     const ImgSrc = `${httpserver}${pathserver}${ImgYear}/${ImgMonth}/${picgym}`;
-    console.log(ImgSrc);
     const htmlContent = descgym ? persianNumber(`${descgym.replace(/(\r\n|\n|\r)/gm, '')}`) : '<p>فاقد توضیحات.</p>';
     const tuitionGym = tuitiongym ? persianNumber(`${tuitiongym.toLocaleString()}`) : '؟';
     const slide = this.state.slideready ?
@@ -178,16 +174,18 @@ export default class MyGym extends Component {
       :
       (<Image style={{ flex: 1, height: itemHeight, width: null }} resizeMode="contain" source={{ uri: ImgSrc }} />);
     const gallery =
-      (<CardItem style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <Button
-          style={{ backgroundColor: mainColor }}
-          onPress={() => Actions.showImage({ images: this.state.dataSource })}
-        >
-          <Text style={{ color: '#FFF', paddingHorizontal: 5 }}>
+      (
+        <CardItem style={{ justifyContent: 'center', alignItems: 'center' }}>
+          <Button
+            style={{ backgroundColor: mainColor }}
+            onPress={() => Actions.showImage({ images: this.state.dataSource })}
+          >
+            <Text style={{ color: '#FFF', paddingHorizontal: 5 }}>
             مشاهده گالری تصویر
-          </Text>
-        </Button>
-      </CardItem>);
+            </Text>
+          </Button>
+        </CardItem>
+      );
     const TELL = telgym ? persianNumber(`${telgym}`) : '؟';
     const numbertuitionGym = numbertuitiongym ? persianNumber(`${numbertuitiongym}`) : '؟';
     const VISIT = visitgym ? persianNumber(`${visitgym}`) : '؟';
@@ -291,7 +289,6 @@ export default class MyGym extends Component {
                   <Text>تلفن: </Text>
                 </View>
                 <Text>شهریه باشگاه: {tuitionGym} تومان</Text>
-                <Text>فعالیت باشگاه: {activegym ? 'فعال' : 'غیر فعال'}</Text>
                 <Text>ظرفیت باشگاه: {numbertuitionGym}</Text>
               </ScrollView>
             </CardItem>
@@ -324,7 +321,7 @@ export default class MyGym extends Component {
         <Button
           block
           style={[form.submitButton, { margin: 10, marginBottom: 20 }]}
-          onPress={this.handleMapClick.bind(this)}
+          onPress={this.handleMapClick}
         >
           <Text style={{ color: '#FFF' }}>مسیریابی</Text>
         </Button>
@@ -332,7 +329,7 @@ export default class MyGym extends Component {
         <Button
           full
           style={{ backgroundColor: mainColor }}
-          onPress={this.onPressHandler.bind(this)}
+          onPress={this.onPressHandler}
         >
           <Text style={{ color: '#FFF' }}>ویرایش باشگاه</Text>
         </Button>}
