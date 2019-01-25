@@ -48,7 +48,7 @@ export const getSingleToken = async (token, tokenapi, Price = false) => {
     console.log('Member/GetSingleToken');
     console.log(json);
     if (Price) {
-      return { Data: json.data, Wallet: json.Price };
+      return { Data: json.data, wallet: json.Price || 0 };
     }
     return json.Data;
   } catch (e) {

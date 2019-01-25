@@ -28,12 +28,18 @@ import {
   SET_ROAD,
   SET_TOKEN_API,
   SET_TOKEN_MEMBER,
-  SET_USER,
+  SET_USER, SET_WALLET,
   TOKEN_BLOG,
   TOKEN_BUFFET,
   TOKEN_GYM,
   TOKEN_STORE
 } from './type';
+
+// Wallet
+export const setWallet = wallet => ({
+  type: SET_WALLET,
+  wallet
+});
 
 // USER
 export const setUser = user => ({

@@ -2,20 +2,21 @@ import React, { Component } from 'react';
 import { Alert } from 'react-native';
 import { Button, Container, Content, View } from 'native-base';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 import PropTypes from 'prop-types';
 import AppHeader from '../header';
-import { setUser } from '../../redux/actions';
+import { setUser, setWallet } from '../../redux/actions';
 import requestWallet from '../../services/Wallet';
 import { Text, TextInput } from '../Kit';
 import { darkColor, mainColor, white } from '../../assets/variables/colors';
 import { persianNumber } from '../../utils/persian';
 import { getSingleToken } from '../../services';
-import {Actions} from "react-native-router-flux";
 
 @connect(state => ({
   user: state.user,
 }), {
   setUser,
+  setWallet,
 })
 export default class Wallet extends Component {
   static propTypes = {
@@ -29,19 +30,23 @@ export default class Wallet extends Component {
     this.state = {
       selected: 0,
       AddWallet: props.Amount,
-      Wallet: null
     };
   }
   componentWillMount() {
     this.getWallet();
+    const WalletCheck = setInterval(() => this.getWallet(), 2000);
+    this.setState({ WalletCheck });
   }
+  componentWillUnmount() {
+    clearInterval(this.state.WalletCheck);
+  }
+
   async getWallet() {
     const { tokenmember, tokenapi } = await this.props.user;
-    const { Wallet } = await getSingleToken(tokenmember, tokenapi, true);
+    const { wallet } = await getSingleToken(tokenmember, tokenapi, true);
     console.log('Wallet Amount');
-    console.log(Wallet);
-    if (!Wallet) return;
-    this.setState({ Wallet });
+    console.log(wallet);
+    this.props.setWallet(wallet);
   }
   async PaymentDirect() {
     const { AddWallet } = await this.state;
@@ -53,9 +58,7 @@ export default class Wallet extends Component {
     const result = await requestWallet(AddWallet, tokenmember);
     if (!result) {
       Alert.alert('خطا', 'مشکلی در درگاه پرداخت پیش آمده لطفا مجددا تلاش کنید', [{ text: 'باشه' }]);
-      return;
     }
-    Actions.pop();
   }
   render() {
     const AddWallet = this.state.AddWallet.toLocaleString();
@@ -63,7 +66,7 @@ export default class Wallet extends Component {
       <Container>
         <AppHeader rightTitle="کیف پول" />
         <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-around' }} scrollEnabled={false}>
-          <Text type="bold" style={{ textAlign: 'center', fontSize: 22 }}>مبلغ موجودی: {`${persianNumber(this.state.Wallet || '0')}`} تومان</Text>
+          <Text type="bold" style={{ textAlign: 'center', fontSize: 22 }}>مبلغ موجودی: {`${persianNumber(this.props.user.wallet || '0')}`} تومان</Text>
           <View
             style={{
             flexDirection: 'row-reverse',

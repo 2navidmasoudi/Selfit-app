@@ -8,7 +8,7 @@ import AppHeader from '../../header';
 import { darkColor, errorColor, mainColor, white } from '../../../assets/variables/colors';
 import { persianNumber } from '../../../utils/persian';
 import { Text, TextInput } from '../../Kit';
-import { tokenBuffet } from '../../../redux/actions';
+import { setWallet, tokenBuffet } from '../../../redux/actions';
 import { getOrderBuffet, putFactorWallet } from '../../../services/orders';
 import { getPrice } from '../../../services/payment';
 import { getSingleToken } from '../../../services';
@@ -20,7 +20,8 @@ let codeInput = null;
   user: state.user,
   tokenapi: state.buffet.tokenapi,
 }), {
-  tokenBuffet
+  tokenBuffet,
+  setWallet
 })
 export default class FactorBuffetDetail extends Component {
   constructor(props) {
@@ -29,7 +30,6 @@ export default class FactorBuffetDetail extends Component {
       buffetOrder: null,
       materialOrder: null,
       totalPrice: 0,
-      Wallet: 0,
       Msg: 'لطفا کد تخفیف خود را وارد کنید.'
     };
     this.handleFooterPress = this.handleFooterPress.bind(this);
@@ -40,6 +40,10 @@ export default class FactorBuffetDetail extends Component {
     await this.getOrderBuffet();
     await this.getPrice();
     await this.getWallet();
+  }
+  componentWillReceiveProps(props) {
+    console.log('component: componentWillReceiveProps');
+    console.log(props);
   }
   async getOrderBuffet() {
     try {
@@ -72,14 +76,15 @@ export default class FactorBuffetDetail extends Component {
   }
   async getWallet() {
     const { tokenmember, tokenapi } = await this.props.user;
-    const { Wallet } = await getSingleToken(tokenmember, tokenapi, true);
-    this.setState({ Wallet });
+    const { wallet } = await getSingleToken(tokenmember, tokenapi, true);
+    this.props.setWallet(wallet);
   }
   async handleFooterPress() {
     try {
-      const { totalPrice, Wallet } = await this.state;
-      if (totalPrice > Wallet) {
-        const Diff = await totalPrice - Wallet;
+      const { totalPrice } = await this.state;
+      const { wallet } = await this.props.user;
+      if (totalPrice > wallet) {
+        const Diff = await totalPrice - wallet;
         const DotedDiff = Diff.toLocaleString();
         const PersianDiff = await persianNumber(DotedDiff);
         Alert.alert(
@@ -280,6 +285,9 @@ export default class FactorBuffetDetail extends Component {
             <CardItem>
               <Right style={{ flex: 1 }}>
                 <Text style={{ flex: 1 }}>
+                  از بوفه: {this.props.buffetInfo.namebuffet}
+                </Text>
+                <Text style={{ flex: 1 }}>
               به آدرس: {item.titleaddressmember}{'، '}{item.descaddressmember}
                 </Text>
                 <Text style={{ flex: 1 }}>
@@ -293,11 +301,11 @@ export default class FactorBuffetDetail extends Component {
             {this.state.totalPrice && item.statepayedid !== 1
               ?
                 <View>
-                  {this.state.Wallet ?
+                  {this.props.user.wallet ?
                     <Card style={{ flex: 0 }}>
                       <CardItem>
                         <Text style={{ flex: 1, textAlign: 'center' }} type="bold">
-                          کیف پول:{` ${persianNumber(this.state.Wallet.toLocaleString() || '?')} تومان`}
+                          کیف پول:{` ${persianNumber(this.props.user.wallet.toLocaleString() || '?')} تومان`}
                         </Text>
                       </CardItem>
                     </Card> : null}

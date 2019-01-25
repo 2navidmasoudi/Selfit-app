@@ -10,7 +10,7 @@ import { drawer } from '../../assets/styles/index';
 import { getSingleToken, putUserLogout } from '../../services';
 import { Text } from '../Kit';
 import { persianNumber } from '../../utils/persian';
-import { setUser } from '../../redux/actions';
+import { setUser, setWallet } from '../../redux/actions';
 import { darkColor, mainColor, white } from '../../assets/variables/colors';
 import { helpOff, helpReset } from '../../redux/actions/help';
 
@@ -19,7 +19,7 @@ import { helpOff, helpReset } from '../../redux/actions/help';
   buffetBasketCount: state.basket.buffetBasketCount,
   materialBasketCount: state.basket.materialBasketCount,
   productBasketCount: state.basket.productBasketCount,
-}), { setUser, helpReset, helpOff })
+}), { setUser, helpReset, helpOff, setWallet })
 export default class DrawerLayout extends Component {
   static propTypes = {
     user: PropTypes.objectOf(PropTypes.node).isRequired,
@@ -34,7 +34,6 @@ export default class DrawerLayout extends Component {
     super();
     this.state = {
       Active: true,
-      Wallet: null,
     };
     this.toggleHelp = this.toggleHelp.bind(this);
     this.logEvent = (smth) => {
@@ -67,11 +66,8 @@ export default class DrawerLayout extends Component {
   }
   async getWallet() {
     const { tokenmember, tokenapi } = await this.props.user;
-    const { Wallet } = await getSingleToken(tokenmember, tokenapi, true);
-    console.log('Wallet Amount');
-    console.log(Wallet);
-    if (!Wallet) return;
-    this.setState({ Wallet });
+    const { wallet } = await getSingleToken(tokenmember, tokenapi, true);
+    this.props.setWallet(wallet);
   }
   getRequestLogout() {
     Alert.alert(
@@ -134,7 +130,7 @@ export default class DrawerLayout extends Component {
               Actions.wallet();
             }}
           >
-            <Text style={drawer.itemTitle}>افزایش اعتبار: {`${persianNumber(this.state.Wallet || '0')} تومان`}</Text>
+            <Text style={drawer.itemTitle}>افزایش اعتبار: {`${persianNumber(this.props.user.wallet.toLocaleString() || '0')} تومان`}</Text>
             <Icon name="cash" color={mainColor} style={drawer.itemIcon} />
           </Item>
           <Item

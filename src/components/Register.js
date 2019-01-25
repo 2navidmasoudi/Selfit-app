@@ -86,6 +86,7 @@ export default class Register extends Component {
         phone,
         tokenmember,
         tokenapi,
+        null,
         code
       );
       if (json === 1) {

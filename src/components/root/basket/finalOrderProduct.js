@@ -17,7 +17,7 @@ import { Actions } from 'react-native-router-flux';
 import { Base64 } from 'js-base64';
 import PropTypes from 'prop-types';
 import AppHeader from '../../header';
-import { setProductPriceAll, setRoad, tokenStore } from '../../../redux/actions';
+import { setProductPriceAll, setRoad, setWallet, tokenStore } from '../../../redux/actions';
 import { getPrice } from '../../../services/payment';
 import {
   FactorWalletProduct,
@@ -43,6 +43,7 @@ let codeInput = null;
   tokenStore,
   setRoad,
   setProductPriceAll,
+  setWallet
 })
 export default class finalOrderProduct extends Component {
   static propTypes = {
@@ -58,7 +59,6 @@ export default class finalOrderProduct extends Component {
     super();
     this.state = {
       totalPrice: 0,
-      Wallet: null,
       Msg: 'لطفا کد تخفیف خود را وارد کنید.'
     };
     this.handleFooterPress = this.handleFooterPress.bind(this);
@@ -80,8 +80,8 @@ export default class finalOrderProduct extends Component {
   }
   async getWallet() {
     const { tokenmember, tokenapi } = await this.props.user;
-    const { Wallet } = await getSingleToken(tokenmember, tokenapi, true);
-    this.setState({ Wallet });
+    const { wallet } = await getSingleToken(tokenmember, tokenapi, true);
+    this.props.setWallet(wallet);
   }
   async putTimeFactor(idfactor) {
     try {
@@ -95,10 +95,21 @@ export default class finalOrderProduct extends Component {
   }
   async handleFooterPress() {
     try {
-      const { totalPrice, Wallet } = await this.state;
-      if (Wallet === null) return;
-      if (totalPrice > Wallet) {
-        const Diff = await totalPrice - Wallet;
+      const { totalPrice } = await this.state;
+      const { wallet } = await this.props.user;
+      if (wallet === 0 || wallet === null) return;
+      if (totalPrice < 20000) {
+        Alert.alert(
+          'خطا',
+          'میزان سفارش شما باید حداقل بیست هزار تومان باشد!',
+          [
+            { text: 'باشه' },
+          ]
+        );
+        return;
+      }
+      if (totalPrice > wallet) {
+        const Diff = await totalPrice - wallet;
         const DotedDiff = Diff.toLocaleString();
         const PersianDiff = await persianNumber(DotedDiff);
         Alert.alert(
@@ -204,11 +215,11 @@ export default class finalOrderProduct extends Component {
             {this.state.totalPrice
               ?
                 <View>
-                  {this.state.Wallet ?
+                  {this.props.user.wallet ?
                     <Card style={{ flex: 0 }}>
                       <CardItem>
                         <Text style={{ flex: 1, textAlign: 'center' }} type="bold">
-                          کیف پول:{` ${persianNumber(this.state.Wallet.toLocaleString() || '?')} تومان`}
+                          کیف پول:{` ${persianNumber(this.props.user.wallet.toLocaleString() || '?')} تومان`}
                         </Text>
                       </CardItem>
                     </Card> : null}

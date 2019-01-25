@@ -1,4 +1,4 @@
-import { LOCATE_USER, SET_PHONE, SET_TOKEN_API, SET_TOKEN_MEMBER, SET_USER } from '../actions/type';
+import {LOCATE_USER, SET_PHONE, SET_TOKEN_API, SET_TOKEN_MEMBER, SET_USER, SET_WALLET} from '../actions/type';
 
 const initialState = {
   namefamilymember: null,
@@ -14,6 +14,7 @@ const initialState = {
   httpserver: null,
   pathserver: null,
   picmember: null,
+  wallet: 0,
 };
 
 export default (state = initialState, action = {}) => {
@@ -52,6 +53,11 @@ export default (state = initialState, action = {}) => {
         ...state,
         latval: action.payload.latval,
         longval: action.payload.longval,
+      };
+    case SET_WALLET:
+      return {
+        ...state,
+        wallet: action.wallet,
       };
     default:
       return state;

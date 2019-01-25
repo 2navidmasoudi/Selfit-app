@@ -26,30 +26,30 @@ export default class Follow extends Component {
     return (
       <Container>
         <AppHeader rightTitle="پیگیری سفارش" backButton="flex" />
-          <Tabs
-            locked
-            tabBarPosition="top"
-            tabBarUnderlineStyle={TabsStyle.underLine}
+        <Tabs
+          locked
+          tabBarPosition="top"
+          tabBarUnderlineStyle={TabsStyle.underLine}
+        >
+          <Tab
+            heading="پراخت نشده"
+            activeTextStyle={TabsStyle.activeText}
+            textStyle={TabsStyle.text}
+            activeTabStyle={TabsStyle.activeTab}
+            tabStyle={TabsStyle.notActiveTabs}
           >
-            <Tab
-              heading="پراخت نشده"
-              activeTextStyle={TabsStyle.activeText}
-              textStyle={TabsStyle.text}
-              activeTabStyle={TabsStyle.activeTab}
-              tabStyle={TabsStyle.notActiveTabs}
-            >
-              <List1 />
-            </Tab>
-            <Tab
-              heading="پرداخت شده"
-              activeTextStyle={TabsStyle.activeText}
-              textStyle={TabsStyle.text}
-              activeTabStyle={TabsStyle.activeTab}
-              tabStyle={TabsStyle.notActiveTabs}
-            >
-              <List2 />
-            </Tab>
-          </Tabs>
+            <List1 />
+          </Tab>
+          <Tab
+            heading="پرداخت شده"
+            activeTextStyle={TabsStyle.activeText}
+            textStyle={TabsStyle.text}
+            activeTabStyle={TabsStyle.activeTab}
+            tabStyle={TabsStyle.notActiveTabs}
+          >
+            <List2 />
+          </Tab>
+        </Tabs>
       </Container>
     );
   }

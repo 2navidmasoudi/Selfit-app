@@ -155,6 +155,9 @@ export default class FactorBuffet extends Component {
           <CardItem>
             <Right style={{ flex: 1 }}>
               <Text style={{ flex: 1 }}>
+                از بوفه: {this.state.buffetInfo ? this.state.buffetInfo.namebuffet : 'در حال بررسی'}
+              </Text>
+              <Text style={{ flex: 1 }}>
               به آدرس: {item.titleaddressmember}
               </Text>
               <Text style={{ flex: 1 }}>

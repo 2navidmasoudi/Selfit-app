@@ -8,10 +8,7 @@ import {
   Content,
   Footer,
   FooterTab,
-  Icon,
-  Input,
-  Item,
-  Label, Left,
+  Left,
   ListItem, Right, Spinner
 } from 'native-base';
 import { Alert, FlatList, View } from 'react-native';
@@ -20,8 +17,7 @@ import { Base64 } from 'js-base64';
 import PropTypes from 'prop-types';
 import { postFactor } from '../../../services/orderBuffet';
 import AppHeader from '../../header';
-import { refreshBuffet, setRoad, tokenBuffet } from '../../../redux/actions';
-import { SignStyle } from '../../../assets/styles/sign';
+import { refreshBuffet, setRoad, setWallet, tokenBuffet } from '../../../redux/actions';
 import { Text, TextInput } from '../../Kit';
 import { persianNumber } from '../../../utils/persian';
 import { sendPrice } from '../../../services/Alopeyk';
@@ -47,7 +43,8 @@ let long;
 }), {
   tokenBuffet,
   setRoad,
-  refreshBuffet
+  refreshBuffet,
+  setWallet
 })
 export default class finalOrderBuffet extends Component {
   static propTypes = {
@@ -72,7 +69,6 @@ export default class finalOrderBuffet extends Component {
     this.state = {
       descfactor: '',
       sendServicePrice: 0,
-      Wallet: null,
       disableSendFactor: false,
     };
     this.sendOrderBuffet = this.sendOrderBuffet.bind(this);
@@ -100,11 +96,25 @@ export default class finalOrderBuffet extends Component {
   }
   async getWallet() {
     const { tokenmember, tokenapi } = await this.props.user;
-    const { Wallet } = await getSingleToken(tokenmember, tokenapi, true);
-    this.setState({ Wallet });
+    const { wallet } = await getSingleToken(tokenmember, tokenapi, true);
+    this.props.setWallet(wallet);
   }
   async sendOrderBuffet() {
     try {
+      const totalPrice =
+        await (this.props.PriceAllBuffet +
+          this.props.PriceAllMaterial +
+          (this.state.sendServicePrice * (3 / 5)));
+      if (totalPrice < 20000) {
+        Alert.alert(
+          'خطا',
+          'میزان سفارش شما باید حداقل بیست هزار تومان باشد!',
+          [
+            { text: 'باشه' },
+          ]
+        );
+        return;
+      }
       this.setState({ disableSendFactor: true });
       const { tokenmember } = await this.props.user;
       const { tokenapi, buffetid } = await this.props;
@@ -276,11 +286,11 @@ export default class finalOrderBuffet extends Component {
             {totalPrice
               ?
                 <View>
-                  {this.state.Wallet ?
+                  {this.props.user.wallet ?
                     <Card style={{ flex: 0 }}>
                       <CardItem>
                         <Text style={{ flex: 1, textAlign: 'center' }} type="bold">
-                          کیف پول:{` ${persianNumber(this.state.Wallet.toLocaleString() || '?')} تومان`}
+                          کیف پول:{` ${persianNumber(this.props.user.wallet.toLocaleString() || '?')} تومان`}
                         </Text>
                       </CardItem>
                     </Card> : null}
