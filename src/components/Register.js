@@ -93,6 +93,12 @@ export default class Register extends Component {
         const MemberSingleToken = await getSingleToken(tokenmember, tokenapi);
         await this.props.setUser(MemberSingleToken);
         Actions.reset('root');
+      } else if (json === -4) {
+        Alert.alert(
+          'خطا',
+          'کد معرف وارد شده معتبر نمی باشد.',
+          [{ text: 'باشه' }]
+        );
       }
     } else {
       Alert.alert(

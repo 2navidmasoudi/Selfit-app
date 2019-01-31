@@ -1,18 +1,16 @@
 import React from 'react';
-import { Image, View, TouchableWithoutFeedback, ScrollView, Share } from 'react-native';
+import { Image, ScrollView, Share } from 'react-native';
 import {
   Container,
   Content,
   Card,
   CardItem,
-  Thumbnail,
   Button,
   Left,
   Body,
 } from 'native-base';
 import moment from 'moment-jalaali';
 import HTMLView from 'react-native-htmlview';
-import { Actions } from 'react-native-router-flux';
 import AppHeader from '../../header';
 import { form } from '../../../assets/styles/index';
 import { Text } from '../../Kit';
@@ -25,7 +23,6 @@ export default ({ blog }) => {
   const ImgMonth = m.jMonth() + 1;
   const ImgSrc = `${blog.httpserver}${blog.pathserver}${ImgYear}/${ImgMonth}/${blog.picblog}`;
   const htmlContent = blog.descblog ? persianNumber(blog.descblog.replace(/(\r\n|\n|\r)/gm, '')) : '<p>فاقد توضیحات.</p>';
-
   return (
     <Container>
       <AppHeader rightTitle="بیشتر بدانید" backButton="flex" />
@@ -34,19 +31,14 @@ export default ({ blog }) => {
           <CardItem>
             <Left style={{ flex: 1 }}>
               <Body>
-                <Text style={{ marginRight: 10 }}>
+                <Text type="bold" style={{ marginRight: 10, fontSize: 16, textAlign: 'center' }}>
                   {blog.titleblog}
                 </Text>
               </Body>
-              <TouchableWithoutFeedback onPress={() => Actions.showImage({ uri: ImgSrc })}>
-                <Thumbnail source={{ uri: ImgSrc }} />
-              </TouchableWithoutFeedback>
             </Left>
           </CardItem>
           <CardItem>
-            <TouchableWithoutFeedback onPress={() => Actions.showImage({ uri: ImgSrc })}>
-              <Image style={{ flex: 1, height: 220, width: null }} resizeMode="contain" source={{ uri: ImgSrc }} />
-            </TouchableWithoutFeedback>
+            <Image style={{ flex: 1, height: 220, width: null }} resizeMode="contain" source={{ uri: ImgSrc }} />
           </CardItem>
           <CardItem>
             <ScrollView style={{ flex: 1 }}>

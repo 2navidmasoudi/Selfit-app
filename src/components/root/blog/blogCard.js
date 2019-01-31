@@ -29,9 +29,7 @@ export default class BlogCard extends Component {
         <Card>
           <CardItem>
             <Left style={{ flex: 1 }}>
-              <TouchableWithoutFeedback onPress={() => Actions.showImage({ uri: ImgSrc })}>
-                <Thumbnail square size={80} source={{ uri: ImgSrc }} />
-              </TouchableWithoutFeedback>
+              <Thumbnail square size={80} source={{ uri: ImgSrc }} />
             </Left>
             <Right style={{ flex: 3 }}>
               <Text style={{ flex: 1, marginRight: 10 }}>

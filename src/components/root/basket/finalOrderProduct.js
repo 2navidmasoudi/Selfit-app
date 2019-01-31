@@ -97,7 +97,6 @@ export default class finalOrderProduct extends Component {
     try {
       const { totalPrice } = await this.state;
       const { wallet } = await this.props.user;
-      if (wallet === 0 || wallet === null) return;
       if (totalPrice < 20000) {
         Alert.alert(
           'خطا',

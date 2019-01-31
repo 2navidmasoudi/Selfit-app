@@ -157,13 +157,13 @@ export default class Blog extends Component {
     return (
       <Container>
         <AppHeader rightTitle="آموزش" />
-        <Content>
-          <SearchBar
-            showLoading
-            onChangeText={this.searchText}
-            placeholder="تیتر، متن و ..."
-            inputStyle={{ textAlign: Platform.OS === 'ios' ? 'right' : undefined, fontFamily: 'IRANSansMobile', fontSize: 12 }}
-          />
+        <SearchBar
+          showLoading
+          onChangeText={this.searchText}
+          placeholder="تیتر، متن و ..."
+          inputStyle={{ textAlign: Platform.OS === 'ios' ? 'right' : undefined, fontFamily: 'IRANSansMobile', fontSize: 12 }}
+        />
+        <Content padder>
           <Card style={{ flex: 0 }}>
             <CardItem style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} header bordered>
               <Left style={{ flex: 1 }} />

@@ -67,7 +67,7 @@ export default class BlogChildren extends Component {
     return (
       <Container>
         <AppHeader rightTitle="آموزش" />
-        <Content>
+        <Content padder>
           <Card style={{ flex: 0 }}>
             <CardItem style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} header bordered>
               <Left style={{ flex: 1 }} />

@@ -43,10 +43,24 @@ export default class Wallet extends Component {
 
   async getWallet() {
     const { tokenmember, tokenapi } = await this.props.user;
+    const PreviousWalletAmount = await this.props.user.wallet;
     const { wallet } = await getSingleToken(tokenmember, tokenapi, true);
     console.log('Wallet Amount');
     console.log(wallet);
     this.props.setWallet(wallet);
+    if (wallet > PreviousWalletAmount) {
+      const Diff = wallet - PreviousWalletAmount;
+      const DotedDiff = Diff.toLocaleString();
+      const PersianDiff = await persianNumber(DotedDiff);
+      Alert.alert(
+        'شارژ کیف پول',
+        `شارژ کیف پول شما با موفقیت انجام شد! میزان شارژ: ${PersianDiff} تومان`,
+        [
+          { text: 'قبول' },
+        ]
+      );
+      Actions.pop();
+    }
   }
   async PaymentDirect() {
     const { AddWallet } = await this.state;

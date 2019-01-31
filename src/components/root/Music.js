@@ -41,7 +41,8 @@ export default class Music extends Component {
         album: 'Start Up!',
         url: 'https://selfit.ir/Resource/music/BazamRaft.mp3',
         idmusic: 0,
-      }]
+      }],
+      songID: 0
     };
     this.togglePlay = this.togglePlay.bind(this);
     this.goForward = this.goForward.bind(this);
@@ -161,13 +162,31 @@ export default class Music extends Component {
       () => { if (this.state.playing) bounce(); }
     );
   }
-  selectMusic(index) {
+  selectMusic(item, index) {
     this.setState({
       songIndex: index,
+      songID: item.idmusic,
       currentTime: 0,
     });
     this.audio.seek(0);
   }
+  renderMusic = ({ item, index }) => (
+    <TouchableOpacity onPress={() => this.selectMusic(item, index)}>
+      <Card style={{ flex: 0 }}>
+        <CardItem>
+          <Left>
+            <Icon name="musical-note" />
+          </Left>
+          <Body>
+            <Text style={{ textAlign: 'center' }}>{item.namemusic}</Text>
+          </Body>
+          <Right>
+            <Icon style={{ color: this.state.songID === item.idmusic ? mainColor : darkColor }} name="md-play" />
+          </Right>
+        </CardItem>
+      </Card>
+    </TouchableOpacity>
+  );
   render() {
     const songPlaying = this.state.songs[this.state.songIndex];
     const uri = `${SelfitMusic}${songPlaying.urlmusic}`;
@@ -282,23 +301,7 @@ export default class Music extends Component {
           <FlatList
             data={this.state.songs}
             keyExtractor={item => item.idmusic}
-            renderItem={({ item, index }) => (
-              <TouchableOpacity onPress={() => this.selectMusic(index)}>
-                <Card style={{ flex: 0 }}>
-                  <CardItem>
-                    <Left>
-                      <Icon name="musical-note" />
-                    </Left>
-                    <Body>
-                      <Text style={{ textAlign: 'center' }}>{item.namemusic}</Text>
-                    </Body>
-                    <Right>
-                      <Icon name="md-play" style={{ color: index === this.state.songIndex ? mainColor : darkColor }} />
-                    </Right>
-                  </CardItem>
-                </Card>
-              </TouchableOpacity>
-            )}
+            renderItem={this.renderMusic}
           />
         </Content>
       </Container>

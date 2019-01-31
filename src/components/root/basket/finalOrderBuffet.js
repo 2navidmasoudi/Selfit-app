@@ -105,10 +105,10 @@ export default class finalOrderBuffet extends Component {
         await (this.props.PriceAllBuffet +
           this.props.PriceAllMaterial +
           (this.state.sendServicePrice * (3 / 5)));
-      if (totalPrice < 20000) {
+      if (totalPrice < 15000) {
         Alert.alert(
           'خطا',
-          'میزان سفارش شما باید حداقل بیست هزار تومان باشد!',
+          'میزان سفارش شما باید حداقل پانزده هزار تومان باشد!',
           [
             { text: 'باشه' },
           ]

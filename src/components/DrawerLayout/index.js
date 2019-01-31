@@ -67,7 +67,7 @@ export default class DrawerLayout extends Component {
   async getWallet() {
     const { tokenmember, tokenapi } = await this.props.user;
     const { wallet } = await getSingleToken(tokenmember, tokenapi, true);
-    this.props.setWallet(wallet);
+    setTimeout(() => this.props.setWallet(wallet), 5000);
   }
   getRequestLogout() {
     Alert.alert(
