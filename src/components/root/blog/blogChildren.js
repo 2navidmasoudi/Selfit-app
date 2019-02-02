@@ -28,11 +28,12 @@ const MaterialSource = 'https://selfit.ir/Resource/Material/';
   tokenBlog,
 })
 export default class BlogChildren extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       BlogList: [],
       loading: true,
+      SelectCategory: props.blogCategory || [],
     };
     this.onItemPress = (item) => {
       Actions.blogChildren({
@@ -46,6 +47,8 @@ export default class BlogChildren extends Component {
   async componentWillMount() {
     await this.props.tokenBlog('selfit.public');
     await this.getAllBlog();
+    console.log(this.props);
+    console.log(this.state);
   }
   async getAllBlog() {
     try {
@@ -102,7 +105,12 @@ export default class BlogChildren extends Component {
             data={this.state.BlogList}
             renderItem={item => this.renderItem(item)}
             keyExtractor={item => item.blogid}
-            ListEmptyComponent={<Loader loading={this.state.loading} />}
+            ListEmptyComponent={
+              <Loader
+                loading={this.state.loading}
+                msg={this.state.SelectCategory.length > 0 ? 'دسته مورد نظر خود را انتخاب کنید.' : 'موردی یافت نشد.'}
+              />
+              }
             scrollEnabled={false}
           />
         </Content>

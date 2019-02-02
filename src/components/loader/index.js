@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { Text } from '../Kit';
 import { mainColor } from '../../assets/variables/colors';
 
-export default function Loader({ loading }) {
+export default function Loader({ loading, msg }) {
   return (
     loading
       ?
@@ -16,7 +16,7 @@ export default function Loader({ loading }) {
         </View>
       :
         <View style={styles.view}>
-          <Text>اطلاعاتی دریافت نشد.</Text>
+          <Text>{msg || 'اطلاعاتی دریافت نشد.'}</Text>
         </View>
   );
 }
@@ -31,4 +31,9 @@ const styles = StyleSheet.create({
 
 Loader.propTypes = {
   loading: PropTypes.bool.isRequired,
+  msg: PropTypes.string
+};
+
+Loader.defaultProps = {
+  msg: 'اطلاعاتی دریافت نشد.'
 };
