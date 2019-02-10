@@ -11,7 +11,8 @@ import {
   FooterTab,
   Left,
   ListItem,
-  Right
+  Right,
+  Body
 } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { Base64 } from 'js-base64';
@@ -161,11 +162,13 @@ export default class finalOrderProduct extends Component {
   }
   renderItem = ({ item }) => (
     <ListItem>
-      <Left>
+      <Left style={{ flex: 0 }}>
         <Text>{persianNumber((item.priceproduct).toLocaleString())} تومان</Text>
       </Left>
-      <Text>{persianNumber(item.titleproduct)}</Text>
-      <Right>
+      <View style={{ flex: 1, marginHorizontal: 5 }}>
+        <Text style={{ textAlign: 'center' }}>{persianNumber(item.titleproduct)}</Text>
+      </View>
+      <Right style={{ flex: 0 }}>
         <Text>{persianNumber(item.numberbasket)} عدد</Text>
       </Right>
     </ListItem>

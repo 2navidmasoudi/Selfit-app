@@ -9,7 +9,7 @@ import {
   Footer,
   FooterTab,
   Left,
-  ListItem, Right, Spinner
+  ListItem, Right, Spinner, Body
 } from 'native-base';
 import { Alert, FlatList, View } from 'react-native';
 import { Actions } from 'react-native-router-flux';
@@ -170,22 +170,26 @@ export default class finalOrderBuffet extends Component {
   }
   renderItem = ({ item }) => (
     <ListItem>
-      <Left>
+      <Left style={{ flex: 0 }}>
         <Text>{persianNumber((item.pricemenufood).toLocaleString())} تومان</Text>
       </Left>
-      <Text style={{ textAlign: 'center' }}>{persianNumber(item.namemenufood)}</Text>
-      <Right>
+      <Body style={{ flex: 1, marginHorizontal: 5 }}>
+        <Text style={{ textAlign: 'center' }}>{persianNumber(item.namemenufood)}</Text>
+      </Body>
+      <Right style={{ flex: 0 }}>
         <Text>{persianNumber(item.numbermenufood)} عدد</Text>
       </Right>
     </ListItem>
   );
   renderItem2 = ({ item }) => (
     <ListItem>
-      <Left>
+      <Left style={{ flex: 0 }}>
         <Text>{persianNumber((item.pricematerial).toLocaleString())} تومان</Text>
       </Left>
-      <Text style={{ textAlign: 'center' }}>{persianNumber(item.namematerial)}</Text>
-      <Right>
+      <Body style={{ flex: 1, marginHorizontal: 5 }}>
+        <Text style={{ textAlign: 'center' }}>{persianNumber(item.namematerial)}</Text>
+      </Body>
+      <Right style={{ flex: 0 }}>
         <Text>{persianNumber(item.numbermaterial)} عدد</Text>
       </Right>
     </ListItem>

@@ -84,7 +84,7 @@ export default function HeaderComponent({ rightTitle, hasBlog, noPop, Inbox, Dra
           </View>
         </TouchableOpacity>
       </Left>
-      <Body style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Body style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
         <Title style={header.bodyTitle}>
           SelFit
         </Title>
