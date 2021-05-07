@@ -65,7 +65,7 @@
     "redux-persist": "5.9.1",
     "redux-persist-sensitive-storage": "1.0.0",
     "redux-thunk": "2.2.0",
-    "underscore": "1.9.1",
+    "underscore": "1.12.1",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
